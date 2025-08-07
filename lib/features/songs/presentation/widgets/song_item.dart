@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/features/song_details/presentation/pages/song_details_page.dart';
 
 class SongItem extends StatelessWidget {
   const SongItem({super.key});
@@ -6,10 +7,19 @@ class SongItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const SongDetailsPage()),
+        );
+      },
       title: Text('Song Title', style: Theme.of(context).textTheme.titleMedium),
-      subtitle: Text(
-        'Artist Name',
-        style: Theme.of(context).textTheme.bodySmall,
+      subtitle: Row(
+        mainAxisSize: MainAxisSize.max,
+        spacing: 2,
+        children: [
+          Icon(Icons.person, size: 12),
+          Text('Artist Name', style: Theme.of(context).textTheme.bodySmall),
+        ],
       ),
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
