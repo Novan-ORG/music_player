@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/features/song_details/presentation/widgets/audio_progress.dart';
-import 'package:music_player/features/song_details/presentation/widgets/more_action_buttons.dart';
-import 'package:music_player/features/song_details/presentation/widgets/player_action_buttons.dart';
-import 'package:music_player/features/song_details/presentation/widgets/upnext_musics.dart';
+import 'package:music_player/features/music_plyer/presentation/widgets/audio_progress.dart';
+import 'package:music_player/features/music_plyer/presentation/widgets/more_action_buttons.dart';
+import 'package:music_player/features/music_plyer/presentation/widgets/player_action_buttons.dart';
+import 'package:music_player/features/music_plyer/presentation/widgets/upnext_musics.dart';
 
-class SongDetailsPage extends StatelessWidget {
-  const SongDetailsPage({super.key});
+class MusicPlayerPage extends StatelessWidget {
+  const MusicPlayerPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Song Details')),
+      appBar: AppBar(title: const Text('Player')),
       body: Padding(
         padding: EdgeInsets.only(
           left: 16,

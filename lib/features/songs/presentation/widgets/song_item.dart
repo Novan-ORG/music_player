@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/features/song_details/presentation/pages/song_details_page.dart';
+import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
 
 class SongItem extends StatelessWidget {
   const SongItem({super.key});
@@ -9,7 +9,7 @@ class SongItem extends StatelessWidget {
     return ListTile(
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const SongDetailsPage()),
+          MaterialPageRoute(builder: (context) => const MusicPlayerPage()),
         );
       },
       title: Text('Song Title', style: Theme.of(context).textTheme.titleMedium),
