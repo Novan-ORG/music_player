@@ -1,6 +1,8 @@
 // App router, theme, etc.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
 import 'package:music_player/features/songs/presentation/pages/songs_page.dart';
 
 class MusicPlayerApp extends StatelessWidget {
@@ -8,12 +10,17 @@ class MusicPlayerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Music Player',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => SongsBloc()..add(const LoadSongsEvent())),
+      ],
+      child: MaterialApp(
+        title: 'Music Player',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
+        home: const SongsPage(),
       ),
-      home: const SongsPage(),
     );
   }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
+import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SongItem extends StatelessWidget {
-  const SongItem({super.key});
+  const SongItem({required this.song, super.key});
+
+  final SongModel song;
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +15,18 @@ class SongItem extends StatelessWidget {
           MaterialPageRoute(builder: (context) => const MusicPlayerPage()),
         );
       },
-      title: Text('Song Title', style: Theme.of(context).textTheme.titleMedium),
+      title: Text(
+        song.title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
       subtitle: Row(
         mainAxisSize: MainAxisSize.max,
         spacing: 2,
         children: [
           Icon(Icons.person, size: 12),
-          Text('Artist Name', style: Theme.of(context).textTheme.bodySmall),
+          Text(song.artist ?? 'unknown', style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
       leading: ClipRRect(
