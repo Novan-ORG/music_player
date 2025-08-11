@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 
 class PlayerActionButtons extends StatefulWidget {
   const PlayerActionButtons({super.key});
@@ -11,31 +14,37 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
   bool isPlayed = false;
   bool isShuffled = false;
   bool isRepeated = false;
+  late final MusicPlayerBloc musicPlayer;
+
+  @override
+  void initState() {
+    musicPlayer = context.read<MusicPlayerBloc>();
+    isPlayed = musicPlayer.state.status == MusicPlayerStatus.playing;
+    isShuffled = musicPlayer.audioPlayer.shuffleModeEnabled;
+    isRepeated = musicPlayer.audioPlayer.loopMode == LoopMode.all;
+    super.initState();
+  }
 
   void togglePlay() {
     setState(() {
       isPlayed = !isPlayed;
     });
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(isPlayed ? 'Playing' : 'Paused')));
+    musicPlayer.add(TogglePlayPauseEvent());
   }
 
   void toggleShuffle() {
     setState(() {
       isShuffled = !isShuffled;
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(isShuffled ? 'Shuffle On' : 'Shuffle Off')),
-    );
+    musicPlayer.audioPlayer.setShuffleModeEnabled(isShuffled);
   }
 
   void toggleRepeat() {
     setState(() {
       isRepeated = !isRepeated;
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(isRepeated ? 'Repeat On' : 'Repeat Off')),
+    musicPlayer.audioPlayer.setLoopMode(
+      isRepeated ? LoopMode.all : LoopMode.off,
     );
   }
 
@@ -49,44 +58,47 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
           isSelected: isShuffled,
           selectedIcon: const Icon(Icons.shuffle_on_rounded),
           onPressed: () {
-            // Handle shuffle action
             toggleShuffle();
           },
         ),
         IconButton(
-          icon: const Icon(Icons.skip_previous),
-          onPressed: () {
-            // Handle skip previous action
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('Skip Previous')));
-          },
+          icon: Opacity(
+            opacity: musicPlayer.audioPlayer.hasPrevious ? 1 : 0.5,
+            child: const Icon(Icons.skip_previous),
+          ),
+          onPressed: musicPlayer.audioPlayer.hasPrevious
+              ? () {
+                  musicPlayer.add(PreviousMusicEvent());
+                  setState(() {});
+                }
+              : null,
         ),
         IconButton(
           iconSize: 38,
-          icon: const Icon(Icons.play_arrow),
-          selectedIcon: const Icon(Icons.pause),
+          icon: const Icon(Icons.pause),
+          selectedIcon: const Icon(Icons.play_arrow),
           isSelected: isPlayed,
           onPressed: () {
-            // Handle play action
             togglePlay();
           },
         ),
         IconButton(
-          icon: const Icon(Icons.skip_next),
-          onPressed: () {
-            // Handle skip next action
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('Skip Next')));
-          },
+          icon: Opacity(
+            opacity: musicPlayer.audioPlayer.hasNext ? 1 : 0.5,
+            child: const Icon(Icons.skip_next),
+          ),
+          onPressed: musicPlayer.audioPlayer.hasNext
+              ? () {
+                  musicPlayer.add(NextMusicEvent());
+                  setState(() {});
+                }
+              : null,
         ),
         IconButton(
           icon: const Icon(Icons.repeat),
           isSelected: isRepeated,
           selectedIcon: const Icon(Icons.repeat_on_rounded),
           onPressed: () {
-            // Handle repeat action
             toggleRepeat();
           },
         ),

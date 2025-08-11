@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SongItem extends StatelessWidget {
-  const SongItem({required this.song, super.key});
+  const SongItem({required this.song, this.onTap, super.key});
 
   final SongModel song;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const MusicPlayerPage()),
-        );
-      },
+      onTap: onTap,
       title: Text(
-        song.title,
+        song.displayNameWOExt,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: Theme.of(context).textTheme.titleMedium,
@@ -26,17 +22,26 @@ class SongItem extends StatelessWidget {
         spacing: 2,
         children: [
           Icon(Icons.person, size: 12),
-          Text(song.artist ?? 'unknown', style: Theme.of(context).textTheme.bodySmall),
+          Text(
+            song.artist ?? 'unknown',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ],
       ),
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: Image.asset(
-          'assets/images/song_cover.png',
-          fit: BoxFit.cover,
-          width: 50,
-          height: 50,
-          alignment: Alignment.center,
+      leading: QueryArtworkWidget(
+        id: song.id,
+        quality: 70,
+        type: ArtworkType.AUDIO,
+        artworkBorder: BorderRadius.circular(8.0),
+        nullArtworkWidget: ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Image.asset(
+            'assets/images/song_cover.png',
+            fit: BoxFit.cover,
+            width: 50,
+            height: 50,
+            alignment: Alignment.center,
+          ),
         ),
       ),
       trailing: Row(

@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marquee/marquee.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/audio_progress.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/more_action_buttons.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/player_action_buttons.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/upnext_musics.dart';
+import 'package:on_audio_query_pluse/on_audio_query.dart';
 
-class MusicPlayerPage extends StatelessWidget {
+class MusicPlayerPage extends StatefulWidget {
   const MusicPlayerPage({super.key});
+
+  @override
+  State<MusicPlayerPage> createState() => _MusicPlayerPageState();
+}
+
+class _MusicPlayerPageState extends State<MusicPlayerPage> {
+  late final musicPlayerBloc = context.read<MusicPlayerBloc>();
+  SongModel? currentSong;
+  int currentSongIndex = -1;
+
+  @override
+  void initState() {
+    musicPlayerBloc.audioPlayer.currentIndexStream.listen((index) {
+      if (index != null && index >= 0 && index != currentSongIndex) {
+        currentSongIndex = index;
+        currentSong = musicPlayerBloc.state.playList[index];
+        setState(() {});
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,44 +67,52 @@ class MusicPlayerPage extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              spacing: 16,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Song Title',
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Artist Name',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.favorite)),
-              ],
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: SizedBox(
+                height: 28,
+                child:
+                    (currentSong?.displayNameWOExt ?? 'Unknown Song').length >
+                        15
+                    ? Marquee(
+                        text: currentSong?.displayNameWOExt ?? 'Unknown Song',
+                        style: Theme.of(context).textTheme.titleLarge,
+                        scrollAxis: Axis.horizontal,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        blankSpace: 30.0,
+                        showFadingOnlyWhenScrolling: true,
+                        velocity: 40.0,
+                        pauseAfterRound: Duration(seconds: 1),
+                        accelerationDuration: Duration(seconds: 1),
+                        accelerationCurve: Curves.linear,
+                        decelerationDuration: Duration(milliseconds: 500),
+                        decelerationCurve: Curves.easeOut,
+                      )
+                    : Text(
+                        currentSong?.displayNameWOExt ?? 'Unknown Song',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+              ),
+              subtitle: Text(
+                currentSong?.artist ?? 'Unknown Artist',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              trailing: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.favorite),
+              ),
             ),
             AudioProgress(
-              progress: 0.5,
-              duration: const Duration(minutes: 3, seconds: 30),
-              position: const Duration(minutes: 1, seconds: 45),
-              onSeek: (newPosition) {
-                // Handle seek action
-                debugPrint('Seek to $newPosition');
-              },
-              onChangeEnd: (newPosition) {
-                // Handle change end action
-                debugPrint('Change ended at $newPosition');
-              },
-              onChangeStart: (newPosition) {
-                // Handle change start action
-                debugPrint('Change started at $newPosition');
-              },
+              durationStream: context
+                  .read<MusicPlayerBloc>()
+                  .audioPlayer
+                  .durationStream,
+              positionStream: context
+                  .read<MusicPlayerBloc>()
+                  .audioPlayer
+                  .positionStream,
+              onSeek: context.read<MusicPlayerBloc>().audioPlayer.seek,
+              onChangeEnd: context.read<MusicPlayerBloc>().audioPlayer.seek,
             ),
             MoreActionButtons(),
             UpnextMusics(),

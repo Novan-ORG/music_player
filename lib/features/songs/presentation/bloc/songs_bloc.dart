@@ -16,10 +16,18 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
   void loadSongs(SongsEvent event, Emitter emit) async {
     try {
       emit(SongsState(status: SongsStatus.loading));
+      final permissionsGranted = await audioQuery.permissionsStatus();
+      if (!permissionsGranted) {
+        final permissions = await audioQuery.permissionsRequest();
+        if (!permissions) {
+          emit(SongsState(status: SongsStatus.error));
+          return;
+        }
+      }
       final songs = await audioQuery.querySongs(
         sortType: SongSortType.DATE_ADDED,
       );
-      emit(SongsState(songs: songs,status: SongsStatus.loaded));
+      emit(SongsState(songs: songs, status: SongsStatus.loaded));
     } catch (e, s) {
       Logger.error('Error fetching songs: $e', e, s);
       emit(SongsState(status: SongsStatus.error));
