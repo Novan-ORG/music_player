@@ -58,13 +58,32 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                     ),
                   ],
                 ),
-                child: Image.asset(
-                  'assets/images/song_cover.png',
-                  fit: BoxFit.cover,
-                  width: MediaQuery.of(context).size.height * 0.33,
-                  height: MediaQuery.of(context).size.height * 0.33,
-                  alignment: Alignment.center,
-                ),
+                child: currentSong != null
+                    ? QueryArtworkWidget(
+                        id: currentSong!.id,
+                        type: ArtworkType.AUDIO,
+                        quality: 100,
+                        artworkFit: BoxFit.cover,
+                        artworkQuality: FilterQuality.high,
+                        artworkBorder: BorderRadius.circular(16.0),
+                        artworkWidth: MediaQuery.of(context).size.height * 0.33,
+                        artworkHeight:
+                            MediaQuery.of(context).size.height * 0.33,
+                        nullArtworkWidget: Image.asset(
+                          'assets/images/song_cover.png',
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.height * 0.33,
+                          height: MediaQuery.of(context).size.height * 0.33,
+                          alignment: Alignment.center,
+                        ),
+                      )
+                    : Image.asset(
+                        'assets/images/song_cover.png',
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.height * 0.33,
+                        height: MediaQuery.of(context).size.height * 0.33,
+                        alignment: Alignment.center,
+                      ),
               ),
             ),
             ListTile(

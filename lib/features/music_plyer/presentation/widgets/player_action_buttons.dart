@@ -75,8 +75,8 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
         ),
         IconButton(
           iconSize: 38,
-          icon: const Icon(Icons.pause),
-          selectedIcon: const Icon(Icons.play_arrow),
+          icon: const Icon(Icons.play_arrow),
+          selectedIcon: const Icon(Icons.pause),
           isSelected: isPlayed,
           onPressed: () {
             togglePlay();
