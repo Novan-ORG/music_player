@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/extensions/duration_ex.dart';
 import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
 
-class UpnextMusics extends StatelessWidget {
-  const UpnextMusics({super.key});
+class UpNextMusics extends StatelessWidget {
+  const UpNextMusics({super.key, this.onTapSong});
+
+  final Function(int)? onTapSong;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +38,7 @@ class UpnextMusics extends StatelessWidget {
                   itemExtent: 28,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      minVerticalPadding: 0,
+                      onTap: () => onTapSong?.call(index),
                       leading: Icon(Icons.music_note),
                       title: Text(
                         '${state.songs[index].displayNameWOExt} - ${state.songs[index].artist ?? 'unknown'}',

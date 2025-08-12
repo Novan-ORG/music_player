@@ -22,14 +22,19 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
 
   @override
   void initState() {
-    musicPlayerBloc.audioPlayer.currentIndexStream.listen((index) {
-      if (index != null && index >= 0 && index != currentSongIndex) {
-        currentSongIndex = index;
-        currentSong = musicPlayerBloc.state.playList[index];
-        setState(() {});
-      }
-    });
+    musicPlayerBloc.audioPlayer.currentIndexStream.listen(_onMusicChanged);
     super.initState();
+  }
+
+  void _onMusicChanged(index) {
+    if (index != null && index >= 0 && index != currentSongIndex) {
+      currentSongIndex = index;
+      currentSong = musicPlayerBloc.state.playList[index];
+      musicPlayerBloc.add(
+        PlayMusicEvent(index, musicPlayerBloc.state.playList),
+      );
+      setState(() {});
+    }
   }
 
   @override
@@ -134,7 +139,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
               onChangeEnd: context.read<MusicPlayerBloc>().audioPlayer.seek,
             ),
             MoreActionButtons(),
-            UpnextMusics(),
+            UpNextMusics(onTapSong: _onMusicChanged),
             PlayerActionButtons(),
           ],
         ),

@@ -22,9 +22,13 @@ class SongItem extends StatelessWidget {
         spacing: 2,
         children: [
           Icon(Icons.person, size: 12),
-          Text(
-            song.artist ?? 'unknown',
-            style: Theme.of(context).textTheme.bodySmall,
+          Flexible(
+            child: Text(
+              song.artist ?? 'unknown',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ),
         ],
       ),

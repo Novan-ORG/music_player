@@ -39,6 +39,8 @@ class AudioProgress extends StatelessWidget {
                 }
                 return Slider(
                   min: 0.0,
+                  max: 1.0,
+                  padding: EdgeInsets.zero,
                   value: value,
                   onChanged: (value) {
                     final newPosition = Duration(
