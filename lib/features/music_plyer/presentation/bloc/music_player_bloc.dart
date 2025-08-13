@@ -14,9 +14,43 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<TogglePlayPauseEvent>(_onTogglePlayPause);
     on<NextMusicEvent>(_onSkipToNext);
     on<PreviousMusicEvent>(_onSkipToPrevious);
+    on<ShuffleMusicEvent>(_onShuffleMusics);
   }
 
   final audioPlayer = AudioPlayer();
+
+  Future<void> _onShuffleMusics(
+    ShuffleMusicEvent event,
+    Emitter<MusicPlayerState> emit,
+  ) async {
+    try {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.playing,
+          playList: event.songs,
+          errorMessage: null,
+        ),
+      );
+      if (audioPlayer.playing) {
+        await audioPlayer.stop();
+      }
+      await audioPlayer.addAudioSources(
+        event.songs
+            .map((song) => AudioSource.uri(Uri.parse(song.uri ?? '')))
+            .toList(),
+      );
+      await audioPlayer.setShuffleModeEnabled(true);
+      await audioPlayer.play();
+    } catch (e, s) {
+      Logger.error('Error shuffling music: $e', e, s);
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
 
   Future<void> _onPlayMusic(
     PlayMusicEvent event,

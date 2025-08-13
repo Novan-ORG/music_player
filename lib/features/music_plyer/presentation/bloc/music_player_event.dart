@@ -44,3 +44,11 @@ final class PreviousMusicEvent extends MusicPlayerEvent {
   @override
   List<Object> get props => [];
 }
+
+final class ShuffleMusicEvent extends MusicPlayerEvent {
+  const ShuffleMusicEvent({required this.songs});
+  final List<SongModel> songs;
+
+  @override
+  List<Object> get props => [...super.props, ...songs];
+}

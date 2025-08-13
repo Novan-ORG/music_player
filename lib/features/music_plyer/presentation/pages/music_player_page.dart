@@ -30,10 +30,9 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
     if (index != null && index >= 0 && index != currentSongIndex) {
       currentSongIndex = index;
       currentSong = musicPlayerBloc.state.playList[index];
-      musicPlayerBloc.add(
-        PlayMusicEvent(index, musicPlayerBloc.state.playList),
-      );
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 

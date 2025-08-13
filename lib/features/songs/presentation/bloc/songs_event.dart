@@ -8,3 +8,9 @@ sealed class SongsEvent {
 final class LoadSongsEvent extends SongsEvent {
   const LoadSongsEvent();
 }
+
+final class SortSongsEvent extends SongsEvent {
+  const SortSongsEvent(this.sortType);
+
+  final SortType sortType;
+}
