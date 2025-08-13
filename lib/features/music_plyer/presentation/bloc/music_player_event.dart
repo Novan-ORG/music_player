@@ -52,3 +52,11 @@ final class ShuffleMusicEvent extends MusicPlayerEvent {
   @override
   List<Object> get props => [...super.props, ...songs];
 }
+
+final class SkipToMusicIndexEvent extends MusicPlayerEvent {
+  const SkipToMusicIndexEvent(this.index);
+  final int index;
+
+  @override
+  List<Object> get props => [...super.props, index];
+}

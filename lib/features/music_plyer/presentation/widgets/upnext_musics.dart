@@ -37,18 +37,28 @@ class UpNextMusics extends StatelessWidget {
                   itemCount: state.songs.length,
                   itemExtent: 28,
                   itemBuilder: (context, index) {
-                    return ListTile(
+                    return InkWell(
                       onTap: () => onTapSong?.call(index),
-                      leading: Icon(Icons.music_note),
-                      title: Text(
-                        '${state.songs[index].displayNameWOExt} - ${state.songs[index].artist ?? 'unknown'}',
-                        maxLines: 1,
-                      ),
-                      trailing: Text(
-                        Duration(
-                          milliseconds: state.songs[index].duration ?? 0,
-                        ).format(),
-                        maxLines: 1,
+                      child: Row(
+                        spacing: 6,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Icon(Icons.music_note),
+                          Expanded(
+                            child: Text(
+                              '${state.songs[index].displayNameWOExt} - ${state.songs[index].artist ?? 'unknown'}',
+                              maxLines: 1,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Text(
+                            Duration(
+                              milliseconds: state.songs[index].duration ?? 0,
+                            ).format(),
+                            maxLines: 1,
+                          ),
+                        ],
                       ),
                     );
                   },

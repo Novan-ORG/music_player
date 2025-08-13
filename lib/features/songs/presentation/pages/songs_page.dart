@@ -52,7 +52,7 @@ class _SongsView extends StatelessWidget {
                   songsBloc.add(SortSongsEvent(sortType));
                 },
                 sortType: state.sortType,
-              ).padding(horizontal: 12),
+              ).paddingSymmetric(horizontal: 12),
               Expanded(
                 child: ListView.builder(
                   itemCount: songs.length,

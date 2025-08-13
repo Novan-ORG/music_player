@@ -8,74 +8,69 @@ part 'music_player_event.dart';
 part 'music_player_state.dart';
 
 class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
+  final AudioPlayer audioPlayer = AudioPlayer();
+
   MusicPlayerBloc() : super(MusicPlayerState()) {
-    on<PlayMusicEvent>(_onPlayMusic);
-    on<StopMusicEvent>(_onStopMusic);
-    on<TogglePlayPauseEvent>(_onTogglePlayPause);
-    on<NextMusicEvent>(_onSkipToNext);
-    on<PreviousMusicEvent>(_onSkipToPrevious);
-    on<ShuffleMusicEvent>(_onShuffleMusics);
+    on<PlayMusicEvent>(_handlePlayMusic);
+    on<StopMusicEvent>(_handleStopMusic);
+    on<TogglePlayPauseEvent>(_handleTogglePlayPause);
+    on<NextMusicEvent>(_handleSkipToNext);
+    on<PreviousMusicEvent>(_handleSkipToPrevious);
+    on<ShuffleMusicEvent>(_handleShuffleMusics);
+    on<SkipToMusicIndexEvent>(_handleSkipToIndex);
   }
 
-  final audioPlayer = AudioPlayer();
-
-  Future<void> _onShuffleMusics(
+  Future<void> _handleShuffleMusics(
     ShuffleMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    try {
-      emit(
-        state.copyWith(
-          status: MusicPlayerStatus.playing,
-          playList: event.songs,
-          errorMessage: null,
-        ),
-      );
-      if (audioPlayer.playing) {
-        await audioPlayer.stop();
-      }
-      await audioPlayer.addAudioSources(
-        event.songs
-            .map((song) => AudioSource.uri(Uri.parse(song.uri ?? '')))
-            .toList(),
-      );
-      await audioPlayer.setShuffleModeEnabled(true);
-      await audioPlayer.play();
-    } catch (e, s) {
-      Logger.error('Error shuffling music: $e', e, s);
-      emit(
-        state.copyWith(
-          status: MusicPlayerStatus.error,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
+    await _playList(
+      emit: emit,
+      songs: event.songs,
+      shuffle: true,
+      errorContext: 'shuffling music',
+    );
   }
 
-  Future<void> _onPlayMusic(
+  Future<void> _handlePlayMusic(
     PlayMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
+    await _playList(
+      emit: emit,
+      songs: event.playList,
+      index: event.index,
+      shuffle: false,
+      errorContext: 'playing music',
+    );
+  }
+
+  Future<void> _playList({
+    required Emitter<MusicPlayerState> emit,
+    required List<SongModel> songs,
+    int index = 0,
+    required bool shuffle,
+    required String errorContext,
+  }) async {
     try {
       emit(
         state.copyWith(
           status: MusicPlayerStatus.playing,
-          playList: event.playList,
+          playList: songs,
           errorMessage: null,
         ),
       );
-      if (audioPlayer.playing) {
-        await audioPlayer.stop();
-      }
+      if (audioPlayer.playing) await audioPlayer.stop();
       await audioPlayer.addAudioSources(
-        event.playList
+        songs
             .map((song) => AudioSource.uri(Uri.parse(song.uri ?? '')))
             .toList(),
       );
-      await audioPlayer.seek(Duration.zero, index: event.index);
+      await audioPlayer.setShuffleModeEnabled(shuffle);
+      await audioPlayer.seek(Duration.zero, index: index);
       await audioPlayer.play();
     } catch (e, s) {
-      Logger.error('Error playing music: $e', e, s);
+      Logger.error('Error $errorContext: $e', e, s);
       emit(
         state.copyWith(
           status: MusicPlayerStatus.error,
@@ -85,19 +80,15 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     }
   }
 
-  Future<void> _onStopMusic(
+  Future<void> _handleStopMusic(
     StopMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    if (audioPlayer.playing) {
-      await audioPlayer.stop();
-      emit(state.copyWith(status: MusicPlayerStatus.stopped));
-    } else {
-      emit(state.copyWith(status: MusicPlayerStatus.stopped));
-    }
+    if (audioPlayer.playing) await audioPlayer.stop();
+    emit(state.copyWith(status: MusicPlayerStatus.stopped));
   }
 
-  Future<void> _onTogglePlayPause(
+  Future<void> _handleTogglePlayPause(
     TogglePlayPauseEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
@@ -110,31 +101,48 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     }
   }
 
-  Future<void> _onSkipToNext(
+  Future<void> _handleSkipToNext(
     NextMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    try {
-      await audioPlayer.seekToNext();
-    } catch (e, s) {
-      Logger.error('Error skipping to next track: $e', e, s);
-      emit(
-        state.copyWith(
-          status: MusicPlayerStatus.error,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
+    await _handleSeek(
+      emit: emit,
+      seekAction: audioPlayer.seekToNext,
+      errorContext: 'skipping to next track',
+    );
   }
 
-  Future<void> _onSkipToPrevious(
+  Future<void> _handleSkipToIndex(
+    SkipToMusicIndexEvent event,
+    Emitter<MusicPlayerState> emit,
+  ) async {
+    await _handleSeek(
+      emit: emit,
+      seekAction: () => audioPlayer.seek(Duration.zero, index: event.index),
+      errorContext: 'Skipping to trak index ${event.index}',
+    );
+  }
+
+  Future<void> _handleSkipToPrevious(
     PreviousMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
+    await _handleSeek(
+      emit: emit,
+      seekAction: audioPlayer.seekToPrevious,
+      errorContext: 'skipping to previous track',
+    );
+  }
+
+  Future<void> _handleSeek({
+    required Emitter<MusicPlayerState> emit,
+    required Future<void> Function() seekAction,
+    required String errorContext,
+  }) async {
     try {
-      await audioPlayer.seekToPrevious();
+      await seekAction();
     } catch (e, s) {
-      Logger.error('Error skipping to previous track: $e', e, s);
+      Logger.error('Error $errorContext: $e', e, s);
       emit(
         state.copyWith(
           status: MusicPlayerStatus.error,

@@ -13,7 +13,7 @@ class PlayerActionButtons extends StatefulWidget {
 class _PlayerActionButtonsState extends State<PlayerActionButtons> {
   bool isPlayed = false;
   bool isShuffled = false;
-  bool isRepeated = false;
+  LoopMode loopMode = LoopMode.off;
   late final MusicPlayerBloc musicPlayer;
 
   @override
@@ -21,7 +21,7 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
     musicPlayer = context.read<MusicPlayerBloc>();
     isPlayed = musicPlayer.state.status == MusicPlayerStatus.playing;
     isShuffled = musicPlayer.audioPlayer.shuffleModeEnabled;
-    isRepeated = musicPlayer.audioPlayer.loopMode == LoopMode.all;
+    loopMode = musicPlayer.audioPlayer.loopMode;
     super.initState();
   }
 
@@ -41,11 +41,15 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
 
   void toggleRepeat() {
     setState(() {
-      isRepeated = !isRepeated;
+      if (loopMode == LoopMode.off) {
+        loopMode = LoopMode.all;
+      } else if (loopMode == LoopMode.all) {
+        loopMode = LoopMode.one;
+      } else {
+        loopMode = LoopMode.off;
+      }
     });
-    musicPlayer.audioPlayer.setLoopMode(
-      isRepeated ? LoopMode.all : LoopMode.off,
-    );
+    musicPlayer.audioPlayer.setLoopMode(loopMode);
   }
 
   @override
@@ -95,9 +99,14 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
               : null,
         ),
         IconButton(
-          icon: const Icon(Icons.repeat),
-          isSelected: isRepeated,
-          selectedIcon: const Icon(Icons.repeat_on_rounded),
+          icon: Icon(
+            loopMode == LoopMode.off
+                ? Icons.repeat
+                : loopMode == LoopMode.all
+                    ? Icons.repeat_on_rounded
+                    : Icons.repeat_one_on_rounded,
+          ),
+          isSelected: loopMode == LoopMode.all || loopMode == LoopMode.one,
           onPressed: () {
             toggleRepeat();
           },
