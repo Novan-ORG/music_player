@@ -23,7 +23,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
 
   @override
   void initState() {
-    musicPlayerBloc.audioPlayer.currentIndexStream.listen(_onMusicChanged);
+    musicPlayerBloc.currentIndexStream.listen(_onMusicChanged);
     super.initState();
   }
 
@@ -123,10 +123,10 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                 ),
               ),
               AudioProgress(
-                durationStream: musicPlayerBloc.audioPlayer.durationStream,
-                positionStream: musicPlayerBloc.audioPlayer.positionStream,
-                onSeek: context.read<MusicPlayerBloc>().audioPlayer.seek,
-                onChangeEnd: context.read<MusicPlayerBloc>().audioPlayer.seek,
+                durationStream: musicPlayerBloc.durationStream,
+                positionStream: musicPlayerBloc.positionStream,
+                onSeek: context.read<MusicPlayerBloc>().seek,
+                onChangeEnd: context.read<MusicPlayerBloc>().seek,
               ),
               MoreActionButtons(),
               UpNextMusics(

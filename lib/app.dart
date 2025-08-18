@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/services/audio_handler/m_audio_handler.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
 import 'package:music_player/features/songs/presentation/pages/songs_page.dart';
+import 'package:music_player/injection/service_locator.dart';
 
 class MusicPlayerApp extends StatelessWidget {
   const MusicPlayerApp({super.key});
@@ -14,7 +16,9 @@ class MusicPlayerApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => SongsBloc()..add(const LoadSongsEvent())),
-        BlocProvider(create: (_) => MusicPlayerBloc()),
+        BlocProvider(
+          create: (_) => MusicPlayerBloc(getIt.get<MAudioHandler>()),
+        ),
       ],
       child: MaterialApp(
         title: 'Music Player',

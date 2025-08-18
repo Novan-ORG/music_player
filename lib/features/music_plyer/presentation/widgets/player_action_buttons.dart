@@ -11,24 +11,21 @@ class PlayerActionButtons extends StatefulWidget {
 }
 
 class _PlayerActionButtonsState extends State<PlayerActionButtons> {
-  bool isPlayed = false;
+  late Stream<PlayerState> playerStateStream;
   bool isShuffled = false;
-  LoopMode loopMode = LoopMode.off;
+  late Stream<LoopMode> loopModeStream;
   late final MusicPlayerBloc musicPlayer;
 
   @override
   void initState() {
     musicPlayer = context.read<MusicPlayerBloc>();
-    isPlayed = musicPlayer.state.status == MusicPlayerStatus.playing;
-    isShuffled = musicPlayer.audioPlayer.shuffleModeEnabled;
-    loopMode = musicPlayer.audioPlayer.loopMode;
+    playerStateStream = musicPlayer.palyerStateStream;
+    isShuffled = musicPlayer.shuffleModeEnabled;
+    loopModeStream = musicPlayer.loopModeStream;
     super.initState();
   }
 
   void togglePlay() {
-    setState(() {
-      isPlayed = !isPlayed;
-    });
     musicPlayer.add(TogglePlayPauseEvent());
   }
 
@@ -36,20 +33,7 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
     setState(() {
       isShuffled = !isShuffled;
     });
-    musicPlayer.audioPlayer.setShuffleModeEnabled(isShuffled);
-  }
-
-  void toggleRepeat() {
-    setState(() {
-      if (loopMode == LoopMode.off) {
-        loopMode = LoopMode.all;
-      } else if (loopMode == LoopMode.all) {
-        loopMode = LoopMode.one;
-      } else {
-        loopMode = LoopMode.off;
-      }
-    });
-    musicPlayer.audioPlayer.setLoopMode(loopMode);
+    musicPlayer.setShuffleModeEnabled(isShuffled);
   }
 
   @override
@@ -67,48 +51,61 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
         ),
         IconButton(
           icon: Opacity(
-            opacity: musicPlayer.audioPlayer.hasPrevious ? 1 : 0.5,
+            opacity: musicPlayer.hasPrevious ? 1 : 0.5,
             child: const Icon(Icons.skip_previous),
           ),
-          onPressed: musicPlayer.audioPlayer.hasPrevious
+          onPressed: musicPlayer.hasPrevious
               ? () {
                   musicPlayer.add(PreviousMusicEvent());
                   setState(() {});
                 }
               : null,
         ),
-        IconButton(
-          iconSize: 38,
-          icon: const Icon(Icons.play_arrow),
-          selectedIcon: const Icon(Icons.pause),
-          isSelected: isPlayed,
-          onPressed: () {
-            togglePlay();
+        StreamBuilder(
+          stream: playerStateStream,
+          builder: (context, asyncSnapshot) {
+            return IconButton(
+              iconSize: 38,
+              icon: const Icon(Icons.play_arrow),
+              selectedIcon: const Icon(Icons.pause),
+              isSelected: asyncSnapshot.hasData
+                  ? asyncSnapshot.data!.playing
+                  : false,
+              onPressed: () {
+                togglePlay();
+              },
+            );
           },
         ),
         IconButton(
           icon: Opacity(
-            opacity: musicPlayer.audioPlayer.hasNext ? 1 : 0.5,
+            opacity: musicPlayer.hasNext ? 1 : 0.5,
             child: const Icon(Icons.skip_next),
           ),
-          onPressed: musicPlayer.audioPlayer.hasNext
+          onPressed: musicPlayer.hasNext
               ? () {
                   musicPlayer.add(NextMusicEvent());
                   setState(() {});
                 }
               : null,
         ),
-        IconButton(
-          icon: Icon(
-            loopMode == LoopMode.off
-                ? Icons.repeat
-                : loopMode == LoopMode.all
+        StreamBuilder(
+          stream: loopModeStream,
+          builder: (context, asyncSnapshot) {
+            final loopMode = asyncSnapshot.data ?? LoopMode.off;
+            return IconButton(
+              icon: Icon(
+                loopMode == LoopMode.off
+                    ? Icons.repeat
+                    : loopMode == LoopMode.all
                     ? Icons.repeat_on_rounded
                     : Icons.repeat_one_on_rounded,
-          ),
-          isSelected: loopMode == LoopMode.all || loopMode == LoopMode.one,
-          onPressed: () {
-            toggleRepeat();
+              ),
+              isSelected: loopMode == LoopMode.all || loopMode == LoopMode.one,
+              onPressed: () {
+                musicPlayer.setNextLoopMode(loopMode);
+              },
+            );
           },
         ),
       ],

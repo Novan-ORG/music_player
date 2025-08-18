@@ -20,6 +20,9 @@ dependencies:
   equatable: ^2.0.7
   stream_transform: ^2.1.1
   marquee: ^2.3.0
+  audio_service: ^0.18.18
+  audio_session: ^0.2.2
+  get_it: ^8.2.0
   
 
 dev_dependencies:

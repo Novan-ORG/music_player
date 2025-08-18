@@ -1,6 +1,8 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_player/core/services/audio_handler/m_audio_handler.dart';
 import 'package:music_player/core/services/logger/logger.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
@@ -8,9 +10,9 @@ part 'music_player_event.dart';
 part 'music_player_state.dart';
 
 class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
-  final AudioPlayer audioPlayer = AudioPlayer();
+  final MAudioHandler audioHandler;
 
-  MusicPlayerBloc() : super(MusicPlayerState()) {
+  MusicPlayerBloc(this.audioHandler) : super(MusicPlayerState()) {
     on<PlayMusicEvent>(_handlePlayMusic);
     on<StopMusicEvent>(_handleStopMusic);
     on<TogglePlayPauseEvent>(_handleTogglePlayPause);
@@ -19,6 +21,40 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<ShuffleMusicEvent>(_handleShuffleMusics);
     on<SkipToMusicIndexEvent>(_handleSkipToIndex);
   }
+
+  Stream<int?> get currentIndexStream => audioHandler.currentIndexStream;
+
+  Stream<Duration?> get durationStream => audioHandler.durationStream;
+
+  Stream<Duration> get positionStream => audioHandler.positionStream;
+
+  Stream<PlayerState> get palyerStateStream => audioHandler.palyerStateStream;
+
+  Stream<LoopMode> get loopModeStream => audioHandler.loopModeStream;
+
+  Future<void> seek(Duration duration) => audioHandler.seek(duration);
+
+  bool get hasNext => audioHandler.hasNext;
+  bool get hasPrevious => audioHandler.hasPrevious;
+
+  LoopMode get loopMode => audioHandler.loopMode;
+
+  bool get shuffleModeEnabled => audioHandler.shuffleModeEnabled;
+
+  void setNextLoopMode(LoopMode loopMode) {
+    LoopMode newMode = LoopMode.off;
+    if (loopMode == LoopMode.off) {
+      newMode = LoopMode.all;
+    } else if (loopMode == LoopMode.all) {
+      newMode = LoopMode.one;
+    } else {
+      newMode = LoopMode.off;
+    }
+    audioHandler.setLoopMode(newMode);
+  }
+
+  void setShuffleModeEnabled(bool enabled) =>
+      audioHandler.setShuffleModeEnabled(enabled);
 
   Future<void> _handleShuffleMusics(
     ShuffleMusicEvent event,
@@ -60,15 +96,27 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           errorMessage: null,
         ),
       );
-      if (audioPlayer.playing) await audioPlayer.stop();
-      await audioPlayer.addAudioSources(
-        songs
-            .map((song) => AudioSource.uri(Uri.parse(song.uri ?? '')))
-            .toList(),
+      if (audioHandler.playing) await audioHandler.stop();
+      List<MediaItem> mediaItems = [];
+      await audioHandler.addAudioSources(
+        songs.map((song) {
+          final mediaItem = MediaItem(
+            id: song.id.toString(),
+            title: song.title,
+            album: song.album,
+            artist: song.artist,
+            duration: song.duration == null
+                ? Duration.zero
+                : Duration(milliseconds: song.duration!),
+          );
+          mediaItems.add(mediaItem);
+          return AudioSource.uri(Uri.parse(song.uri ?? ''));
+        }).toList(),
       );
-      await audioPlayer.setShuffleModeEnabled(shuffle);
-      await audioPlayer.seek(Duration.zero, index: index);
-      await audioPlayer.play();
+      await audioHandler.setShuffleModeEnabled(shuffle);
+      await audioHandler.seek(Duration.zero, index: index);
+      audioHandler.addQueueItems(mediaItems);
+      await audioHandler.play();
     } catch (e, s) {
       Logger.error('Error $errorContext: $e', e, s);
       emit(
@@ -84,7 +132,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     StopMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    if (audioPlayer.playing) await audioPlayer.stop();
+    if (audioHandler.playing) await audioHandler.stop();
     emit(state.copyWith(status: MusicPlayerStatus.stopped));
   }
 
@@ -92,11 +140,11 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     TogglePlayPauseEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    if (audioPlayer.playing) {
-      await audioPlayer.pause();
+    if (audioHandler.playing) {
+      await audioHandler.pause();
       emit(state.copyWith(status: MusicPlayerStatus.paused));
     } else {
-      await audioPlayer.play();
+      await audioHandler.play();
       emit(state.copyWith(status: MusicPlayerStatus.playing));
     }
   }
@@ -107,7 +155,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) async {
     await _handleSeek(
       emit: emit,
-      seekAction: audioPlayer.seekToNext,
+      seekAction: () => audioHandler.seekForward(true),
       errorContext: 'skipping to next track',
     );
   }
@@ -118,7 +166,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) async {
     await _handleSeek(
       emit: emit,
-      seekAction: () => audioPlayer.seek(Duration.zero, index: event.index),
+      seekAction: () => audioHandler.seek(Duration.zero, index: event.index),
       errorContext: 'Skipping to trak index ${event.index}',
     );
   }
@@ -129,7 +177,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) async {
     await _handleSeek(
       emit: emit,
-      seekAction: audioPlayer.seekToPrevious,
+      seekAction: () => audioHandler.seekBackward(true),
       errorContext: 'skipping to previous track',
     );
   }
