@@ -59,6 +59,9 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
           duration: song.duration == null
               ? Duration.zero
               : Duration(milliseconds: song.duration!),
+          artUri: Uri.parse(
+            'content://media/external/audio/albumart/${song.albumId}',
+          ),
         );
         mediaItems.add(mediaItem);
         return AudioSource.uri(Uri.parse(song.uri ?? ''));
