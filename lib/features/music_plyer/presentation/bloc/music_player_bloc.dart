@@ -1,4 +1,3 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:just_audio/just_audio.dart';
@@ -97,25 +96,9 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         ),
       );
       if (audioHandler.playing) await audioHandler.stop();
-      List<MediaItem> mediaItems = [];
-      await audioHandler.addAudioSources(
-        songs.map((song) {
-          final mediaItem = MediaItem(
-            id: song.id.toString(),
-            title: song.title,
-            album: song.album,
-            artist: song.artist,
-            duration: song.duration == null
-                ? Duration.zero
-                : Duration(milliseconds: song.duration!),
-          );
-          mediaItems.add(mediaItem);
-          return AudioSource.uri(Uri.parse(song.uri ?? ''));
-        }).toList(),
-      );
+      await audioHandler.addAudioSources(songs);
       await audioHandler.setShuffleModeEnabled(shuffle);
       await audioHandler.seek(Duration.zero, index: index);
-      audioHandler.addQueueItems(mediaItems);
       await audioHandler.play();
     } catch (e, s) {
       Logger.error('Error $errorContext: $e', e, s);
@@ -155,7 +138,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) async {
     await _handleSeek(
       emit: emit,
-      seekAction: () => audioHandler.seekForward(true),
+      seekAction: () => audioHandler.skipToNext(),
       errorContext: 'skipping to next track',
     );
   }
@@ -177,7 +160,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) async {
     await _handleSeek(
       emit: emit,
-      seekAction: () => audioHandler.seekBackward(true),
+      seekAction: () => audioHandler.skipToPrevious(),
       errorContext: 'skipping to previous track',
     );
   }

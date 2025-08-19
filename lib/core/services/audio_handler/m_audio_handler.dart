@@ -1,9 +1,17 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class MAudioHandler extends BaseAudioHandler with SeekHandler {
   MAudioHandler(this._player) {
     _player.playbackEventStream.map(_transformEvent).pipe(playbackState);
+    _player.currentIndexStream.listen((currentIndex) {
+      if (currentIndex != null && queue.value.length > currentIndex) {
+        if (mediaItem.value?.id != queue.value[currentIndex].id) {
+          mediaItem.add(queue.value[currentIndex]);
+        }
+      }
+    });
   }
 
   final AudioPlayer _player;
@@ -31,16 +39,6 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
   void setLoopMode(LoopMode loopMode) => _player.setLoopMode(loopMode);
 
   @override
-  Future<void> seekBackward(bool begin) async {
-    await _player.seekToPrevious();
-  }
-
-  @override
-  Future<void> seekForward(bool begin) async {
-    await _player.seekToNext();
-  }
-
-  @override
   Future<void> seek(Duration position, {int index = 0}) async {
     await _player.seek(position, index: index);
   }
@@ -49,8 +47,24 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
     await _player.setShuffleModeEnabled(enabled);
   }
 
-  Future<void> addAudioSources(List<AudioSource> sources) async {
-    await _player.addAudioSources(sources);
+  Future<void> addAudioSources(List<SongModel> songs) async {
+    List<MediaItem> mediaItems = [];
+    await _player.addAudioSources(
+      songs.map((song) {
+        final mediaItem = MediaItem(
+          id: song.id.toString(),
+          title: song.title,
+          album: song.album,
+          artist: song.artist,
+          duration: song.duration == null
+              ? Duration.zero
+              : Duration(milliseconds: song.duration!),
+        );
+        mediaItems.add(mediaItem);
+        return AudioSource.uri(Uri.parse(song.uri ?? ''));
+      }).toList(),
+    );
+    await addQueueItems(mediaItems);
   }
 
   @override
