@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marquee/marquee.dart';
@@ -28,7 +29,10 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
   }
 
   void _onMusicChanged(index) {
-    if (index != null && index >= 0 && index != currentSongIndex) {
+    if (index != null &&
+        index >= 0 &&
+        index != currentSongIndex &&
+        index < musicPlayerBloc.state.playList.length) {
       currentSongIndex = index;
       currentSong = musicPlayerBloc.state.playList[index];
       if (mounted) {
@@ -89,29 +93,27 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
               ),
               ListTile(
                 contentPadding: EdgeInsets.zero,
-                title: SizedBox(
-                  height: 22,
-                  child:
-                      (currentSong?.displayNameWOExt ?? 'Unknown Song').length >
-                          20
-                      ? Marquee(
-                          text: currentSong?.displayNameWOExt ?? 'Unknown Song',
-                          style: Theme.of(context).textTheme.titleLarge,
-                          scrollAxis: Axis.horizontal,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          blankSpace: 30.0,
-                          showFadingOnlyWhenScrolling: true,
-                          velocity: 40.0,
-                          pauseAfterRound: Duration(seconds: 1),
-                          accelerationDuration: Duration(seconds: 1),
-                          accelerationCurve: Curves.linear,
-                          decelerationDuration: Duration(milliseconds: 500),
-                          decelerationCurve: Curves.easeOut,
-                        )
-                      : Text(
-                          currentSong?.displayNameWOExt ?? 'Unknown Song',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
+                title: AutoSizeText(
+                  currentSong?.displayNameWOExt ?? 'Unknown Song',
+                  style: Theme.of(context).textTheme.titleLarge,
+                  maxLines: 1,
+                  overflowReplacement: SizedBox(
+                    height: 22,
+                    child: Marquee(
+                      text: currentSong?.displayNameWOExt ?? 'Unknown Song',
+                      style: Theme.of(context).textTheme.titleLarge,
+                      scrollAxis: Axis.horizontal,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      blankSpace: 30.0,
+                      showFadingOnlyWhenScrolling: true,
+                      velocity: 40.0,
+                      pauseAfterRound: Duration(seconds: 1),
+                      accelerationDuration: Duration(seconds: 1),
+                      accelerationCurve: Curves.linear,
+                      decelerationDuration: Duration(milliseconds: 500),
+                      decelerationCurve: Curves.easeOut,
+                    ),
+                  ),
                 ),
                 subtitle: Text(
                   currentSong?.artist ?? 'Unknown Artist',
