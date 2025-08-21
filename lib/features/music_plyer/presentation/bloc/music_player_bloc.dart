@@ -1,17 +1,27 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_player/core/constants/preferences_keys.dart';
 import 'package:music_player/core/services/audio_handler/m_audio_handler.dart';
 import 'package:music_player/core/services/logger/logger.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'music_player_event.dart';
 part 'music_player_state.dart';
 
 class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
-  final MAudioHandler audioHandler;
-
-  MusicPlayerBloc(this.audioHandler) : super(MusicPlayerState()) {
+  MusicPlayerBloc(this.audioHandler, this._preferences)
+    : super(
+        MusicPlayerState(
+          likedSongIds:
+              _preferences
+                  .getStringList(PreferencesKeys.favoritedSongs)
+                  ?.map(int.parse)
+                  .toList() ??
+              [],
+        ),
+      ) {
     on<PlayMusicEvent>(_handlePlayMusic);
     on<StopMusicEvent>(_handleStopMusic);
     on<TogglePlayPauseEvent>(_handleTogglePlayPause);
@@ -19,7 +29,11 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<PreviousMusicEvent>(_handleSkipToPrevious);
     on<ShuffleMusicEvent>(_handleShuffleMusics);
     on<SkipToMusicIndexEvent>(_handleSkipToIndex);
+    on<ToggleLikeMusicEvent>(_handleToggleLike);
   }
+
+  final MAudioHandler audioHandler;
+  final SharedPreferences _preferences;
 
   Stream<int?> get currentIndexStream => audioHandler.currentIndexStream;
 
@@ -55,6 +69,21 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   void setShuffleModeEnabled(bool enabled) =>
       audioHandler.setShuffleModeEnabled(enabled);
 
+  Future<void> _handleToggleLike(
+    ToggleLikeMusicEvent event,
+    Emitter<MusicPlayerState> emit,
+  ) async {
+    final favorites =
+        _preferences.getStringList(PreferencesKeys.favoritedSongs) ?? [];
+    if (favorites.contains(event.songId.toString())) {
+      favorites.remove(event.songId.toString());
+    } else {
+      favorites.add(event.songId.toString());
+    }
+    await _preferences.setStringList(PreferencesKeys.favoritedSongs, favorites);
+    emit(state.copyWith(likedSongIds: favorites.map(int.parse).toList()));
+  }
+
   Future<void> _handleShuffleMusics(
     ShuffleMusicEvent event,
     Emitter<MusicPlayerState> emit,
@@ -88,10 +117,13 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     required String errorContext,
   }) async {
     try {
+      final favorites =
+          _preferences.getStringList(PreferencesKeys.favoritedSongs) ?? [];
       emit(
         state.copyWith(
           status: MusicPlayerStatus.playing,
           playList: songs,
+          likedSongIds: favorites.map(int.parse).toList(),
           errorMessage: null,
         ),
       );

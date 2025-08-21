@@ -119,10 +119,28 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                   currentSong?.artist ?? 'Unknown Artist',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                trailing: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.favorite),
-                ),
+                trailing:
+                    BlocSelector<MusicPlayerBloc, MusicPlayerState, List<int>>(
+                      selector: (state) {
+                        return state.likedSongIds;
+                      },
+                      builder: (context, state) {
+                        return IconButton(
+                          onPressed: () {
+                            if (currentSong != null) {
+                              musicPlayerBloc.add(
+                                ToggleLikeMusicEvent(currentSong!.id),
+                              );
+                            }
+                          },
+                          icon: Icon(
+                            state.contains(currentSong?.id ?? -1)
+                                ? Icons.favorite
+                                : Icons.favorite_border_rounded,
+                          ),
+                        );
+                      },
+                    ),
               ),
               AudioProgress(
                 durationStream: musicPlayerBloc.durationStream,

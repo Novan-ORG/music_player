@@ -61,7 +61,23 @@ class MiniPlayerPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             spacing: 2,
             children: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
+              BlocSelector<MusicPlayerBloc, MusicPlayerState, List<int>>(
+                selector: (state) {
+                  return state.likedSongIds;
+                },
+                builder: (context, state) {
+                  return IconButton(
+                    onPressed: () {
+                      musicPlayerBloc.add(ToggleLikeMusicEvent(currentSong.id));
+                    },
+                    icon: Icon(
+                      state.contains(currentSong.id)
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                    ),
+                  );
+                },
+              ),
               const SizedBox(width: 1),
               IconButton(
                 onPressed: musicPlayerBloc.hasPrevious

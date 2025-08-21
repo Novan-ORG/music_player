@@ -60,3 +60,12 @@ final class SkipToMusicIndexEvent extends MusicPlayerEvent {
   @override
   List<Object> get props => [...super.props, index];
 }
+
+final class ToggleLikeMusicEvent extends MusicPlayerEvent {
+  const ToggleLikeMusicEvent(this.songId);
+
+  final int songId;
+
+  @override
+  List<Object> get props => [...super.props, songId];
+}

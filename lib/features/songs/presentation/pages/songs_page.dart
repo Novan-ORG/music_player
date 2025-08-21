@@ -57,16 +57,33 @@ class _SongsView extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: songs.length,
                   itemBuilder: (_, index) {
-                    return SongItem(
-                      song: songs[index],
-                      onTap: () {
-                        context.read<MusicPlayerBloc>().add(
-                          PlayMusicEvent(index, songs),
-                        );
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const MusicPlayerPage(),
-                          ),
+                    return BlocSelector<
+                      MusicPlayerBloc,
+                      MusicPlayerState,
+                      List<int>
+                    >(
+                      selector: (state) {
+                        return state.likedSongIds;
+                      },
+                      builder: (context, state) {
+                        return SongItem(
+                          song: songs[index],
+                          isLiked: state.contains(songs[index].id),
+                          onToggleLike: () {
+                            context.read<MusicPlayerBloc>().add(
+                              ToggleLikeMusicEvent(songs[index].id),
+                            );
+                          },
+                          onTap: () {
+                            context.read<MusicPlayerBloc>().add(
+                              PlayMusicEvent(index, songs),
+                            );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const MusicPlayerPage(),
+                              ),
+                            );
+                          },
                         );
                       },
                     );

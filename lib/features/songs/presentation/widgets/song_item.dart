@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SongItem extends StatelessWidget {
-  const SongItem({required this.song, this.onTap, super.key});
+  const SongItem({
+    required this.song,
+    this.onTap,
+    this.isLiked = false,
+    this.onToggleLike,
+    super.key,
+  });
 
   final SongModel song;
   final VoidCallback? onTap;
+  final bool isLiked;
+  final VoidCallback? onToggleLike;
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +62,8 @@ class SongItem extends StatelessWidget {
         spacing: 12,
         children: [
           IconButton(
-            icon: Icon(Icons.favorite_border),
-            onPressed: () {
-              // Handle favorite action
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text('favorite pressed')));
-            },
+            icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border),
+            onPressed: onToggleLike,
           ),
           IconButton(
             icon: Icon(Icons.more_horiz),

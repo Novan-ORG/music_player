@@ -7,6 +7,7 @@ import 'package:music_player/features/home/presentation/pages/home_page.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
 import 'package:music_player/injection/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MusicPlayerApp extends StatelessWidget {
   const MusicPlayerApp({super.key});
@@ -17,7 +18,10 @@ class MusicPlayerApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => SongsBloc()..add(const LoadSongsEvent())),
         BlocProvider(
-          create: (_) => MusicPlayerBloc(getIt.get<MAudioHandler>()),
+          create: (_) => MusicPlayerBloc(
+            getIt.get<MAudioHandler>(),
+            getIt.get<SharedPreferences>(),
+          ),
         ),
       ],
       child: MaterialApp(
