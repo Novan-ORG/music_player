@@ -9,7 +9,7 @@ final getIt = GetIt.instance;
 
 void setup() {
   //
-  getIt.registerSingletonAsync(() => ObjectBox.create(),);
+  getIt.registerSingletonAsync(() => ObjectBox.create());
   //
   getIt.registerLazySingleton<AudioPlayer>(() => AudioPlayer());
   getIt.registerSingletonAsync<MAudioHandler>(

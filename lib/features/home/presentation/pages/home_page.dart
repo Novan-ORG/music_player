@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/features/mini_player/presentation/pages/mini_player_page.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
+import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
 import 'package:music_player/features/songs/presentation/pages/songs_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,7 +19,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SongsPage(),
+      body: switch (currentIndex) {
+        0 => const SongsPage(),
+        1 => const PlaylistsPage(),
+        2 => Container(),
+        _ => const SongsPage(),
+      },
       bottomSheet: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
         bloc: musicPlayerBloc,
         builder: (_, state) {

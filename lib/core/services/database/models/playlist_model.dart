@@ -1,4 +1,3 @@
-
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -15,5 +14,4 @@ class PlaylistModel {
     this.imagePath,
     this.description,
   });
-  
 }
