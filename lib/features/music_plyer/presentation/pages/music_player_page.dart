@@ -8,6 +8,7 @@ import 'package:music_player/features/music_plyer/presentation/widgets/audio_pro
 import 'package:music_player/features/music_plyer/presentation/widgets/more_action_buttons.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/player_action_buttons.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/upnext_musics.dart';
+import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class MusicPlayerPage extends StatefulWidget {
@@ -148,7 +149,14 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                 onSeek: context.read<MusicPlayerBloc>().seek,
                 onChangeEnd: context.read<MusicPlayerBloc>().seek,
               ),
-              MoreActionButtons(),
+              MoreActionButtons(
+                onAddToPlaylistPressed: () {
+                  PlaylistsPage.showSheet(
+                    context: context,
+                    songId: currentSong?.id,
+                  );
+                },
+              ),
               UpNextMusics(
                 onTapSong: (index) {
                   musicPlayerBloc.add(SkipToMusicIndexEvent(index));

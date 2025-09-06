@@ -17,3 +17,13 @@ final class AddPlayListEvent extends PlayListEvent {
   @override
   List<Object> get props => [playlistModel];
 }
+
+final class AddSongToPlaylistsEvent extends PlayListEvent {
+  const AddSongToPlaylistsEvent(this.songId, this.playlistIds);
+
+  final int songId;
+  final List<int> playlistIds;
+
+  @override
+  List<Object> get props => [songId, playlistIds];
+}

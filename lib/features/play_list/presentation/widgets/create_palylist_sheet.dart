@@ -46,7 +46,12 @@ class CreatePalylistSheet extends StatelessWidget {
             onPressed: () {
               if (textController.text.trim().isEmpty) return;
               context.read<PlayListBloc>().add(
-                AddPlayListEvent(PlaylistModel(name: textController.text)),
+                AddPlayListEvent(
+                  PlaylistModel(
+                    id: context.read<PlayListBloc>().state.playLists.length + 1,
+                    name: textController.text,
+                  ),
+                ),
               );
               Navigator.of(context).pop();
             },

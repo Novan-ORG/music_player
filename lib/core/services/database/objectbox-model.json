@@ -5,14 +5,14 @@
   "entities": [
     {
       "id": "1:4810329605292288283",
-      "lastPropertyId": "4:2000081922668166154",
+      "lastPropertyId": "5:8787462956697355784",
       "name": "PlaylistModel",
       "properties": [
         {
           "id": "1:8967902643415053381",
           "name": "id",
           "type": 6,
-          "flags": 1
+          "flags": 129
         },
         {
           "id": "2:922584578537872566",
@@ -28,6 +28,11 @@
           "id": "4:2000081922668166154",
           "name": "description",
           "type": 9
+        },
+        {
+          "id": "5:8787462956697355784",
+          "name": "songs",
+          "type": 27
         }
       ],
       "relations": []

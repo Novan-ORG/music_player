@@ -10,9 +10,37 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
   PlayListBloc(this.objectBox) : super(const PlayListState()) {
     on<LoadPlayListsEvent>(_loadPlayLists);
     on<AddPlayListEvent>(_addPlayList);
+    on<AddSongToPlaylistsEvent>(_addSongToPlaylists);
   }
 
   final ObjectBox objectBox;
+
+  Future<void> _addSongToPlaylists(
+    AddSongToPlaylistsEvent event,
+    Emitter<PlayListState> emit,
+  ) async {
+    try {
+      final playlistBox = objectBox.store.box<PlaylistModel>();
+
+      for (final playlistId in event.playlistIds) {
+        final playlist = playlistBox.get(playlistId);
+        if (playlist != null &&
+            playlist.songs.contains(event.songId) == false) {
+          playlist.songs.add(event.songId);
+          playlistBox.put(playlist);
+        }
+      }
+      final playLists = playlistBox.getAll();
+      emit(state.copyWith(playLists: playLists, status: PlayListStatus.loaded));
+    } catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.toString(),
+          status: PlayListStatus.error,
+        ),
+      );
+    }
+  }
 
   Future<void> _addPlayList(
     AddPlayListEvent event,

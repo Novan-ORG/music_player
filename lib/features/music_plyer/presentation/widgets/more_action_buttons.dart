@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class MoreActionButtons extends StatelessWidget {
-  const MoreActionButtons({super.key});
+  const MoreActionButtons({super.key, this.onAddToPlaylistPressed});
+
+  final VoidCallback? onAddToPlaylistPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -10,9 +12,7 @@ class MoreActionButtons extends StatelessWidget {
       children: [
         IconButton(
           icon: const Icon(Icons.playlist_add_outlined),
-          onPressed: () {
-            // Handle showing the list of all songs
-          },
+          onPressed: onAddToPlaylistPressed,
         ),
         IconButton(
           icon: const Icon(Icons.lyrics),

@@ -4,13 +4,31 @@ import 'package:music_player/features/play_list/presentation/bloc/play_list_bloc
 import 'package:music_player/features/play_list/presentation/widgets/create_palylist_sheet.dart';
 
 class PlaylistsPage extends StatefulWidget {
-  const PlaylistsPage({super.key});
+  const PlaylistsPage({super.key, this.isSelectionMode = false, this.songId});
+
+  final bool isSelectionMode;
+  final int? songId;
+
+  static Future<void> showSheet({required BuildContext context, int? songId}) {
+    return showModalBottomSheet(
+      context: context,
+      useSafeArea: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      builder: (_) => Padding(
+        padding: EdgeInsets.all(16),
+        child: PlaylistsPage(isSelectionMode: true, songId: songId),
+      ),
+    );
+  }
 
   @override
   State<PlaylistsPage> createState() => _PlaylistsPageState();
 }
 
 class _PlaylistsPageState extends State<PlaylistsPage> {
+  final selectedPlaylistIds = <int>{};
   @override
   void initState() {
     context.read<PlayListBloc>().add(LoadPlayListsEvent());
@@ -57,7 +75,28 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                     );
                   } else {
                     final playlist = state.playLists[index - 1];
-                    return ListTile(title: Text(playlist.name));
+                    return widget.isSelectionMode
+                        ? CheckboxListTile(
+                            value: selectedPlaylistIds.contains(playlist.id),
+                            title: Text(playlist.name),
+                            subtitle: Text(
+                              '${playlist.songs.length} song${playlist.songs.length == 1 ? '' : 's'}',
+                            ),
+                            onChanged: (value) {
+                              if (value == true) {
+                                selectedPlaylistIds.add(playlist.id);
+                              } else {
+                                selectedPlaylistIds.remove(playlist.id);
+                              }
+                              setState(() {});
+                            },
+                          )
+                        : ListTile(
+                            title: Text(playlist.name),
+                            subtitle: Text(
+                              '${playlist.songs.length} song${playlist.songs.length == 1 ? '' : 's'}',
+                            ),
+                          );
                   }
                 },
               );
@@ -66,6 +105,25 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           return Center(child: Text('Playlists Page'));
         },
       ),
+      bottomNavigationBar: widget.isSelectionMode && widget.songId != null
+          ? Padding(
+              padding: EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: selectedPlaylistIds.isEmpty
+                    ? null
+                    : () {
+                        context.read<PlayListBloc>().add(
+                          AddSongToPlaylistsEvent(
+                            widget.songId!,
+                            selectedPlaylistIds.toList(),
+                          ),
+                        );
+                        Navigator.of(context).pop(selectedPlaylistIds.toList());
+                      },
+                child: Text('Add to Selected Playlists'),
+              ),
+            )
+          : null,
     );
   }
 }

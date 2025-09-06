@@ -22,14 +22,14 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(1, 4810329605292288283),
     name: 'PlaylistModel',
-    lastPropertyId: const obx_int.IdUid(4, 2000081922668166154),
+    lastPropertyId: const obx_int.IdUid(5, 8787462956697355784),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(1, 8967902643415053381),
         name: 'id',
         type: 6,
-        flags: 1,
+        flags: 129,
       ),
       obx_int.ModelProperty(
         id: const obx_int.IdUid(2, 922584578537872566),
@@ -47,6 +47,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(4, 2000081922668166154),
         name: 'description',
         type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 8787462956697355784),
+        name: 'songs',
+        type: 27,
         flags: 0,
       ),
     ],
@@ -113,7 +119,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
       toManyRelations: (PlaylistModel object) => {},
       getId: (PlaylistModel object) => object.id,
       setId: (PlaylistModel object, int id) {
-        object.id = id;
+        if (object.id != id) {
+          throw ArgumentError(
+            'Field PlaylistModel.id is read-only '
+            '(final or getter-only) and it was declared to be self-assigned. '
+            'However, the currently inserted object (.id=${object.id}) '
+            "doesn't match the inserted ID (ID $id). "
+            'You must assign an ID before calling [box.put()].',
+          );
+        }
       },
       objectToFB: (PlaylistModel object, fb.Builder fbb) {
         final nameOffset = fbb.writeString(object.name);
@@ -123,11 +137,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final descriptionOffset = object.description == null
             ? null
             : fbb.writeString(object.description!);
-        fbb.startTable(5);
+        final songsOffset = fbb.writeListInt64(object.songs);
+        fbb.startTable(6);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, nameOffset);
         fbb.addOffset(2, imagePathOffset);
         fbb.addOffset(3, descriptionOffset);
+        fbb.addOffset(4, songsOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -143,6 +159,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final nameParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
+        final songsParam = const fb.ListReader<int>(
+          fb.Int64Reader(),
+          lazy: false,
+        ).vTableGet(buffer, rootOffset, 12, []);
         final imagePathParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 8);
@@ -152,6 +172,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final object = PlaylistModel(
           id: idParam,
           name: nameParam,
+          songs: songsParam,
           imagePath: imagePathParam,
           description: descriptionParam,
         );
@@ -184,5 +205,10 @@ class PlaylistModel_ {
   /// See [PlaylistModel.description].
   static final description = obx.QueryStringProperty<PlaylistModel>(
     _entities[0].properties[3],
+  );
+
+  /// See [PlaylistModel.songs].
+  static final songs = obx.QueryIntegerVectorProperty<PlaylistModel>(
+    _entities[0].properties[4],
   );
 }
