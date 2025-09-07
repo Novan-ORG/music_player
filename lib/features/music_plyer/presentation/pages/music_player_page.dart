@@ -10,6 +10,7 @@ import 'package:music_player/features/music_plyer/presentation/widgets/player_ac
 import 'package:music_player/features/music_plyer/presentation/widgets/upnext_musics.dart';
 import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MusicPlayerPage extends StatefulWidget {
   const MusicPlayerPage({super.key});
@@ -154,6 +155,15 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                   PlaylistsPage.showSheet(
                     context: context,
                     songId: currentSong?.id,
+                  );
+                },
+                onSharePressed: () {
+                  SharePlus.instance.share(
+                    ShareParams(
+                      text: currentSong?.displayNameWOExt ?? 'Unknown Song',
+                      subject: currentSong?.artist ?? 'Unknown Artist',
+                      files: [XFile(currentSong?.data ?? '')],
+                    ),
                   );
                 },
               ),
