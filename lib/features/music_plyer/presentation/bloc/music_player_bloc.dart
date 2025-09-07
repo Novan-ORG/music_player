@@ -127,7 +127,6 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           errorMessage: null,
         ),
       );
-      if (audioHandler.playing) await audioHandler.stop();
       await audioHandler.addAudioSources(songs);
       await audioHandler.setShuffleModeEnabled(shuffle);
       await audioHandler.seek(Duration.zero, index: index);

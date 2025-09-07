@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/features/play_list/presentation/bloc/play_list_bloc.dart';
 import 'package:music_player/features/play_list/presentation/widgets/create_palylist_sheet.dart';
+import 'package:music_player/features/songs/presentation/pages/songs_page.dart';
 
 class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({super.key, this.isSelectionMode = false, this.songId});
@@ -92,6 +93,13 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                             },
                           )
                         : ListTile(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => SongsPage(playlist: playlist),
+                                ),
+                              );
+                            },
                             title: Text(playlist.name),
                             subtitle: Text(
                               '${playlist.songs.length} song${playlist.songs.length == 1 ? '' : 's'}',

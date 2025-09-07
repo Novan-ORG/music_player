@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/extensions/duration_ex.dart';
-import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 
 class UpNextMusics extends StatelessWidget {
   const UpNextMusics({super.key, this.onTapSong});
@@ -24,17 +24,12 @@ class UpNextMusics extends StatelessWidget {
             ],
           ),
           Flexible(
-            child: BlocBuilder<SongsBloc, SongsState>(
+            child: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+              buildWhen: (previous, current) =>
+                  previous.playList != current.playList,
               builder: (context, state) {
-                if (state.status == SongsStatus.loading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state.status == SongsStatus.error) {
-                  return const Center(child: Text('Error loading songs'));
-                } else if (state.songs.isEmpty) {
-                  return const Center(child: Text('No songs found'));
-                }
                 return ListView.builder(
-                  itemCount: state.songs.length,
+                  itemCount: state.playList.length,
                   itemExtent: 28,
                   itemBuilder: (context, index) {
                     return InkWell(
@@ -46,7 +41,7 @@ class UpNextMusics extends StatelessWidget {
                           Icon(Icons.music_note),
                           Expanded(
                             child: Text(
-                              '${state.songs[index].displayNameWOExt} - ${state.songs[index].artist ?? 'unknown'}',
+                              '${state.playList[index].displayNameWOExt} - ${state.playList[index].artist ?? 'unknown'}',
                               maxLines: 1,
                               style: Theme.of(context).textTheme.bodyMedium,
                               overflow: TextOverflow.ellipsis,
@@ -54,7 +49,7 @@ class UpNextMusics extends StatelessWidget {
                           ),
                           Text(
                             Duration(
-                              milliseconds: state.songs[index].duration ?? 0,
+                              milliseconds: state.playList[index].duration ?? 0,
                             ).format(),
                             maxLines: 1,
                           ),

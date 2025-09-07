@@ -18,7 +18,7 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
 
   bool get playing => _player.playing;
 
-  Stream<int?> get currentIndexStream => _player.currentIndexStream;
+  Stream<int?> get currentIndexStream => _player.currentIndexStream.distinct();
 
   Stream<Duration?> get durationStream => _player.durationStream;
 

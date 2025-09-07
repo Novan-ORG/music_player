@@ -17,9 +17,9 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
   final audioQuery = OnAudioQuery();
 
   void onSortSongs(SortSongsEvent event, Emitter<SongsState> emit) {
-    final sortedSongs = List<SongModel>.from(state.songs);
+    final sortedSongs = List<SongModel>.from(state.allSongs);
     _sortSongs(sortedSongs, event.sortType);
-    emit(state.copyWith(songs: sortedSongs, sortType: event.sortType));
+    emit(state.copyWith(allSongs: sortedSongs, sortType: event.sortType));
   }
 
   void onLoadSongs(SongsEvent event, Emitter emit) async {
@@ -35,7 +35,7 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
       }
       final songs = await audioQuery.querySongs();
       _sortSongs(songs, state.sortType);
-      emit(SongsState(songs: songs, status: SongsStatus.loaded));
+      emit(SongsState(allSongs: songs, status: SongsStatus.loaded));
     } catch (e, s) {
       Logger.error('Error fetching songs: $e', e, s);
       emit(SongsState(status: SongsStatus.error));
