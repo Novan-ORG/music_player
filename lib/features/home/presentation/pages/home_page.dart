@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
       body: switch (currentIndex) {
         0 => const SongsPage(),
         1 => const PlaylistsPage(),
-        2 => Container(),
+        2 => SongsPage(isFavorites: true),
         _ => const SongsPage(),
       },
       bottomSheet: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(

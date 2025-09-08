@@ -49,7 +49,8 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
 
   Future<void> addAudioSources(List<SongModel> songs) async {
     List<MediaItem> mediaItems = [];
-    await _player.addAudioSources(
+
+    await _player.setAudioSources(
       songs.map((song) {
         final mediaItem = MediaItem(
           id: song.id.toString(),

@@ -10,9 +10,10 @@ import 'package:music_player/features/songs/presentation/widgets/top_head_action
 import 'package:on_audio_query_pluse/on_audio_query.dart' hide PlaylistModel;
 
 class SongsPage extends StatefulWidget {
-  const SongsPage({super.key, this.playlist});
+  const SongsPage({super.key, this.playlist, this.isFavorites = false});
 
   final PlaylistModel? playlist;
+  final bool isFavorites;
 
   @override
   State<SongsPage> createState() => _SongsPageState();
@@ -44,55 +45,61 @@ class _SongsPageState extends State<SongsPage> {
               (song) => widget.playlist!.songs.contains(song.id),
             );
           }
-          if (songs.isEmpty) {
-            return const Center(child: Text('No songs in this playlist'));
-          }
-          return Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              TopHeadActions(
-                songCount: songs.length,
-                onShuffleAll: () {
-                  context.read<MusicPlayerBloc>().add(
-                    ShuffleMusicEvent(songs: songs),
-                  );
-                  Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute(builder: (_) => MusicPlayerPage()));
-                },
-                onSortSongs: (sortType) {
-                  songsBloc.add(SortSongsEvent(sortType));
-                },
-                sortType: state.sortType,
-              ).paddingSymmetric(horizontal: 12),
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    songsBloc.add(LoadSongsEvent());
-                  },
-                  child: ListView.builder(
-                    itemCount: songs.length,
-                    itemBuilder: (_, index) {
-                      return BlocSelector<
-                        MusicPlayerBloc,
-                        MusicPlayerState,
-                        List<int>
-                      >(
-                        selector: (state) {
-                          return state.likedSongIds;
-                        },
-                        builder: (context, state) {
+          final musicPlayerBloc = context.read<MusicPlayerBloc>();
+          return BlocSelector<MusicPlayerBloc, MusicPlayerState, List<int>>(
+            bloc: musicPlayerBloc,
+            selector: (state) {
+              return state.likedSongIds;
+            },
+            builder: (context, likedSongIds) {
+              final filteredSongs = List<SongModel>.from(songs);
+              if (widget.isFavorites) {
+                filteredSongs.retainWhere(
+                  (song) => likedSongIds.contains(song.id),
+                );
+              }
+              if (filteredSongs.isEmpty) {
+                return const Center(child: Text('No songs in this playlist'));
+              }
+              return Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  TopHeadActions(
+                    songCount: filteredSongs.length,
+                    onShuffleAll: () {
+                      context.read<MusicPlayerBloc>().add(
+                        ShuffleMusicEvent(songs: filteredSongs),
+                      );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => MusicPlayerPage()),
+                      );
+                    },
+                    onSortSongs: (sortType) {
+                      songsBloc.add(SortSongsEvent(sortType));
+                    },
+                    sortType: state.sortType,
+                  ).paddingSymmetric(horizontal: 12),
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        songsBloc.add(LoadSongsEvent());
+                      },
+                      child: ListView.builder(
+                        itemCount: filteredSongs.length,
+                        itemBuilder: (_, index) {
                           return SongItem(
-                            song: songs[index],
-                            isLiked: state.contains(songs[index].id),
+                            song: filteredSongs[index],
+                            isLiked: likedSongIds.contains(
+                              filteredSongs[index].id,
+                            ),
                             onToggleLike: () {
-                              context.read<MusicPlayerBloc>().add(
-                                ToggleLikeMusicEvent(songs[index].id),
+                              musicPlayerBloc.add(
+                                ToggleLikeMusicEvent(filteredSongs[index].id),
                               );
                             },
                             onTap: () {
                               context.read<MusicPlayerBloc>().add(
-                                PlayMusicEvent(index, songs),
+                                PlayMusicEvent(index, filteredSongs),
                               );
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -102,12 +109,12 @@ class _SongsPageState extends State<SongsPage> {
                             },
                           );
                         },
-                      );
-                    },
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ],
+                ],
+              );
+            },
           );
         },
       ),
