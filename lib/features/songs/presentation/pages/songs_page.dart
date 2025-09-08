@@ -5,6 +5,7 @@ import 'package:music_player/extensions/padding_ex.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
 import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
+import 'package:music_player/features/songs/presentation/widgets/no_songs_widget.dart';
 import 'package:music_player/features/songs/presentation/widgets/song_item.dart';
 import 'package:music_player/features/songs/presentation/widgets/top_head_actions.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart' hide PlaylistModel;
@@ -26,7 +27,11 @@ class _SongsPageState extends State<SongsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.playlist != null ? widget.playlist!.name : 'All Songs Page',
+          widget.isFavorites
+              ? 'Favorite Songs'
+              : widget.playlist != null
+              ? widget.playlist!.name
+              : 'All Songs Page',
         ),
       ),
       body: BlocBuilder<SongsBloc, SongsState>(
@@ -37,7 +42,11 @@ class _SongsPageState extends State<SongsPage> {
           } else if (state.status == SongsStatus.error) {
             return const Center(child: Text('Error loading songs'));
           } else if (state.allSongs.isEmpty) {
-            return const Center(child: Text('No songs found'));
+            return NoSongsWidget(
+              onRefresh: () async {
+                songsBloc.add(LoadSongsEvent());
+              },
+            );
           }
           final songs = List<SongModel>.from(state.allSongs);
           if (widget.playlist != null) {
@@ -59,7 +68,14 @@ class _SongsPageState extends State<SongsPage> {
                 );
               }
               if (filteredSongs.isEmpty) {
-                return const Center(child: Text('No songs in this playlist'));
+                return NoSongsWidget(
+                  message: widget.isFavorites
+                      ? 'No favorite songs yet'
+                      : 'No songs available in this playlist',
+                  onRefresh: () async {
+                    songsBloc.add(LoadSongsEvent());
+                  },
+                );
               }
               return Column(
                 mainAxisSize: MainAxisSize.max,
@@ -89,6 +105,33 @@ class _SongsPageState extends State<SongsPage> {
                         itemBuilder: (_, index) {
                           return SongItem(
                             song: filteredSongs[index],
+                            onDeletePressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Delete Song'),
+                                  content: const Text(
+                                    'Are you sure you want to delete this song?',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        songsBloc.add(
+                                          DeleteSongEvent(filteredSongs[index]),
+                                        );
+                                      },
+                                      child: const Text('Delete'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                             isLiked: likedSongIds.contains(
                               filteredSongs[index].id,
                             ),

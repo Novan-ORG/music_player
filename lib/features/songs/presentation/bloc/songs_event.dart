@@ -14,3 +14,9 @@ final class SortSongsEvent extends SongsEvent {
 
   final SortType sortType;
 }
+
+final class DeleteSongEvent extends SongsEvent {
+  const DeleteSongEvent(this.song);
+
+  final SongModel song;
+}

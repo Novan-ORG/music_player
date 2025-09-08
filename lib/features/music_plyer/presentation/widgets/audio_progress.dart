@@ -7,13 +7,11 @@ class AudioProgress extends StatelessWidget {
     required this.durationStream,
     required this.positionStream,
     this.onSeek,
-    this.onChangeEnd,
   });
 
   final Stream<Duration?> durationStream;
   final Stream<Duration> positionStream;
   final ValueChanged<Duration>? onSeek;
-  final ValueChanged<Duration>? onChangeEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +45,6 @@ class AudioProgress extends StatelessWidget {
                       milliseconds: (value * duration.inMilliseconds).round(),
                     );
                     onSeek?.call(newPosition);
-                  },
-                  onChangeEnd: (value) {
-                    final newPosition = Duration(
-                      milliseconds: (value * duration.inMilliseconds).round(),
-                    );
-                    onChangeEnd?.call(newPosition);
                   },
                 );
               },

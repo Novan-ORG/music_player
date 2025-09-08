@@ -7,6 +7,7 @@ class SongItem extends StatelessWidget {
     this.onTap,
     this.isLiked = false,
     this.onToggleLike,
+    this.onDeletePressed,
     super.key,
   });
 
@@ -14,6 +15,7 @@ class SongItem extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isLiked;
   final VoidCallback? onToggleLike;
+  final VoidCallback? onDeletePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -65,14 +67,40 @@ class SongItem extends StatelessWidget {
             icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border),
             onPressed: onToggleLike,
           ),
-          IconButton(
+          PopupMenuButton<String>(
             icon: Icon(Icons.more_horiz),
-            onPressed: () {
-              // Handle more action
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text('more pressed')));
+            onSelected: (value) {
+              if (value == 'delete') {
+                onDeletePressed?.call();
+              } else if (value == 'ringtone') {
+                // Handle set as ringtone action
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Set as ringtone pressed')),
+                );
+              }
             },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text('Delete'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'ringtone',
+                child: Row(
+                  children: [
+                    Icon(Icons.music_note, color: Colors.blue),
+                    SizedBox(width: 8),
+                    Text('Set as ringtone'),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

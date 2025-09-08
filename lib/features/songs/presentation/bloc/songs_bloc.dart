@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart' show immutable;
 import 'package:music_player/core/services/logger/logger.dart';
 import 'package:music_player/features/songs/presentation/widgets/top_head_actions.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 part 'songs_event.dart';
 part 'songs_state.dart';
@@ -12,9 +15,35 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
   SongsBloc() : super(const SongsState()) {
     on<LoadSongsEvent>(onLoadSongs);
     on<SortSongsEvent>(onSortSongs);
+    on<DeleteSongEvent>(onDeleteSong);
   }
 
   final audioQuery = OnAudioQuery();
+
+  void onDeleteSong(DeleteSongEvent event, Emitter<SongsState> emit) async {
+    try {
+      final file = File(event.song.data);
+      if (await file.exists()) {
+        if (await Permission.manageExternalStorage.isGranted) {
+          file.deleteSync();
+          final updatedSongs = List<SongModel>.from(state.allSongs)
+            ..removeWhere((song) => song.id == event.song.id);
+          emit(state.copyWith(allSongs: updatedSongs));
+        } else {
+          final isGranted = await Permission.manageExternalStorage.request();
+          if (isGranted == PermissionStatus.granted ||
+              isGranted == PermissionStatus.limited) {
+            file.deleteSync();
+            final updatedSongs = List<SongModel>.from(state.allSongs)
+              ..removeWhere((song) => song.id == event.song.id);
+            emit(state.copyWith(allSongs: updatedSongs));
+          }
+        }
+      }
+    } catch (e, s) {
+      Logger.error('Error deleting song: $e', e, s);
+    }
+  }
 
   void onSortSongs(SortSongsEvent event, Emitter<SongsState> emit) {
     final sortedSongs = List<SongModel>.from(state.allSongs);

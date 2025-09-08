@@ -148,7 +148,6 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                 durationStream: musicPlayerBloc.durationStream,
                 positionStream: musicPlayerBloc.positionStream,
                 onSeek: context.read<MusicPlayerBloc>().seek,
-                onChangeEnd: context.read<MusicPlayerBloc>().seek,
               ),
               MoreActionButtons(
                 onAddToPlaylistPressed: () {

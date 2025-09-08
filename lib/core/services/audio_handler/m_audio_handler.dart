@@ -39,7 +39,7 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
   void setLoopMode(LoopMode loopMode) => _player.setLoopMode(loopMode);
 
   @override
-  Future<void> seek(Duration position, {int index = 0}) async {
+  Future<void> seek(Duration position, {int? index}) async {
     await _player.seek(position, index: index);
   }
 
