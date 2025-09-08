@@ -8,6 +8,7 @@ class SongItem extends StatelessWidget {
     this.isLiked = false,
     this.onToggleLike,
     this.onDeletePressed,
+    this.onSetAsRingtonePressed,
     super.key,
   });
 
@@ -16,6 +17,7 @@ class SongItem extends StatelessWidget {
   final bool isLiked;
   final VoidCallback? onToggleLike;
   final VoidCallback? onDeletePressed;
+  final VoidCallback? onSetAsRingtonePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +75,7 @@ class SongItem extends StatelessWidget {
               if (value == 'delete') {
                 onDeletePressed?.call();
               } else if (value == 'ringtone') {
-                // Handle set as ringtone action
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Set as ringtone pressed')),
-                );
+                onSetAsRingtonePressed?.call();
               }
             },
             itemBuilder: (context) => [
