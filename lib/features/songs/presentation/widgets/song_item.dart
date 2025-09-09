@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/features/songs/presentation/widgets/song_image_widget.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SongItem extends StatelessWidget {
@@ -44,22 +45,7 @@ class SongItem extends StatelessWidget {
           ),
         ],
       ),
-      leading: QueryArtworkWidget(
-        id: song.id,
-        quality: 70,
-        type: ArtworkType.AUDIO,
-        artworkBorder: BorderRadius.circular(8.0),
-        nullArtworkWidget: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Image.asset(
-            'assets/images/song_cover.png',
-            fit: BoxFit.cover,
-            width: 50,
-            height: 50,
-            alignment: Alignment.center,
-          ),
-        ),
-      ),
+      leading: SongImageWidget(songId: song.id),
       trailing: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,

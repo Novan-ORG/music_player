@@ -5,6 +5,7 @@ import 'package:music_player/core/services/ringtone_set/ringtone_set.dart';
 import 'package:music_player/extensions/padding_ex.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
+import 'package:music_player/features/search/presentation/pages/search_songs_page.dart';
 import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
 import 'package:music_player/features/songs/presentation/widgets/no_songs_widget.dart';
 import 'package:music_player/features/songs/presentation/widgets/song_item.dart';
@@ -87,6 +88,16 @@ class _SongsPageState extends State<SongsPage> {
               ? 'Favorite Songs'
               : widget.playlist?.name ?? 'All Songs Page',
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const SearchSongsPage()),
+              );
+            },
+            icon: Icon(Icons.search),
+          ),
+        ],
       ),
       body: BlocBuilder<SongsBloc, SongsState>(
         bloc: songsBloc,
