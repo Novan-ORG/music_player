@@ -39,6 +39,9 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.isSelectionMode ? 'Select Playlists' : 'Playlists'),
+      ),
       body: BlocBuilder<PlayListBloc, PlayListState>(
         builder: (context, state) {
           if (state.status == PlayListStatus.loading) {

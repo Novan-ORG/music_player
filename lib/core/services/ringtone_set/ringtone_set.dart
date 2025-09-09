@@ -6,7 +6,9 @@ class RingtoneSet {
 
   static Future<bool> setRingtone(String path) async {
     try {
-      MethodChannel channel = const MethodChannel('com.taleb.music_player/ringtone_set');
+      MethodChannel channel = const MethodChannel(
+        'com.taleb.music_player/ringtone_set',
+      );
       final result = await channel.invokeMethod('set_ringtone', {
         'filePath': path,
       });

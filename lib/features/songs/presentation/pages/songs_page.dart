@@ -122,9 +122,13 @@ class _SongsPageState extends State<SongsPage> {
                   TopHeadActions(
                     songCount: filteredSongs.length,
                     onShuffleAll: () {
-                      musicPlayerBloc.add(ShuffleMusicEvent(songs: filteredSongs));
+                      musicPlayerBloc.add(
+                        ShuffleMusicEvent(songs: filteredSongs),
+                      );
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const MusicPlayerPage()),
+                        MaterialPageRoute(
+                          builder: (_) => const MusicPlayerPage(),
+                        ),
                       );
                     },
                     onSortSongs: (sortType) {
@@ -146,10 +150,13 @@ class _SongsPageState extends State<SongsPage> {
                                 _setAsRingtone(context, song.data),
                             onDeletePressed: () =>
                                 _showDeleteDialog(context, song),
-                            onToggleLike: () =>
-                                musicPlayerBloc.add(ToggleLikeMusicEvent(song.id)),
+                            onToggleLike: () => musicPlayerBloc.add(
+                              ToggleLikeMusicEvent(song.id),
+                            ),
                             onTap: () {
-                              musicPlayerBloc.add(PlayMusicEvent(index, filteredSongs));
+                              musicPlayerBloc.add(
+                                PlayMusicEvent(index, filteredSongs),
+                              );
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (_) => const MusicPlayerPage(),
