@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
               theme.bottomNavigationBarTheme.backgroundColor ?? theme.cardColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withAlpha(5),
               blurRadius: 8,
               offset: const Offset(0, -2),
             ),

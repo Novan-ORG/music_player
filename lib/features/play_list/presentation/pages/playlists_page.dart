@@ -14,11 +14,11 @@ class PlaylistsPage extends StatefulWidget {
     return showModalBottomSheet(
       context: context,
       useSafeArea: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) => Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: PlaylistsPage(isSelectionMode: true, songId: songId),
       ),
     );
@@ -29,11 +29,163 @@ class PlaylistsPage extends StatefulWidget {
 }
 
 class _PlaylistsPageState extends State<PlaylistsPage> {
-  final selectedPlaylistIds = <int>{};
+  final Set<int> selectedPlaylistIds = {};
+
   @override
   void initState() {
-    context.read<PlayListBloc>().add(LoadPlayListsEvent());
     super.initState();
+    context.read<PlayListBloc>().add(LoadPlayListsEvent());
+  }
+
+  void _showCreatePlaylistSheet() {
+    CreatePlaylistSheet.show(context);
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.playlist_play, size: 64, color: Colors.grey[400]),
+          const SizedBox(height: 16),
+          const Text(
+            'No Playlists Found',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 8),
+          ElevatedButton.icon(
+            icon: const Icon(Icons.add),
+            label: const Text('Create First Playlist'),
+            onPressed: _showCreatePlaylistSheet,
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPlaylistTile(playlist) {
+    final subtitle = '${playlist.songs.length} song${playlist.songs.length == 1 ? '' : 's'}';
+    if (widget.isSelectionMode) {
+      return Card(
+        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+        child: CheckboxListTile(
+          value: selectedPlaylistIds.contains(playlist.id),
+          title: Text(playlist.name, style: const TextStyle(fontWeight: FontWeight.w500)),
+          subtitle: Text(subtitle),
+          secondary: const Icon(Icons.queue_music),
+          activeColor: Theme.of(context).colorScheme.primary,
+          onChanged: (value) {
+            setState(() {
+              if (value == true) {
+                selectedPlaylistIds.add(playlist.id);
+              } else {
+                selectedPlaylistIds.remove(playlist.id);
+              }
+            });
+          },
+        ),
+      );
+    } else {
+      return Card(
+        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            child: const Icon(Icons.queue_music, color: Colors.black54),
+          ),
+          title: Text(playlist.name, style: const TextStyle(fontWeight: FontWeight.w500)),
+          subtitle: Text(subtitle),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => SongsPage(playlist: playlist),
+              ),
+            );
+          },
+        ),
+      );
+    }
+  }
+
+  Widget _buildPlaylistsList(List playlists) {
+    return ListView.separated(
+      padding: const EdgeInsets.only(top: 8, bottom: 80),
+      itemCount: playlists.length + 1,
+      separatorBuilder: (_, __) => const SizedBox(height: 2),
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Card(
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            child: ListTile(
+              leading: const Icon(Icons.add, color: Colors.blueAccent),
+              title: const Text('Create New Playlist', style: TextStyle(fontWeight: FontWeight.w600)),
+              onTap: _showCreatePlaylistSheet,
+            ),
+          );
+        }
+        final playlist = playlists[index - 1];
+        return _buildPlaylistTile(playlist);
+      },
+    );
+  }
+
+  Widget _buildBody(PlayListState state) {
+    switch (state.status) {
+      case PlayListStatus.loading:
+        return const Center(child: CircularProgressIndicator());
+      case PlayListStatus.error:
+        return Center(child: Text('Error: ${state.errorMessage}'));
+      case PlayListStatus.loaded:
+        if (state.playLists.isEmpty) {
+          return _buildEmptyState();
+        }
+        return _buildPlaylistsList(state.playLists);
+      default:
+        return const Center(child: Text('Playlists Page'));
+    }
+  }
+
+  Widget? _buildBottomBar() {
+    if (widget.isSelectionMode && widget.songId != null) {
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 8,
+              offset: Offset(0, -2),
+            ),
+          ],
+        ),
+        child: ElevatedButton.icon(
+          icon: const Icon(Icons.playlist_add_check),
+          label: const Text('Add to Selected Playlists'),
+          onPressed: selectedPlaylistIds.isEmpty
+              ? null
+              : () {
+                  context.read<PlayListBloc>().add(
+                        AddSongToPlaylistsEvent(
+                          widget.songId!,
+                          selectedPlaylistIds.toList(),
+                        ),
+                      );
+                  Navigator.of(context).pop(selectedPlaylistIds.toList());
+                },
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size.fromHeight(48),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        ),
+      );
+    }
+    return null;
   }
 
   @override
@@ -41,100 +193,21 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.isSelectionMode ? 'Select Playlists' : 'Playlists'),
+        centerTitle: true,
+        elevation: 1,
+        actions: [
+          if (!widget.isSelectionMode)
+            IconButton(
+              icon: const Icon(Icons.add),
+              tooltip: 'Create Playlist',
+              onPressed: _showCreatePlaylistSheet,
+            ),
+        ],
       ),
       body: BlocBuilder<PlayListBloc, PlayListState>(
-        builder: (context, state) {
-          if (state.status == PlayListStatus.loading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state.status == PlayListStatus.error) {
-            return Center(child: Text('Error: ${state.errorMessage}'));
-          } else if (state.status == PlayListStatus.loaded) {
-            if (state.playLists.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 18,
-                  children: [
-                    Text('No Playlists Found'),
-                    TextButton(
-                      onPressed: () {
-                        CreatePalylistSheet.show(context);
-                      },
-                      child: Text('Create First Playlist'),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              return ListView.builder(
-                itemCount: state.playLists.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return ListTile(
-                      title: Text('Create New Playlist'),
-                      leading: Icon(Icons.add),
-                      onTap: () {
-                        CreatePalylistSheet.show(context);
-                      },
-                    );
-                  } else {
-                    final playlist = state.playLists[index - 1];
-                    return widget.isSelectionMode
-                        ? CheckboxListTile(
-                            value: selectedPlaylistIds.contains(playlist.id),
-                            title: Text(playlist.name),
-                            subtitle: Text(
-                              '${playlist.songs.length} song${playlist.songs.length == 1 ? '' : 's'}',
-                            ),
-                            onChanged: (value) {
-                              if (value == true) {
-                                selectedPlaylistIds.add(playlist.id);
-                              } else {
-                                selectedPlaylistIds.remove(playlist.id);
-                              }
-                              setState(() {});
-                            },
-                          )
-                        : ListTile(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => SongsPage(playlist: playlist),
-                                ),
-                              );
-                            },
-                            title: Text(playlist.name),
-                            subtitle: Text(
-                              '${playlist.songs.length} song${playlist.songs.length == 1 ? '' : 's'}',
-                            ),
-                          );
-                  }
-                },
-              );
-            }
-          }
-          return Center(child: Text('Playlists Page'));
-        },
+        builder: (context, state) => _buildBody(state),
       ),
-      bottomNavigationBar: widget.isSelectionMode && widget.songId != null
-          ? Padding(
-              padding: EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: selectedPlaylistIds.isEmpty
-                    ? null
-                    : () {
-                        context.read<PlayListBloc>().add(
-                          AddSongToPlaylistsEvent(
-                            widget.songId!,
-                            selectedPlaylistIds.toList(),
-                          ),
-                        );
-                        Navigator.of(context).pop(selectedPlaylistIds.toList());
-                      },
-                child: Text('Add to Selected Playlists'),
-              ),
-            )
-          : null,
+      bottomNavigationBar: _buildBottomBar(),
     );
   }
 }

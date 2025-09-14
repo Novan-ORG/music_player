@@ -3,66 +3,131 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/services/database/models/playlist_model.dart';
 import 'package:music_player/features/play_list/presentation/bloc/play_list_bloc.dart';
 
-class CreatePalylistSheet extends StatelessWidget {
-  const CreatePalylistSheet._();
+class CreatePlaylistSheet extends StatefulWidget {
+  const CreatePlaylistSheet._();
 
   static Future<void> show(BuildContext context) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-      ),
-      builder: (_) => Padding(
-        padding: EdgeInsets.all(16),
-        child: const CreatePalylistSheet._(),
-      ),
+      backgroundColor: Colors.transparent,
+      builder: (_) => const CreatePlaylistSheet._(),
     );
   }
 
   @override
+  State<CreatePlaylistSheet> createState() => _CreatePlaylistSheetState();
+}
+
+class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
+  final TextEditingController _controller = TextEditingController();
+  bool _isValid = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onChanged(String value) {
+    setState(() {
+      _isValid = value.trim().isNotEmpty;
+    });
+  }
+
+  void _createPlaylist() {
+    final name = _controller.text.trim();
+    if (name.isEmpty) return;
+    final bloc = context.read<PlayListBloc>();
+    bloc.add(
+      AddPlayListEvent(
+        PlaylistModel(
+          id: bloc.state.playLists.length + 1,
+          name: name,
+        ),
+      ),
+    );
+    Navigator.of(context).pop();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final textController = TextEditingController();
-    return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: 16,
-        children: [
-          Text(
-            'Create New Playlist',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineMedium,
+    final theme = Theme.of(context);
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: DraggableScrollableSheet(
+        initialChildSize: 0.45,
+        minChildSize: 0.35,
+        maxChildSize: 0.7,
+        builder: (context, scrollController) => Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 16,
+                offset: Offset(0, -4),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: textController,
-            decoration: InputDecoration(
-              labelText: 'Playlist Name',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (textController.text.trim().isEmpty) return;
-              context.read<PlayListBloc>().add(
-                AddPlayListEvent(
-                  PlaylistModel(
-                    id: context.read<PlayListBloc>().state.playLists.length + 1,
-                    name: textController.text,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          child: ListView(
+            controller: scrollController,
+            shrinkWrap: true,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: theme.dividerColor,
+                    borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-              );
-              Navigator.of(context).pop();
-            },
-            style: ButtonStyle(
-              shape: WidgetStateProperty.all(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
               ),
-            ),
-            child: Text('Create Playlist'),
+              Text(
+                'Create New Playlist',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 24),
+              TextField(
+                controller: _controller,
+                onChanged: _onChanged,
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: 'Playlist Name',
+                  prefixIcon: const Icon(Icons.playlist_add),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: theme.colorScheme.surfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 24),
+              AnimatedOpacity(
+                opacity: _isValid ? 1 : 0.5,
+                duration: const Duration(milliseconds: 200),
+                child: ElevatedButton.icon(
+                  onPressed: _isValid ? _createPlaylist : null,
+                  icon: const Icon(Icons.check_circle_outline),
+                  label: const Text('Create Playlist'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
