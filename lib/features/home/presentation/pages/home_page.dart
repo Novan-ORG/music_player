@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/features/mini_player/presentation/pages/mini_player_page.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
+import 'package:music_player/features/settings/presentation/pages/settings_page.dart';
 import 'package:music_player/features/songs/presentation/pages/songs_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
         0 => const SongsPage(),
         1 => const PlaylistsPage(),
         2 => SongsPage(isFavorites: true),
+        3 => const SettingsPage(),
         _ => const SongsPage(),
       },
       bottomSheet: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
@@ -36,6 +38,7 @@ class _HomePageState extends State<HomePage> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         onTap: (value) {
           setState(() {
@@ -54,6 +57,10 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite_rounded),
             label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings_rounded),
+            label: 'Settings',
           ),
         ],
       ),
