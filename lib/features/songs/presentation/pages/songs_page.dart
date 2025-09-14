@@ -189,8 +189,8 @@ class _SongsPageState extends State<SongsPage> {
                 MaterialPageRoute(builder: (_) => const SearchSongsPage()),
               );
             },
-            child: const Icon(Icons.search, size: 28),
             tooltip: 'Search Songs',
+            child: const Icon(Icons.search, size: 28),
           ),
           body: BlocBuilder<SongsBloc, SongsState>(
             bloc: songsBloc,

@@ -14,55 +14,79 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int currentIndex = 0;
-  late final musicPlayerBloc = context.read<MusicPlayerBloc>();
+  int _currentIndex = 0;
+  late final MusicPlayerBloc _musicPlayerBloc = context.read<MusicPlayerBloc>();
+
+  final List<Widget> _pages = const [
+    SongsPage(),
+    PlaylistsPage(),
+    SongsPage(isFavorites: true),
+    SettingsPage(),
+  ];
+
+  final List<BottomNavigationBarItem> _navBarItems = const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.music_note_rounded),
+      label: 'Songs',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.queue_music_rounded),
+      label: 'Playlists',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.favorite_rounded),
+      label: 'Favorites',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.settings_rounded),
+      label: 'Settings',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      body: switch (currentIndex) {
-        0 => const SongsPage(),
-        1 => const PlaylistsPage(),
-        2 => SongsPage(isFavorites: true),
-        3 => const SettingsPage(),
-        _ => const SongsPage(),
-      },
+      backgroundColor: theme.colorScheme.background,
+      body: SafeArea(
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: _pages[_currentIndex],
+        ),
+      ),
       bottomSheet: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
-        bloc: musicPlayerBloc,
+        bloc: _musicPlayerBloc,
         builder: (_, state) {
           if (state.playList.isEmpty) {
-            return SizedBox.shrink();
-          } else {
-            return MiniPlayerPage();
+            return const SizedBox.shrink();
           }
+          return const MiniPlayerPage();
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentIndex,
-        onTap: (value) {
-          setState(() {
-            currentIndex = value;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.music_note_rounded),
-            label: 'Songs',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.queue_music_rounded),
-            label: 'Playlists',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_rounded),
-            label: 'Favorites',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_rounded),
-            label: 'Settings',
-          ),
-        ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color:
+              theme.bottomNavigationBarTheme.backgroundColor ?? theme.cardColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          onTap: (index) => setState(() => _currentIndex = index),
+          items: _navBarItems,
+          selectedItemColor: theme.colorScheme.primary,
+          unselectedItemColor: theme.disabledColor,
+          showUnselectedLabels: true,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
       ),
     );
   }
