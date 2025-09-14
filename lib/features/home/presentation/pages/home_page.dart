@@ -64,29 +64,16 @@ class _HomePageState extends State<HomePage> {
           return const MiniPlayerPage();
         },
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color:
-              theme.bottomNavigationBarTheme.backgroundColor ?? theme.cardColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(5),
-              blurRadius: 8,
-              offset: const Offset(0, -2),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
-          items: _navBarItems,
-          selectedItemColor: theme.colorScheme.primary,
-          unselectedItemColor: theme.disabledColor,
-          showUnselectedLabels: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentIndex,
+        onTap: (index) => setState(() => _currentIndex = index),
+        items: _navBarItems,
+        selectedItemColor: theme.colorScheme.primary,
+        unselectedItemColor: theme.disabledColor,
+        showUnselectedLabels: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
       ),
     );
   }

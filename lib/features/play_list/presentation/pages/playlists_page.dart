@@ -58,7 +58,9 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
             label: const Text('Create First Playlist'),
             onPressed: _showCreatePlaylistSheet,
             style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
           ),
         ],
@@ -67,13 +69,17 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   }
 
   Widget _buildPlaylistTile(playlist) {
-    final subtitle = '${playlist.songs.length} song${playlist.songs.length == 1 ? '' : 's'}';
+    final subtitle =
+        '${playlist.songs.length} song${playlist.songs.length == 1 ? '' : 's'}';
     if (widget.isSelectionMode) {
       return Card(
         margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
         child: CheckboxListTile(
           value: selectedPlaylistIds.contains(playlist.id),
-          title: Text(playlist.name, style: const TextStyle(fontWeight: FontWeight.w500)),
+          title: Text(
+            playlist.name,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
           subtitle: Text(subtitle),
           secondary: const Icon(Icons.queue_music),
           activeColor: Theme.of(context).colorScheme.primary,
@@ -93,17 +99,20 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
         margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            backgroundColor: Theme.of(
+              context,
+            ).colorScheme.primary.withOpacity(0.1),
             child: const Icon(Icons.queue_music, color: Colors.black54),
           ),
-          title: Text(playlist.name, style: const TextStyle(fontWeight: FontWeight.w500)),
+          title: Text(
+            playlist.name,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
           subtitle: Text(subtitle),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
             Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => SongsPage(playlist: playlist),
-              ),
+              MaterialPageRoute(builder: (_) => SongsPage(playlist: playlist)),
             );
           },
         ),
@@ -123,7 +132,10 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
             margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             child: ListTile(
               leading: const Icon(Icons.add, color: Colors.blueAccent),
-              title: const Text('Create New Playlist', style: TextStyle(fontWeight: FontWeight.w600)),
+              title: const Text(
+                'Create New Playlist',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
               onTap: _showCreatePlaylistSheet,
             ),
           );
@@ -171,16 +183,18 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
               ? null
               : () {
                   context.read<PlayListBloc>().add(
-                        AddSongToPlaylistsEvent(
-                          widget.songId!,
-                          selectedPlaylistIds.toList(),
-                        ),
-                      );
+                    AddSongToPlaylistsEvent(
+                      widget.songId!,
+                      selectedPlaylistIds.toList(),
+                    ),
+                  );
                   Navigator.of(context).pop(selectedPlaylistIds.toList());
                 },
           style: ElevatedButton.styleFrom(
             minimumSize: const Size.fromHeight(48),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
         ),
       );

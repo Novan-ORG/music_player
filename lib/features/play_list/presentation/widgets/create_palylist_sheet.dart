@@ -41,10 +41,7 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
     final bloc = context.read<PlayListBloc>();
     bloc.add(
       AddPlayListEvent(
-        PlaylistModel(
-          id: bloc.state.playLists.length + 1,
-          name: name,
-        ),
+        PlaylistModel(id: bloc.state.playLists.length + 1, name: name),
       ),
     );
     Navigator.of(context).pop();
