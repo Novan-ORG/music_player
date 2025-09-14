@@ -1,12 +1,12 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:marquee/marquee.dart';
 import 'package:music_player/extensions/padding_ex.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/audio_progress.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/more_action_buttons.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/player_action_buttons.dart';
+import 'package:music_player/features/music_plyer/presentation/widgets/song_artwork.dart';
+import 'package:music_player/features/music_plyer/presentation/widgets/song_info.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/upnext_musics.dart';
 import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
@@ -26,8 +26,8 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
 
   @override
   void initState() {
-    musicPlayerBloc.currentIndexStream.listen(_onMusicChanged);
     super.initState();
+    musicPlayerBloc.currentIndexStream.listen(_onMusicChanged);
   }
 
   void _onMusicChanged(index) {
@@ -35,11 +35,10 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
         index >= 0 &&
         index != currentSongIndex &&
         index < musicPlayerBloc.state.playList.length) {
-      currentSongIndex = index;
-      currentSong = musicPlayerBloc.state.playList[index];
-      if (mounted) {
-        setState(() {});
-      }
+      setState(() {
+        currentSongIndex = index;
+        currentSong = musicPlayerBloc.state.playList[index];
+      });
     }
   }
 
@@ -49,141 +48,56 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
       tag: 'mini_cover_${currentSong?.id ?? 'no_song'}',
       child: Scaffold(
         appBar: AppBar(title: const Text('Player')),
-        body:
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              spacing: 12,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10.0,
-                          offset: Offset(0, 5),
-                        ),
-                      ],
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 24),
+              SongArtwork(song: currentSong),
+              const SizedBox(height: 24),
+              SongInfo(
+                song: currentSong,
+                onLikePressed: () {
+                  if (currentSong != null) {
+                    musicPlayerBloc.add(ToggleLikeMusicEvent(currentSong!.id));
+                  }
+                },
+              ),
+              const SizedBox(height: 16),
+              AudioProgress(
+                durationStream: musicPlayerBloc.durationStream,
+                positionStream: musicPlayerBloc.positionStream,
+                onSeek: musicPlayerBloc.seek,
+              ),
+              const SizedBox(height: 16),
+              MoreActionButtons(
+                onAddToPlaylistPressed: () {
+                  PlaylistsPage.showSheet(
+                    context: context,
+                    songId: currentSong?.id,
+                  );
+                },
+                onSharePressed: () {
+                  SharePlus.instance.share(
+                    ShareParams(
+                      text: currentSong?.displayNameWOExt ?? 'Unknown Song',
+                      subject: currentSong?.artist ?? 'Unknown Artist',
+                      files: [XFile(currentSong?.data ?? '')],
                     ),
-                    child: currentSong != null
-                        ? QueryArtworkWidget(
-                            id: currentSong!.id,
-                            type: ArtworkType.AUDIO,
-                            quality: 100,
-                            artworkFit: BoxFit.cover,
-                            artworkQuality: FilterQuality.high,
-                            artworkBorder: BorderRadius.circular(16.0),
-                            artworkWidth:
-                                MediaQuery.of(context).size.height * 0.33,
-                            artworkHeight:
-                                MediaQuery.of(context).size.height * 0.33,
-                            nullArtworkWidget: Image.asset(
-                              'assets/images/song_cover.png',
-                              fit: BoxFit.cover,
-                              width: MediaQuery.of(context).size.height * 0.33,
-                              height: MediaQuery.of(context).size.height * 0.33,
-                              alignment: Alignment.center,
-                            ),
-                          )
-                        : Image.asset(
-                            'assets/images/song_cover.png',
-                            fit: BoxFit.cover,
-                            width: MediaQuery.of(context).size.height * 0.33,
-                            height: MediaQuery.of(context).size.height * 0.33,
-                            alignment: Alignment.center,
-                          ),
-                  ),
-                ),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: AutoSizeText(
-                    currentSong?.displayNameWOExt ?? 'Unknown Song',
-                    style: Theme.of(context).textTheme.titleLarge,
-                    maxLines: 1,
-                    overflowReplacement: SizedBox(
-                      height: 22,
-                      child: Marquee(
-                        text: currentSong?.displayNameWOExt ?? 'Unknown Song',
-                        style: Theme.of(context).textTheme.titleLarge,
-                        scrollAxis: Axis.horizontal,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        blankSpace: 30.0,
-                        showFadingOnlyWhenScrolling: true,
-                        velocity: 40.0,
-                        pauseAfterRound: Duration(seconds: 1),
-                        accelerationDuration: Duration(seconds: 1),
-                        accelerationCurve: Curves.linear,
-                        decelerationDuration: Duration(milliseconds: 500),
-                        decelerationCurve: Curves.easeOut,
-                      ),
-                    ),
-                  ),
-                  subtitle: Text(
-                    currentSong?.artist ?? 'Unknown Artist',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  trailing:
-                      BlocSelector<
-                        MusicPlayerBloc,
-                        MusicPlayerState,
-                        List<int>
-                      >(
-                        selector: (state) {
-                          return state.likedSongIds;
-                        },
-                        builder: (context, state) {
-                          return IconButton(
-                            onPressed: () {
-                              if (currentSong != null) {
-                                musicPlayerBloc.add(
-                                  ToggleLikeMusicEvent(currentSong!.id),
-                                );
-                              }
-                            },
-                            icon: Icon(
-                              state.contains(currentSong?.id ?? -1)
-                                  ? Icons.favorite
-                                  : Icons.favorite_border_rounded,
-                            ),
-                          );
-                        },
-                      ),
-                ),
-                AudioProgress(
-                  durationStream: musicPlayerBloc.durationStream,
-                  positionStream: musicPlayerBloc.positionStream,
-                  onSeek: context.read<MusicPlayerBloc>().seek,
-                ),
-                MoreActionButtons(
-                  onAddToPlaylistPressed: () {
-                    PlaylistsPage.showSheet(
-                      context: context,
-                      songId: currentSong?.id,
-                    );
-                  },
-                  onSharePressed: () {
-                    SharePlus.instance.share(
-                      ShareParams(
-                        text: currentSong?.displayNameWOExt ?? 'Unknown Song',
-                        subject: currentSong?.artist ?? 'Unknown Artist',
-                        files: [XFile(currentSong?.data ?? '')],
-                      ),
-                    );
-                  },
-                ),
-                UpNextMusics(
-                  onTapSong: (index) {
-                    musicPlayerBloc.add(SkipToMusicIndexEvent(index));
-                  },
-                ),
-                PlayerActionButtons(),
-              ],
-            ).paddingOnly(
-              left: 16,
-              right: 16,
-              bottom: MediaQuery.of(context).padding.bottom + 16,
-            ),
+                  );
+                },
+              ),
+              const SizedBox(height: 8),
+              UpNextMusics(
+                onTapSong: (index) {
+                  musicPlayerBloc.add(SkipToMusicIndexEvent(index));
+                },
+              ),
+              const SizedBox(height: 12),
+              const PlayerActionButtons(),
+            ],
+          ).paddingSymmetric(horizontal: 16, vertical: 8),
+        ),
       ),
     );
   }

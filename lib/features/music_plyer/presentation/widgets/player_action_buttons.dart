@@ -38,77 +38,145 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        IconButton(
-          icon: const Icon(Icons.shuffle),
-          isSelected: isShuffled,
-          selectedIcon: const Icon(Icons.shuffle_on_rounded),
-          onPressed: () {
-            toggleShuffle();
-          },
-        ),
-        IconButton(
-          icon: Opacity(
-            opacity: musicPlayer.hasPrevious ? 1 : 0.5,
-            child: const Icon(Icons.skip_previous),
+    final colorScheme = Theme.of(context).colorScheme;
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: LinearGradient(
+            colors: [
+              colorScheme.primary.withAlpha(10),
+              colorScheme.secondary.withAlpha(8),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          onPressed: musicPlayer.hasPrevious
-              ? () {
-                  musicPlayer.add(PreviousMusicEvent());
-                  setState(() {});
-                }
-              : null,
         ),
-        StreamBuilder(
-          stream: playerStateStream,
-          builder: (context, asyncSnapshot) {
-            return IconButton(
-              iconSize: 38,
-              icon: const Icon(Icons.play_arrow),
-              selectedIcon: const Icon(Icons.pause),
-              isSelected: asyncSnapshot.hasData
-                  ? asyncSnapshot.data!.playing
-                  : false,
-              onPressed: () {
-                togglePlay();
-              },
-            );
-          },
-        ),
-        IconButton(
-          icon: Opacity(
-            opacity: musicPlayer.hasNext ? 1 : 0.5,
-            child: const Icon(Icons.skip_next),
-          ),
-          onPressed: musicPlayer.hasNext
-              ? () {
-                  musicPlayer.add(NextMusicEvent());
-                  setState(() {});
-                }
-              : null,
-        ),
-        StreamBuilder(
-          stream: loopModeStream,
-          builder: (context, asyncSnapshot) {
-            final loopMode = asyncSnapshot.data ?? LoopMode.off;
-            return IconButton(
-              icon: Icon(
-                loopMode == LoopMode.off
-                    ? Icons.repeat
-                    : loopMode == LoopMode.all
-                    ? Icons.repeat_on_rounded
-                    : Icons.repeat_one_on_rounded,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Tooltip(
+              message: isShuffled ? 'Disable Shuffle' : 'Enable Shuffle',
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: IconButton(
+                  key: ValueKey(isShuffled),
+                  icon: Icon(
+                    isShuffled ? Icons.shuffle_on_rounded : Icons.shuffle,
+                    color: isShuffled
+                        ? colorScheme.primary
+                        : colorScheme.onSurface.withAlpha(70),
+                  ),
+                  splashRadius: 28,
+                  onPressed: toggleShuffle,
+                ),
               ),
-              isSelected: loopMode == LoopMode.all || loopMode == LoopMode.one,
-              onPressed: () {
-                musicPlayer.setNextLoopMode(loopMode);
+            ),
+            Tooltip(
+              message: 'Previous',
+              child: IconButton(
+                icon: Opacity(
+                  opacity: musicPlayer.hasPrevious ? 1 : 0.5,
+                  child: const Icon(Icons.skip_previous),
+                ),
+                splashRadius: 28,
+                onPressed: musicPlayer.hasPrevious
+                    ? () {
+                        musicPlayer.add(PreviousMusicEvent());
+                        setState(() {});
+                      }
+                    : null,
+              ),
+            ),
+            StreamBuilder<PlayerState>(
+              stream: playerStateStream,
+              builder: (context, asyncSnapshot) {
+                final isPlaying = asyncSnapshot.hasData
+                    ? asyncSnapshot.data!.playing
+                    : false;
+                return Tooltip(
+                  message: isPlaying ? 'Pause' : 'Play',
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, anim) =>
+                        ScaleTransition(scale: anim, child: child),
+                    child: IconButton(
+                      key: ValueKey(isPlaying),
+                      iconSize: 44,
+                      icon: Icon(
+                        isPlaying
+                            ? Icons.pause_circle_filled
+                            : Icons.play_circle_fill,
+                        color: colorScheme.primary,
+                      ),
+                      splashRadius: 32,
+                      onPressed: togglePlay,
+                    ),
+                  ),
+                );
               },
-            );
-          },
+            ),
+            Tooltip(
+              message: 'Next',
+              child: IconButton(
+                icon: Opacity(
+                  opacity: musicPlayer.hasNext ? 1 : 0.5,
+                  child: const Icon(Icons.skip_next),
+                ),
+                splashRadius: 28,
+                onPressed: musicPlayer.hasNext
+                    ? () {
+                        musicPlayer.add(NextMusicEvent());
+                        setState(() {});
+                      }
+                    : null,
+              ),
+            ),
+            StreamBuilder<LoopMode>(
+              stream: loopModeStream,
+              builder: (context, asyncSnapshot) {
+                final loopMode = asyncSnapshot.data ?? LoopMode.off;
+                IconData icon;
+                String tooltip;
+                Color color;
+                switch (loopMode) {
+                  case LoopMode.one:
+                    icon = Icons.repeat_one_on_rounded;
+                    tooltip = 'Repeat One';
+                    color = colorScheme.primary;
+                    break;
+                  case LoopMode.all:
+                    icon = Icons.repeat_on_rounded;
+                    tooltip = 'Repeat All';
+                    color = colorScheme.primary;
+                    break;
+                  default:
+                    icon = Icons.repeat;
+                    tooltip = 'No Repeat';
+                    color = colorScheme.onSurface.withAlpha(70);
+                }
+                return Tooltip(
+                  message: tooltip,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: IconButton(
+                      key: ValueKey(loopMode),
+                      icon: Icon(icon, color: color),
+                      splashRadius: 28,
+                      onPressed: () {
+                        musicPlayer.setNextLoopMode(loopMode);
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
