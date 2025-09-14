@@ -25,46 +25,167 @@ class TopHeadActions extends StatelessWidget {
   final OnSortSongs onSortSongs;
   final SortType sortType;
 
+  String _sortTypeLabel(SortType type) {
+    switch (type) {
+      case SortType.recentlyAdded:
+        return 'Recent';
+      case SortType.dateAdded:
+        return 'Date Added';
+      case SortType.duration:
+        return 'Duration';
+      case SortType.size:
+        return 'Size';
+      case SortType.ascendingOrder:
+        return 'Ascending Order';
+      case SortType.descendingOrder:
+        return 'Descending Order';
+    }
+  }
+
+  IconData _sortTypeIcon(SortType type) {
+    switch (type) {
+      case SortType.recentlyAdded:
+        return Icons.fiber_new;
+      case SortType.dateAdded:
+        return Icons.event;
+      case SortType.duration:
+        return Icons.timer;
+      case SortType.size:
+        return Icons.sd_storage;
+      case SortType.ascendingOrder:
+        return Icons.arrow_upward;
+      case SortType.descendingOrder:
+        return Icons.arrow_downward;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text('Songs: $songCount'),
-        const Spacer(),
-        IconButton(
-          icon: const Icon(Icons.shuffle),
-          onPressed: onShuffleAll,
-          tooltip: 'Shuffle All Songs',
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Material(
+        elevation: 2,
+        borderRadius: BorderRadius.circular(12),
+        color: theme.cardColor,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: Row(
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.library_music, color: theme.primaryColor),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Songs: $songCount',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Tooltip(
+                message: 'Shuffle All Songs',
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    backgroundColor: theme.colorScheme.secondaryContainer,
+                    foregroundColor: theme.colorScheme.onSecondaryContainer,
+                  ),
+                  icon: const Icon(Icons.shuffle),
+                  label: const Text('Shuffle'),
+                  onPressed: onShuffleAll,
+                ),
+              ),
+              const Spacer(),
+              PopupMenuButton<SortType>(
+                initialValue: sortType,
+                tooltip: 'Sort Songs',
+                icon: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Icon(_sortTypeIcon(sortType), color: theme.primaryColor),
+                    const SizedBox(width: 4),
+                    Text(
+                      _sortTypeLabel(sortType),
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                    const Icon(Icons.arrow_drop_down),
+                  ],
+                ),
+                onSelected: onSortSongs,
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<SortType>>[
+                      PopupMenuItem<SortType>(
+                        value: SortType.recentlyAdded,
+                        child: Row(
+                          children: [
+                            Icon(_sortTypeIcon(SortType.recentlyAdded)),
+                            const SizedBox(width: 8),
+                            Text(_sortTypeLabel(SortType.recentlyAdded)),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem<SortType>(
+                        value: SortType.dateAdded,
+                        child: Row(
+                          children: [
+                            Icon(_sortTypeIcon(SortType.dateAdded)),
+                            const SizedBox(width: 8),
+                            Text(_sortTypeLabel(SortType.dateAdded)),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem<SortType>(
+                        value: SortType.duration,
+                        child: Row(
+                          children: [
+                            Icon(_sortTypeIcon(SortType.duration)),
+                            const SizedBox(width: 8),
+                            Text(_sortTypeLabel(SortType.duration)),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem<SortType>(
+                        value: SortType.size,
+                        child: Row(
+                          children: [
+                            Icon(_sortTypeIcon(SortType.size)),
+                            const SizedBox(width: 8),
+                            Text(_sortTypeLabel(SortType.size)),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuDivider(),
+                      PopupMenuItem<SortType>(
+                        value: SortType.ascendingOrder,
+                        child: Row(
+                          children: [
+                            Icon(_sortTypeIcon(SortType.ascendingOrder)),
+                            const SizedBox(width: 8),
+                            Text(_sortTypeLabel(SortType.ascendingOrder)),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem<SortType>(
+                        value: SortType.descendingOrder,
+                        child: Row(
+                          children: [
+                            Icon(_sortTypeIcon(SortType.descendingOrder)),
+                            const SizedBox(width: 8),
+                            Text(_sortTypeLabel(SortType.descendingOrder)),
+                          ],
+                        ),
+                      ),
+                    ],
+              ),
+            ],
+          ),
         ),
-        PopupMenuButton<SortType>(
-          icon: const Icon(Icons.sort),
-          onSelected: onSortSongs,
-          itemBuilder: (BuildContext context) => <PopupMenuEntry<SortType>>[
-            PopupMenuItem<SortType>(
-              value: SortType.recentlyAdded,
-              child: Text('Recently Added'),
-            ),
-            PopupMenuItem<SortType>(
-              value: SortType.dateAdded,
-              child: Text('Date Added'),
-            ),
-            PopupMenuItem<SortType>(
-              value: SortType.duration,
-              child: Text('Duration'),
-            ),
-            PopupMenuItem<SortType>(value: SortType.size, child: Text('Size')),
-            const PopupMenuDivider(),
-            PopupMenuItem<SortType>(
-              value: SortType.ascendingOrder,
-              child: Text('Ascending Order'),
-            ),
-            PopupMenuItem<SortType>(
-              value: SortType.descendingOrder,
-              child: Text('Descending Order'),
-            ),
-          ],
-        ),
-      ],
+      ),
     );
   }
 }

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SongImageWidget extends StatelessWidget {
-  const SongImageWidget({super.key, required this.songId});
+  const SongImageWidget({super.key, required this.songId, this.size = 50});
 
   final int songId;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +19,8 @@ class SongImageWidget extends StatelessWidget {
         child: Image.asset(
           'assets/images/song_cover.png',
           fit: BoxFit.cover,
-          width: 50,
-          height: 50,
+          width: size,
+          height: size,
           alignment: Alignment.center,
         ),
       ),
