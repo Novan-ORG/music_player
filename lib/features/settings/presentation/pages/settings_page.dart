@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/utils/launcher_utils.dart';
 import 'package:music_player/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:music_player/features/settings/presentation/widgets/count_down_sheet.dart';
 import 'package:music_player/features/settings/presentation/widgets/count_down_timer.dart';
@@ -161,12 +162,24 @@ class _SettingsPageState extends State<SettingsPage> {
                     children: [
                       SettingsTile(
                         icon: Icons.feedback_rounded,
-                        title: 'Send Feedback Or Recommendations',
+                        title: 'Send Feedback or Suggestions',
                         trailing: const Icon(
                           Icons.email_rounded,
                           color: Colors.blueAccent,
                         ),
-                        onTap: () {},
+                        onTap: () async {
+                          final success = await LauncherUtils.openEmailApp(
+                            toEmail: 'development.taleb@gmail.com',
+                            subject: 'Music Player Feedback',
+                          );
+                          if (!success && context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Could not open email app.'),
+                              ),
+                            );
+                          }
+                        },
                       ),
                       const Divider(height: 1),
                       SettingsTile(
