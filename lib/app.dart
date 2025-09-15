@@ -29,7 +29,10 @@ class MusicPlayerApp extends StatelessWidget {
         ),
         BlocProvider(create: (_) => PlayListBloc(getIt.get<ObjectBox>())),
         BlocProvider(
-          create: (_) => SettingsBloc(getIt.get<SharedPreferences>()),
+          create: (_) => SettingsBloc(
+            getIt.get<SharedPreferences>(),
+            getIt.get<MAudioHandler>(),
+          ),
         ),
       ],
       child: BlocBuilder<SettingsBloc, SettingsState>(

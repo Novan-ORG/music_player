@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:music_player/features/settings/presentation/widgets/count_down_sheet.dart';
+import 'package:music_player/features/settings/presentation/widgets/count_down_timer.dart';
 import 'package:music_player/features/settings/presentation/widgets/custom_drop_down.dart';
+import 'package:music_player/features/settings/presentation/widgets/duration_picker_sheet.dart';
 import 'package:music_player/features/settings/presentation/widgets/section_tile.dart';
 import 'package:music_player/features/settings/presentation/widgets/settings_card.dart';
 import 'package:music_player/features/settings/presentation/widgets/setttings_tile.dart';
@@ -14,11 +17,10 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  String _selectedSleepTimer = 'off';
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final settingsBloc = context.read<SettingsBloc>();
 
     return Scaffold(
       appBar: AppBar(
@@ -28,7 +30,10 @@ class _SettingsPageState extends State<SettingsPage> {
         foregroundColor: theme.colorScheme.onSurface,
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(
+        bloc: settingsBloc,
         builder: (context, state) {
+          final mDuration =
+              state.sleepEndTime?.difference(DateTime.now()) ?? Duration.zero;
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
             child: Column(
@@ -63,22 +68,90 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: SettingsTile(
                     icon: Icons.timer_rounded,
                     title: 'Sleep Timer',
-                    trailing: CustomDropdown(
-                      value: _selectedSleepTimer,
-                      items: const [
-                        DropdownMenuItem(value: 'off', child: Text('Off')),
-                        DropdownMenuItem(value: '15min', child: Text('15 min')),
-                        DropdownMenuItem(value: '30min', child: Text('30 min')),
-                        DropdownMenuItem(value: '1hr', child: Text('1 hour')),
-                        DropdownMenuItem(
-                          value: 'custom',
-                          child: Text('Custom'),
-                        ),
-                      ],
-                      onChanged: (value) {
-                        setState(() => _selectedSleepTimer = value!);
-                      },
-                    ),
+                    trailing: mDuration <= Duration.zero
+                        ? CustomDropdown(
+                            value: '0',
+                            items: const [
+                              DropdownMenuItem(value: '0', child: Text('Off')),
+                              DropdownMenuItem(
+                                value: '15',
+                                child: Text('15 min'),
+                              ),
+                              DropdownMenuItem(
+                                value: '30',
+                                child: Text('30 min'),
+                              ),
+                              DropdownMenuItem(
+                                value: '60',
+                                child: Text('1 hour'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'custom',
+                                child: Text('Custom'),
+                              ),
+                            ],
+                            onChanged: (value) async {
+                              if (value == 'custom') {
+                                final duration =
+                                    await showModalBottomSheet<Duration>(
+                                      context: context,
+                                      builder: (context) => DurationPickerSheet(
+                                        initialDuration: const Duration(
+                                          minutes: 15,
+                                        ),
+                                      ),
+                                    );
+                                if (!mounted) return;
+                                if (duration != null &&
+                                    duration > Duration.zero) {
+                                  final now = DateTime.now();
+                                  final sleepEndTime = now.add(duration);
+                                  settingsBloc.add(
+                                    ChangeSleepTimerEvent(sleepEndTime),
+                                  );
+                                }
+                                return;
+                              } else {
+                                final now = DateTime.now();
+                                final duration = Duration(
+                                  minutes: int.tryParse(value!) ?? 0,
+                                );
+                                final sleepEndTime = now.add(duration);
+                                context.read<SettingsBloc>().add(
+                                  ChangeSleepTimerEvent(sleepEndTime),
+                                );
+                              }
+                            },
+                          )
+                        : InkWell(
+                            onTap: () {
+                              final remainedDuration =
+                                  state.sleepEndTime?.difference(
+                                    DateTime.now(),
+                                  ) ??
+                                  Duration.zero;
+                              if (remainedDuration <= Duration.zero) {
+                                return;
+                              }
+                              CountDownSheet.show(
+                                context: context,
+                                initialDuration: remainedDuration,
+                                onCancel: () {
+                                  settingsBloc.add(ChangeSleepTimerEvent(null));
+                                },
+                              );
+                            },
+                            child: CountDownTimer(
+                              duration:
+                                  state.sleepEndTime?.difference(
+                                    DateTime.now(),
+                                  ) ??
+                                  Duration.zero,
+                              onEnd: () {
+                                settingsBloc.add(ClearSleepTimerEvent());
+                              },
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 24),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
@@ -13,6 +15,8 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
       }
     });
   }
+
+  Timer? _timer;
 
   final AudioPlayer _player;
 
@@ -37,6 +41,19 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
   bool get shuffleModeEnabled => _player.shuffleModeEnabled;
 
   void setLoopMode(LoopMode loopMode) => _player.setLoopMode(loopMode);
+
+  void setSleepTimer(Duration duration) {
+    _timer?.cancel();
+    _timer = Timer(duration, () async {
+      await stop();
+      cancelSleepTimer();
+    });
+  }
+
+  void cancelSleepTimer() {
+    _timer?.cancel();
+    _timer = null;
+  }
 
   @override
   Future<void> seek(Duration position, {int? index}) async {
