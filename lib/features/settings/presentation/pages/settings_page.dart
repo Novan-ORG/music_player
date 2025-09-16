@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/constants/strings_constants.dart';
 import 'package:music_player/core/utils/launcher_utils.dart';
 import 'package:music_player/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:music_player/features/settings/presentation/widgets/about_me_popup.dart';
 import 'package:music_player/features/settings/presentation/widgets/count_down_sheet.dart';
 import 'package:music_player/features/settings/presentation/widgets/count_down_timer.dart';
 import 'package:music_player/features/settings/presentation/widgets/custom_drop_down.dart';
@@ -169,8 +171,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         onTap: () async {
                           final success = await LauncherUtils.openEmailApp(
-                            toEmail: 'development.taleb@gmail.com',
-                            subject: 'Music Player Feedback',
+                            toEmail: StringsConstants.supportEmail,
+                            subject: StringsConstants.supportEmailSubject,
                           );
                           if (!success && context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -189,7 +191,12 @@ class _SettingsPageState extends State<SettingsPage> {
                           Icons.telegram_rounded,
                           color: Colors.blueAccent,
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => const AboutMePopup(),
+                          );
+                        },
                       ),
                     ],
                   ),
