@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:music_player/core/services/audio_handler/m_audio_handler.dart';
 import 'package:music_player/core/services/database/objectbox.dart';
 import 'package:music_player/core/theme/app_themes.dart';
@@ -18,6 +19,7 @@ class MusicPlayerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlutterNativeSplash.remove();
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => SongsBloc()..add(const LoadSongsEvent())),
