@@ -4,12 +4,14 @@ import 'package:music_player/extensions/duration_ex.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 
 class UpNextMusics extends StatelessWidget {
-  const UpNextMusics({super.key, this.onTapSong});
+  const UpNextMusics({super.key, this.onTapSong, this.currentSongId});
 
   final Function(int)? onTapSong;
+  final int? currentSongId;
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
     return Expanded(
       child: Card(
         elevation: 2,
@@ -25,7 +27,7 @@ class UpNextMusics extends StatelessWidget {
                 child: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
                   buildWhen: (previous, current) =>
                       previous.playList != current.playList,
-                  builder: (context, state) {
+                  builder: (_, state) {
                     if (state.playList.isEmpty) {
                       return Center(
                         child: Text(
@@ -35,7 +37,7 @@ class UpNextMusics extends StatelessWidget {
                       );
                     }
                     return ListView.separated(
-                      padding: EdgeInsets.zero, // Remove default padding
+                      padding: EdgeInsets.zero,
                       itemCount: state.playList.length,
                       separatorBuilder: (_, __) => const Divider(height: 1),
                       itemBuilder: (context, index) {
@@ -44,26 +46,46 @@ class UpNextMusics extends StatelessWidget {
                           dense: true,
                           visualDensity: VisualDensity.compact,
                           contentPadding: EdgeInsets.symmetric(horizontal: 4),
-                          leading: const Icon(
-                            Icons.music_note,
-                            color: Colors.blueAccent,
-                            size: 20,
+                          leading: Transform.scale(
+                            scale: currentSongId == song.id ? 1.2 : 1,
+                            child: Icon(
+                              Icons.music_note,
+                              color: currentSongId == song.id
+                                  ? primaryColor
+                                  : Colors.blueAccent,
+                              size: 20,
+                            ),
                           ),
                           title: Text(
                             song.displayNameWOExt,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodySmall,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: currentSongId == song.id
+                                      ? primaryColor
+                                      : null,
+                                ),
                           ),
                           subtitle: Text(
                             song.artist ?? 'Unknown Artist',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.labelSmall,
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
+                                  color: currentSongId == song.id
+                                      ? primaryColor
+                                      : null,
+                                ),
                           ),
                           trailing: Text(
                             Duration(milliseconds: song.duration ?? 0).format(),
-                            style: Theme.of(context).textTheme.labelSmall,
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
+                                  color: currentSongId == song.id
+                                      ? primaryColor
+                                      : null,
+                                ),
                           ),
                           onTap: () => onTapSong?.call(index),
                           shape: RoundedRectangleBorder(

@@ -78,10 +78,7 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
             Tooltip(
               message: 'Previous',
               child: IconButton(
-                icon: Opacity(
-                  opacity: musicPlayer.hasPrevious ? 1 : 0.5,
-                  child: const Icon(Icons.skip_previous),
-                ),
+                icon: const Icon(Icons.skip_previous),
                 splashRadius: 28,
                 onPressed: musicPlayer.hasPrevious
                     ? () {
@@ -94,9 +91,7 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
             StreamBuilder<PlayerState>(
               stream: playerStateStream,
               builder: (context, asyncSnapshot) {
-                final isPlaying = asyncSnapshot.hasData
-                    ? asyncSnapshot.data!.playing
-                    : false;
+                final isPlaying = asyncSnapshot.data?.playing ?? false;
                 return Tooltip(
                   message: isPlaying ? 'Pause' : 'Play',
                   child: AnimatedSwitcher(
@@ -122,10 +117,7 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
             Tooltip(
               message: 'Next',
               child: IconButton(
-                icon: Opacity(
-                  opacity: musicPlayer.hasNext ? 1 : 0.5,
-                  child: const Icon(Icons.skip_next),
-                ),
+                icon: const Icon(Icons.skip_next),
                 splashRadius: 28,
                 onPressed: musicPlayer.hasNext
                     ? () {
@@ -168,6 +160,7 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
                       splashRadius: 28,
                       onPressed: () {
                         musicPlayer.setNextLoopMode(loopMode);
+                        setState(() {});
                       },
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/widgets/background_gradient.dart';
 import 'package:music_player/features/play_list/presentation/bloc/play_list_bloc.dart';
 import 'package:music_player/features/play_list/presentation/widgets/create_palylist_sheet.dart';
 import 'package:music_player/features/songs/presentation/pages/songs_page.dart';
@@ -128,7 +129,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
       itemBuilder: (context, index) {
         if (index == 0) {
           return Card(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+            color: Theme.of(context).colorScheme.primary.withAlpha(8),
             margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             child: ListTile(
               leading: const Icon(Icons.add, color: Colors.blueAccent),
@@ -206,6 +207,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xFF7F53AC),
         title: Text(widget.isSelectionMode ? 'Select Playlists' : 'Playlists'),
         centerTitle: true,
         elevation: 1,
@@ -218,8 +220,10 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
             ),
         ],
       ),
-      body: BlocBuilder<PlayListBloc, PlayListState>(
-        builder: (context, state) => _buildBody(state),
+      body: BackgroundGradient(
+        child: BlocBuilder<PlayListBloc, PlayListState>(
+          builder: (context, state) => _buildBody(state),
+        ),
       ),
       bottomNavigationBar: _buildBottomBar(),
     );

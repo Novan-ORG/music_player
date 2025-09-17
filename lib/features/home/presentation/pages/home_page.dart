@@ -49,11 +49,9 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      body: SafeArea(
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: _pages[_currentIndex],
-        ),
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: _pages[_currentIndex],
       ),
       bottomSheet: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
         bloc: _musicPlayerBloc,

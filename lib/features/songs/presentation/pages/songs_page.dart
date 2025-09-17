@@ -1,8 +1,8 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/services/database/models/playlist_model.dart';
 import 'package:music_player/core/services/ringtone_set/ringtone_set.dart';
+import 'package:music_player/core/widgets/background_gradient.dart';
 import 'package:music_player/extensions/padding_ex.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
@@ -72,38 +72,32 @@ class _SongsPageState extends State<SongsPage> {
     return songs;
   }
 
-  Widget _buildAppBar(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.vertical(bottom: Radius.circular(32)),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-        child: AppBar(
-          backgroundColor: Colors.black.withAlpha(40),
-          elevation: 0,
-          title: Text(
-            widget.isFavorites
-                ? 'Favorite Songs'
-                : widget.playlist?.name ?? 'All Songs',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 26,
-              letterSpacing: 1.2,
-            ),
-          ),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const SearchSongsPage()),
-                );
-              },
-              icon: const Icon(Icons.search, size: 28),
-              tooltip: 'Search Songs',
-            ),
-          ],
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Color(0xFF7F53AC),
+      elevation: 0,
+      title: Text(
+        widget.isFavorites
+            ? 'Favorite Songs'
+            : widget.playlist?.name ?? 'All Songs',
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 26,
+          letterSpacing: 1.2,
         ),
       ),
+      centerTitle: true,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const SearchSongsPage()));
+          },
+          icon: const Icon(Icons.search, size: 28),
+          tooltip: 'Search Songs',
+        ),
+      ],
     );
   }
 
@@ -164,101 +158,83 @@ class _SongsPageState extends State<SongsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // Gradient background
-        Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF7F53AC), Color(0xFF647DEE)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(70),
-            child: _buildAppBar(context),
-          ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.deepPurple,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const SearchSongsPage()),
+    return Scaffold(
+      appBar: _buildAppBar(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (_) => const SearchSongsPage()));
+        },
+        tooltip: 'Search Songs',
+        child: const Icon(Icons.search, size: 28, color: Colors.white),
+      ),
+      body: BackgroundGradient(
+        child: BlocBuilder<SongsBloc, SongsState>(
+          bloc: songsBloc,
+          builder: (context, state) {
+            if (state.status == SongsStatus.loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (state.status == SongsStatus.error) {
+              return _buildEmptyState('Error loading songs', () {
+                songsBloc.add(LoadSongsEvent());
+              });
+            }
+            if (state.allSongs.isEmpty) {
+              return _buildEmptyState(
+                'No songs found.\nTry refreshing or adding music!',
+                () => songsBloc.add(LoadSongsEvent()),
               );
-            },
-            tooltip: 'Search Songs',
-            child: const Icon(Icons.search, size: 28),
-          ),
-          body: BlocBuilder<SongsBloc, SongsState>(
-            bloc: songsBloc,
-            builder: (context, state) {
-              if (state.status == SongsStatus.loading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (state.status == SongsStatus.error) {
-                return _buildEmptyState('Error loading songs', () {
-                  songsBloc.add(LoadSongsEvent());
-                });
-              }
-              if (state.allSongs.isEmpty) {
-                return _buildEmptyState(
-                  'No songs found.\nTry refreshing or adding music!',
-                  () => songsBloc.add(LoadSongsEvent()),
-                );
-              }
-              return BlocSelector<MusicPlayerBloc, MusicPlayerState, List<int>>(
-                bloc: musicPlayerBloc,
-                selector: (state) => state.likedSongIds,
-                builder: (context, likedSongIds) {
-                  final filteredSongs = _filterSongs(state, likedSongIds);
+            }
+            return BlocSelector<MusicPlayerBloc, MusicPlayerState, List<int>>(
+              bloc: musicPlayerBloc,
+              selector: (state) => state.likedSongIds,
+              builder: (context, likedSongIds) {
+                final filteredSongs = _filterSongs(state, likedSongIds);
 
-                  if (filteredSongs.isEmpty) {
-                    return _buildEmptyState(
-                      widget.isFavorites
-                          ? 'No favorite songs yet'
-                          : 'No songs available in this playlist',
-                      () => songsBloc.add(LoadSongsEvent()),
-                    );
-                  }
-
-                  return Column(
-                    children: [
-                      TopHeadActions(
-                        songCount: filteredSongs.length,
-                        onShuffleAll: () {
-                          musicPlayerBloc.add(
-                            ShuffleMusicEvent(songs: filteredSongs),
-                          );
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const MusicPlayerPage(),
-                            ),
-                          );
-                        },
-                        onSortSongs: (sortType) {
-                          songsBloc.add(SortSongsEvent(sortType));
-                        },
-                        sortType: state.sortType,
-                      ).paddingSymmetric(horizontal: 12),
-                      const SizedBox(height: 8),
-                      Expanded(
-                        child: RefreshIndicator(
-                          onRefresh: () async =>
-                              songsBloc.add(LoadSongsEvent()),
-                          child: _buildSongList(filteredSongs, likedSongIds),
-                        ),
-                      ),
-                    ],
+                if (filteredSongs.isEmpty) {
+                  return _buildEmptyState(
+                    widget.isFavorites
+                        ? 'No favorite songs yet'
+                        : 'No songs available in this playlist',
+                    () => songsBloc.add(LoadSongsEvent()),
                   );
-                },
-              );
-            },
-          ),
+                }
+
+                return Column(
+                  children: [
+                    TopHeadActions(
+                      songCount: filteredSongs.length,
+                      onShuffleAll: () {
+                        musicPlayerBloc.add(
+                          ShuffleMusicEvent(songs: filteredSongs),
+                        );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const MusicPlayerPage(),
+                          ),
+                        );
+                      },
+                      onSortSongs: (sortType) {
+                        songsBloc.add(SortSongsEvent(sortType));
+                      },
+                      sortType: state.sortType,
+                    ).paddingSymmetric(horizontal: 12),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () async => songsBloc.add(LoadSongsEvent()),
+                        child: _buildSongList(filteredSongs, likedSongIds),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
         ),
-      ],
+      ),
     );
   }
 }
