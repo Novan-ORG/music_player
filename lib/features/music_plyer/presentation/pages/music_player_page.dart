@@ -9,7 +9,7 @@ import 'package:music_player/features/music_plyer/presentation/widgets/more_acti
 import 'package:music_player/features/music_plyer/presentation/widgets/player_action_buttons.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/song_artwork.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/song_info.dart';
-import 'package:music_player/features/music_plyer/presentation/widgets/upnext_musics.dart';
+import 'package:music_player/features/music_plyer/presentation/widgets/upnext_musics_sheet.dart';
 import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:share_plus/share_plus.dart';
@@ -98,15 +98,11 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                   ),
                 );
               },
-            ),
-            const SizedBox(height: 8),
-            UpNextMusics(
-              currentSongId: currentSong?.id,
-              onTapSong: (index) {
-                musicPlayerBloc.add(SkipToMusicIndexEvent(index));
+              onMusicQueuePressed: () {
+                UpnextMusicsSheet.show(context);
               },
             ),
-            const SizedBox(height: 12),
+            const Spacer(),
             const PlayerActionButtons(),
           ],
         ).paddingSymmetric(horizontal: 16, vertical: 8),

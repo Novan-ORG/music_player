@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/services/database/models/playlist_model.dart';
 import 'package:music_player/core/services/ringtone_set/ringtone_set.dart';
 import 'package:music_player/core/widgets/background_gradient.dart';
-import 'package:music_player/extensions/padding_ex.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
 import 'package:music_player/features/search/presentation/pages/search_songs_page.dart';
@@ -220,7 +219,7 @@ class _SongsPageState extends State<SongsPage> {
                         songsBloc.add(SortSongsEvent(sortType));
                       },
                       sortType: state.sortType,
-                    ).paddingSymmetric(horizontal: 12),
+                    ),
                     const SizedBox(height: 8),
                     Expanded(
                       child: RefreshIndicator(
