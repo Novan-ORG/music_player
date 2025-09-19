@@ -11,7 +11,7 @@ part 'music_player_event.dart';
 part 'music_player_state.dart';
 
 class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
-  MusicPlayerBloc(this.audioHandler, this._preferences)
+  MusicPlayerBloc(this._audioHandler, this._preferences)
     : super(
         MusicPlayerState(
           likedSongIds:
@@ -32,27 +32,27 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<ToggleLikeMusicEvent>(_handleToggleLike);
   }
 
-  final MAudioHandler audioHandler;
+  final MAudioHandler _audioHandler;
   final SharedPreferences _preferences;
 
-  Stream<int?> get currentIndexStream => audioHandler.currentIndexStream;
+  Stream<int?> get currentIndexStream => _audioHandler.currentIndexStream;
 
-  Stream<Duration?> get durationStream => audioHandler.durationStream;
+  Stream<Duration?> get durationStream => _audioHandler.durationStream;
 
-  Stream<Duration> get positionStream => audioHandler.positionStream;
+  Stream<Duration> get positionStream => _audioHandler.positionStream;
 
-  Stream<PlayerState> get palyerStateStream => audioHandler.palyerStateStream;
+  Stream<PlayerState> get palyerStateStream => _audioHandler.palyerStateStream;
 
-  Stream<LoopMode> get loopModeStream => audioHandler.loopModeStream;
+  Stream<LoopMode> get loopModeStream => _audioHandler.loopModeStream;
 
-  Future<void> seek(Duration duration) => audioHandler.seek(duration);
+  Future<void> seek(Duration duration) => _audioHandler.seek(duration);
 
-  bool get hasNext => audioHandler.hasNext;
-  bool get hasPrevious => audioHandler.hasPrevious;
+  bool get hasNext => _audioHandler.hasNext;
+  bool get hasPrevious => _audioHandler.hasPrevious;
 
-  LoopMode get loopMode => audioHandler.loopMode;
+  LoopMode get loopMode => _audioHandler.loopMode;
 
-  bool get shuffleModeEnabled => audioHandler.shuffleModeEnabled;
+  bool get shuffleModeEnabled => _audioHandler.shuffleModeEnabled;
 
   void setNextLoopMode(LoopMode loopMode) {
     LoopMode newMode = LoopMode.off;
@@ -63,11 +63,11 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     } else {
       newMode = LoopMode.off;
     }
-    audioHandler.setLoopMode(newMode);
+    _audioHandler.setLoopMode(newMode);
   }
 
   void setShuffleModeEnabled(bool enabled) =>
-      audioHandler.setShuffleModeEnabled(enabled);
+      _audioHandler.setShuffleModeEnabled(enabled);
 
   Future<void> _handleToggleLike(
     ToggleLikeMusicEvent event,
@@ -127,10 +127,10 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           errorMessage: null,
         ),
       );
-      await audioHandler.addAudioSources(songs);
-      await audioHandler.setShuffleModeEnabled(shuffle);
-      await audioHandler.seek(Duration.zero, index: index);
-      await audioHandler.play();
+      await _audioHandler.addAudioSources(songs);
+      await _audioHandler.setShuffleModeEnabled(shuffle);
+      await _audioHandler.seek(Duration.zero, index: index);
+      await _audioHandler.play();
     } catch (e, s) {
       Logger.error('Error $errorContext: $e', e, s);
       emit(
@@ -146,7 +146,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     StopMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    if (audioHandler.playing) await audioHandler.stop();
+    if (_audioHandler.playing) await _audioHandler.stop();
     emit(state.copyWith(status: MusicPlayerStatus.stopped));
   }
 
@@ -154,11 +154,11 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     TogglePlayPauseEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    if (audioHandler.playing) {
-      await audioHandler.pause();
+    if (_audioHandler.playing) {
+      await _audioHandler.pause();
       emit(state.copyWith(status: MusicPlayerStatus.paused));
     } else {
-      await audioHandler.play();
+      await _audioHandler.play();
       emit(state.copyWith(status: MusicPlayerStatus.playing));
     }
   }
@@ -169,7 +169,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) async {
     await _handleSeek(
       emit: emit,
-      seekAction: () => audioHandler.skipToNext(),
+      seekAction: () => _audioHandler.skipToNext(),
       errorContext: 'skipping to next track',
     );
   }
@@ -180,7 +180,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) async {
     await _handleSeek(
       emit: emit,
-      seekAction: () => audioHandler.seek(Duration.zero, index: event.index),
+      seekAction: () => _audioHandler.seek(Duration.zero, index: event.index),
       errorContext: 'Skipping to trak index ${event.index}',
     );
   }
@@ -191,7 +191,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) async {
     await _handleSeek(
       emit: emit,
-      seekAction: () => audioHandler.skipToPrevious(),
+      seekAction: () => _audioHandler.skipToPrevious(),
       errorContext: 'skipping to previous track',
     );
   }

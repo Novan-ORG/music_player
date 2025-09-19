@@ -227,6 +227,8 @@ class _SongsPageState extends State<SongsPage> {
                         child: _buildSongList(filteredSongs, likedSongIds),
                       ),
                     ),
+                    if (musicPlayerBloc.state.playList.isNotEmpty)
+                      SizedBox(height: 80),
                   ],
                 );
               },

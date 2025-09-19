@@ -9,33 +9,35 @@ class AboutMePopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      scrollable: true,
       title: const Text('About the Developer', textAlign: TextAlign.center),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const CircleAvatar(
-              radius: 40,
-              backgroundImage: AssetImage('assets/images/developer_avatar.jpg'),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              "Hi! I'm Taleb, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people's lives easier.",
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              "This app is completely free. If you enjoy using it, please consider supporting me by rating it 5 stars and leaving a kind comment on the app store!",
-              style: TextStyle(fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              "Connect with me:",
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
-            Row(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const CircleAvatar(
+            radius: 40,
+            backgroundImage: AssetImage('assets/images/developer_avatar.jpg'),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            "Hi! I'm Taleb, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people's lives easier.",
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            "This app is completely free. If you enjoy using it, please consider supporting me by rating it 5 stars and leaving a kind comment on the app store!",
+            style: TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            "Connect with me:",
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 8),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
@@ -75,18 +77,18 @@ class AboutMePopup extends StatelessWidget {
                 ),
               ],
             ),
+          ),
 
-            /// uncomment to add rate button after publishing the app
-            // const SizedBox(height: 16),
-            // ElevatedButton.icon(
-            //   icon: const Icon(Icons.star_rate),
-            //   label: const Text('Rate this app'),
-            //   onPressed: () => LauncherUtils.launchUrlExternally(
-            //     'https://play.google.com/store/apps/details?id=com.example.music_player',
-            //   ),
-            // ),
-          ],
-        ),
+          /// uncomment to add rate button after publishing the app
+          // const SizedBox(height: 16),
+          // ElevatedButton.icon(
+          //   icon: const Icon(Icons.star_rate),
+          //   label: const Text('Rate this app'),
+          //   onPressed: () => LauncherUtils.launchUrlExternally(
+          //     'https://play.google.com/store/apps/details?id=com.example.music_player',
+          //   ),
+          // ),
+        ],
       ),
       actions: [
         TextButton(

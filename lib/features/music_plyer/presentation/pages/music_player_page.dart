@@ -10,9 +10,12 @@ import 'package:music_player/features/music_plyer/presentation/widgets/player_ac
 import 'package:music_player/features/music_plyer/presentation/widgets/song_artwork.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/song_info.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/upnext_musics_sheet.dart';
+import 'package:music_player/features/music_plyer/presentation/widgets/volume_slider.dart';
 import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
+import 'package:music_player/injection/service_locator.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:volume_controller/volume_controller.dart';
 
 class MusicPlayerPage extends StatefulWidget {
   const MusicPlayerPage({super.key});
@@ -57,7 +60,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Player')),
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -102,10 +105,15 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                 UpnextMusicsSheet.show(context);
               },
             ),
-            const Spacer(),
-            const PlayerActionButtons(),
+            VolumeSlider(volumeController: getIt.get<VolumeController>()),
           ],
         ).paddingSymmetric(horizontal: 16, vertical: 8),
+      ),
+      bottomSheet: SafeArea(
+        child: PlayerActionButtons().paddingSymmetric(
+          vertical: 4,
+          horizontal: 16,
+        ),
       ),
     );
   }

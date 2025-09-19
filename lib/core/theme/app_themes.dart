@@ -61,6 +61,9 @@ TextTheme appTextTheme(Color textPrimary, Color textSecondary) => TextTheme(
 // Dark ThemeData
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
+  bottomSheetTheme: BottomSheetThemeData(
+    backgroundColor: AppDarkColors.background,
+  ),
   primaryColor: AppDarkColors.primary,
   scaffoldBackgroundColor: AppDarkColors.background,
   canvasColor: AppDarkColors.background,
@@ -99,6 +102,9 @@ final ThemeData darkTheme = ThemeData(
 // Light ThemeData
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
+  bottomSheetTheme: BottomSheetThemeData(
+    backgroundColor: AppLightColors.background,
+  ),
   primaryColor: AppLightColors.primary,
   scaffoldBackgroundColor: AppLightColors.background,
   canvasColor: AppLightColors.background,

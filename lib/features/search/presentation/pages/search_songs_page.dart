@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/widgets/background_gradient.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
+import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
 import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
 import 'package:music_player/features/songs/presentation/widgets/no_songs_widget.dart';
 import 'package:music_player/features/songs/presentation/widgets/song_image_widget.dart';
@@ -82,7 +84,14 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
                       title: Text(song.title),
                       subtitle: Text(song.artist ?? 'Unknown Artist'),
                       onTap: () {
-                        // Handle song tap
+                        context.read<MusicPlayerBloc>().add(
+                          PlayMusicEvent(index, filteredSongs),
+                        );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const MusicPlayerPage(),
+                          ),
+                        );
                       },
                     );
                   },

@@ -58,8 +58,9 @@ class _HomePageState extends State<HomePage> {
         builder: (_, state) {
           if (state.playList.isEmpty) {
             return const SizedBox.shrink();
+          } else {
+            return const MiniPlayerPage();
           }
-          return const MiniPlayerPage();
         },
       ),
       bottomNavigationBar: BottomNavigationBar(

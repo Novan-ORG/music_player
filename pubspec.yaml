@@ -37,6 +37,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.6
   scrollable_positioned_list: ^0.3.8
+  volume_controller: ^3.4.0
   
 
 objectbox:
