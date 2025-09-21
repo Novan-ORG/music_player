@@ -1,0 +1,104 @@
+{
+    "@@locale": "en",
+    "appTitle": "Music Player",
+    "@appTitle": {
+        "description": "The application name"
+    },
+
+    "settingsPage": "",
+    "@settingsPage": {
+        "description": "The Settings page localization"
+    },
+    "settings": "Settings",
+    "appearance": "Appearance",
+    "language": "Language",
+    "theme": "Theme",
+    "system": "System",
+    "dark": "Dark",
+    "light": "Light",
+    "playback": "Playback",
+    "sleepTimer": "Sleep Timer",
+    "off": "Off",
+    "min15":"15 Min",
+    "min30": "30 Min",
+    "hour1": "1 hour",
+    "custom": "Custom",
+    "support": "Support",
+    "sendFeedbackOrSuggestion":"Send Feedback or Suggestions",
+    "errorOpenEmail": "Could not open email app.",
+    "aboutMe": "About Me",
+
+    "homePage": "",
+    "@homePage": {
+        "description": "Home page localizations."
+    },
+    "songs": "Songs",
+    "playlists": "Playlists",
+    "favorites": "Favorites",
+
+    "songsPage":"",
+    "@songsPage": {
+        "description": "Songs page localization"
+    },
+
+    "permissionDeniedForRingtone": "Permission not granted to set ringtone",
+    "deleteSong": "Delete song",
+    "areSureYouWantToDeleteSong": "'Are you sure you want to delete this song?",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "favoriteSongs": "Favorite Songs",
+    "allSongs": "All Songs",
+    "searchSongs": "Search Songs",
+    "refresh": "Refresh",
+    "errorLoadingSongs": "Some error happend while loading songs",
+    "noSongTryAgain": "No songs found.\nTry refreshing or adding music!",
+    "noFavoriteSong": "No favorite song exist",
+    "noSongInPlaylist": "No song exist in this playlist",
+    "shuffleAllSongs": "Shuffle All Songs",
+    "sortSongs": "Sort Songs",
+    "recent": "Recent",
+    "dateAdded": "Date Added",
+    "duration": "Duration",
+    "size": "Size",
+    "ascending": "Ascending",
+    "descending": "Descending",
+
+    "playListPage":"",
+    "@playListPage": {
+        "description": "Playlist page localization"
+    },
+    "noPlaylistFound": "No Playlists Found",
+    "createFirstPlaylist": "Create First Playlist",
+    "song": "Song",
+    "s": "s",
+    "createNewPlaylist": "Create New Playlist",
+    "error": "Error",
+    "playlistPage": "Playlists page",
+    "addToSelectedPlaylist": "Add To Selected Playlist",
+    "selectPlaylist": "Select Playlist",
+    "createPlaylist": "Create Playlist",
+    "playlistName": "Playlist Name",
+
+    "musicPlayerPage": "",
+    "@musicPlayerPage": {
+        "description": "Music Player page localization"
+    },
+    "noSongInQueue": "No songs in queue",
+    "upNext": "Up Next",
+
+    "aboutMePage": "",
+    "@aboutMePage": {
+        "description": "AboutMe page localization"
+    },
+    "aboutDeveloper": "About the Developer",
+    "developerStroy": "Hi! I'm Taleb, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people's lives easier.",
+    "appPurpose": "This app is completely free. If you enjoy using it, please consider supporting me by rating it 5 stars and leaving a kind comment on the app store!",
+    "connectWithMe": "Connect with me",
+    "linkedin": "LinkedIn",
+    "github": "Github",
+    "telegram": "Telegram",
+    "gmail": "Gmail",
+    "twitter": "Twitter/X",
+    "close": "Close"
+
+}

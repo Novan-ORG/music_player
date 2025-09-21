@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/widgets/background_gradient.dart';
+import 'package:music_player/extensions/context_ex.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
 import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
@@ -32,7 +33,7 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
       appBar: AppBar(
         title: TextField(
           decoration: InputDecoration(
-            hintText: 'Search Songs',
+            hintText: context.localization.searchSongs,
             border: InputBorder.none,
           ),
           style: Theme.of(context).textTheme.titleMedium,
@@ -49,7 +50,9 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
               return const Center(child: CircularProgressIndicator());
             }
             if (state.status == SongsStatus.error) {
-              return const Center(child: Text('Error loading songs'));
+              return Center(
+                child: Text(context.localization.errorLoadingSongs),
+              );
             }
             if (state.allSongs.isEmpty) {
               return NoSongsWidget(

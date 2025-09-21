@@ -1,0 +1,102 @@
+{
+    "@@locale": "fa",
+    "appTitle": "Music Player",
+    "@appTitle": {
+        "description": "نام اپلیکیشن"
+    },
+    "settingsPage": "",
+    "@settingsPage": {
+        "description": "محلی سازی صفحه تنظیمات"
+    },
+    "settings": "تنظیمات",
+    "appearance": "ظاهر",
+    "language": "زبان",
+    "theme": "تم",
+    "system": "سیستم",
+    "dark": "تیره",
+    "light": "روشن",
+    "playback": "پخش",
+    "sleepTimer": "تایمر خواب",
+    "off": "خاموش",
+    "min15": "۱۵ دقیقه",
+    "min30": "۳۰ دقیقه",
+    "hour1": "۱ ساعت",
+    "custom": "تایم دلخواه",
+    "support": "پشتیبانی",
+    "sendFeedbackOrSuggestion": "ارسال بازخورد یا پیشنهادات",
+    "errorOpenEmail": "برنامه ایمیل باز نشد به دلیل خطای نامعلوم.",
+    "aboutMe": "درباره من",
+    "homePage": "",
+    
+    "@homePage": {
+        "description": "محلی سازی صفحه خانه"
+    },
+    "songs": "موزیک ها",
+    "playlists": "لیست های پخش",
+    "favorites": "محبوب ها",
+
+    "songsPage":"",
+    "@songsPage": {
+        "description": "محلی سازی صفحه موزیک ها"
+    },
+
+    "permissionDeniedForRingtone": "اجازه دسترسی برای تغیر آهنگ زنگ داده نشد!",
+    "deleteSong": "حذف موزیک",
+    "areSureYouWantToDeleteSong": "آیا برای حذف این موزیک مطمئن هستید؟",
+    "cancel": "انصراف",
+    "delete": "حذف",
+    "favoriteSongs": "موزیک های محبوب",
+    "allSongs": "همه موزیک ها",
+    "searchSongs": "جستجوی موزیک ها",
+    "refresh": "تازه سازی",
+    "errorLoadingSongs": "در هنگام باگزاری موزیک ها خطایی رخ داده است",
+    "noSongTryAgain": "هیچ موزیکی پیدا نشد\n یا تازه سازی کنید و موزیک جدیدی اضاف کنید.",
+    "noFavoriteSong": "هیچ موزیک محبوبی برای نمایش وجود ندارد",
+    "noSongInPlaylist": "هیچ موزیکی در این لیست پخش وجود ندارد",
+    "shuffleAllSongs": "همه موزیک های بصورت رندوم",
+    "sortSongs": "مرتب سازی موزیک ها",
+    "recent": "اخیر",
+    "dateAdded": "تاریخ افزدون",
+    "duration": "مدت زمان",
+    "size": "اندازه",
+    "ascending": "افزایشی",
+    "descending": "کاهشی",
+
+    "playListPage":"",
+    "@playListPage": {
+        "description": "محلی سازی صفحه لیست پخش ها"
+    },
+    "noPlaylistFound": "هیچ لیست پخشی پیدا نشد",
+    "createFirstPlaylist": "ایجاد اولین لیست پخش",
+    "song": "موزیک",
+    "s": "ها",
+    "createNewPlaylist": "ایجاد لیست پخش جدید",
+    "error": "خطا",
+    "playlistPage": "صفحه لیست پخش",
+    "addToSelectedPlaylist": "اضافه کردن به لیست پخش انتخاب شده",
+    "selectPlaylist": "انتخاب لیست پخش",
+    "createPlaylist": "ایجاد لیست پخش",
+    "playlistName": "نام لیست پخش",
+
+    "musicPlayerPage": "",
+    "@musicPlayerPage": {
+        "description": "محلی سازی صفحه موزیک پلیر"
+    },
+    "noSongInQueue": "هیچ موزیک در صف وجود ندارد",
+    "upNext": "بعدی",
+
+    "aboutMePage": "",
+    "@aboutMePage": {
+        "description": "AboutMe page localization"
+    },
+    "aboutDeveloper": "درباره توسعه دهنده",
+    "developerStroy": "سلام! من طالب هستم، یک توسعه‌دهنده‌ی موبایل پرشور با سال‌ها تجربه در ساخت اپلیکیشن‌های زیبا و قابل اعتماد برای اندروید و iOS. من عاشق ایجاد اپلیکیشن‌های کاربرپسند و پرکارایی هستم که زندگی مردم را آسان‌تر می‌کنند.",
+    "appPurpose": "این اپلیکیشن کاملاً رایگان است. اگر از استفاده‌ی آن لذت می‌برید، لطفاً با دادن ۵ ستاره و گذاشتن یک نظر محبت‌آمیز در اپ‌استور از من حمایت کنید!",
+    "connectWithMe": "ارتباط با من",
+    "linkedin": "لینکدین",
+    "github": "گیتهاب",
+    "telegram": "تلگرام",
+    "gmail": "جمیل",
+    "twitter": "توییتر",
+    "close": "بستن"
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/extensions/context_ex.dart';
 import 'package:music_player/features/mini_player/presentation/pages/mini_player_page.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
@@ -24,22 +25,22 @@ class _HomePageState extends State<HomePage> {
     SettingsPage(),
   ];
 
-  final List<BottomNavigationBarItem> _navBarItems = const [
+  late final List<BottomNavigationBarItem> _navBarItems = [
     BottomNavigationBarItem(
       icon: Icon(Icons.music_note_rounded),
-      label: 'Songs',
+      label: context.localization.songs,
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.queue_music_rounded),
-      label: 'Playlists',
+      label: context.localization.playlists,
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.favorite_rounded),
-      label: 'Favorites',
+      label: context.localization.favorites,
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.settings_rounded),
-      label: 'Settings',
+      label: context.localization.settings,
     ),
   ];
 

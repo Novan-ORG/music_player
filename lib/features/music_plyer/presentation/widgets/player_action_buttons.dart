@@ -39,135 +39,138 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Card(
-      elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          gradient: LinearGradient(
-            colors: [
-              colorScheme.primary.withAlpha(10),
-              colorScheme.secondary.withAlpha(8),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Card(
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: LinearGradient(
+              colors: [
+                colorScheme.primary.withAlpha(10),
+                colorScheme.secondary.withAlpha(8),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Tooltip(
-              message: isShuffled ? 'Disable Shuffle' : 'Enable Shuffle',
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: IconButton(
-                  key: ValueKey(isShuffled),
-                  icon: Icon(
-                    isShuffled ? Icons.shuffle_on_rounded : Icons.shuffle,
-                    color: isShuffled
-                        ? colorScheme.primary
-                        : colorScheme.onSurface.withAlpha(70),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Tooltip(
+                message: isShuffled ? 'Disable Shuffle' : 'Enable Shuffle',
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: IconButton(
+                    key: ValueKey(isShuffled),
+                    icon: Icon(
+                      isShuffled ? Icons.shuffle_on_rounded : Icons.shuffle,
+                      color: isShuffled
+                          ? colorScheme.primary
+                          : colorScheme.onSurface.withAlpha(70),
+                    ),
+                    splashRadius: 28,
+                    onPressed: toggleShuffle,
                   ),
-                  splashRadius: 28,
-                  onPressed: toggleShuffle,
                 ),
               ),
-            ),
-            Tooltip(
-              message: 'Previous',
-              child: IconButton(
-                icon: const Icon(Icons.skip_previous),
-                splashRadius: 28,
-                onPressed: musicPlayer.hasPrevious
-                    ? () {
-                        musicPlayer.add(PreviousMusicEvent());
-                        setState(() {});
-                      }
-                    : null,
+              Tooltip(
+                message: 'Previous',
+                child: IconButton(
+                  icon: const Icon(Icons.skip_previous),
+                  splashRadius: 28,
+                  onPressed: musicPlayer.hasPrevious
+                      ? () {
+                          musicPlayer.add(PreviousMusicEvent());
+                          setState(() {});
+                        }
+                      : null,
+                ),
               ),
-            ),
-            StreamBuilder<PlayerState>(
-              stream: playerStateStream,
-              builder: (context, asyncSnapshot) {
-                final isPlaying = asyncSnapshot.data?.playing ?? false;
-                return Tooltip(
-                  message: isPlaying ? 'Pause' : 'Play',
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    transitionBuilder: (child, anim) =>
-                        ScaleTransition(scale: anim, child: child),
-                    child: IconButton(
-                      key: ValueKey(isPlaying),
-                      iconSize: 44,
-                      icon: Icon(
-                        isPlaying
-                            ? Icons.pause_circle_filled
-                            : Icons.play_circle_fill,
-                        color: colorScheme.primary,
+              StreamBuilder<PlayerState>(
+                stream: playerStateStream,
+                builder: (context, asyncSnapshot) {
+                  final isPlaying = asyncSnapshot.data?.playing ?? false;
+                  return Tooltip(
+                    message: isPlaying ? 'Pause' : 'Play',
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder: (child, anim) =>
+                          ScaleTransition(scale: anim, child: child),
+                      child: IconButton(
+                        key: ValueKey(isPlaying),
+                        iconSize: 44,
+                        icon: Icon(
+                          isPlaying
+                              ? Icons.pause_circle_filled
+                              : Icons.play_circle_fill,
+                          color: colorScheme.primary,
+                        ),
+                        splashRadius: 32,
+                        onPressed: togglePlay,
                       ),
-                      splashRadius: 32,
-                      onPressed: togglePlay,
                     ),
-                  ),
-                );
-              },
-            ),
-            Tooltip(
-              message: 'Next',
-              child: IconButton(
-                icon: const Icon(Icons.skip_next),
-                splashRadius: 28,
-                onPressed: musicPlayer.hasNext
-                    ? () {
-                        musicPlayer.add(NextMusicEvent());
-                        setState(() {});
-                      }
-                    : null,
+                  );
+                },
               ),
-            ),
-            StreamBuilder<LoopMode>(
-              stream: loopModeStream,
-              builder: (context, asyncSnapshot) {
-                final loopMode = asyncSnapshot.data ?? LoopMode.off;
-                IconData icon;
-                String tooltip;
-                Color color;
-                switch (loopMode) {
-                  case LoopMode.one:
-                    icon = Icons.repeat_one_on_rounded;
-                    tooltip = 'Repeat One';
-                    color = colorScheme.primary;
-                    break;
-                  case LoopMode.all:
-                    icon = Icons.repeat_on_rounded;
-                    tooltip = 'Repeat All';
-                    color = colorScheme.primary;
-                    break;
-                  default:
-                    icon = Icons.repeat;
-                    tooltip = 'No Repeat';
-                    color = colorScheme.onSurface.withAlpha(70);
-                }
-                return Tooltip(
-                  message: tooltip,
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    child: IconButton(
-                      key: ValueKey(loopMode),
-                      icon: Icon(icon, color: color),
-                      splashRadius: 28,
-                      onPressed: () {
-                        musicPlayer.setNextLoopMode(loopMode);
-                        setState(() {});
-                      },
+              Tooltip(
+                message: 'Next',
+                child: IconButton(
+                  icon: const Icon(Icons.skip_next),
+                  splashRadius: 28,
+                  onPressed: musicPlayer.hasNext
+                      ? () {
+                          musicPlayer.add(NextMusicEvent());
+                          setState(() {});
+                        }
+                      : null,
+                ),
+              ),
+              StreamBuilder<LoopMode>(
+                stream: loopModeStream,
+                builder: (context, asyncSnapshot) {
+                  final loopMode = asyncSnapshot.data ?? LoopMode.off;
+                  IconData icon;
+                  String tooltip;
+                  Color color;
+                  switch (loopMode) {
+                    case LoopMode.one:
+                      icon = Icons.repeat_one_on_rounded;
+                      tooltip = 'Repeat One';
+                      color = colorScheme.primary;
+                      break;
+                    case LoopMode.all:
+                      icon = Icons.repeat_on_rounded;
+                      tooltip = 'Repeat All';
+                      color = colorScheme.primary;
+                      break;
+                    default:
+                      icon = Icons.repeat;
+                      tooltip = 'No Repeat';
+                      color = colorScheme.onSurface.withAlpha(70);
+                  }
+                  return Tooltip(
+                    message: tooltip,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: IconButton(
+                        key: ValueKey(loopMode),
+                        icon: Icon(icon, color: color),
+                        splashRadius: 28,
+                        onPressed: () {
+                          musicPlayer.setNextLoopMode(loopMode);
+                          setState(() {});
+                        },
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

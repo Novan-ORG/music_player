@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/services/database/models/playlist_model.dart';
+import 'package:music_player/extensions/context_ex.dart';
 import 'package:music_player/features/play_list/presentation/bloc/play_list_bloc.dart';
 
 class CreatePlaylistSheet extends StatefulWidget {
@@ -85,7 +86,7 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                 ),
               ),
               Text(
-                'Create New Playlist',
+                context.localization.createNewPlaylist,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
@@ -97,7 +98,7 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                 onChanged: _onChanged,
                 autofocus: true,
                 decoration: InputDecoration(
-                  labelText: 'Playlist Name',
+                  labelText: context.localization.playlistName,
                   prefixIcon: const Icon(Icons.playlist_add),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -113,7 +114,7 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                 child: ElevatedButton.icon(
                   onPressed: _isValid ? _createPlaylist : null,
                   icon: const Icon(Icons.check_circle_outline),
-                  label: const Text('Create Playlist'),
+                  label: Text(context.localization.createPlaylist),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(48),
                     shape: RoundedRectangleBorder(

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/extensions/context_ex.dart';
 import 'package:music_player/extensions/duration_ex.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
@@ -79,7 +80,7 @@ class _UpNextMusicsView extends StatelessWidget {
             child: playList.isEmpty
                 ? Center(
                     child: Text(
-                      'No songs in queue',
+                      context.localization.noSongInQueue,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   )
@@ -165,7 +166,7 @@ class _Header extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Up Next',
+          context.localization.upNext,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
             letterSpacing: 1.2,

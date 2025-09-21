@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/services/database/models/playlist_model.dart';
 import 'package:music_player/core/services/ringtone_set/ringtone_set.dart';
 import 'package:music_player/core/widgets/background_gradient.dart';
+import 'package:music_player/extensions/context_ex.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
 import 'package:music_player/features/search/presentation/pages/search_songs_page.dart';
@@ -31,7 +32,9 @@ class _SongsPageState extends State<SongsPage> {
       await RingtoneSet.setRingtone(songPath);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Permission not granted to set ringtone')),
+        SnackBar(
+          content: Text(context.localization.permissionDeniedForRingtone),
+        ),
       );
     }
   }
@@ -40,19 +43,19 @@ class _SongsPageState extends State<SongsPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Song'),
-        content: const Text('Are you sure you want to delete this song?'),
+        title: Text(context.localization.deleteSong),
+        content: Text(context.localization.areSureYouWantToDeleteSong),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(context.localization.cancel),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               songsBloc.add(DeleteSongEvent(song));
             },
-            child: const Text('Delete'),
+            child: Text(context.localization.delete),
           ),
         ],
       ),
@@ -77,8 +80,8 @@ class _SongsPageState extends State<SongsPage> {
       elevation: 0,
       title: Text(
         widget.isFavorites
-            ? 'Favorite Songs'
-            : widget.playlist?.name ?? 'All Songs',
+            ? context.localization.favoriteSongs
+            : widget.playlist?.name ?? context.localization.allSongs,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 26,
@@ -94,7 +97,7 @@ class _SongsPageState extends State<SongsPage> {
             ).push(MaterialPageRoute(builder: (_) => const SearchSongsPage()));
           },
           icon: const Icon(Icons.search, size: 28),
-          tooltip: 'Search Songs',
+          tooltip: context.localization.searchSongs,
         ),
       ],
     );
@@ -116,7 +119,7 @@ class _SongsPageState extends State<SongsPage> {
           ElevatedButton.icon(
             onPressed: onRefresh,
             icon: const Icon(Icons.refresh),
-            label: const Text('Refresh'),
+            label: Text(context.localization.refresh),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepPurple,
               foregroundColor: Colors.white,
@@ -165,7 +168,7 @@ class _SongsPageState extends State<SongsPage> {
             context,
           ).push(MaterialPageRoute(builder: (_) => const SearchSongsPage()));
         },
-        tooltip: 'Search Songs',
+        tooltip: context.localization.searchSongs,
         child: const Icon(Icons.search, size: 28, color: Colors.white),
       ),
       body: BackgroundGradient(
@@ -176,13 +179,16 @@ class _SongsPageState extends State<SongsPage> {
               return const Center(child: CircularProgressIndicator());
             }
             if (state.status == SongsStatus.error) {
-              return _buildEmptyState('Error loading songs', () {
-                songsBloc.add(LoadSongsEvent());
-              });
+              return _buildEmptyState(
+                context.localization.errorLoadingSongs,
+                () {
+                  songsBloc.add(LoadSongsEvent());
+                },
+              );
             }
             if (state.allSongs.isEmpty) {
               return _buildEmptyState(
-                'No songs found.\nTry refreshing or adding music!',
+                context.localization.noSongTryAgain,
                 () => songsBloc.add(LoadSongsEvent()),
               );
             }
@@ -195,8 +201,8 @@ class _SongsPageState extends State<SongsPage> {
                 if (filteredSongs.isEmpty) {
                   return _buildEmptyState(
                     widget.isFavorites
-                        ? 'No favorite songs yet'
-                        : 'No songs available in this playlist',
+                        ? context.localization.noSongTryAgain
+                        : context.localization.noSongInPlaylist,
                     () => songsBloc.add(LoadSongsEvent()),
                   );
                 }

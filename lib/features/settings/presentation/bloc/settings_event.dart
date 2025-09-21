@@ -26,3 +26,11 @@ final class ChangeSleepTimerEvent extends SettingsEvent {
 }
 
 final class ClearSleepTimerEvent extends SettingsEvent {}
+
+final class ChangeLanguageEvent extends SettingsEvent {
+  const ChangeLanguageEvent(this.langCode);
+  final String langCode;
+
+  @override
+  List<Object?> get props => [...super.props, langCode];
+}

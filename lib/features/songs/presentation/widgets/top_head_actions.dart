@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:music_player/extensions/context_ex.dart';
 
 typedef OnSortSongs = void Function(SortType sortType);
 
@@ -25,20 +27,20 @@ class TopHeadActions extends StatelessWidget {
   final OnSortSongs onSortSongs;
   final SortType sortType;
 
-  String _sortTypeLabel(SortType type) {
+  String _sortTypeLabel(BuildContext context, SortType type) {
     switch (type) {
       case SortType.recentlyAdded:
-        return 'Recent';
+        return context.localization.recent;
       case SortType.dateAdded:
-        return 'Date Added';
+        return context.localization.dateAdded;
       case SortType.duration:
-        return 'Duration';
+        return context.localization.duration;
       case SortType.size:
-        return 'Size';
+        return context.localization.size;
       case SortType.ascendingOrder:
-        return 'Ascending';
+        return context.localization.ascending;
       case SortType.descendingOrder:
-        return 'Descending';
+        return context.localization.descending;
     }
   }
 
@@ -53,9 +55,9 @@ class TopHeadActions extends StatelessWidget {
       case SortType.size:
         return Icons.sd_storage;
       case SortType.ascendingOrder:
-        return Icons.arrow_upward;
+        return FontAwesomeIcons.arrowUpAZ;
       case SortType.descendingOrder:
-        return Icons.arrow_downward;
+        return FontAwesomeIcons.arrowDownAZ;
     }
   }
 
@@ -72,7 +74,7 @@ class TopHeadActions extends StatelessWidget {
               Icon(Icons.library_music, color: theme.primaryColor),
               const SizedBox(width: 8),
               Text(
-                'Songs: $songCount',
+                '${context.localization.songs}: $songCount',
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -81,7 +83,7 @@ class TopHeadActions extends StatelessWidget {
           ),
           const Spacer(),
           Tooltip(
-            message: 'Shuffle All Songs',
+            message: context.localization.shuffleAllSongs,
             child: IconButton(
               style: IconButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -99,14 +101,14 @@ class TopHeadActions extends StatelessWidget {
             initialValue: sortType,
             padding: EdgeInsets.zero,
             menuPadding: EdgeInsets.zero,
-            tooltip: 'Sort Songs',
+            tooltip: context.localization.sortSongs,
             icon: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
                 Icon(_sortTypeIcon(sortType), color: theme.primaryColor),
                 const SizedBox(width: 4),
                 Text(
-                  _sortTypeLabel(sortType),
+                  _sortTypeLabel(context, sortType),
                   style: theme.textTheme.titleSmall,
                 ),
                 const Icon(Icons.arrow_drop_down),
@@ -120,7 +122,7 @@ class TopHeadActions extends StatelessWidget {
                   children: [
                     Icon(_sortTypeIcon(SortType.recentlyAdded)),
                     const SizedBox(width: 8),
-                    Text(_sortTypeLabel(SortType.recentlyAdded)),
+                    Text(_sortTypeLabel(context, SortType.recentlyAdded)),
                   ],
                 ),
               ),
@@ -130,7 +132,7 @@ class TopHeadActions extends StatelessWidget {
                   children: [
                     Icon(_sortTypeIcon(SortType.dateAdded)),
                     const SizedBox(width: 8),
-                    Text(_sortTypeLabel(SortType.dateAdded)),
+                    Text(_sortTypeLabel(context, SortType.dateAdded)),
                   ],
                 ),
               ),
@@ -140,7 +142,7 @@ class TopHeadActions extends StatelessWidget {
                   children: [
                     Icon(_sortTypeIcon(SortType.duration)),
                     const SizedBox(width: 8),
-                    Text(_sortTypeLabel(SortType.duration)),
+                    Text(_sortTypeLabel(context, SortType.duration)),
                   ],
                 ),
               ),
@@ -150,7 +152,7 @@ class TopHeadActions extends StatelessWidget {
                   children: [
                     Icon(_sortTypeIcon(SortType.size)),
                     const SizedBox(width: 8),
-                    Text(_sortTypeLabel(SortType.size)),
+                    Text(_sortTypeLabel(context, SortType.size)),
                   ],
                 ),
               ),
@@ -161,7 +163,7 @@ class TopHeadActions extends StatelessWidget {
                   children: [
                     Icon(_sortTypeIcon(SortType.ascendingOrder)),
                     const SizedBox(width: 8),
-                    Text(_sortTypeLabel(SortType.ascendingOrder)),
+                    Text(_sortTypeLabel(context, SortType.ascendingOrder)),
                   ],
                 ),
               ),
@@ -171,7 +173,7 @@ class TopHeadActions extends StatelessWidget {
                   children: [
                     Icon(_sortTypeIcon(SortType.descendingOrder)),
                     const SizedBox(width: 8),
-                    Text(_sortTypeLabel(SortType.descendingOrder)),
+                    Text(_sortTypeLabel(context, SortType.descendingOrder)),
                   ],
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/widgets/background_gradient.dart';
+import 'package:music_player/extensions/context_ex.dart';
 import 'package:music_player/features/play_list/presentation/bloc/play_list_bloc.dart';
 import 'package:music_player/features/play_list/presentation/widgets/create_palylist_sheet.dart';
 import 'package:music_player/features/songs/presentation/pages/songs_page.dart';
@@ -49,14 +50,14 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
         children: [
           Icon(Icons.playlist_play, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
-          const Text(
-            'No Playlists Found',
+          Text(
+            context.localization.noPlaylistFound,
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8),
           ElevatedButton.icon(
             icon: const Icon(Icons.add),
-            label: const Text('Create First Playlist'),
+            label: Text(context.localization.createFirstPlaylist),
             onPressed: _showCreatePlaylistSheet,
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -71,7 +72,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
 
   Widget _buildPlaylistTile(playlist) {
     final subtitle =
-        '${playlist.songs.length} song${playlist.songs.length == 1 ? '' : 's'}';
+        '${playlist.songs.length} ${context.localization.song}${playlist.songs.length <= 1 ? '' : context.localization.s}';
     if (widget.isSelectionMode) {
       return Card(
         margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -102,7 +103,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           leading: CircleAvatar(
             backgroundColor: Theme.of(
               context,
-            ).colorScheme.primary.withOpacity(0.1),
+            ).colorScheme.primary.withAlpha(10),
             child: const Icon(Icons.queue_music, color: Colors.black54),
           ),
           title: Text(
@@ -133,8 +134,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
             margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             child: ListTile(
               leading: const Icon(Icons.add, color: Colors.blueAccent),
-              title: const Text(
-                'Create New Playlist',
+              title: Text(
+                context.localization.createNewPlaylist,
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
               onTap: _showCreatePlaylistSheet,
@@ -152,14 +153,16 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
       case PlayListStatus.loading:
         return const Center(child: CircularProgressIndicator());
       case PlayListStatus.error:
-        return Center(child: Text('Error: ${state.errorMessage}'));
+        return Center(
+          child: Text('${context.localization.error}: ${state.errorMessage}'),
+        );
       case PlayListStatus.loaded:
         if (state.playLists.isEmpty) {
           return _buildEmptyState();
         }
         return _buildPlaylistsList(state.playLists);
       default:
-        return const Center(child: Text('Playlists Page'));
+        return Center(child: Text(context.localization.playListPage));
     }
   }
 
@@ -179,7 +182,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
         ),
         child: ElevatedButton.icon(
           icon: const Icon(Icons.playlist_add_check),
-          label: const Text('Add to Selected Playlists'),
+          label: Text(context.localization.addToSelectedPlaylist),
           onPressed: selectedPlaylistIds.isEmpty
               ? null
               : () {
@@ -208,14 +211,18 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF7F53AC),
-        title: Text(widget.isSelectionMode ? 'Select Playlists' : 'Playlists'),
+        title: Text(
+          widget.isSelectionMode
+              ? context.localization.selectPlaylist
+              : context.localization.playlists,
+        ),
         centerTitle: true,
         elevation: 1,
         actions: [
           if (!widget.isSelectionMode)
             IconButton(
               icon: const Icon(Icons.add),
-              tooltip: 'Create Playlist',
+              tooltip: context.localization.createPlaylist,
               onPressed: _showCreatePlaylistSheet,
             ),
         ],

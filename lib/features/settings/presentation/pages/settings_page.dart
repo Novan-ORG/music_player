@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/constants/strings_constants.dart';
 import 'package:music_player/core/utils/launcher_utils.dart';
 import 'package:music_player/core/widgets/background_gradient.dart';
+import 'package:music_player/extensions/context_ex.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:music_player/features/settings/presentation/widgets/about_me_popup.dart';
@@ -28,7 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(context.localization.settings),
         elevation: 0,
         backgroundColor: const Color(0xFF7F53AC),
       ),
@@ -52,25 +53,50 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SectionTitle(title: 'Appearance'),
+                    const SizedBox(height: 24),
+                    SectionTitle(title: context.localization.appearance),
+                    SettingsCard(
+                      child: SettingsTile(
+                        icon: Icons.language,
+                        title: context.localization.language,
+                        trailing: CustomDropdown(
+                          value: state.currentLocale.languageCode,
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'en',
+                              child: Text('English (en)'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'fa',
+                              child: Text('فارسی (fa)'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            context.read<SettingsBloc>().add(
+                              ChangeLanguageEvent(value!),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                     SettingsCard(
                       child: SettingsTile(
                         icon: Icons.palette_rounded,
-                        title: 'Theme',
+                        title: context.localization.theme,
                         trailing: CustomDropdown(
                           value: state.themeMode,
-                          items: const [
+                          items: [
                             DropdownMenuItem(
                               value: 'system',
-                              child: Text('System'),
+                              child: Text(context.localization.system),
                             ),
                             DropdownMenuItem(
                               value: 'dark',
-                              child: Text('Dark'),
+                              child: Text(context.localization.dark),
                             ),
                             DropdownMenuItem(
                               value: 'light',
-                              child: Text('Light'),
+                              child: Text(context.localization.light),
                             ),
                           ],
                           onChanged: (value) {
@@ -82,34 +108,34 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    SectionTitle(title: 'Playback'),
+                    SectionTitle(title: context.localization.playback),
                     SettingsCard(
                       child: SettingsTile(
                         icon: Icons.timer_rounded,
-                        title: 'Sleep Timer',
+                        title: context.localization.sleepTimer,
                         trailing: mDuration <= Duration.zero
                             ? CustomDropdown(
                                 value: '0',
-                                items: const [
+                                items: [
                                   DropdownMenuItem(
                                     value: '0',
-                                    child: Text('Off'),
+                                    child: Text(context.localization.off),
                                   ),
                                   DropdownMenuItem(
                                     value: '15',
-                                    child: Text('15 min'),
+                                    child: Text(context.localization.min15),
                                   ),
                                   DropdownMenuItem(
                                     value: '30',
-                                    child: Text('30 min'),
+                                    child: Text(context.localization.min30),
                                   ),
                                   DropdownMenuItem(
                                     value: '60',
-                                    child: Text('1 hour'),
+                                    child: Text(context.localization.hour1),
                                   ),
                                   DropdownMenuItem(
                                     value: 'custom',
-                                    child: Text('Custom'),
+                                    child: Text(context.localization.custom),
                                   ),
                                 ],
                                 onChanged: (value) async {
@@ -181,13 +207,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    SectionTitle(title: 'Support'),
+                    SectionTitle(title: context.localization.support),
                     SettingsCard(
                       child: Column(
                         children: [
                           SettingsTile(
                             icon: Icons.feedback_rounded,
-                            title: 'Send Feedback or Suggestions',
+                            title:
+                                context.localization.sendFeedbackOrSuggestion,
                             trailing: const Icon(
                               Icons.email_rounded,
                               color: Colors.blueAccent,
@@ -199,8 +226,10 @@ class _SettingsPageState extends State<SettingsPage> {
                               );
                               if (!success && context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Could not open email app.'),
+                                  SnackBar(
+                                    content: Text(
+                                      context.localization.errorOpenEmail,
+                                    ),
                                   ),
                                 );
                               }
@@ -209,7 +238,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           const Divider(height: 1),
                           SettingsTile(
                             icon: Icons.info_rounded,
-                            title: 'About Me',
+                            title: context.localization.aboutMe,
                             trailing: const Icon(
                               Icons.telegram_rounded,
                               color: Colors.blueAccent,

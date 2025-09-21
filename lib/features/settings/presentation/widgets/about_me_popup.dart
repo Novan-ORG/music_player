@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:music_player/core/constants/strings_constants.dart';
 import 'package:music_player/core/utils/launcher_utils.dart';
+import 'package:music_player/extensions/context_ex.dart';
 
 class AboutMePopup extends StatelessWidget {
   const AboutMePopup({super.key});
@@ -10,7 +11,10 @@ class AboutMePopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       scrollable: true,
-      title: const Text('About the Developer', textAlign: TextAlign.center),
+      title: Text(
+        context.localization.aboutDeveloper,
+        textAlign: TextAlign.center,
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -19,19 +23,19 @@ class AboutMePopup extends StatelessWidget {
             backgroundImage: AssetImage('assets/images/developer_avatar.jpg'),
           ),
           const SizedBox(height: 16),
-          const Text(
-            "Hi! I'm Taleb, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people's lives easier.",
+          Text(
+            context.localization.developerStroy,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          const Text(
-            "This app is completely free. If you enjoy using it, please consider supporting me by rating it 5 stars and leaving a kind comment on the app store!",
+          Text(
+            context.localization.appPurpose,
             style: TextStyle(fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          const Text(
-            "Connect with me:",
+          Text(
+            context.localization.connectWithMe,
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8),
@@ -42,35 +46,35 @@ class AboutMePopup extends StatelessWidget {
               children: [
                 IconButton(
                   icon: const Icon(FontAwesomeIcons.linkedin),
-                  tooltip: 'LinkedIn',
+                  tooltip: context.localization.linkedin,
                   onPressed: () => LauncherUtils.launchUrlExternally(
                     StringsConstants.developerLinkedIn,
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.code),
-                  tooltip: 'GitHub',
+                  tooltip: context.localization.github,
                   onPressed: () => LauncherUtils.launchUrlExternally(
                     StringsConstants.developerGithub,
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.email),
-                  tooltip: 'Email',
+                  tooltip: context.localization.gmail,
                   onPressed: () => LauncherUtils.openEmailApp(
                     toEmail: StringsConstants.developerEmail,
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.telegram),
-                  tooltip: 'Telegram',
+                  tooltip: context.localization.telegram,
                   onPressed: () => LauncherUtils.launchUrlExternally(
                     StringsConstants.developerTelegram,
                   ),
                 ),
                 IconButton(
                   icon: const Icon(FontAwesomeIcons.twitter),
-                  tooltip: 'Twitter/X',
+                  tooltip: context.localization.twitter,
                   onPressed: () => LauncherUtils.launchUrlExternally(
                     StringsConstants.developerTwitter,
                   ),
@@ -92,7 +96,7 @@ class AboutMePopup extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          child: const Text('Close'),
+          child: Text(context.localization.close),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ],

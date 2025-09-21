@@ -1,14 +1,24 @@
 part of 'settings_bloc.dart';
 
 final class SettingsState extends Equatable {
-  const SettingsState({this.themeMode = 'system', this.sleepEndTime});
+  const SettingsState({
+    this.themeMode = 'system',
+    this.sleepEndTime,
+    required this.currentLocale,
+  });
 
   final String themeMode;
+  final Locale currentLocale;
   final DateTime? sleepEndTime;
 
-  SettingsState copyWith({String? themeMode, DateTime? sleepEndTime}) {
+  SettingsState copyWith({
+    String? themeMode,
+    DateTime? sleepEndTime,
+    Locale? currentLocale,
+  }) {
     return SettingsState(
       themeMode: themeMode ?? this.themeMode,
+      currentLocale: currentLocale ?? this.currentLocale,
       sleepEndTime: sleepEndTime ?? this.sleepEndTime,
     );
   }
@@ -29,5 +39,6 @@ final class SettingsState extends Equatable {
   List<Object> get props => [
     themeMode,
     if (sleepEndTime != null) sleepEndTime!,
+    currentLocale,
   ];
 }
