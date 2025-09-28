@@ -98,5 +98,8 @@
     "telegram": "تلگرام",
     "gmail": "جمیل",
     "twitter": "توییتر",
-    "close": "بستن"
+    "close": "بستن",
+    "setAsRingtone": "تنظیم به عنوان آهنگ زنگ",
+    "sleepTimerActive": "تایمر خواب فعال است",
+    "cancelTimer": "لغو تایمر"
 }

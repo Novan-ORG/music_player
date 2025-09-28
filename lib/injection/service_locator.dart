@@ -6,27 +6,29 @@ import 'package:music_player/core/services/database/objectbox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volume_controller/volume_controller.dart';
 
-final getIt = GetIt.instance;
+final GetIt getIt = GetIt.instance;
 
 void setup() {
   //
-  getIt.registerSingletonAsync(() => ObjectBox.create());
-  //
-  getIt.registerLazySingleton<AudioPlayer>(() => AudioPlayer());
-  getIt.registerSingletonAsync<MAudioHandler>(
-    () => AudioService.init(
-      builder: () => MAudioHandler(getIt.get<AudioPlayer>()),
-      config: AudioServiceConfig(
-        androidNotificationChannelId: 'com.example.music_palyer.channel.audio',
-        androidNotificationChannelName: 'Music Player',
-        androidNotificationOngoing: true,
+  getIt
+    ..registerSingletonAsync(ObjectBox.create)
+    //
+    ..registerLazySingleton<AudioPlayer>(AudioPlayer.new)
+    ..registerSingletonAsync<MAudioHandler>(
+      () => AudioService.init(
+        builder: () => MAudioHandler(getIt.get<AudioPlayer>()),
+        config: const AudioServiceConfig(
+          androidNotificationChannelId:
+              'com.example.music_palyer.channel.audio',
+          androidNotificationChannelName: 'Music Player',
+          androidNotificationOngoing: true,
+        ),
       ),
-    ),
-  );
-  //
-  getIt.registerSingletonAsync<SharedPreferences>(
-    () => SharedPreferences.getInstance(),
-  );
-  //
-  getIt.registerLazySingleton(() => VolumeController.instance);
+    )
+    //
+    ..registerSingletonAsync<SharedPreferences>(
+      SharedPreferences.getInstance,
+    )
+    //
+    ..registerLazySingleton(() => VolumeController.instance);
 }

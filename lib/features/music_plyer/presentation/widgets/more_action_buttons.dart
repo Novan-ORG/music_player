@@ -23,7 +23,7 @@ class MoreActionButtons extends StatelessWidget {
         ),
         IconButton(
           onPressed: onMusicQueuePressed,
-          icon: Icon(Icons.queue_music_rounded),
+          icon: const Icon(Icons.queue_music_rounded),
         ),
         IconButton(icon: const Icon(Icons.share), onPressed: onSharePressed),
       ],

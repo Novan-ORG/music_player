@@ -1,7 +1,9 @@
-class StringsConstants {
+sealed class StringsConstants {
+  // Support Info
   static const supportEmail = 'development.taleb@gmail.com';
   static const supportEmailSubject = 'Music Player Feedback';
-  // About the Developer URLs
+
+  // Developer Info
   static const developerGithub = 'https://github.com/TalebRafiepour';
   static const developerTwitter = 'https://twitter.com/R75Taleb';
   static const developerEmail = 'taleb.r75@gmail.com';

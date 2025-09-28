@@ -228,4 +228,13 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get close => 'بستن';
+
+  @override
+  String get setAsRingtone => 'تنظیم به عنوان آهنگ زنگ';
+
+  @override
+  String get sleepTimerActive => 'تایمر خواب فعال است';
+
+  @override
+  String get cancelTimer => 'لغو تایمر';
 }

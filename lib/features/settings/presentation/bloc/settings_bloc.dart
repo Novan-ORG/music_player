@@ -48,25 +48,29 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
   }
 
-  void _onTimerClear(ClearSleepTimerEvent event, Emitter<SettingsState> emit) {
-    preferences.remove(PreferencesKeys.sleepTimer);
+  Future<void> _onTimerClear(
+    ClearSleepTimerEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    await preferences.remove(PreferencesKeys.sleepTimer);
     emit(
       SettingsState(
         themeMode: state.themeMode,
-        sleepEndTime: null,
         currentLocale: state.currentLocale,
       ),
     );
   }
 
-  void _onSleepTimer(ChangeSleepTimerEvent event, Emitter<SettingsState> emit) {
+  Future<void> _onSleepTimer(
+    ChangeSleepTimerEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
     if (event.sleepEndTime == null) {
-      preferences.remove(PreferencesKeys.sleepTimer);
+      await preferences.remove(PreferencesKeys.sleepTimer);
       audioHandler.cancelSleepTimer();
       emit(
         SettingsState(
           themeMode: state.themeMode,
-          sleepEndTime: null,
           currentLocale: state.currentLocale,
         ),
       );
@@ -76,17 +80,20 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     final oldSleepEndTime = preferences.getString(PreferencesKeys.sleepTimer);
     final newSleepEndTimeStr = event.sleepEndTime!.toIso8601String();
     if (oldSleepEndTime == newSleepEndTimeStr) return;
-    preferences.setString(PreferencesKeys.sleepTimer, newSleepEndTimeStr);
+    await preferences.setString(PreferencesKeys.sleepTimer, newSleepEndTimeStr);
 
     final remainedDuration = event.sleepEndTime!.difference(DateTime.now());
     audioHandler.setSleepTimer(remainedDuration);
     emit(state.copyWith(sleepEndTime: event.sleepEndTime));
   }
 
-  void _onChangeTheme(ChangeThemeEvent event, Emitter<SettingsState> emit) {
+  Future<void> _onChangeTheme(
+    ChangeThemeEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
     final oldMode = preferences.getString(PreferencesKeys.themeMode);
     if (oldMode == event.mode) return;
-    preferences.setString(PreferencesKeys.themeMode, event.mode);
+    await preferences.setString(PreferencesKeys.themeMode, event.mode);
     emit(state.copyWith(themeMode: event.mode));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/extensions/context_ex.dart';
 import 'package:music_player/features/songs/presentation/widgets/song_image_widget.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
@@ -114,20 +115,20 @@ class SongItem extends StatelessWidget {
         PopupMenuItem(
           value: 'delete',
           child: Row(
-            children: const [
-              Icon(Icons.delete, color: Colors.red),
-              SizedBox(width: 8),
-              Text('Delete'),
+            spacing: 8,
+            children: [
+              const Icon(Icons.delete, color: Colors.red),
+              Text(context.localization.delete),
             ],
           ),
         ),
         PopupMenuItem(
           value: 'ringtone',
           child: Row(
-            children: const [
-              Icon(Icons.music_note, color: Colors.blue),
-              SizedBox(width: 8),
-              Text('Set as ringtone'),
+            spacing: 8,
+            children: [
+              const Icon(Icons.music_note, color: Colors.blue),
+              Text(context.localization.setAsRingtone),
             ],
           ),
         ),

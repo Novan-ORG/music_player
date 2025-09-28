@@ -3,10 +3,10 @@ import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class MiniCoverAndProgress extends StatelessWidget {
   const MiniCoverAndProgress({
-    super.key,
     required this.positionStream,
     required this.durationStream,
     required this.songId,
+    super.key,
   });
 
   final Stream<Duration> positionStream;
@@ -20,19 +20,17 @@ class MiniCoverAndProgress extends StatelessWidget {
       children: [
         QueryArtworkWidget(
           id: songId,
-          quality: 50,
           type: ArtworkType.AUDIO,
-          artworkBorder: BorderRadius.circular(38.0),
+          artworkBorder: BorderRadius.circular(38),
           artworkWidth: 38,
           artworkHeight: 38,
           nullArtworkWidget: ClipRRect(
-            borderRadius: BorderRadius.circular(38.0),
+            borderRadius: BorderRadius.circular(38),
             child: Image.asset(
               'assets/images/song_cover.png',
               fit: BoxFit.cover,
               width: 38,
               height: 38,
-              alignment: Alignment.center,
             ),
           ),
         ),
@@ -46,7 +44,7 @@ class MiniCoverAndProgress extends StatelessWidget {
               return StreamBuilder(
                 stream: positionStream,
                 builder: (context, positionShot) {
-                  double value = 0.0;
+                  double value = 0;
                   if (positionShot.hasData) {
                     value =
                         (positionShot.data!.inMilliseconds /

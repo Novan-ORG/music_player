@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart'
-    show SongModel, QueryArtworkWidget, ArtworkType;
+    show ArtworkType, QueryArtworkWidget, SongModel;
 
 class SongArtwork extends StatelessWidget {
-  final SongModel? song;
   const SongArtwork({super.key, this.song});
+  final SongModel? song;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size.height * 0.33;
     return Center(
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(16),
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             boxShadow: [
               BoxShadow(
                 color: Colors.black26,
-                blurRadius: 10.0,
+                blurRadius: 10,
                 offset: Offset(0, 5),
               ),
             ],
@@ -27,9 +27,8 @@ class SongArtwork extends StatelessWidget {
                   id: song!.id,
                   type: ArtworkType.AUDIO,
                   quality: 100,
-                  artworkFit: BoxFit.cover,
                   artworkQuality: FilterQuality.high,
-                  artworkBorder: BorderRadius.circular(16.0),
+                  artworkBorder: BorderRadius.circular(16),
                   artworkWidth: size,
                   artworkHeight: size,
                   nullArtworkWidget: Image.asset(
@@ -37,7 +36,6 @@ class SongArtwork extends StatelessWidget {
                     fit: BoxFit.cover,
                     width: size,
                     height: size,
-                    alignment: Alignment.center,
                   ),
                 )
               : Image.asset(
@@ -45,7 +43,6 @@ class SongArtwork extends StatelessWidget {
                   fit: BoxFit.cover,
                   width: size,
                   height: size,
-                  alignment: Alignment.center,
                 ),
         ),
       ),

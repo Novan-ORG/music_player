@@ -16,7 +16,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         MusicPlayerState(
           likedSongIds:
               _preferences
-                  .getStringList(PreferencesKeys.favoritedSongs)
+                  .getStringList(PreferencesKeys.favoriteSongs)
                   ?.map(int.parse)
                   .toList() ??
               [],
@@ -55,7 +55,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   bool get shuffleModeEnabled => _audioHandler.shuffleModeEnabled;
 
   void setNextLoopMode(LoopMode loopMode) {
-    LoopMode newMode = LoopMode.off;
+    var newMode = LoopMode.off;
     if (loopMode == LoopMode.off) {
       newMode = LoopMode.all;
     } else if (loopMode == LoopMode.all) {
@@ -66,21 +66,21 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     _audioHandler.setLoopMode(newMode);
   }
 
-  void setShuffleModeEnabled(bool enabled) =>
-      _audioHandler.setShuffleModeEnabled(enabled);
+  void setShuffleModeEnabled({required bool enabled}) =>
+      _audioHandler.setShuffleModeEnabled(enabled: enabled);
 
   Future<void> _handleToggleLike(
     ToggleLikeMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
     final favorites =
-        _preferences.getStringList(PreferencesKeys.favoritedSongs) ?? [];
+        _preferences.getStringList(PreferencesKeys.favoriteSongs) ?? [];
     if (favorites.contains(event.songId.toString())) {
       favorites.remove(event.songId.toString());
     } else {
       favorites.add(event.songId.toString());
     }
-    await _preferences.setStringList(PreferencesKeys.favoritedSongs, favorites);
+    await _preferences.setStringList(PreferencesKeys.favoriteSongs, favorites);
     emit(state.copyWith(likedSongIds: favorites.map(int.parse).toList()));
   }
 
@@ -112,26 +112,25 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   Future<void> _playList({
     required Emitter<MusicPlayerState> emit,
     required List<SongModel> songs,
-    int index = 0,
     required bool shuffle,
     required String errorContext,
+    int index = 0,
   }) async {
     try {
       final favorites =
-          _preferences.getStringList(PreferencesKeys.favoritedSongs) ?? [];
+          _preferences.getStringList(PreferencesKeys.favoriteSongs) ?? [];
       emit(
         state.copyWith(
           status: MusicPlayerStatus.playing,
           playList: songs,
           likedSongIds: favorites.map(int.parse).toList(),
-          errorMessage: null,
         ),
       );
       await _audioHandler.addAudioSources(songs);
-      await _audioHandler.setShuffleModeEnabled(shuffle);
+      await _audioHandler.setShuffleModeEnabled(enabled: shuffle);
       await _audioHandler.seek(Duration.zero, index: index);
       await _audioHandler.play();
-    } catch (e, s) {
+    } on Exception catch (e, s) {
       Logger.error('Error $errorContext: $e', e, s);
       emit(
         state.copyWith(
@@ -169,7 +168,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) async {
     await _handleSeek(
       emit: emit,
-      seekAction: () => _audioHandler.skipToNext(),
+      seekAction: _audioHandler.skipToNext,
       errorContext: 'skipping to next track',
     );
   }
@@ -191,7 +190,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) async {
     await _handleSeek(
       emit: emit,
-      seekAction: () => _audioHandler.skipToPrevious(),
+      seekAction: _audioHandler.skipToPrevious,
       errorContext: 'skipping to previous track',
     );
   }
@@ -203,7 +202,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   }) async {
     try {
       await seekAction();
-    } catch (e, s) {
+    } on Exception catch (e, s) {
       Logger.error('Error $errorContext: $e', e, s);
       emit(
         state.copyWith(

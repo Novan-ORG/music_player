@@ -26,10 +26,10 @@ class MusicPlayerPage extends StatefulWidget {
 }
 
 class _MusicPlayerPageState extends State<MusicPlayerPage> {
-  late final musicPlayerBloc = context.read<MusicPlayerBloc>();
+  late final MusicPlayerBloc musicPlayerBloc = context.read<MusicPlayerBloc>();
   SongModel? currentSong;
   int currentSongIndex = -1;
-  late final StreamSubscription streamSubscription;
+  late final StreamSubscription<int?> streamSubscription;
 
   @override
   void initState() {
@@ -41,11 +41,11 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
 
   @override
   void dispose() {
-    streamSubscription.cancel();
+    unawaited(streamSubscription.cancel());
     super.dispose();
   }
 
-  void _onMusicChanged(index) {
+  void _onMusicChanged(int? index) {
     if (index != null &&
         index >= 0 &&
         index != currentSongIndex &&
@@ -87,14 +87,14 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
             ),
             const SizedBox(height: 16),
             MoreActionButtons(
-              onAddToPlaylistPressed: () {
-                PlaylistsPage.showSheet(
+              onAddToPlaylistPressed: () async {
+                await PlaylistsPage.showSheet(
                   context: context,
                   songId: currentSong?.id,
                 );
               },
-              onSharePressed: () {
-                SharePlus.instance.share(
+              onSharePressed: () async {
+                await SharePlus.instance.share(
                   ShareParams(
                     text: currentSong?.displayNameWOExt ?? 'Unknown Song',
                     subject: currentSong?.artist ?? 'Unknown Artist',
@@ -102,8 +102,8 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
                   ),
                 );
               },
-              onMusicQueuePressed: () {
-                UpnextMusicsSheet.show(context);
+              onMusicQueuePressed: () async {
+                await UpnextMusicsSheet.show(context);
               },
             ),
             VolumeSlider(volumeController: getIt.get<VolumeController>()),
@@ -111,7 +111,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage> {
         ).paddingSymmetric(horizontal: 16, vertical: 8),
       ),
       bottomSheet: SafeArea(
-        child: PlayerActionButtons().paddingSymmetric(
+        child: const PlayerActionButtons().paddingSymmetric(
           vertical: 10,
           horizontal: 16,
         ),

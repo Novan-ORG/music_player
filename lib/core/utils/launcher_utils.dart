@@ -13,13 +13,11 @@ class LauncherUtils {
     String? subject,
     String? body,
   }) async {
-    final String encodedSubject = subject != null
-        ? Uri.encodeComponent(subject)
-        : "";
-    final String encodedBody = body != null ? Uri.encodeComponent(body) : "";
+    final encodedSubject = subject != null ? Uri.encodeComponent(subject) : '';
+    final encodedBody = body != null ? Uri.encodeComponent(body) : '';
 
-    final Uri emailUri = Uri.parse(
-      "mailto:$toEmail?subject=$encodedSubject&body=$encodedBody",
+    final emailUri = Uri.parse(
+      'mailto:$toEmail?subject=$encodedSubject&body=$encodedBody',
     );
 
     if (await canLaunchUrl(emailUri)) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/services/database/models/playlist_model.dart';
 import 'package:music_player/core/widgets/background_gradient.dart';
 import 'package:music_player/extensions/context_ex.dart';
 import 'package:music_player/features/play_list/presentation/bloc/play_list_bloc.dart';
@@ -39,9 +40,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
     context.read<PlayListBloc>().add(LoadPlayListsEvent());
   }
 
-  void _showCreatePlaylistSheet() {
-    CreatePlaylistSheet.show(context);
-  }
+  Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
 
   Widget _buildEmptyState() {
     return Center(
@@ -52,7 +51,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           const SizedBox(height: 16),
           Text(
             context.localization.noPlaylistFound,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8),
           ElevatedButton.icon(
@@ -70,9 +69,10 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
     );
   }
 
-  Widget _buildPlaylistTile(playlist) {
+  Widget _buildPlaylistTile(PlaylistModel playlist) {
     final subtitle =
-        '${playlist.songs.length} ${context.localization.song}${playlist.songs.length <= 1 ? '' : context.localization.s}';
+        '${playlist.songs.length} ${context.localization.song}'
+        '${playlist.songs.length <= 1 ? '' : context.localization.s}';
     if (widget.isSelectionMode) {
       return Card(
         margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -87,7 +87,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           activeColor: Theme.of(context).colorScheme.primary,
           onChanged: (value) {
             setState(() {
-              if (value == true) {
+              if (value ?? false) {
                 selectedPlaylistIds.add(playlist.id);
               } else {
                 selectedPlaylistIds.remove(playlist.id);
@@ -112,9 +112,11 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           ),
           subtitle: Text(subtitle),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => SongsPage(playlist: playlist)),
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => SongsPage(playlist: playlist),
+              ),
             );
           },
         ),
@@ -122,11 +124,11 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
     }
   }
 
-  Widget _buildPlaylistsList(List playlists) {
+  Widget _buildPlaylistsList(List<PlaylistModel> playlists) {
     return ListView.separated(
       padding: const EdgeInsets.only(top: 8, bottom: 80),
       itemCount: playlists.length + 1,
-      separatorBuilder: (_, __) => const SizedBox(height: 2),
+      separatorBuilder: (_, _) => const SizedBox(height: 2),
       itemBuilder: (context, index) {
         if (index == 0) {
           return Card(
@@ -136,7 +138,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
               leading: const Icon(Icons.add, color: Colors.blueAccent),
               title: Text(
                 context.localization.createNewPlaylist,
-                style: TextStyle(fontWeight: FontWeight.w600),
+                style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               onTap: _showCreatePlaylistSheet,
             ),
@@ -161,7 +163,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           return _buildEmptyState();
         }
         return _buildPlaylistsList(state.playLists);
-      default:
+
+      case PlayListStatus.initial:
         return Center(child: Text(context.localization.playListPage));
     }
   }
@@ -172,7 +175,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               blurRadius: 8,

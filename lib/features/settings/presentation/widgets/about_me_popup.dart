@@ -30,13 +30,13 @@ class AboutMePopup extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             context.localization.appPurpose,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           Text(
             context.localization.connectWithMe,
-            style: TextStyle(fontWeight: FontWeight.w600),
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8),
           SingleChildScrollView(

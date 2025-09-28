@@ -99,6 +99,9 @@
     "telegram": "Telegram",
     "gmail": "Gmail",
     "twitter": "Twitter/X",
-    "close": "Close"
+    "close": "Close",
+    "setAsRingtone": "Set as ringtone",
+    "sleepTimerActive": "Sleep Timer is Active",
+    "cancelTimer": "Cancel Timer"
 
 }

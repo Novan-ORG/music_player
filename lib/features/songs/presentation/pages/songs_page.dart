@@ -27,10 +27,11 @@ class _SongsPageState extends State<SongsPage> {
   SongsBloc get songsBloc => context.read<SongsBloc>();
   MusicPlayerBloc get musicPlayerBloc => context.read<MusicPlayerBloc>();
 
-  Future<void> _setAsRingtone(BuildContext context, String songPath) async {
+  Future<void> _setAsRingtone(String songPath) async {
     if (await Permission.systemAlertWindow.request().isGranted) {
       await RingtoneSet.setRingtone(songPath);
     } else {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.localization.permissionDeniedForRingtone),
@@ -39,8 +40,8 @@ class _SongsPageState extends State<SongsPage> {
     }
   }
 
-  void _showDeleteDialog(BuildContext context, SongModel song) {
-    showDialog(
+  Future<void> _showDeleteDialog(SongModel song) async {
+    await showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(context.localization.deleteSong),
@@ -63,7 +64,7 @@ class _SongsPageState extends State<SongsPage> {
   }
 
   List<SongModel> _filterSongs(SongsState state, List<int> likedSongIds) {
-    List<SongModel> songs = List<SongModel>.from(state.allSongs);
+    final songs = List<SongModel>.from(state.allSongs);
 
     if (widget.playlist != null) {
       songs.retainWhere((song) => widget.playlist!.songs.contains(song.id));
@@ -76,7 +77,7 @@ class _SongsPageState extends State<SongsPage> {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Color(0xFF7F53AC),
+      backgroundColor: const Color(0xFF7F53AC),
       elevation: 0,
       title: Text(
         widget.isFavorites
@@ -91,10 +92,12 @@ class _SongsPageState extends State<SongsPage> {
       centerTitle: true,
       actions: [
         IconButton(
-          onPressed: () {
-            Navigator.of(
+          onPressed: () async {
+            await Navigator.of(
               context,
-            ).push(MaterialPageRoute(builder: (_) => const SearchSongsPage()));
+            ).push(
+              MaterialPageRoute<void>(builder: (_) => const SearchSongsPage()),
+            );
           },
           icon: const Icon(Icons.search, size: 28),
           tooltip: context.localization.searchSongs,
@@ -143,15 +146,17 @@ class _SongsPageState extends State<SongsPage> {
         return SongItem(
           song: song,
           isLiked: likedSongIds.contains(song.id),
-          onSetAsRingtonePressed: () => _setAsRingtone(context, song.data),
-          onDeletePressed: () => _showDeleteDialog(context, song),
+          onSetAsRingtonePressed: () => _setAsRingtone(song.data),
+          onDeletePressed: () => _showDeleteDialog(song),
           onToggleLike: () =>
               musicPlayerBloc.add(ToggleLikeMusicEvent(song.id)),
-          onTap: () {
+          onTap: () async {
             musicPlayerBloc.add(PlayMusicEvent(index, songs));
-            Navigator.of(
+            await Navigator.of(
               context,
-            ).push(MaterialPageRoute(builder: (_) => const MusicPlayerPage()));
+            ).push(
+              MaterialPageRoute<void>(builder: (_) => const MusicPlayerPage()),
+            );
           },
         );
       },
@@ -163,10 +168,12 @@ class _SongsPageState extends State<SongsPage> {
     return Scaffold(
       appBar: _buildAppBar(context),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(
+        onPressed: () async {
+          await Navigator.of(
             context,
-          ).push(MaterialPageRoute(builder: (_) => const SearchSongsPage()));
+          ).push(
+            MaterialPageRoute<void>(builder: (_) => const SearchSongsPage()),
+          );
         },
         tooltip: context.localization.searchSongs,
         child: const Icon(Icons.search, size: 28, color: Colors.white),
@@ -182,14 +189,14 @@ class _SongsPageState extends State<SongsPage> {
               return _buildEmptyState(
                 context.localization.errorLoadingSongs,
                 () {
-                  songsBloc.add(LoadSongsEvent());
+                  songsBloc.add(const LoadSongsEvent());
                 },
               );
             }
             if (state.allSongs.isEmpty) {
               return _buildEmptyState(
                 context.localization.noSongTryAgain,
-                () => songsBloc.add(LoadSongsEvent()),
+                () => songsBloc.add(const LoadSongsEvent()),
               );
             }
             return BlocSelector<MusicPlayerBloc, MusicPlayerState, List<int>>(
@@ -203,7 +210,7 @@ class _SongsPageState extends State<SongsPage> {
                     widget.isFavorites
                         ? context.localization.noSongTryAgain
                         : context.localization.noSongInPlaylist,
-                    () => songsBloc.add(LoadSongsEvent()),
+                    () => songsBloc.add(const LoadSongsEvent()),
                   );
                 }
 
@@ -211,12 +218,12 @@ class _SongsPageState extends State<SongsPage> {
                   children: [
                     TopHeadActions(
                       songCount: filteredSongs.length,
-                      onShuffleAll: () {
+                      onShuffleAll: () async {
                         musicPlayerBloc.add(
                           ShuffleMusicEvent(songs: filteredSongs),
                         );
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
+                        await Navigator.of(context).push(
+                          MaterialPageRoute<void>(
                             builder: (_) => const MusicPlayerPage(),
                           ),
                         );
@@ -229,12 +236,13 @@ class _SongsPageState extends State<SongsPage> {
                     const SizedBox(height: 8),
                     Expanded(
                       child: RefreshIndicator(
-                        onRefresh: () async => songsBloc.add(LoadSongsEvent()),
+                        onRefresh: () async =>
+                            songsBloc.add(const LoadSongsEvent()),
                         child: _buildSongList(filteredSongs, likedSongIds),
                       ),
                     ),
                     if (musicPlayerBloc.state.playList.isNotEmpty)
-                      SizedBox(height: 80),
+                      const SizedBox(height: 80),
                   ],
                 );
               },

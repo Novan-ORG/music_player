@@ -3,10 +3,10 @@ import 'package:music_player/extensions/duration_ex.dart';
 
 class AudioProgress extends StatelessWidget {
   const AudioProgress({
-    super.key,
     required this.durationStream,
     required this.positionStream,
     this.onSeek,
+    super.key,
   });
 
   final Stream<Duration?> durationStream;
@@ -36,8 +36,6 @@ class AudioProgress extends StatelessWidget {
                   value = 0.0;
                 }
                 return Slider(
-                  min: 0.0,
-                  max: 1.0,
                   padding: EdgeInsets.zero,
                   value: value,
                   onChanged: (value) {

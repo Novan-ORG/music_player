@@ -20,10 +20,13 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
 
   final audioQuery = OnAudioQuery();
 
-  void onDeleteSong(DeleteSongEvent event, Emitter<SongsState> emit) async {
+  Future<void> onDeleteSong(
+    DeleteSongEvent event,
+    Emitter<SongsState> emit,
+  ) async {
     try {
       final file = File(event.song.data);
-      if (await file.exists()) {
+      if (file.existsSync()) {
         if (await Permission.manageExternalStorage.isGranted) {
           file.deleteSync();
           final updatedSongs = List<SongModel>.from(state.allSongs)
@@ -40,7 +43,7 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
           }
         }
       }
-    } catch (e, s) {
+    } on Exception catch (e, s) {
       Logger.error('Error deleting song: $e', e, s);
     }
   }
@@ -51,23 +54,23 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     emit(state.copyWith(allSongs: sortedSongs, sortType: event.sortType));
   }
 
-  void onLoadSongs(SongsEvent event, Emitter emit) async {
+  Future<void> onLoadSongs(SongsEvent event, Emitter<SongsState> emit) async {
     try {
-      emit(SongsState(status: SongsStatus.loading));
+      emit(const SongsState(status: SongsStatus.loading));
       final permissionsGranted = await audioQuery.permissionsStatus();
       if (!permissionsGranted) {
         final permissions = await audioQuery.permissionsRequest();
         if (!permissions) {
-          emit(SongsState(status: SongsStatus.error));
+          emit(const SongsState(status: SongsStatus.error));
           return;
         }
       }
       final songs = await audioQuery.querySongs();
       _sortSongs(songs, state.sortType);
       emit(SongsState(allSongs: songs, status: SongsStatus.loaded));
-    } catch (e, s) {
+    } on Exception catch (e, s) {
       Logger.error('Error fetching songs: $e', e, s);
-      emit(SongsState(status: SongsStatus.error));
+      emit(const SongsState(status: SongsStatus.error));
     }
   }
 
@@ -75,22 +78,16 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     switch (sortType) {
       case SortType.recentlyAdded:
         songs.sort((a, b) => (b.dateAdded ?? 0).compareTo(a.dateAdded ?? 0));
-        break;
       case SortType.dateAdded:
         songs.sort((a, b) => (a.dateAdded ?? 0).compareTo(b.dateAdded ?? 0));
-        break;
       case SortType.duration:
         songs.sort((a, b) => (a.duration ?? 0).compareTo(b.duration ?? 0));
-        break;
       case SortType.size:
         songs.sort((a, b) => a.size.compareTo(b.size));
-        break;
       case SortType.ascendingOrder:
         songs.sort((a, b) => a.title.compareTo(b.title));
-        break;
       case SortType.descendingOrder:
         songs.sort((a, b) => b.title.compareTo(a.title));
-        break;
     }
   }
 }

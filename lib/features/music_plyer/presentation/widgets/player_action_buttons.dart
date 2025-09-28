@@ -26,14 +26,14 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
   }
 
   void togglePlay() {
-    musicPlayer.add(TogglePlayPauseEvent());
+    musicPlayer.add(const TogglePlayPauseEvent());
   }
 
   void toggleShuffle() {
     setState(() {
       isShuffled = !isShuffled;
     });
-    musicPlayer.setShuffleModeEnabled(isShuffled);
+    musicPlayer.setShuffleModeEnabled(enabled: isShuffled);
   }
 
   @override
@@ -84,7 +84,7 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
                   splashRadius: 28,
                   onPressed: musicPlayer.hasPrevious
                       ? () {
-                          musicPlayer.add(PreviousMusicEvent());
+                          musicPlayer.add(const PreviousMusicEvent());
                           setState(() {});
                         }
                       : null,
@@ -123,7 +123,7 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
                   splashRadius: 28,
                   onPressed: musicPlayer.hasNext
                       ? () {
-                          musicPlayer.add(NextMusicEvent());
+                          musicPlayer.add(const NextMusicEvent());
                           setState(() {});
                         }
                       : null,
@@ -141,16 +141,17 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
                       icon = Icons.repeat_one_on_rounded;
                       tooltip = 'Repeat One';
                       color = colorScheme.primary;
-                      break;
                     case LoopMode.all:
                       icon = Icons.repeat_on_rounded;
                       tooltip = 'Repeat All';
                       color = colorScheme.primary;
-                      break;
-                    default:
+
+                    case LoopMode.off:
                       icon = Icons.repeat;
                       tooltip = 'No Repeat';
-                      color = colorScheme.onSurface.withAlpha(70);
+                      color = colorScheme.onSurface.withAlpha(
+                        (0.7 * 255).round(),
+                      );
                   }
                   return Tooltip(
                     message: tooltip,

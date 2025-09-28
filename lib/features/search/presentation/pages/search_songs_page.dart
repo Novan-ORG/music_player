@@ -23,7 +23,7 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
 
   @override
   void dispose() {
-    searchStream.close();
+    unawaited(searchStream.close());
     super.dispose();
   }
 
@@ -38,9 +38,7 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
           ),
           style: Theme.of(context).textTheme.titleMedium,
           autofocus: true,
-          onChanged: (query) {
-            searchStream.add(query);
-          },
+          onChanged: searchStream.add,
         ),
       ),
       body: BackgroundGradient(
@@ -57,7 +55,7 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
             if (state.allSongs.isEmpty) {
               return NoSongsWidget(
                 onRefresh: () {
-                  context.read<SongsBloc>().add(LoadSongsEvent());
+                  context.read<SongsBloc>().add(const LoadSongsEvent());
                 },
               );
             }
@@ -69,8 +67,8 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
                 if (query.isNotEmpty) {
                   filteredSongs = state.allSongs.where((song) {
                     final title = song.title.toLowerCase();
-                    final artist = song.artist?.toLowerCase() ?? "";
-                    final album = song.album?.toLowerCase() ?? "";
+                    final artist = song.artist?.toLowerCase() ?? '';
+                    final album = song.album?.toLowerCase() ?? '';
                     return title.contains(query) ||
                         artist.contains(query) ||
                         album.contains(query);
@@ -86,12 +84,12 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
                       leading: SongImageWidget(songId: song.id),
                       title: Text(song.title),
                       subtitle: Text(song.artist ?? 'Unknown Artist'),
-                      onTap: () {
+                      onTap: () async {
                         context.read<MusicPlayerBloc>().add(
                           PlayMusicEvent(index, filteredSongs),
                         );
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
+                        await Navigator.of(context).push(
+                          MaterialPageRoute<void>(
                             builder: (_) => const MusicPlayerPage(),
                           ),
                         );

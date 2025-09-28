@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/extensions/context_ex.dart';
 import 'package:music_player/features/settings/presentation/widgets/count_down_timer.dart';
 
 class CountDownSheet extends StatefulWidget {
@@ -42,21 +43,24 @@ class _CountDownSheetState extends State<CountDownSheet> {
                 Navigator.of(context).pop();
               },
             )
-          : SizedBox.shrink(),
+          : const SizedBox.shrink(),
     );
   }
 }
 
 class _ActiveTimerView extends StatelessWidget {
+  const _ActiveTimerView({
+    required this.duration,
+    required this.onCancel,
+  });
+
   final Duration duration;
   final VoidCallback onCancel;
-
-  const _ActiveTimerView({required this.duration, required this.onCancel});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -67,7 +71,7 @@ class _ActiveTimerView extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Sleep Timer Active',
+            context.localization.sleepTimerActive,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 12),
@@ -78,7 +82,7 @@ class _ActiveTimerView extends StatelessWidget {
             child: OutlinedButton.icon(
               onPressed: onCancel,
               icon: const Icon(Icons.cancel),
-              label: const Text('Cancel Timer'),
+              label: Text(context.localization.cancelTimer),
               style: OutlinedButton.styleFrom(
                 foregroundColor: Theme.of(context).colorScheme.error,
                 side: BorderSide(color: Theme.of(context).colorScheme.error),

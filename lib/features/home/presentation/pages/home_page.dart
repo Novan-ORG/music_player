@@ -27,19 +27,19 @@ class _HomePageState extends State<HomePage> {
 
   late final List<BottomNavigationBarItem> _navBarItems = [
     BottomNavigationBarItem(
-      icon: Icon(Icons.music_note_rounded),
+      icon: const Icon(Icons.music_note_rounded),
       label: context.localization.songs,
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.queue_music_rounded),
+      icon: const Icon(Icons.queue_music_rounded),
       label: context.localization.playlists,
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.favorite_rounded),
+      icon: const Icon(Icons.favorite_rounded),
       label: context.localization.favorites,
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.settings_rounded),
+      icon: const Icon(Icons.settings_rounded),
       label: context.localization.settings,
     ),
   ];

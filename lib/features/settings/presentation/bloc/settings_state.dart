@@ -2,9 +2,9 @@ part of 'settings_bloc.dart';
 
 final class SettingsState extends Equatable {
   const SettingsState({
+    required this.currentLocale,
     this.themeMode = 'system',
     this.sleepEndTime,
-    required this.currentLocale,
   });
 
   final String themeMode;

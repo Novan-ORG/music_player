@@ -529,6 +529,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get close;
+
+  /// No description provided for @setAsRingtone.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as ringtone'**
+  String get setAsRingtone;
+
+  /// No description provided for @sleepTimerActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep Timer is Active'**
+  String get sleepTimerActive;
+
+  /// No description provided for @cancelTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Timer'**
+  String get cancelTimer;
 }
 
 class _AppLocalizationsDelegate

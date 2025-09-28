@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class CountDownTimer extends StatelessWidget {
   const CountDownTimer({
-    super.key,
     required this.duration,
     this.onEnd,
     this.fontSize,
+    super.key,
   });
 
   final Duration duration;

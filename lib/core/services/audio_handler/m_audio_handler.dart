@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_player/core/services/logger/logger.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class MAudioHandler extends BaseAudioHandler with SeekHandler {
   MAudioHandler(this._player) {
-    _player.playbackEventStream.map(_transformEvent).pipe(playbackState);
+    unawaited(
+      _player.playbackEventStream.map(_transformEvent).pipe(playbackState),
+    );
     _player.currentIndexStream.listen((currentIndex) {
       if (currentIndex != null && queue.value.length > currentIndex) {
         if (mediaItem.value?.id != queue.value[currentIndex].id) {
@@ -42,6 +45,11 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
 
   void setLoopMode(LoopMode loopMode) => _player.setLoopMode(loopMode);
 
+  Future<void> dispose() async {
+    _timer?.cancel();
+    await _player.dispose();
+  }
+
   void setSleepTimer(Duration duration) {
     _timer?.cancel();
     _timer = Timer(duration, () async {
@@ -60,32 +68,36 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
     await _player.seek(position, index: index);
   }
 
-  Future<void> setShuffleModeEnabled(bool enabled) async {
+  Future<void> setShuffleModeEnabled({required bool enabled}) async {
     await _player.setShuffleModeEnabled(enabled);
   }
 
   Future<void> addAudioSources(List<SongModel> songs) async {
-    List<MediaItem> mediaItems = [];
+    final mediaItems = <MediaItem>[];
 
-    await _player.setAudioSources(
-      songs.map((song) {
-        final mediaItem = MediaItem(
-          id: song.id.toString(),
-          title: song.title,
-          album: song.album,
-          artist: song.artist,
-          duration: song.duration == null
-              ? Duration.zero
-              : Duration(milliseconds: song.duration!),
-          artUri: Uri.parse(
-            'content://media/external/audio/albumart/${song.albumId}',
-          ),
-        );
-        mediaItems.add(mediaItem);
-        return AudioSource.uri(Uri.parse(song.uri ?? ''));
-      }).toList(),
-    );
-    await addQueueItems(mediaItems);
+    try {
+      await _player.setAudioSources(
+        songs.map((song) {
+          final mediaItem = MediaItem(
+            id: song.id.toString(),
+            title: song.title,
+            album: song.album,
+            artist: song.artist,
+            duration: song.duration == null
+                ? Duration.zero
+                : Duration(milliseconds: song.duration!),
+            artUri: Uri.parse(
+              'content://media/external/audio/albumart/${song.albumId}',
+            ),
+          );
+          mediaItems.add(mediaItem);
+          return AudioSource.uri(Uri.parse(song.uri ?? ''));
+        }).toList(),
+      );
+      await addQueueItems(mediaItems);
+    } on Exception catch (e) {
+      Logger.error('Error setting audio sources: $e');
+    }
   }
 
   @override
@@ -103,7 +115,7 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
     return PlaybackState(
       controls: [
         MediaControl.skipToPrevious,
-        _player.playing ? MediaControl.pause : MediaControl.play,
+        if (_player.playing) MediaControl.pause else MediaControl.play,
         MediaControl.skipToNext,
       ],
       systemActions: const {

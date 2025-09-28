@@ -145,11 +145,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           context: context,
                                           isScrollControlled: true,
                                           builder: (context) =>
-                                              DurationPickerSheet(
-                                                initialDuration: const Duration(
-                                                  minutes: 15,
-                                                ),
-                                              ),
+                                              const DurationPickerSheet(),
                                         );
                                     if (!mounted) return;
                                     if (duration != null &&
@@ -174,7 +170,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 },
                               )
                             : InkWell(
-                                onTap: () {
+                                onTap: () async {
                                   final remainedDuration =
                                       state.sleepEndTime?.difference(
                                         DateTime.now(),
@@ -183,12 +179,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                   if (remainedDuration <= Duration.zero) {
                                     return;
                                   }
-                                  CountDownSheet.show(
+                                  await CountDownSheet.show(
                                     context: context,
                                     initialDuration: remainedDuration,
                                     onCancel: () {
                                       settingsBloc.add(
-                                        ChangeSleepTimerEvent(null),
+                                        const ChangeSleepTimerEvent(null),
                                       );
                                     },
                                   );
@@ -243,8 +239,8 @@ class _SettingsPageState extends State<SettingsPage> {
                               Icons.telegram_rounded,
                               color: Colors.blueAccent,
                             ),
-                            onTap: () {
-                              showDialog(
+                            onTap: () async {
+                              await showDialog<void>(
                                 context: context,
                                 builder: (_) => const AboutMePopup(),
                               );

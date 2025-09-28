@@ -27,14 +27,18 @@ class NoSongsWidget extends StatelessWidget {
               Icon(
                 Icons.music_off,
                 size: 64,
-                color: theme.colorScheme.primary.withOpacity(0.6),
+                color: theme.colorScheme.primary.withAlpha(
+                  (0.6 * 2555).round(),
+                ),
               ),
               const SizedBox(height: 20),
               Text(
                 message,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.8),
+                  color: theme.colorScheme.onSurface.withAlpha(
+                    (0.8 * 255).round(),
+                  ),
                   fontWeight: FontWeight.w600,
                 ),
               ),

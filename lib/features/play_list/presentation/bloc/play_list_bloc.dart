@@ -24,15 +24,14 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
 
       for (final playlistId in event.playlistIds) {
         final playlist = playlistBox.get(playlistId);
-        if (playlist != null &&
-            playlist.songs.contains(event.songId) == false) {
+        if (playlist != null && !playlist.songs.contains(event.songId)) {
           playlist.songs.add(event.songId);
           playlistBox.put(playlist);
         }
       }
       final playLists = playlistBox.getAll();
       emit(state.copyWith(playLists: playLists, status: PlayListStatus.loaded));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(
         state.copyWith(
           errorMessage: e.toString(),
@@ -50,7 +49,7 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
       objectBox.store.box<PlaylistModel>().put(event.playlistModel);
       final playLists = objectBox.store.box<PlaylistModel>().getAll();
       emit(state.copyWith(playLists: playLists, status: PlayListStatus.loaded));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(
         state.copyWith(
           errorMessage: e.toString(),
@@ -68,7 +67,7 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     try {
       final playLists = objectBox.store.box<PlaylistModel>().getAll();
       emit(state.copyWith(playLists: playLists, status: PlayListStatus.loaded));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(
         state.copyWith(
           errorMessage: e.toString(),

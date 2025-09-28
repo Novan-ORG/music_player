@@ -61,7 +61,7 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
                 blurRadius: 16,
@@ -104,7 +104,7 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   filled: true,
-                  fillColor: theme.colorScheme.surfaceVariant,
+                  fillColor: theme.colorScheme.surfaceContainerHighest,
                 ),
               ),
               const SizedBox(height: 24),

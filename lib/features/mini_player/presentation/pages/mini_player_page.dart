@@ -27,10 +27,14 @@ class MiniPlayerPage extends StatelessWidget {
           ),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
-            onTap: () {
-              Navigator.of(
+            onTap: () async {
+              await Navigator.of(
                 context,
-              ).push(MaterialPageRoute(builder: (_) => MusicPlayerPage()));
+              ).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const MusicPlayerPage(),
+                ),
+              );
             },
             child: Container(
               decoration: BoxDecoration(
@@ -91,7 +95,7 @@ class MiniPlayerPage extends StatelessWidget {
   }
 
   Widget _buildSubtitle(BuildContext context, String? artist) {
-    final displayArtist = artist?.isNotEmpty == true ? artist! : 'unknown';
+    final displayArtist = artist?.isNotEmpty ?? false ? artist! : 'unknown';
     return AutoSizeText(
       displayArtist,
       style: Theme.of(
@@ -113,13 +117,12 @@ class MiniPlayerPage extends StatelessWidget {
 }
 
 class _MiniPlayerControls extends StatelessWidget {
-  final MusicPlayerBloc musicPlayerBloc;
-  final int currentSongId;
-
   const _MiniPlayerControls({
     required this.musicPlayerBloc,
     required this.currentSongId,
   });
+  final MusicPlayerBloc musicPlayerBloc;
+  final int currentSongId;
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +155,7 @@ class _MiniPlayerControls extends StatelessWidget {
               icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
               tooltip: isPlaying ? 'Pause' : 'Play',
               onPressed: () {
-                musicPlayerBloc.add(TogglePlayPauseEvent());
+                musicPlayerBloc.add(const TogglePlayPauseEvent());
               },
             );
           },

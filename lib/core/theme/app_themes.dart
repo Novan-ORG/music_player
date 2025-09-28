@@ -61,7 +61,7 @@ TextTheme appTextTheme(Color textPrimary, Color textSecondary) => TextTheme(
 // Dark ThemeData
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  bottomSheetTheme: BottomSheetThemeData(
+  bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: AppDarkColors.background,
   ),
   primaryColor: AppDarkColors.primary,
@@ -69,7 +69,7 @@ final ThemeData darkTheme = ThemeData(
   canvasColor: AppDarkColors.background,
   cardColor: AppDarkColors.surface,
   secondaryHeaderColor: AppDarkColors.primary,
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: AppDarkColors.surface,
     iconTheme: IconThemeData(color: AppDarkColors.textPrimary),
     titleTextStyle: TextStyle(
@@ -80,20 +80,19 @@ final ThemeData darkTheme = ThemeData(
     ),
     elevation: 0,
   ),
-  iconTheme: IconThemeData(color: AppDarkColors.textPrimary),
+  iconTheme: const IconThemeData(color: AppDarkColors.textPrimary),
   textTheme: appTextTheme(
     AppDarkColors.textPrimary,
     AppDarkColors.textSecondary,
   ),
-  colorScheme: ColorScheme.dark(
+  colorScheme: const ColorScheme.dark(
     primary: AppDarkColors.primary,
     surface: AppDarkColors.surface,
     secondary: AppDarkColors.accent,
     onPrimary: AppDarkColors.textPrimary,
-    onSurface: AppDarkColors.textPrimary,
     onSecondary: AppDarkColors.textSecondary,
   ),
-  buttonTheme: ButtonThemeData(
+  buttonTheme: const ButtonThemeData(
     buttonColor: AppDarkColors.primary,
     textTheme: ButtonTextTheme.primary,
   ),
@@ -102,7 +101,7 @@ final ThemeData darkTheme = ThemeData(
 // Light ThemeData
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  bottomSheetTheme: BottomSheetThemeData(
+  bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: AppLightColors.background,
   ),
   primaryColor: AppLightColors.primary,
@@ -110,7 +109,7 @@ final ThemeData lightTheme = ThemeData(
   canvasColor: AppLightColors.background,
   cardColor: AppLightColors.surface,
   secondaryHeaderColor: AppLightColors.primary,
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: AppLightColors.surface,
     iconTheme: IconThemeData(color: AppLightColors.textPrimary),
     titleTextStyle: TextStyle(
@@ -121,12 +120,12 @@ final ThemeData lightTheme = ThemeData(
     ),
     elevation: 0,
   ),
-  iconTheme: IconThemeData(color: AppLightColors.textPrimary),
+  iconTheme: const IconThemeData(color: AppLightColors.textPrimary),
   textTheme: appTextTheme(
     AppLightColors.textPrimary,
     AppLightColors.textSecondary,
   ),
-  colorScheme: ColorScheme.light(
+  colorScheme: const ColorScheme.light(
     primary: AppLightColors.primary,
     surface: AppLightColors.surface,
     secondary: AppLightColors.accent,
@@ -134,7 +133,7 @@ final ThemeData lightTheme = ThemeData(
     onSurface: AppLightColors.textPrimary,
     onSecondary: AppLightColors.textSecondary,
   ),
-  buttonTheme: ButtonThemeData(
+  buttonTheme: const ButtonThemeData(
     buttonColor: AppLightColors.primary,
     textTheme: ButtonTextTheme.primary,
   ),

@@ -5,10 +5,14 @@ import 'package:music_player/features/music_plyer/presentation/widgets/song_titl
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SongInfo extends StatelessWidget {
+  const SongInfo({
+    required this.song,
+    required this.onLikePressed,
+    super.key,
+  });
+
   final SongModel? song;
   final VoidCallback onLikePressed;
-
-  const SongInfo({super.key, required this.song, required this.onLikePressed});
 
   @override
   Widget build(BuildContext context) {

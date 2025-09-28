@@ -15,11 +15,11 @@ enum SortType {
 
 class TopHeadActions extends StatelessWidget {
   const TopHeadActions({
-    super.key,
     required this.songCount,
     required this.onShuffleAll,
     required this.onSortSongs,
     required this.sortType,
+    super.key,
   });
 
   final int songCount;
@@ -103,7 +103,6 @@ class TopHeadActions extends StatelessWidget {
             menuPadding: EdgeInsets.zero,
             tooltip: context.localization.sortSongs,
             icon: Row(
-              mainAxisSize: MainAxisSize.max,
               children: [
                 Icon(_sortTypeIcon(sortType), color: theme.primaryColor),
                 const SizedBox(width: 4),

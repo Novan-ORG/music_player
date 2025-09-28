@@ -1,7 +1,10 @@
 import 'package:flutter/widgets.dart';
 
 class BackgroundGradient extends StatelessWidget {
-  const BackgroundGradient({super.key, required this.child});
+  const BackgroundGradient({
+    required this.child,
+    super.key,
+  });
 
   final Widget child;
 

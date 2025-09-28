@@ -50,7 +50,7 @@ class MusicPlayerApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             locale: state.currentLocale,
             supportedLocales: AppLocalizations.supportedLocales,
-            localizationsDelegates: [
+            localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,

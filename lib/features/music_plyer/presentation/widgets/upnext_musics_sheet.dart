@@ -16,7 +16,7 @@ class UpnextMusicsSheet extends StatelessWidget {
       context: context,
       scrollControlDisabledMaxHeightRatio: 0.5,
       backgroundColor: Colors.transparent,
-      builder: (_) => UpnextMusicsSheet(),
+      builder: (_) => const UpnextMusicsSheet(),
     );
   }
 
@@ -45,7 +45,7 @@ class _UpNextMusicsView extends StatelessWidget {
     this.currentSongIndex,
   });
 
-  final Function(int)? onTapSong;
+  final void Function(int)? onTapSong;
   final int? currentSongIndex;
   final List<SongModel> playList;
 
@@ -56,23 +56,24 @@ class _UpNextMusicsView extends StatelessWidget {
     final scrollController = ItemScrollController();
     scheduleMicrotask(() {
       if (currentSongIndex == null || currentSongIndex! <= 0) return;
-      scrollController.scrollTo(
-        index: currentSongIndex!,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
+      unawaited(
+        scrollController.scrollTo(
+          index: currentSongIndex!,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+        ),
       );
     });
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: cardColor,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
         ),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
         children: [
           _Header(),
           const SizedBox(height: 12),
@@ -88,14 +89,16 @@ class _UpNextMusicsView extends StatelessWidget {
                     itemScrollController: scrollController,
                     padding: EdgeInsets.zero,
                     itemCount: playList.length,
-                    separatorBuilder: (_, __) => const Divider(height: 1),
+                    separatorBuilder: (_, _) => const Divider(height: 1),
                     itemBuilder: (context, index) {
                       final song = playList[index];
                       final isPlaying = currentSongIndex == index;
                       return ListTile(
                         dense: true,
                         visualDensity: VisualDensity.compact,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                        ),
                         leading: Transform.scale(
                           scale: isPlaying ? 1.2 : 1,
                           child: Icon(

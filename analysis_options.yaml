@@ -1,4 +1,16 @@
-include: package:flutter_lints/flutter.yaml
+include: package:very_good_analysis/analysis_options.yaml
 
-linter:
-  rules:
+analyzer:  
+  exclude: 
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.gr.dart"
+    - "**/*.pb.dart"
+    - "**/*.pbjson.dart"
+    - "**/*.pbenum.dart"
+    - "**/*.pbserver.dart"
+    - "**/core/services/database/**"
+
+linter: 
+  rules: 
+    public_member_api_docs: false

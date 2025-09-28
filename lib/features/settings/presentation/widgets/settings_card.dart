@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SettingsCard extends StatelessWidget {
+  const SettingsCard({required this.child, super.key});
   final Widget child;
-  const SettingsCard({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

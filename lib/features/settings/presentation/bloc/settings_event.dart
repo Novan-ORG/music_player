@@ -8,18 +8,16 @@ sealed class SettingsEvent extends Equatable {
 }
 
 final class ChangeThemeEvent extends SettingsEvent {
-  final String mode;
-
   const ChangeThemeEvent(this.mode);
+  final String mode;
 
   @override
   List<Object?> get props => [mode];
 }
 
 final class ChangeSleepTimerEvent extends SettingsEvent {
-  final DateTime? sleepEndTime;
-
   const ChangeSleepTimerEvent(this.sleepEndTime);
+  final DateTime? sleepEndTime;
 
   @override
   List<Object?> get props => [sleepEndTime];

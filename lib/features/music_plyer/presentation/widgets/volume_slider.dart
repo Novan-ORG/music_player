@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:volume_controller/volume_controller.dart';
 
 class VolumeSlider extends StatefulWidget {
-  final VolumeController volumeController;
+  const VolumeSlider({
+    required this.volumeController,
+    super.key,
+  });
 
-  const VolumeSlider({super.key, required this.volumeController});
+  final VolumeController volumeController;
 
   @override
   State<VolumeSlider> createState() => _VolumeSliderState();
@@ -15,15 +18,17 @@ class VolumeSlider extends StatefulWidget {
 class _VolumeSliderState extends State<VolumeSlider> {
   double _volume = 0.5;
 
-  late final StreamSubscription _volumeSubscription;
+  late final StreamSubscription<double> _volumeSubscription;
 
   @override
   void initState() {
-    widget.volumeController.getVolume().then((initialVolume) {
-      setState(() {
-        _volume = initialVolume;
-      });
-    });
+    unawaited(
+      widget.volumeController.getVolume().then((initialVolume) {
+        setState(() {
+          _volume = initialVolume;
+        });
+      }),
+    );
 
     _volumeSubscription = widget.volumeController.addListener((newVolume) {
       if (newVolume != _volume) {
@@ -38,7 +43,7 @@ class _VolumeSliderState extends State<VolumeSlider> {
 
   @override
   void dispose() {
-    _volumeSubscription.cancel();
+    unawaited(_volumeSubscription.cancel());
     super.dispose();
   }
 
@@ -50,32 +55,30 @@ class _VolumeSliderState extends State<VolumeSlider> {
         children: [
           IconButton(
             icon: Icon(_volume == 0 ? Icons.volume_mute : Icons.volume_down),
-            onPressed: () {
-              widget.volumeController.setMute(true);
+            onPressed: () async {
+              await widget.volumeController.setMute(true);
             },
           ),
           Expanded(
             child: SliderTheme(
               data: SliderTheme.of(context).copyWith(
                 trackHeight: 4,
-                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
+                thumbShape: const RoundSliderThumbShape(),
               ),
               child: Slider(
                 value: _volume,
-                min: 0,
-                max: 1,
-                onChanged: (newValue) {
+                onChanged: (newValue) async {
                   if (newValue != _volume) {
-                    widget.volumeController.setVolume(newValue);
+                    await widget.volumeController.setVolume(newValue);
                   }
                 },
               ),
             ),
           ),
           IconButton(
-            icon: Icon(Icons.volume_up),
-            onPressed: () {
-              widget.volumeController.setVolume(1);
+            icon: const Icon(Icons.volume_up),
+            onPressed: () async {
+              await widget.volumeController.setVolume(1);
             },
           ),
         ],
