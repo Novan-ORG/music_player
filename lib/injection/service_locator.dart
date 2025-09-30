@@ -1,8 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_player/core/services/audio_handler/m_audio_handler.dart';
-import 'package:music_player/core/services/database/objectbox.dart';
+import 'package:music_player/core/services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volume_controller/volume_controller.dart';
 

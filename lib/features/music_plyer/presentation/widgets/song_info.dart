@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocSelector;
-import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
-import 'package:music_player/features/music_plyer/presentation/widgets/song_title.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
+import 'package:music_player/features/music_plyer/presentation/widgets/widgets.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SongInfo extends StatelessWidget {

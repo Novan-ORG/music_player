@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:music_player/core/services/database/models/playlist_model.dart';
-import 'package:music_player/core/services/database/objectbox.dart';
+import 'package:music_player/core/services/services.dart';
 
 part 'play_list_event.dart';
 part 'play_list_state.dart';

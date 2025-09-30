@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/extensions/duration_ex.dart';
+import 'package:music_player/extensions/extensions.dart';
 
 class AudioProgress extends StatelessWidget {
   const AudioProgress({

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart' show immutable;
-import 'package:music_player/core/services/logger/logger.dart';
-import 'package:music_player/features/songs/presentation/widgets/top_head_actions.dart';
+import 'package:music_player/core/services/services.dart';
+import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 

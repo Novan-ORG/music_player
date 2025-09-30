@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/constants/constants.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class MiniCoverAndProgress extends StatelessWidget {
@@ -27,7 +28,7 @@ class MiniCoverAndProgress extends StatelessWidget {
           nullArtworkWidget: ClipRRect(
             borderRadius: BorderRadius.circular(38),
             child: Image.asset(
-              'assets/images/song_cover.png',
+              ImageAssets.songCover,
               fit: BoxFit.cover,
               width: 38,
               height: 38,

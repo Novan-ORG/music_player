@@ -2,9 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marquee/marquee.dart';
-import 'package:music_player/features/mini_player/presentation/widgets/mini_cover_and_progress.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
-import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
+import 'package:music_player/features/mini_player/presentation/widgets/widgets.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
+import 'package:music_player/features/music_plyer/presentation/view/view.dart';
 
 class MiniPlayerPage extends StatelessWidget {
   const MiniPlayerPage({super.key});

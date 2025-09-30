@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_player/core/services/database/models/playlist_model.dart';
-import 'package:music_player/core/services/ringtone_set/ringtone_set.dart';
-import 'package:music_player/core/widgets/background_gradient.dart';
-import 'package:music_player/extensions/context_ex.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
-import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
-import 'package:music_player/features/search/presentation/pages/search_songs_page.dart';
-import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
-import 'package:music_player/features/songs/presentation/widgets/song_item.dart';
-import 'package:music_player/features/songs/presentation/widgets/top_head_actions.dart';
+import 'package:music_player/core/services/services.dart';
+import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
+import 'package:music_player/features/music_plyer/presentation/view/view.dart';
+import 'package:music_player/features/search/presentation/view/view.dart';
+import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
+import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart' hide PlaylistModel;
 import 'package:permission_handler/permission_handler.dart';
 

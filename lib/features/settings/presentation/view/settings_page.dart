@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_player/core/constants/strings_constants.dart';
-import 'package:music_player/core/utils/launcher_utils.dart';
-import 'package:music_player/core/widgets/background_gradient.dart';
-import 'package:music_player/extensions/context_ex.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
-import 'package:music_player/features/settings/presentation/bloc/settings_bloc.dart';
-import 'package:music_player/features/settings/presentation/widgets/about_me_popup.dart';
-import 'package:music_player/features/settings/presentation/widgets/count_down_sheet.dart';
-import 'package:music_player/features/settings/presentation/widgets/count_down_timer.dart';
-import 'package:music_player/features/settings/presentation/widgets/custom_drop_down.dart';
-import 'package:music_player/features/settings/presentation/widgets/duration_picker_sheet.dart';
-import 'package:music_player/features/settings/presentation/widgets/section_tile.dart';
-import 'package:music_player/features/settings/presentation/widgets/settings_card.dart';
-import 'package:music_player/features/settings/presentation/widgets/setttings_tile.dart';
+import 'package:music_player/core/constants/constants.dart';
+import 'package:music_player/core/utils/utils.dart';
+import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
+import 'package:music_player/features/settings/presentation/bloc/bloc.dart';
+import 'package:music_player/features/settings/presentation/widgets/widgets.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

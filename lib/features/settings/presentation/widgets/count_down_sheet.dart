@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/extensions/context_ex.dart';
-import 'package:music_player/features/settings/presentation/widgets/count_down_timer.dart';
+import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/settings/presentation/widgets/widgets.dart';
 
 class CountDownSheet extends StatefulWidget {
   const CountDownSheet._({this.initialDuration, this.onCancel});

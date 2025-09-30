@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/constants/constants.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart'
     show ArtworkType, QueryArtworkWidget, SongModel;
 
@@ -32,14 +33,14 @@ class SongArtwork extends StatelessWidget {
                   artworkWidth: size,
                   artworkHeight: size,
                   nullArtworkWidget: Image.asset(
-                    'assets/images/song_cover.png',
+                    ImageAssets.songCover,
                     fit: BoxFit.cover,
                     width: size,
                     height: size,
                   ),
                 )
               : Image.asset(
-                  'assets/images/song_cover.png',
+                  ImageAssets.songCover,
                   fit: BoxFit.cover,
                   width: size,
                   height: size,

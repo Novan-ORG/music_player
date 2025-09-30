@@ -7,7 +7,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:music_player/core/services/audio_handler/m_audio_handler.dart';
 import 'package:music_player/core/services/database/objectbox.dart';
 import 'package:music_player/core/theme/app_themes.dart';
-import 'package:music_player/features/home/presentation/pages/home_page.dart';
+import 'package:music_player/features/home/presentation/view/home_page.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
 import 'package:music_player/features/play_list/presentation/bloc/play_list_bloc.dart';
 import 'package:music_player/features/settings/presentation/bloc/settings_bloc.dart';

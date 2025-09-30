@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/constants/constants.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SongImageWidget extends StatelessWidget {
@@ -21,7 +22,7 @@ class SongImageWidget extends StatelessWidget {
       nullArtworkWidget: ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: Image.asset(
-          'assets/images/song_cover.png',
+          ImageAssets.songCover,
           fit: BoxFit.cover,
           width: size,
           height: size,

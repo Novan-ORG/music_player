@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:music_player/extensions/context_ex.dart';
+import 'package:music_player/extensions/extensions.dart';
 
 typedef OnSortSongs = void Function(SortType sortType);
 

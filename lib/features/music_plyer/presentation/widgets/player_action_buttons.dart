@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 
 class PlayerActionButtons extends StatefulWidget {
   const PlayerActionButtons({super.key});

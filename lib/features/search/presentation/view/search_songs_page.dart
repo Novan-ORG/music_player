@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_player/core/widgets/background_gradient.dart';
-import 'package:music_player/extensions/context_ex.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
-import 'package:music_player/features/music_plyer/presentation/pages/music_player_page.dart';
-import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
-import 'package:music_player/features/songs/presentation/widgets/no_songs_widget.dart';
-import 'package:music_player/features/songs/presentation/widgets/song_image_widget.dart';
+import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
+import 'package:music_player/features/music_plyer/presentation/view/view.dart';
+import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
+import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SearchSongsPage extends StatefulWidget {

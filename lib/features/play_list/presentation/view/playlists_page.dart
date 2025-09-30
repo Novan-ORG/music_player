@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_player/core/services/database/models/playlist_model.dart';
-import 'package:music_player/core/widgets/background_gradient.dart';
-import 'package:music_player/extensions/context_ex.dart';
-import 'package:music_player/features/play_list/presentation/bloc/play_list_bloc.dart';
-import 'package:music_player/features/play_list/presentation/widgets/create_palylist_sheet.dart';
-import 'package:music_player/features/songs/presentation/pages/songs_page.dart';
+import 'package:music_player/core/services/services.dart';
+import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/play_list/presentation/bloc/bloc.dart';
+import 'package:music_player/features/play_list/presentation/widgets/widgets.dart';
+import 'package:music_player/features/songs/presentation/view/view.dart';
 
 class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({super.key, this.isSelectionMode = false, this.songId});

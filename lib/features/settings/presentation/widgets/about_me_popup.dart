@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:music_player/core/constants/strings_constants.dart';
-import 'package:music_player/core/utils/launcher_utils.dart';
-import 'package:music_player/extensions/context_ex.dart';
+import 'package:music_player/core/constants/constants.dart';
+import 'package:music_player/core/utils/utils.dart';
+import 'package:music_player/extensions/extensions.dart';
 
 class AboutMePopup extends StatelessWidget {
   const AboutMePopup({super.key});
@@ -20,7 +20,7 @@ class AboutMePopup extends StatelessWidget {
         children: [
           const CircleAvatar(
             radius: 40,
-            backgroundImage: AssetImage('assets/images/developer_avatar.jpg'),
+            backgroundImage: AssetImage(ImageAssets.developerAvatar),
           ),
           const SizedBox(height: 16),
           Text(

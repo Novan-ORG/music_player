@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_player/extensions/context_ex.dart';
-import 'package:music_player/extensions/duration_ex.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
+import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 

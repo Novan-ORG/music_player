@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/extensions/context_ex.dart';
-import 'package:music_player/features/songs/presentation/widgets/song_image_widget.dart';
+import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SongItem extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/core/constants/preferences_keys.dart';
+import 'package:music_player/core/constants/constants.dart';
 import 'package:music_player/core/services/audio_handler/m_audio_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

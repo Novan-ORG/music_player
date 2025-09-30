@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_player/extensions/context_ex.dart';
-import 'package:music_player/features/mini_player/presentation/pages/mini_player_page.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/music_player_bloc.dart';
-import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
-import 'package:music_player/features/settings/presentation/pages/settings_page.dart';
-import 'package:music_player/features/songs/presentation/pages/songs_page.dart';
+import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/mini_player/presentation/view/view.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
+import 'package:music_player/features/play_list/presentation/view/view.dart';
+import 'package:music_player/features/settings/presentation/view/view.dart';
+import 'package:music_player/features/songs/presentation/view/view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
