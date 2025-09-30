@@ -5,7 +5,7 @@ import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/play_list/presentation/bloc/bloc.dart';
 import 'package:music_player/features/play_list/presentation/widgets/widgets.dart';
-import 'package:music_player/features/songs/presentation/view/view.dart';
+import 'package:music_player/features/songs/presentation/pages/pages.dart';
 
 class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({super.key, this.isSelectionMode = false, this.songId});

@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/widgets.dart';
-import 'package:music_player/features/play_list/presentation/view/view.dart';
+import 'package:music_player/features/play_list/presentation/pages/pages.dart';
 import 'package:music_player/injection/service_locator.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:share_plus/share_plus.dart';

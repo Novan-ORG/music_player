@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marquee/marquee.dart';
 import 'package:music_player/features/mini_player/presentation/widgets/widgets.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
-import 'package:music_player/features/music_plyer/presentation/view/view.dart';
+import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 
 class MiniPlayerPage extends StatelessWidget {
   const MiniPlayerPage({super.key});
