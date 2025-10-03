@@ -1,43 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:music_player/features/music_plyer/domain/entities/entities.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 
-class PlayerActionButtons extends StatefulWidget {
+class PlayerActionButtons extends StatelessWidget {
   const PlayerActionButtons({super.key});
 
   @override
-  State<PlayerActionButtons> createState() => _PlayerActionButtonsState();
-}
-
-class _PlayerActionButtonsState extends State<PlayerActionButtons> {
-  late Stream<PlayerState> playerStateStream;
-  bool isShuffled = false;
-  late Stream<LoopMode> loopModeStream;
-  late final MusicPlayerBloc musicPlayer;
-
-  @override
-  void initState() {
-    musicPlayer = context.read<MusicPlayerBloc>();
-    playerStateStream = musicPlayer.palyerStateStream;
-    isShuffled = musicPlayer.shuffleModeEnabled;
-    loopModeStream = musicPlayer.loopModeStream;
-    super.initState();
-  }
-
-  void togglePlay() {
-    musicPlayer.add(const TogglePlayPauseEvent());
-  }
-
-  void toggleShuffle() {
-    setState(() {
-      isShuffled = !isShuffled;
-    });
-    musicPlayer.setShuffleModeEnabled(enabled: isShuffled);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final musicPlayer = context.read<MusicPlayerBloc>();
     final colorScheme = Theme.of(context).colorScheme;
     return Directionality(
       textDirection: TextDirection.ltr,
@@ -57,45 +28,59 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
             ),
           ),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Tooltip(
-                message: isShuffled ? 'Disable Shuffle' : 'Enable Shuffle',
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: IconButton(
-                    key: ValueKey(isShuffled),
-                    icon: Icon(
-                      isShuffled ? Icons.shuffle_on_rounded : Icons.shuffle,
-                      color: isShuffled
-                          ? colorScheme.primary
-                          : colorScheme.onSurface.withAlpha(70),
+          child: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+            builder: (context, state) {
+              final isPlaying = state.status == MusicPlayerStatus.playing;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Tooltip(
+                    message: state.shuffleEnabled
+                        ? 'Disable Shuffle'
+                        : 'Enable Shuffle',
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: IconButton(
+                        key: ValueKey(state.shuffleEnabled),
+                        icon: Icon(
+                          state.shuffleEnabled
+                              ? Icons.shuffle_on_rounded
+                              : Icons.shuffle,
+                          color: state.shuffleEnabled
+                              ? colorScheme.primary
+                              : colorScheme.onSurface.withAlpha(70),
+                        ),
+                        splashRadius: 28,
+                        onPressed: () {
+                          musicPlayer.add(
+                            SetShuffleEnabledEvent(
+                              isEnabled: !state.shuffleEnabled,
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                    splashRadius: 28,
-                    onPressed: toggleShuffle,
                   ),
-                ),
-              ),
-              Tooltip(
-                message: 'Previous',
-                child: IconButton(
-                  icon: const Icon(Icons.skip_previous),
-                  splashRadius: 28,
-                  onPressed: musicPlayer.hasPrevious
-                      ? () {
-                          musicPlayer.add(const PreviousMusicEvent());
-                          setState(() {});
-                        }
-                      : null,
-                ),
-              ),
-              StreamBuilder<PlayerState>(
-                stream: playerStateStream,
-                builder: (context, asyncSnapshot) {
-                  final isPlaying = asyncSnapshot.data?.playing ?? false;
-                  return Tooltip(
-                    message: isPlaying ? 'Pause' : 'Play',
+                  Tooltip(
+                    message: 'Previous',
+                    child: IconButton(
+                      icon: const Icon(Icons.skip_previous),
+                      splashRadius: 28,
+                      onPressed: state.hasPrevious
+                          ? () {
+                              musicPlayer.add(
+                                SeekMusicEvent(
+                                  index: state.currentSongIndex - 1,
+                                ),
+                              );
+                            }
+                          : null,
+                    ),
+                  ),
+                  Tooltip(
+                    message: state.status == MusicPlayerStatus.playing
+                        ? 'Pause'
+                        : 'Play',
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
                       transitionBuilder: (child, anim) =>
@@ -110,67 +95,71 @@ class _PlayerActionButtonsState extends State<PlayerActionButtons> {
                           color: colorScheme.primary,
                         ),
                         splashRadius: 32,
-                        onPressed: togglePlay,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              Tooltip(
-                message: 'Next',
-                child: IconButton(
-                  icon: const Icon(Icons.skip_next),
-                  splashRadius: 28,
-                  onPressed: musicPlayer.hasNext
-                      ? () {
-                          musicPlayer.add(const NextMusicEvent());
-                          setState(() {});
-                        }
-                      : null,
-                ),
-              ),
-              StreamBuilder<LoopMode>(
-                stream: loopModeStream,
-                builder: (context, asyncSnapshot) {
-                  final loopMode = asyncSnapshot.data ?? LoopMode.off;
-                  IconData icon;
-                  String tooltip;
-                  Color color;
-                  switch (loopMode) {
-                    case LoopMode.one:
-                      icon = Icons.repeat_one_on_rounded;
-                      tooltip = 'Repeat One';
-                      color = colorScheme.primary;
-                    case LoopMode.all:
-                      icon = Icons.repeat_on_rounded;
-                      tooltip = 'Repeat All';
-                      color = colorScheme.primary;
-
-                    case LoopMode.off:
-                      icon = Icons.repeat;
-                      tooltip = 'No Repeat';
-                      color = colorScheme.onSurface.withAlpha(
-                        (0.7 * 255).round(),
-                      );
-                  }
-                  return Tooltip(
-                    message: tooltip,
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      child: IconButton(
-                        key: ValueKey(loopMode),
-                        icon: Icon(icon, color: color),
-                        splashRadius: 28,
                         onPressed: () {
-                          musicPlayer.setNextLoopMode(loopMode);
-                          setState(() {});
+                          musicPlayer.add(const TogglePlayPauseEvent());
                         },
                       ),
                     ),
-                  );
-                },
-              ),
-            ],
+                  ),
+                  Tooltip(
+                    message: 'Next',
+                    child: IconButton(
+                      icon: const Icon(Icons.skip_next),
+                      splashRadius: 28,
+                      onPressed: state.hasNext
+                          ? () {
+                              musicPlayer.add(
+                                SeekMusicEvent(
+                                  index: state.currentSongIndex + 1,
+                                ),
+                              );
+                            }
+                          : null,
+                    ),
+                  ),
+                  Builder(
+                    builder: (_) {
+                      IconData icon;
+                      String tooltip;
+                      Color color;
+                      switch (state.loopMode) {
+                        case PlayerLoopMode.one:
+                          icon = Icons.repeat_one_on_rounded;
+                          tooltip = 'Repeat One';
+                          color = colorScheme.primary;
+                        case PlayerLoopMode.all:
+                          icon = Icons.repeat_on_rounded;
+                          tooltip = 'Repeat All';
+                          color = colorScheme.primary;
+
+                        case PlayerLoopMode.off:
+                          icon = Icons.repeat;
+                          tooltip = 'No Repeat';
+                          color = colorScheme.onSurface.withAlpha(
+                            (0.7 * 255).round(),
+                          );
+                      }
+                      return Tooltip(
+                        message: tooltip,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: IconButton(
+                            key: ValueKey(state.loopMode),
+                            icon: Icon(icon, color: color),
+                            splashRadius: 28,
+                            onPressed: () {
+                              musicPlayer.add(
+                                SetPlayerLoopModeEvent(state.loopMode),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

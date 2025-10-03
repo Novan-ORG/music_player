@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class UpnextMusicsSheet extends StatelessWidget {
@@ -22,14 +22,17 @@ class UpnextMusicsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final musicPlayerBloc = context.read<MusicPlayerBloc>();
-    return StreamBuilder<int?>(
-      stream: musicPlayerBloc.currentIndexStream,
-      builder: (context, snapShotData) {
+    return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+      bloc: musicPlayerBloc,
+      buildWhen: (state, newState) =>
+          state.currentSongIndex != newState.currentSongIndex ||
+          state.playList != newState.playList,
+      builder: (context, newState) {
         return _UpNextMusicsView(
-          currentSongIndex: snapShotData.data,
-          playList: musicPlayerBloc.state.playList,
+          currentSongIndex: newState.currentSongIndex,
+          playList: newState.playList,
           onTapSong: (index) {
-            musicPlayerBloc.add(SkipToMusicIndexEvent(index));
+            musicPlayerBloc.add(SeekMusicEvent(index: index));
           },
         );
       },
@@ -46,7 +49,7 @@ class _UpNextMusicsView extends StatelessWidget {
 
   final void Function(int)? onTapSong;
   final int? currentSongIndex;
-  final List<SongModel> playList;
+  final List<Song> playList;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +110,7 @@ class _UpNextMusicsView extends StatelessWidget {
                           ),
                         ),
                         title: Text(
-                          song.displayNameWOExt,
+                          song.title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodySmall
@@ -126,7 +129,7 @@ class _UpNextMusicsView extends StatelessWidget {
                             ),
                             Flexible(
                               child: Text(
-                                song.artist ?? 'Unknown Artist',
+                                song.artist,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context).textTheme.labelSmall
@@ -138,7 +141,7 @@ class _UpNextMusicsView extends StatelessWidget {
                           ],
                         ),
                         trailing: Text(
-                          Duration(milliseconds: song.duration ?? 0).format(),
+                          song.duration.format(),
                           style: Theme.of(context).textTheme.labelSmall
                               ?.copyWith(
                                 color: isPlaying ? primaryColor : null,

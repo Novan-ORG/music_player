@@ -1,15 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart' show SongModel;
+import 'package:music_player/core/domain/entities/song.dart';
 
 class SongTitle extends StatelessWidget {
   const SongTitle({super.key, this.song});
-  final SongModel? song;
+  final Song? song;
 
   @override
   Widget build(BuildContext context) {
-    final title = song?.displayNameWOExt ?? 'Unknown Song';
+    final title = song?.title ?? 'Unknown Song';
     return AutoSizeText(
       title,
       style: Theme.of(context).textTheme.titleLarge,

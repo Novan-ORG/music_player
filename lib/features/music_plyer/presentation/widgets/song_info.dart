@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocSelector;
+import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/widgets.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SongInfo extends StatelessWidget {
   const SongInfo({
@@ -11,7 +11,7 @@ class SongInfo extends StatelessWidget {
     super.key,
   });
 
-  final SongModel? song;
+  final Song? song;
   final VoidCallback onLikePressed;
 
   @override
@@ -23,7 +23,7 @@ class SongInfo extends StatelessWidget {
         song?.artist ?? 'Unknown Artist',
         style: Theme.of(context).textTheme.bodyMedium,
       ),
-      trailing: BlocSelector<MusicPlayerBloc, MusicPlayerState, List<int>>(
+      trailing: BlocSelector<MusicPlayerBloc, MusicPlayerState, Set<int>>(
         selector: (state) => state.likedSongIds,
         builder: (context, likedSongIds) {
           final isLiked = likedSongIds.contains(song?.id ?? -1);

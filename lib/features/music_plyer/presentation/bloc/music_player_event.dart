@@ -11,7 +11,7 @@ final class PlayMusicEvent extends MusicPlayerEvent {
   const PlayMusicEvent(this.index, this.playList);
 
   final int index;
-  final List<SongModel> playList;
+  final List<Song> playList;
 
   @override
   List<Object> get props => [index, playList];
@@ -31,34 +31,12 @@ final class TogglePlayPauseEvent extends MusicPlayerEvent {
   List<Object> get props => [];
 }
 
-final class NextMusicEvent extends MusicPlayerEvent {
-  const NextMusicEvent();
-
-  @override
-  List<Object> get props => [];
-}
-
-final class PreviousMusicEvent extends MusicPlayerEvent {
-  const PreviousMusicEvent();
-
-  @override
-  List<Object> get props => [];
-}
-
 final class ShuffleMusicEvent extends MusicPlayerEvent {
   const ShuffleMusicEvent({required this.songs});
-  final List<SongModel> songs;
+  final List<Song> songs;
 
   @override
   List<Object> get props => [...super.props, ...songs];
-}
-
-final class SkipToMusicIndexEvent extends MusicPlayerEvent {
-  const SkipToMusicIndexEvent(this.index);
-  final int index;
-
-  @override
-  List<Object> get props => [...super.props, index];
 }
 
 final class ToggleLikeMusicEvent extends MusicPlayerEvent {
@@ -68,4 +46,44 @@ final class ToggleLikeMusicEvent extends MusicPlayerEvent {
 
   @override
   List<Object> get props => [...super.props, songId];
+}
+
+final class SetShuffleEnabledEvent extends MusicPlayerEvent {
+  const SetShuffleEnabledEvent({required this.isEnabled});
+
+  final bool isEnabled;
+
+  @override
+  List<Object> get props => [...super.props, isEnabled];
+}
+
+final class SeekMusicEvent extends MusicPlayerEvent {
+  const SeekMusicEvent({this.position = Duration.zero, this.index});
+  final Duration position;
+  final int? index;
+
+  @override
+  List<Object> get props => [
+    ...super.props,
+    position,
+    if (index != null) index!,
+  ];
+}
+
+final class SetPlayerLoopModeEvent extends MusicPlayerEvent {
+  const SetPlayerLoopModeEvent(this.loopMode);
+
+  final PlayerLoopMode loopMode;
+
+  @override
+  List<Object> get props => [...super.props, loopMode];
+}
+
+final class UpdateStateEvent extends MusicPlayerEvent {
+  const UpdateStateEvent(this.state);
+
+  final MusicPlayerState state;
+
+  @override
+  List<Object> get props => [...super.props, state];
 }

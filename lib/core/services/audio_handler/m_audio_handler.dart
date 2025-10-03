@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_player/core/services/logger/logger.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart';
+import 'package:music_player/features/music_plyer/data/models/song_model.dart';
 
 class MAudioHandler extends BaseAudioHandler with SeekHandler {
   MAudioHandler(this._player) {
@@ -83,15 +83,13 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
             title: song.title,
             album: song.album,
             artist: song.artist,
-            duration: song.duration == null
-                ? Duration.zero
-                : Duration(milliseconds: song.duration!),
+            duration: song.duration,
             artUri: Uri.parse(
               'content://media/external/audio/albumart/${song.albumId}',
             ),
           );
           mediaItems.add(mediaItem);
-          return AudioSource.uri(Uri.parse(song.uri ?? ''));
+          return AudioSource.uri(Uri.parse(song.uri));
         }).toList(),
       );
       await addQueueItems(mediaItems);

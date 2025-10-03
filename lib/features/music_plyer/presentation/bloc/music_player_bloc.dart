@@ -1,97 +1,212 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:music_player/core/constants/constants.dart';
-import 'package:music_player/core/services/services.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:music_player/core/domain/entities/entities.dart';
+import 'package:music_player/features/music_plyer/domain/entities/entities.dart';
+import 'package:music_player/features/music_plyer/domain/usecases/usecases.dart';
 
 part 'music_player_event.dart';
 part 'music_player_state.dart';
 
 class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
-  MusicPlayerBloc(this._audioHandler, this._preferences)
-    : super(
+  MusicPlayerBloc(
+    this.playSong,
+    this.getLikedSongs,
+    this.pauseSong,
+    this.seekSong,
+    this.stopSong,
+    this.toggleSongLike,
+    this.resumeSong,
+    this.setShuffleEnabled,
+    this.hasNextSong,
+    this.hasPreviousSong,
+    this.watchPlayerIndex,
+    this.watchSongDuration,
+    this.watchSongPosition,
+    this.setLoopMode,
+  ) : super(
         MusicPlayerState(
-          likedSongIds:
-              _preferences
-                  .getStringList(PreferencesKeys.favoriteSongs)
-                  ?.map(int.parse)
-                  .toList() ??
-              [],
+          likedSongIds: getLikedSongs().value?.toSet() ?? <int>{},
         ),
       ) {
+    _playerIndexSubscription = watchPlayerIndex().distinct().listen(
+      _watchPlayerIndex,
+    );
+    on<UpdateStateEvent>(
+      (event, emit) => emit(event.state),
+    );
     on<PlayMusicEvent>(_handlePlayMusic);
     on<StopMusicEvent>(_handleStopMusic);
     on<TogglePlayPauseEvent>(_handleTogglePlayPause);
-    on<NextMusicEvent>(_handleSkipToNext);
-    on<PreviousMusicEvent>(_handleSkipToPrevious);
     on<ShuffleMusicEvent>(_handleShuffleMusics);
-    on<SkipToMusicIndexEvent>(_handleSkipToIndex);
     on<ToggleLikeMusicEvent>(_handleToggleLike);
+    on<SetShuffleEnabledEvent>(_handleSetShuffleEnabled);
+    on<SeekMusicEvent>(_handleSeekMusic);
+    on<SetPlayerLoopModeEvent>(_handleSetPlayerLoopMode);
   }
 
-  final MAudioHandler _audioHandler;
-  final SharedPreferences _preferences;
+  final PlaySong playSong;
+  final GetLikedSongs getLikedSongs;
+  final PauseSong pauseSong;
+  final SeekSong seekSong;
+  final StopSong stopSong;
+  final ToggleSongLike toggleSongLike;
+  final ResumeSong resumeSong;
+  final SetShuffleEnabled setShuffleEnabled;
+  final HasNextSong hasNextSong;
+  final HasPreviousSong hasPreviousSong;
+  final SetLoopMode setLoopMode;
+  final WatchPlayerIndex watchPlayerIndex;
+  final WatchSongDuration watchSongDuration;
+  final WatchSongPosition watchSongPosition;
+  late final StreamSubscription<int?> _playerIndexSubscription;
 
-  Stream<int?> get currentIndexStream => _audioHandler.currentIndexStream;
+  Stream<Duration?> get durationStream => watchSongDuration();
 
-  Stream<Duration?> get durationStream => _audioHandler.durationStream;
+  Stream<Duration> get positionStream => watchSongPosition();
 
-  Stream<Duration> get positionStream => _audioHandler.positionStream;
+  @override
+  Future<void> close() async {
+    await _playerIndexSubscription.cancel();
+    return super.close();
+  }
 
-  Stream<PlayerState> get palyerStateStream => _audioHandler.palyerStateStream;
-
-  Stream<LoopMode> get loopModeStream => _audioHandler.loopModeStream;
-
-  Future<void> seek(Duration duration) => _audioHandler.seek(duration);
-
-  bool get hasNext => _audioHandler.hasNext;
-  bool get hasPrevious => _audioHandler.hasPrevious;
-
-  LoopMode get loopMode => _audioHandler.loopMode;
-
-  bool get shuffleModeEnabled => _audioHandler.shuffleModeEnabled;
-
-  void setNextLoopMode(LoopMode loopMode) {
-    var newMode = LoopMode.off;
-    if (loopMode == LoopMode.off) {
-      newMode = LoopMode.all;
-    } else if (loopMode == LoopMode.all) {
-      newMode = LoopMode.one;
-    } else {
-      newMode = LoopMode.off;
+  void _watchPlayerIndex(int? index) {
+    if (index == null ||
+        index == state.currentSongIndex ||
+        index < 0 ||
+        index >= state.playList.length) {
+      return;
     }
-    _audioHandler.setLoopMode(newMode);
+    final hasNext = hasNextSong();
+    final hasPrevious = hasPreviousSong();
+    add(
+      UpdateStateEvent(
+        state.copyWith(
+          currentSongIndex: index,
+          hasNext: hasNext.value ?? state.hasNext,
+          hasPrevious: hasPrevious.value ?? state.hasPrevious,
+        ),
+      ),
+    );
   }
 
-  void setShuffleModeEnabled({required bool enabled}) =>
-      _audioHandler.setShuffleModeEnabled(enabled: enabled);
+  PlayerLoopMode _getNextLoopMode(PlayerLoopMode loopMode) {
+    var newMode = PlayerLoopMode.off;
+    if (loopMode == PlayerLoopMode.off) {
+      newMode = PlayerLoopMode.all;
+    } else if (loopMode == PlayerLoopMode.all) {
+      newMode = PlayerLoopMode.one;
+    } else {
+      newMode = PlayerLoopMode.off;
+    }
+    return newMode;
+  }
+
+  Future<void> _handleSetPlayerLoopMode(
+    SetPlayerLoopModeEvent event,
+    Emitter<MusicPlayerState> emit,
+  ) async {
+    final newLoopMode = _getNextLoopMode(state.loopMode);
+    final result = setLoopMode(loopMode: newLoopMode);
+    if (result.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: result.error,
+        ),
+      );
+      return;
+    } else {
+      emit(state.copyWith(loopMode: newLoopMode));
+    }
+  }
+
+  Future<void> _handleSeekMusic(
+    SeekMusicEvent event,
+    Emitter<MusicPlayerState> emit,
+  ) async {
+    final seekResult = await seekSong(event.position, index: event.index);
+    if (seekResult.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: seekResult.error,
+        ),
+      );
+    }
+    final hasNext = hasNextSong();
+    if (hasNext.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: hasNext.error,
+        ),
+      );
+    }
+
+    final hasPrevious = hasPreviousSong();
+    if (hasPrevious.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: hasPrevious.error,
+        ),
+      );
+    }
+    emit(
+      state.copyWith(
+        hasNext: hasNext.value ?? state.hasNext,
+        hasPrevious: hasPrevious.value ?? state.hasPrevious,
+      ),
+    );
+  }
+
+  Future<void> _handleSetShuffleEnabled(
+    SetShuffleEnabledEvent event,
+    Emitter<MusicPlayerState> emit,
+  ) async {
+    final result = await setShuffleEnabled(isEnabled: event.isEnabled);
+    if (result.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: result.error,
+        ),
+      );
+      return;
+    } else {
+      emit(state.copyWith(shuffleEnabled: event.isEnabled));
+    }
+  }
 
   Future<void> _handleToggleLike(
     ToggleLikeMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    final favorites =
-        _preferences.getStringList(PreferencesKeys.favoriteSongs) ?? [];
-    if (favorites.contains(event.songId.toString())) {
-      favorites.remove(event.songId.toString());
-    } else {
-      favorites.add(event.songId.toString());
+    final result = await toggleSongLike(event.songId);
+    if (result.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: result.error,
+        ),
+      );
+      return;
     }
-    await _preferences.setStringList(PreferencesKeys.favoriteSongs, favorites);
-    emit(state.copyWith(likedSongIds: favorites.map(int.parse).toList()));
+    final likedSongIds = result.value!;
+    emit(state.copyWith(likedSongIds: likedSongIds));
   }
 
   Future<void> _handleShuffleMusics(
     ShuffleMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    await _playList(
-      emit: emit,
-      songs: event.songs,
-      shuffle: true,
-      errorContext: 'shuffling music',
+    await setShuffleEnabled(isEnabled: true);
+    await playSong(event.songs, 0);
+    emit(
+      state.copyWith(shuffleEnabled: true, status: MusicPlayerStatus.playing),
     );
   }
 
@@ -99,42 +214,14 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     PlayMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    await _playList(
-      emit: emit,
-      songs: event.playList,
-      index: event.index,
-      shuffle: false,
-      errorContext: 'playing music',
-    );
-  }
-
-  Future<void> _playList({
-    required Emitter<MusicPlayerState> emit,
-    required List<SongModel> songs,
-    required bool shuffle,
-    required String errorContext,
-    int index = 0,
-  }) async {
-    try {
-      final favorites =
-          _preferences.getStringList(PreferencesKeys.favoriteSongs) ?? [];
-      emit(
-        state.copyWith(
-          status: MusicPlayerStatus.playing,
-          playList: songs,
-          likedSongIds: favorites.map(int.parse).toList(),
-        ),
-      );
-      await _audioHandler.addAudioSources(songs);
-      await _audioHandler.setShuffleModeEnabled(enabled: shuffle);
-      await _audioHandler.seek(Duration.zero, index: index);
-      await _audioHandler.play();
-    } on Exception catch (e, s) {
-      Logger.error('Error $errorContext: $e', e, s);
+    final result = await playSong(event.playList, event.index);
+    if (result.isSuccess) {
+      emit(state.copyWith(status: MusicPlayerStatus.playing));
+    } else {
       emit(
         state.copyWith(
           status: MusicPlayerStatus.error,
-          errorMessage: e.toString(),
+          errorMessage: result.error,
         ),
       );
     }
@@ -144,7 +231,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     StopMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    if (_audioHandler.playing) await _audioHandler.stop();
+    await stopSong();
     emit(state.copyWith(status: MusicPlayerStatus.stopped));
   }
 
@@ -152,63 +239,12 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     TogglePlayPauseEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    if (_audioHandler.playing) {
-      await _audioHandler.pause();
+    if (state.status == MusicPlayerStatus.playing) {
+      await pauseSong();
       emit(state.copyWith(status: MusicPlayerStatus.paused));
     } else {
-      await _audioHandler.play();
+      await resumeSong();
       emit(state.copyWith(status: MusicPlayerStatus.playing));
-    }
-  }
-
-  Future<void> _handleSkipToNext(
-    NextMusicEvent event,
-    Emitter<MusicPlayerState> emit,
-  ) async {
-    await _handleSeek(
-      emit: emit,
-      seekAction: _audioHandler.skipToNext,
-      errorContext: 'skipping to next track',
-    );
-  }
-
-  Future<void> _handleSkipToIndex(
-    SkipToMusicIndexEvent event,
-    Emitter<MusicPlayerState> emit,
-  ) async {
-    await _handleSeek(
-      emit: emit,
-      seekAction: () => _audioHandler.seek(Duration.zero, index: event.index),
-      errorContext: 'Skipping to trak index ${event.index}',
-    );
-  }
-
-  Future<void> _handleSkipToPrevious(
-    PreviousMusicEvent event,
-    Emitter<MusicPlayerState> emit,
-  ) async {
-    await _handleSeek(
-      emit: emit,
-      seekAction: _audioHandler.skipToPrevious,
-      errorContext: 'skipping to previous track',
-    );
-  }
-
-  Future<void> _handleSeek({
-    required Emitter<MusicPlayerState> emit,
-    required Future<void> Function() seekAction,
-    required String errorContext,
-  }) async {
-    try {
-      await seekAction();
-    } on Exception catch (e, s) {
-      Logger.error('Error $errorContext: $e', e, s);
-      emit(
-        state.copyWith(
-          status: MusicPlayerStatus.error,
-          errorMessage: e.toString(),
-        ),
-      );
     }
   }
 }

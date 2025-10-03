@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/constants/constants.dart';
+import 'package:music_player/core/domain/entities/song.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart'
-    show ArtworkType, QueryArtworkWidget, SongModel;
+    show ArtworkType, QueryArtworkWidget;
 
 class SongArtwork extends StatelessWidget {
   const SongArtwork({super.key, this.song});
-  final SongModel? song;
+  final Song? song;
 
   @override
   Widget build(BuildContext context) {
