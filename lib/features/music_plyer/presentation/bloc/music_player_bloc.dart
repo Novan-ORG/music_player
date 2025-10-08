@@ -73,10 +73,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   }
 
   void _watchPlayerIndex(int? index) {
-    if (index == null ||
-        index == state.currentSongIndex ||
-        index < 0 ||
-        index >= state.playList.length) {
+    if (index == null || index < 0 || index >= state.playList.length) {
       return;
     }
     final hasNext = hasNextSong();
@@ -108,7 +105,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     SetPlayerLoopModeEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    final newLoopMode = _getNextLoopMode(state.loopMode);
+    final newLoopMode = _getNextLoopMode(event.loopMode);
     final result = setLoopMode(loopMode: newLoopMode);
     if (result.isFailure) {
       emit(
@@ -117,7 +114,6 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           errorMessage: result.error,
         ),
       );
-      return;
     } else {
       emit(state.copyWith(loopMode: newLoopMode));
     }
@@ -219,16 +215,15 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     PlayMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
+    emit(
+      state.copyWith(
+        currentSongIndex: event.index,
+        status: MusicPlayerStatus.playing,
+        playList: event.playList,
+      ),
+    );
     final result = await playSong(event.playList, event.index);
-    if (result.isSuccess) {
-      emit(
-        state.copyWith(
-          currentSongIndex: event.index,
-          status: MusicPlayerStatus.playing,
-          playList: event.playList,
-        ),
-      );
-    } else {
+    if (result.isFailure) {
       emit(
         state.copyWith(
           status: MusicPlayerStatus.error,
@@ -251,11 +246,11 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     Emitter<MusicPlayerState> emit,
   ) async {
     if (state.status == MusicPlayerStatus.playing) {
-      await pauseSong();
       emit(state.copyWith(status: MusicPlayerStatus.paused));
+      await pauseSong();
     } else {
-      await resumeSong();
       emit(state.copyWith(status: MusicPlayerStatus.playing));
+      await resumeSong();
     }
   }
 }

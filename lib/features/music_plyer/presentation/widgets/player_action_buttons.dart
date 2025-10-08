@@ -78,9 +78,7 @@ class PlayerActionButtons extends StatelessWidget {
                     ),
                   ),
                   Tooltip(
-                    message: state.status == MusicPlayerStatus.playing
-                        ? 'Pause'
-                        : 'Play',
+                    message: isPlaying ? 'Play' : 'Pause',
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
                       transitionBuilder: (child, anim) =>

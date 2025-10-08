@@ -1,6 +1,6 @@
 import 'package:music_player/core/constants/preferences_keys.dart';
+import 'package:music_player/core/data/models/models.dart';
 import 'package:music_player/core/services/services.dart';
-import 'package:music_player/features/music_plyer/data/data.dart';
 import 'package:music_player/features/music_plyer/data/mapppers/mappers.dart';
 import 'package:music_player/features/music_plyer/domain/entities/entities.dart';
 import 'package:shared_preferences/shared_preferences.dart';

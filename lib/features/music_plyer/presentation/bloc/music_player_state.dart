@@ -58,6 +58,7 @@ final class MusicPlayerState extends Equatable {
   List<Object> get props => [
     status,
     playList,
+    loopMode,
     hasNext,
     hasPrevious,
     shuffleEnabled,

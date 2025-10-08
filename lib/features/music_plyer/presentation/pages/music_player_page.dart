@@ -49,7 +49,6 @@ class MusicPlayerPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        debugPrint('state: $state');
         return Scaffold(
           appBar: AppBar(title: Text(context.localization.appTitle)),
           body: SingleChildScrollView(
