@@ -19,11 +19,13 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
+  flutter_dotenv: ^6.0.0
   flutter_launcher_icons: ^0.14.4
   flutter_localizations:
     sdk: flutter
   flutter_native_splash: ^2.4.6
   font_awesome_flutter: ^10.9.1
+  luciq_flutter: ^18.0.0
   get_it: ^8.2.0
   intl: ^0.20.2
   just_audio: ^0.10.4
@@ -72,3 +74,4 @@ flutter:
   assets:
     - assets/images/
     - assets/logo/
+    - .env
