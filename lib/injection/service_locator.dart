@@ -4,6 +4,9 @@ import 'package:just_audio/just_audio.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/features/music_plyer/data/data.dart';
 import 'package:music_player/features/music_plyer/domain/domain.dart';
+import 'package:music_player/features/songs/data/data.dart';
+import 'package:music_player/features/songs/domain/domain.dart';
+import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volume_controller/volume_controller.dart';
 
@@ -12,10 +15,10 @@ final GetIt getIt = GetIt.instance;
 void setup() {
   ///
   /// Core
-  /// 
+  ///
   getIt
     ..registerSingletonAsync(ObjectBox.create)
-    //
+    ..registerLazySingleton(OnAudioQuery.new)
     ..registerLazySingleton<AudioPlayer>(AudioPlayer.new)
     ..registerSingletonAsync<MAudioHandler>(
       () => AudioService.init(
@@ -32,36 +35,52 @@ void setup() {
     ..registerSingletonAsync<SharedPreferences>(
       SharedPreferences.getInstance,
     )
-    //
     ..registerLazySingleton(() => VolumeController.instance)
-
     ///
     /// MusicPlayer feature
-    /// 
+    ///
     // Usecases
-    ..registerLazySingleton(() => GetLikedSongs(getIt()))
-    ..registerLazySingleton(() => HasNextSong(getIt()))
-    ..registerLazySingleton(() => HasPreviousSong(getIt()))
-    ..registerLazySingleton(() => PauseSong(getIt()))
-    ..registerLazySingleton(() => PlaySong(getIt()))
-    ..registerLazySingleton(() => ResumeSong(getIt()))
-    ..registerLazySingleton(() => SeekSong(getIt()))
-    ..registerLazySingleton(() => SetLoopMode(getIt()))
-    ..registerLazySingleton(() => SetShuffleEnabled(getIt()))
-    ..registerLazySingleton(() => StopSong(getIt()))
-    ..registerLazySingleton(() => ToggleSongLike(getIt()))
-    ..registerLazySingleton(() => WatchPlayerIndex(getIt()))
-    ..registerLazySingleton(() => WatchSongDuration(getIt()))
-    ..registerLazySingleton(() => WatchSongPosition(getIt()))
+    ..registerLazySingleton(() => GetLikedSongs(getIt.get()))
+    ..registerLazySingleton(() => HasNextSong(getIt.get()))
+    ..registerLazySingleton(() => HasPreviousSong(getIt.get()))
+    ..registerLazySingleton(() => PauseSong(getIt.get()))
+    ..registerLazySingleton(() => PlaySong(getIt.get()))
+    ..registerLazySingleton(() => ResumeSong(getIt.get()))
+    ..registerLazySingleton(() => SeekSong(getIt.get()))
+    ..registerLazySingleton(() => SetLoopMode(getIt.get()))
+    ..registerLazySingleton(() => SetShuffleEnabled(getIt.get()))
+    ..registerLazySingleton(() => StopSong(getIt.get()))
+    ..registerLazySingleton(() => ToggleSongLike(getIt.get()))
+    ..registerLazySingleton(() => WatchPlayerIndex(getIt.get()))
+    ..registerLazySingleton(() => WatchSongDuration(getIt.get()))
+    ..registerLazySingleton(() => WatchSongPosition(getIt.get()))
     // Repositories
-    ..registerLazySingleton(
-      () => MusicPlayerRepoImpl(audioHandlerDatasource: getIt()),
+    ..registerLazySingleton<MusicPlayerRepository>(
+      () => MusicPlayerRepoImpl(audioHandlerDatasource: getIt.get()),
     )
     // DataSources
-    ..registerLazySingleton(
+    ..registerLazySingleton<AudioHandlerDatasource>(
       () => AudioHandlerDatasourceImpl(
-        audioHandler: getIt(),
-        preferences: getIt(),
+        audioHandler: getIt.get(),
+        preferences: getIt.get(),
       ),
+    )
+    ///
+    /// Songs page feature
+    ///
+    // Usecases
+    ..registerLazySingleton(() => QuerySongs(getIt.get()))
+    ..registerLazySingleton(() => DeleteSong(getIt.get()))
+    // Repositories
+    ..registerLazySingleton<SongsRepository>(
+      () => SongsRepoImpl(songsDatasource: getIt.get()),
+    )
+    // Datasources
+    ..registerLazySingleton<SongsDatasource>(
+      () => SongsDatasourceImpl(onAudioQuery: getIt.get()),
     );
+
+  ///
+  ///
+  ///
 }

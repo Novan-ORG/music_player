@@ -7,6 +7,8 @@ class Song {
     required this.uri,
     required this.duration,
     required this.albumId,
+    required this.dateAdded,
+    required this.size,
   });
 
   final int id;
@@ -16,4 +18,6 @@ class Song {
   final String uri;
   final Duration duration;
   final int? albumId;
+  final int size;
+  final DateTime dateAdded;
 }

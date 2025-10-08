@@ -1,8 +1,7 @@
+import 'package:music_player/core/data/mappers/mappers.dart';
 import 'package:music_player/core/domain/entities/entities.dart';
 import 'package:music_player/core/result.dart';
 import 'package:music_player/features/music_plyer/data/datasources/datasources.dart';
-import 'package:music_player/features/music_plyer/data/mappers/mappers.dart';
-import 'package:music_player/features/music_plyer/data/models/song_model.dart';
 import 'package:music_player/features/music_plyer/domain/domain.dart';
 
 class MusicPlayerRepoImpl implements MusicPlayerRepository {
@@ -35,7 +34,7 @@ class MusicPlayerRepoImpl implements MusicPlayerRepository {
   Future<Result<void>> play(List<Song> playlist, int index) async {
     try {
       await _audioHandlerDatasource.play(
-        playlist.map(SongModel.fromDomain).toList(),
+        playlist.map(SongModelMapper.fromDomain).toList(),
         index,
       );
       return Result.success(null);
@@ -135,10 +134,10 @@ class MusicPlayerRepoImpl implements MusicPlayerRepository {
   Result<PlayerLoopMode> setLoopMode(PlayerLoopMode loopMode) {
     try {
       final result = _audioHandlerDatasource.setPlayerLoopMode(
-        PlayerLoopModeMapper.mapToLoopMode(loopMode),
+        loopMode,
       );
       return Result.success(
-        PlayerLoopModeMapper.map(result),
+        result,
       );
     } on Exception catch (e) {
       return Result.failure('failed to set loop mode: $e');

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SongItem extends StatelessWidget {
   const SongItem({
@@ -14,7 +14,7 @@ class SongItem extends StatelessWidget {
     super.key,
   });
 
-  final SongModel song;
+  final Song song;
   final VoidCallback? onTap;
   final bool isLiked;
   final VoidCallback? onToggleLike;
@@ -47,7 +47,7 @@ class SongItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      song.displayNameWOExt,
+                      song.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -61,7 +61,7 @@ class SongItem extends StatelessWidget {
                       children: [
                         const Icon(Icons.person, size: 14, color: Colors.grey),
                         Text(
-                          song.artist ?? 'Unknown Artist',
+                          song.artist,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodySmall

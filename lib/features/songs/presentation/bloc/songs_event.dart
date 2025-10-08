@@ -18,5 +18,5 @@ final class SortSongsEvent extends SongsEvent {
 final class DeleteSongEvent extends SongsEvent {
   const DeleteSongEvent(this.song);
 
-  final SongModel song;
+  final Song song;
 }

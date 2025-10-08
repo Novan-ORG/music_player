@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_player/core/services/logger/logger.dart';
-import 'package:music_player/features/music_plyer/data/models/song_model.dart';
+import 'package:music_player/core/data/models/song_model.dart';
 
 class MAudioHandler extends BaseAudioHandler with SeekHandler {
   MAudioHandler(this._player) {

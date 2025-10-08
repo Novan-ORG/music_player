@@ -150,6 +150,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get descending => 'Descending';
 
   @override
+  String get dismiss => 'DISMISS';
+
+  @override
   String get playListPage => '';
 
   @override

@@ -206,7 +206,12 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     await setShuffleEnabled(isEnabled: true);
     await playSong(event.songs, 0);
     emit(
-      state.copyWith(shuffleEnabled: true, status: MusicPlayerStatus.playing),
+      state.copyWith(
+        shuffleEnabled: true,
+        status: MusicPlayerStatus.playing,
+        playList: event.songs,
+        currentSongIndex: 0,
+      ),
     );
   }
 
@@ -216,7 +221,13 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) async {
     final result = await playSong(event.playList, event.index);
     if (result.isSuccess) {
-      emit(state.copyWith(status: MusicPlayerStatus.playing));
+      emit(
+        state.copyWith(
+          currentSongIndex: event.index,
+          status: MusicPlayerStatus.playing,
+          playList: event.playList,
+        ),
+      );
     } else {
       emit(
         state.copyWith(

@@ -1,11 +1,11 @@
 import 'package:music_player/features/music_plyer/domain/domain.dart';
 
 class WatchSongPosition {
-  const WatchSongPosition(this.repository);
+  const WatchSongPosition(this._repository);
 
-  final MusicPlayerRepository repository;
+  final MusicPlayerRepository _repository;
 
   Stream<Duration> call() {
-    return repository.positionStream();
+    return _repository.positionStream();
   }
 }

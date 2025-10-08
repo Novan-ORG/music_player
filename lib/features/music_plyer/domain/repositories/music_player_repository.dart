@@ -2,7 +2,7 @@ import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/result.dart';
 import 'package:music_player/features/music_plyer/domain/entities/entities.dart';
 
-abstract class MusicPlayerRepository {
+abstract interface class MusicPlayerRepository {
   Future<Result<void>> play(List<Song> playlist, int index);
 
   Future<Result<void>> pause();

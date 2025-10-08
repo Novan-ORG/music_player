@@ -23,7 +23,12 @@ class MusicPlayerApp extends StatelessWidget {
     FlutterNativeSplash.remove();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => SongsBloc()..add(const LoadSongsEvent())),
+        BlocProvider(
+          create: (_) => SongsBloc(
+            getIt(),
+            getIt(),
+          )..add(const LoadSongsEvent()),
+        ),
         BlocProvider(
           create: (_) => MusicPlayerBloc(
             getIt(),

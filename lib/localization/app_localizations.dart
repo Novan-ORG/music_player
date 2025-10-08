@@ -374,6 +374,12 @@ abstract class AppLocalizations {
   /// **'Descending'**
   String get descending;
 
+  /// No description provided for @dismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'DISMISS'**
+  String get dismiss;
+
   /// Playlist page localization
   ///
   /// In en, this message translates to:

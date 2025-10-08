@@ -1,10 +1,11 @@
-import 'package:just_audio/just_audio.dart';
 import 'package:music_player/core/constants/preferences_keys.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/features/music_plyer/data/data.dart';
+import 'package:music_player/features/music_plyer/data/mapppers/mappers.dart';
+import 'package:music_player/features/music_plyer/domain/entities/entities.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class AudioHandlerDatasource {
+abstract interface class AudioHandlerDatasource {
   Future<void> play(List<SongModel> songs, int index);
   Future<void> pause();
   Future<void> resume();
@@ -18,7 +19,7 @@ abstract class AudioHandlerDatasource {
   Stream<int?> currentIndexStream();
   Stream<Duration?> durationStream();
   Stream<Duration> positionStream();
-  LoopMode setPlayerLoopMode(LoopMode loopMode);
+  PlayerLoopMode setPlayerLoopMode(PlayerLoopMode loopMode);
 }
 
 class AudioHandlerDatasourceImpl implements AudioHandlerDatasource {
@@ -116,8 +117,8 @@ class AudioHandlerDatasourceImpl implements AudioHandlerDatasource {
   }
 
   @override
-  LoopMode setPlayerLoopMode(LoopMode loopMode) {
-    _audioHandler.setLoopMode(loopMode);
+  PlayerLoopMode setPlayerLoopMode(PlayerLoopMode loopMode) {
+    _audioHandler.setLoopMode(PlayerLoopModeMapper.mapToLoopMode(loopMode));
     return loopMode;
   }
 }

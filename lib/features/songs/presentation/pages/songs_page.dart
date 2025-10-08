@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
@@ -8,7 +9,6 @@ import 'package:music_player/features/music_plyer/presentation/pages/pages.dart'
 import 'package:music_player/features/search/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart' hide PlaylistModel;
 import 'package:permission_handler/permission_handler.dart';
 
 class SongsPage extends StatefulWidget {
@@ -38,7 +38,7 @@ class _SongsPageState extends State<SongsPage> {
     }
   }
 
-  Future<void> _showDeleteDialog(SongModel song) async {
+  Future<void> _showDeleteDialog(Song song) async {
     await showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
@@ -61,8 +61,8 @@ class _SongsPageState extends State<SongsPage> {
     );
   }
 
-  List<SongModel> _filterSongs(SongsState state, List<int> likedSongIds) {
-    final songs = List<SongModel>.from(state.allSongs);
+  List<Song> _filterSongs(SongsState state, Set<int> likedSongIds) {
+    final songs = List<Song>.from(state.allSongs);
 
     if (widget.playlist != null) {
       songs.retainWhere((song) => widget.playlist!.songs.contains(song.id));
@@ -134,7 +134,7 @@ class _SongsPageState extends State<SongsPage> {
     );
   }
 
-  Widget _buildSongList(List<SongModel> songs, List<int> likedSongIds) {
+  Widget _buildSongList(List<Song> songs, Set<int> likedSongIds) {
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -144,7 +144,7 @@ class _SongsPageState extends State<SongsPage> {
         return SongItem(
           song: song,
           isLiked: likedSongIds.contains(song.id),
-          onSetAsRingtonePressed: () => _setAsRingtone(song.data),
+          onSetAsRingtonePressed: () => _setAsRingtone(song.uri),
           onDeletePressed: () => _showDeleteDialog(song),
           onToggleLike: () =>
               musicPlayerBloc.add(ToggleLikeMusicEvent(song.id)),
@@ -153,7 +153,12 @@ class _SongsPageState extends State<SongsPage> {
             await Navigator.of(
               context,
             ).push(
-              MaterialPageRoute<void>(builder: (_) => const MusicPlayerPage()),
+              MaterialPageRoute<void>(
+                builder: (_) => BlocProvider.value(
+                  value: musicPlayerBloc,
+                  child: const MusicPlayerPage(),
+                ),
+              ),
             );
           },
         );
@@ -197,7 +202,7 @@ class _SongsPageState extends State<SongsPage> {
                 () => songsBloc.add(const LoadSongsEvent()),
               );
             }
-            return BlocSelector<MusicPlayerBloc, MusicPlayerState, List<int>>(
+            return BlocSelector<MusicPlayerBloc, MusicPlayerState, Set<int>>(
               bloc: musicPlayerBloc,
               selector: (state) => state.likedSongIds,
               builder: (context, likedSongIds) {

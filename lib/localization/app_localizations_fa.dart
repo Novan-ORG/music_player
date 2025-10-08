@@ -150,6 +150,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get descending => 'کاهشی';
 
   @override
+  String get dismiss => 'رد کردن';
+
+  @override
   String get playListPage => '';
 
   @override

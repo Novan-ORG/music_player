@@ -62,6 +62,7 @@
     "size": "Size",
     "ascending": "Ascending",
     "descending": "Descending",
+    "dismiss": "DISMISS",
 
     "playListPage":"",
     "@playListPage": {

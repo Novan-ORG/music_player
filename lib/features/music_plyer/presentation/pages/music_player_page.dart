@@ -8,20 +8,48 @@ import 'package:music_player/injection/service_locator.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:volume_controller/volume_controller.dart';
 
-class MusicPlayerPage extends StatefulWidget {
+class MusicPlayerPage extends StatelessWidget {
   const MusicPlayerPage({super.key});
 
-  @override
-  State<MusicPlayerPage> createState() => _MusicPlayerPageState();
-}
-
-class _MusicPlayerPageState extends State<MusicPlayerPage> {
-  late final MusicPlayerBloc musicPlayerBloc = context.read<MusicPlayerBloc>();
+  void _showErrorBanner(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showMaterialBanner(
+      MaterialBanner(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white),
+        ),
+        leading: const Icon(Icons.error, color: Colors.white),
+        backgroundColor: Colors.red,
+        actions: [
+          TextButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+            },
+            child: Text(
+              context.localization.dismiss,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+    final musicPlayerBloc = context.read<MusicPlayerBloc>();
+    return BlocConsumer<MusicPlayerBloc, MusicPlayerState>(
+      bloc: musicPlayerBloc,
+      listenWhen: (previous, current) {
+        return previous.errorMessage != current.errorMessage;
+      },
+      listener: (context, state) {
+        if (state.errorMessage != null) {
+          _showErrorBanner(context, state.errorMessage!);
+        }
+      },
       builder: (context, state) {
+        debugPrint('state: $state');
         return Scaffold(
           appBar: AppBar(title: Text(context.localization.appTitle)),
           body: SingleChildScrollView(

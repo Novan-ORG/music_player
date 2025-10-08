@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class SearchSongsPage extends StatefulWidget {
   const SearchSongsPage({super.key});
@@ -62,12 +62,12 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
               stream: searchStream.stream,
               builder: (context, searchQuery) {
                 final query = searchQuery.data?.toLowerCase() ?? '';
-                List<SongModel> filteredSongs;
+                List<Song> filteredSongs;
                 if (query.isNotEmpty) {
                   filteredSongs = state.allSongs.where((song) {
                     final title = song.title.toLowerCase();
-                    final artist = song.artist?.toLowerCase() ?? '';
-                    final album = song.album?.toLowerCase() ?? '';
+                    final artist = song.artist.toLowerCase();
+                    final album = song.album.toLowerCase();
                     return title.contains(query) ||
                         artist.contains(query) ||
                         album.contains(query);
@@ -82,7 +82,7 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
                     return ListTile(
                       leading: SongImageWidget(songId: song.id),
                       title: Text(song.title),
-                      subtitle: Text(song.artist ?? 'Unknown Artist'),
+                      subtitle: Text(song.artist),
                       onTap: () async {
                         context.read<MusicPlayerBloc>().add(
                           PlayMusicEvent(index, filteredSongs),

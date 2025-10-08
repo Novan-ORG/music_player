@@ -1,11 +1,11 @@
 import 'package:music_player/features/music_plyer/domain/domain.dart';
 
 class WatchSongDuration {
-  const WatchSongDuration(this.repository);
+  const WatchSongDuration(this._repository);
 
-  final MusicPlayerRepository repository;
+  final MusicPlayerRepository _repository;
 
   Stream<Duration?> call() {
-    return repository.durationStream();
+    return _repository.durationStream();
   }
 }
