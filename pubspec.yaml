@@ -12,7 +12,7 @@ dependencies:
   audio_service: ^0.18.18
   audio_session: ^0.2.2
   auto_size_text: ^3.0.0
-  bloc: ^9.0.0
+  bloc: ^9.0.1
   cupertino_icons: ^1.0.8
   duration_picker: ^1.2.0
   equatable: ^2.0.7
@@ -25,10 +25,10 @@ dependencies:
     sdk: flutter
   flutter_native_splash: ^2.4.6
   font_awesome_flutter: ^10.9.1
-  luciq_flutter: ^18.0.0
   get_it: ^8.2.0
   intl: ^0.20.2
   just_audio: ^0.10.4
+  luciq_flutter: ^18.0.0
   marquee: ^2.3.0
   objectbox: ^5.0.0
   objectbox_flutter_libs: ^5.0.0

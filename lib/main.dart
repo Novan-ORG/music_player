@@ -8,20 +8,17 @@ import 'package:music_player/app.dart';
 import 'package:music_player/injection/service_locator.dart';
 
 Future<void> main() async {
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  setup();
-  await getIt.allReady();
-  await dotenv.load();
-  final luciqToken = dotenv.get('LUCIQ_TOKEN');
-
-  runZonedGuarded(
-    () {
-      WidgetsFlutterBinding.ensureInitialized();
-
-      Luciq.init(
+  await runZonedGuarded(
+    () async {
+      final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+      FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+      setup();
+      await getIt.allReady();
+      await dotenv.load();
+      final luciqToken = dotenv.get('LUCIQ_TOKEN');
+      await Luciq.init(
         token: luciqToken,
-        invocationEvents: [InvocationEvent.floatingButton],
+        invocationEvents: [],
         debugLogsLevel: LogLevel.none,
       );
 
