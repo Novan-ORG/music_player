@@ -1,6 +1,13 @@
 import 'package:flutter/widgets.dart';
 
 extension PaddingEx on Widget {
+  Widget padding({double value = 0}) {
+    return Padding(
+      padding: EdgeInsets.all(value),
+      child: this,
+    );
+  }
+
   Widget paddingSymmetric({double horizontal = 0, double vertical = 0}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical),

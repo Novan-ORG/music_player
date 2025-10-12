@@ -26,7 +26,7 @@
     "support": "Support",
     "sendFeedbackOrSuggestion":"Send Feedback or Suggestions",
     "errorOpenEmail": "Could not open email app.",
-    "aboutMe": "About Me",
+    "aboutUs": "About Us",
 
     "homePage": "",
     "@homePage": {
@@ -91,15 +91,12 @@
     "@aboutMePage": {
         "description": "AboutMe page localization"
     },
-    "aboutDeveloper": "About the Developer",
-    "developerStroy": "Hi! I'm Taleb, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people's lives easier.",
+    "aboutContributers": "About the Contributers",
+    "talebStory": "Hi! I'm Taleb, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people's lives easier.",
     "appPurpose": "This app is completely free. If you enjoy using it, please consider supporting me by rating it 5 stars and leaving a kind comment on the app store!",
     "connectWithMe": "Connect with me",
-    "linkedin": "LinkedIn",
-    "github": "Github",
-    "telegram": "Telegram",
     "gmail": "Gmail",
-    "twitter": "Twitter/X",
+    "linktree": "LinkTree",
     "close": "Close",
     "setAsRingtone": "Set as ringtone",
     "sleepTimerActive": "Sleep Timer is Active",

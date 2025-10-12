@@ -66,7 +66,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get errorOpenEmail => 'برنامه ایمیل باز نشد به دلیل خطای نامعلوم.';
 
   @override
-  String get aboutMe => 'درباره من';
+  String get aboutUs => 'درباره ما';
 
   @override
   String get homePage => '';
@@ -201,10 +201,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get aboutMePage => '';
 
   @override
-  String get aboutDeveloper => 'درباره توسعه دهنده';
+  String get aboutContributers => 'About the Contributers';
 
   @override
-  String get developerStroy =>
+  String get talebStory =>
       'سلام! من طالب هستم، یک توسعه‌دهنده‌ی موبایل پرشور با سال‌ها تجربه در ساخت اپلیکیشن‌های زیبا و قابل اعتماد برای اندروید و iOS. من عاشق ایجاد اپلیکیشن‌های کاربرپسند و پرکارایی هستم که زندگی مردم را آسان‌تر می‌کنند.';
 
   @override
@@ -215,19 +215,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get connectWithMe => 'ارتباط با من';
 
   @override
-  String get linkedin => 'لینکدین';
+  String get gmail => 'Gmail';
 
   @override
-  String get github => 'گیتهاب';
-
-  @override
-  String get telegram => 'تلگرام';
-
-  @override
-  String get gmail => 'جمیل';
-
-  @override
-  String get twitter => 'توییتر';
+  String get linktree => 'لینک جامع';
 
   @override
   String get close => 'بستن';

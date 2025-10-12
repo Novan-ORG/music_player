@@ -66,7 +66,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorOpenEmail => 'Could not open email app.';
 
   @override
-  String get aboutMe => 'About Me';
+  String get aboutUs => 'About Us';
 
   @override
   String get homePage => '';
@@ -201,10 +201,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutMePage => '';
 
   @override
-  String get aboutDeveloper => 'About the Developer';
+  String get aboutContributers => 'About the Contributers';
 
   @override
-  String get developerStroy =>
+  String get talebStory =>
       'Hi! I\'m Taleb, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people\'s lives easier.';
 
   @override
@@ -215,19 +215,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get connectWithMe => 'Connect with me';
 
   @override
-  String get linkedin => 'LinkedIn';
-
-  @override
-  String get github => 'Github';
-
-  @override
-  String get telegram => 'Telegram';
-
-  @override
   String get gmail => 'Gmail';
 
   @override
-  String get twitter => 'Twitter/X';
+  String get linktree => 'LinkTree';
 
   @override
   String get close => 'Close';

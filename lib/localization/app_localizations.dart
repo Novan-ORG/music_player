@@ -212,11 +212,11 @@ abstract class AppLocalizations {
   /// **'Could not open email app.'**
   String get errorOpenEmail;
 
-  /// No description provided for @aboutMe.
+  /// No description provided for @aboutUs.
   ///
   /// In en, this message translates to:
-  /// **'About Me'**
-  String get aboutMe;
+  /// **'About Us'**
+  String get aboutUs;
 
   /// Home page localizations.
   ///
@@ -476,17 +476,17 @@ abstract class AppLocalizations {
   /// **''**
   String get aboutMePage;
 
-  /// No description provided for @aboutDeveloper.
+  /// No description provided for @aboutContributers.
   ///
   /// In en, this message translates to:
-  /// **'About the Developer'**
-  String get aboutDeveloper;
+  /// **'About the Contributers'**
+  String get aboutContributers;
 
-  /// No description provided for @developerStroy.
+  /// No description provided for @talebStory.
   ///
   /// In en, this message translates to:
   /// **'Hi! I\'m Taleb, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people\'s lives easier.'**
-  String get developerStroy;
+  String get talebStory;
 
   /// No description provided for @appPurpose.
   ///
@@ -500,35 +500,17 @@ abstract class AppLocalizations {
   /// **'Connect with me'**
   String get connectWithMe;
 
-  /// No description provided for @linkedin.
-  ///
-  /// In en, this message translates to:
-  /// **'LinkedIn'**
-  String get linkedin;
-
-  /// No description provided for @github.
-  ///
-  /// In en, this message translates to:
-  /// **'Github'**
-  String get github;
-
-  /// No description provided for @telegram.
-  ///
-  /// In en, this message translates to:
-  /// **'Telegram'**
-  String get telegram;
-
   /// No description provided for @gmail.
   ///
   /// In en, this message translates to:
   /// **'Gmail'**
   String get gmail;
 
-  /// No description provided for @twitter.
+  /// No description provided for @linktree.
   ///
   /// In en, this message translates to:
-  /// **'Twitter/X'**
-  String get twitter;
+  /// **'LinkTree'**
+  String get linktree;
 
   /// No description provided for @close.
   ///

@@ -6,6 +6,7 @@ import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/settings/presentation/bloc/bloc.dart';
+import 'package:music_player/features/settings/presentation/pages/pages.dart';
 import 'package:music_player/features/settings/presentation/widgets/widgets.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -227,15 +228,16 @@ class _SettingsPageState extends State<SettingsPage> {
                           const Divider(height: 1),
                           SettingsTile(
                             icon: Icons.info_rounded,
-                            title: context.localization.aboutMe,
+                            title: context.localization.aboutUs,
                             trailing: const Icon(
                               Icons.telegram_rounded,
                               color: Colors.blueAccent,
                             ),
                             onTap: () async {
-                              await showDialog<void>(
-                                context: context,
-                                builder: (_) => const AboutMePopup(),
+                              await Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) => const AboutUsPage(),
+                                ),
                               );
                             },
                           ),

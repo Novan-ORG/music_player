@@ -1,4 +1,4 @@
-export 'about_me_popup.dart';
+export 'contributer_item.dart';
 export 'count_down_sheet.dart';
 export 'count_down_timer.dart';
 export 'custom_drop_down.dart';
