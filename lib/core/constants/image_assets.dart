@@ -4,5 +4,6 @@ sealed class ImageAssets {
   static const String songCover = 'assets/images/song_cover.png';
 
   // Avatars in size of 80 width and height
-  static const String talebAvatar = 'assets/images/taleb_avatar.png';
+  static const String talebAvatar = 'assets/images/taleb_avatar.jpg';
+  static const String caroAvatar = 'assets/images/caro_avatar.jpg';
 }
