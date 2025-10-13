@@ -26,6 +26,9 @@
     "sendFeedbackOrSuggestion": "ارسال بازخورد یا پیشنهادات",
     "errorOpenEmail": "برنامه ایمیل باز نشد به دلیل خطای نامعلوم.",
     "aboutUs": "درباره ما",
+    "selectSleepTimerDuration": "انتخاب تایمر خواب",
+    "set": "تنظیم",
+    "aboutContributers": "درباره مشارکت کنندگان",
     "homePage": "",
     
     "@homePage": {
@@ -62,6 +65,8 @@
     "ascending": "افزایشی",
     "descending": "کاهشی",
     "dismiss": "رد کردن",
+    "seeMore": "مشاهده بیشتر",
+    "seeLess": "مشاهده کمتر",
 
     "playListPage":"",
     "@playListPage": {

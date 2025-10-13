@@ -26,40 +26,36 @@ TextTheme appTextTheme(Color textPrimary, Color textSecondary) => TextTheme(
     fontSize: 32,
     fontWeight: FontWeight.bold,
     color: textPrimary,
-    fontFamily: 'Montserrat',
   ),
   headlineMedium: TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w600,
     color: textPrimary,
-    fontFamily: 'Montserrat',
   ),
   titleLarge: TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: textPrimary,
-    fontFamily: 'Montserrat',
   ),
   bodyLarge: TextStyle(
     fontSize: 16,
     color: textPrimary,
-    fontFamily: 'Montserrat',
   ),
   bodyMedium: TextStyle(
     fontSize: 14,
     color: textSecondary,
-    fontFamily: 'Montserrat',
   ),
   labelLarge: TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     color: textPrimary,
-    fontFamily: 'Montserrat',
   ),
 );
 
 // Dark ThemeData
 final ThemeData darkTheme = ThemeData(
+  fontFamily: 'OpenSans',
+  fontFamilyFallback: const ['IranSans'],
   brightness: Brightness.dark,
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: AppDarkColors.background,
@@ -76,7 +72,6 @@ final ThemeData darkTheme = ThemeData(
       color: AppDarkColors.textPrimary,
       fontSize: 20,
       fontWeight: FontWeight.bold,
-      fontFamily: 'Montserrat',
     ),
     elevation: 0,
   ),
@@ -100,6 +95,8 @@ final ThemeData darkTheme = ThemeData(
 
 // Light ThemeData
 final ThemeData lightTheme = ThemeData(
+  fontFamily: 'OpenSans',
+  fontFamilyFallback: const ['IranSans'],
   brightness: Brightness.light,
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: AppLightColors.background,
@@ -116,7 +113,6 @@ final ThemeData lightTheme = ThemeData(
       color: AppLightColors.textPrimary,
       fontSize: 20,
       fontWeight: FontWeight.bold,
-      fontFamily: 'Montserrat',
     ),
     elevation: 0,
   ),

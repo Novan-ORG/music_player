@@ -218,6 +218,36 @@ abstract class AppLocalizations {
   /// **'About Us'**
   String get aboutUs;
 
+  /// No description provided for @selectSleepTimerDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Sleep Timer Duration'**
+  String get selectSleepTimerDuration;
+
+  /// No description provided for @aboutContributers.
+  ///
+  /// In en, this message translates to:
+  /// **'About the Contributers'**
+  String get aboutContributers;
+
+  /// No description provided for @set.
+  ///
+  /// In en, this message translates to:
+  /// **'Set'**
+  String get set;
+
+  /// No description provided for @seeMore.
+  ///
+  /// In en, this message translates to:
+  /// **'See more'**
+  String get seeMore;
+
+  /// No description provided for @seeLess.
+  ///
+  /// In en, this message translates to:
+  /// **'See Less'**
+  String get seeLess;
+
   /// Home page localizations.
   ///
   /// In en, this message translates to:
@@ -475,12 +505,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **''**
   String get aboutMePage;
-
-  /// No description provided for @aboutContributers.
-  ///
-  /// In en, this message translates to:
-  /// **'About the Contributers'**
-  String get aboutContributers;
 
   /// No description provided for @talebStory.
   ///

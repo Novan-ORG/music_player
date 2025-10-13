@@ -69,6 +69,21 @@ class AppLocalizationsFa extends AppLocalizations {
   String get aboutUs => 'درباره ما';
 
   @override
+  String get selectSleepTimerDuration => 'انتخاب تایمر خواب';
+
+  @override
+  String get aboutContributers => 'درباره مشارکت کنندگان';
+
+  @override
+  String get set => 'تنظیم';
+
+  @override
+  String get seeMore => 'مشاهده بیشتر';
+
+  @override
+  String get seeLess => 'مشاهده کمتر';
+
+  @override
   String get homePage => '';
 
   @override
@@ -199,9 +214,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get aboutMePage => '';
-
-  @override
-  String get aboutContributers => 'About the Contributers';
 
   @override
   String get talebStory =>

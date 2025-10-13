@@ -69,6 +69,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutUs => 'About Us';
 
   @override
+  String get selectSleepTimerDuration => 'Select Sleep Timer Duration';
+
+  @override
+  String get aboutContributers => 'About the Contributers';
+
+  @override
+  String get set => 'Set';
+
+  @override
+  String get seeMore => 'See more';
+
+  @override
+  String get seeLess => 'See Less';
+
+  @override
   String get homePage => '';
 
   @override
@@ -199,9 +214,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutMePage => '';
-
-  @override
-  String get aboutContributers => 'About the Contributers';
 
   @override
   String get talebStory =>

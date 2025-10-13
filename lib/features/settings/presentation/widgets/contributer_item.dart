@@ -41,6 +41,8 @@ class ContributerItem extends StatelessWidget {
                 SeeMoreText(
                   text: aboutContributer,
                   maxLines: 3,
+                  seeMoreText: context.localization.seeMore,
+                  seeLessText: context.localization.seeLess,
                   textStyle: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Row(

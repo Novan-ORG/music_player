@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: "none"
 
-version: 1.0.0+1
+version: 0.0.1+1
 
 environment:
   sdk: ^3.8.1
@@ -76,7 +76,20 @@ flutter:
   assets:
     - assets/images/
     - assets/logo/
+    - assets/fonts/open_sans/
     - .env
+
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/open_sans/OpenSans-Regular.ttf
+        - asset: assets/fonts/open_sans/OpenSans-Italic.ttf
+        - asset: assets/fonts/open_sans/OpenSans-Light.ttf
+        - asset: assets/fonts/open_sans/OpenSans-Bold.ttf
+        - asset: assets/fonts/open_sans/OpenSans-Medium.ttf
+    - family: IranSans
+      fonts:
+        - asset: assets/fonts/iran_sans/irsans.ttf
 
 sentry:
   upload_debug_symbols: true

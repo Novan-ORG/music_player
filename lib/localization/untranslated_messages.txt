@@ -1,6 +1,5 @@
 {
   "fa": [
-    "aboutContributers",
     "gmail"
   ]
 }

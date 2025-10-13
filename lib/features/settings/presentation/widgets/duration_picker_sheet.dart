@@ -1,5 +1,6 @@
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:music_player/extensions/extensions.dart';
 
 class DurationPickerSheet extends StatefulWidget {
   const DurationPickerSheet({
@@ -52,7 +53,7 @@ class _DurationPickerSheetState extends State<DurationPickerSheet> {
               ),
             ),
             Text(
-              'Select Duration',
+              context.localization.selectSleepTimerDuration,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
@@ -88,7 +89,7 @@ class _DurationPickerSheetState extends State<DurationPickerSheet> {
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
+                    child: Text(context.localization.cancel),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -96,7 +97,7 @@ class _DurationPickerSheetState extends State<DurationPickerSheet> {
                   child: ElevatedButton(
                     onPressed: () =>
                         Navigator.of(context).pop(_selectedDuration),
-                    child: const Text('Set'),
+                    child: Text(context.localization.set),
                   ),
                 ),
               ],
