@@ -25,28 +25,27 @@ class _HomePageState extends State<HomePage> {
     SettingsPage(),
   ];
 
-  late final List<BottomNavigationBarItem> _navBarItems = [
-    BottomNavigationBarItem(
-      icon: const Icon(Icons.music_note_rounded),
-      label: context.localization.songs,
-    ),
-    BottomNavigationBarItem(
-      icon: const Icon(Icons.queue_music_rounded),
-      label: context.localization.playlists,
-    ),
-    BottomNavigationBarItem(
-      icon: const Icon(Icons.favorite_rounded),
-      label: context.localization.favorites,
-    ),
-    BottomNavigationBarItem(
-      icon: const Icon(Icons.settings_rounded),
-      label: context.localization.settings,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final navBarItems = [
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.music_note_rounded),
+        label: context.localization.songs,
+      ),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.queue_music_rounded),
+        label: context.localization.playlists,
+      ),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.favorite_rounded),
+        label: context.localization.favorites,
+      ),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.settings_rounded),
+        label: context.localization.settings,
+      ),
+    ];
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -68,7 +67,7 @@ class _HomePageState extends State<HomePage> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
-        items: _navBarItems,
+        items: navBarItems,
         selectedItemColor: theme.colorScheme.primary,
         unselectedItemColor: theme.disabledColor,
         showUnselectedLabels: true,
