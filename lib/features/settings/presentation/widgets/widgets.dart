@@ -6,3 +6,4 @@ export 'duration_picker_sheet.dart';
 export 'section_tile.dart';
 export 'settings_card.dart';
 export 'setttings_tile.dart';
+export 'version_info.dart';

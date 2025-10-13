@@ -251,6 +251,8 @@ class _SettingsPageState extends State<SettingsPage> {
           },
         ),
       ),
+      floatingActionButton: const VersionInfo(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
