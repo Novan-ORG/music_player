@@ -180,7 +180,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get song => 'موزیک';
 
   @override
-  String get s => 'ها';
+  String get s => '';
 
   @override
   String get createNewPlaylist => 'ایجاد لیست پخش جدید';

@@ -17,10 +17,6 @@ Future<void> main() async {
       await dotenv.load();
       final sentryDSN = dotenv.get('SENTRY_DSN');
 
-      FlutterError.onError = (FlutterErrorDetails details) {
-        Zone.current.handleUncaughtError(details.exception, details.stack!);
-      };
-
       await SentryFlutter.init(
         (options) {
           options
