@@ -1,11 +1,16 @@
+import 'package:music_player/core/services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LauncherUtils {
   static Future<void> launchUrlExternally(String url) async {
     final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
+    await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    ).catchError((dynamic e) {
+      Logger.error('error in launching url: $e');
+      return true;
+    });
   }
 
   static Future<bool> openEmailApp({
