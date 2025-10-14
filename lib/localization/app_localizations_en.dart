@@ -113,7 +113,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
-  String get delete => 'Delete';
+  String get deleteFromDevice => 'Delete from device';
 
   @override
   String get favoriteSongs => 'Favorite Songs';

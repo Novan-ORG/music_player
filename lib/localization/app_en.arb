@@ -50,7 +50,7 @@
     "deleteSong": "Delete song",
     "areSureYouWantToDeleteSong": "'Are you sure you want to delete this song?",
     "cancel": "Cancel",
-    "delete": "Delete",
+    "deleteFromDevice": "Delete from device",
     "favoriteSongs": "Favorite Songs",
     "allSongs": "All Songs",
     "searchSongs": "Search Songs",

@@ -302,11 +302,11 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
-  /// No description provided for @delete.
+  /// No description provided for @deleteFromDevice.
   ///
   /// In en, this message translates to:
-  /// **'Delete'**
-  String get delete;
+  /// **'Delete from device'**
+  String get deleteFromDevice;
 
   /// No description provided for @favoriteSongs.
   ///

@@ -118,7 +118,7 @@ class SongItem extends StatelessWidget {
             spacing: 8,
             children: [
               const Icon(Icons.delete, color: Colors.red),
-              Text(context.localization.delete),
+              Text(context.localization.deleteFromDevice),
             ],
           ),
         ),

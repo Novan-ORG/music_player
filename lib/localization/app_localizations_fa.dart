@@ -113,7 +113,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get cancel => 'انصراف';
 
   @override
-  String get delete => 'حذف';
+  String get deleteFromDevice => 'حذف از دستگاه';
 
   @override
   String get favoriteSongs => 'موزیک های محبوب';

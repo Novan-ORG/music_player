@@ -54,7 +54,7 @@ class _SongsPageState extends State<SongsPage> {
               Navigator.of(context).pop();
               songsBloc.add(DeleteSongEvent(song));
             },
-            child: Text(context.localization.delete),
+            child: Text(context.localization.deleteFromDevice),
           ),
         ],
       ),

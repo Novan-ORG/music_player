@@ -47,7 +47,7 @@
     "deleteSong": "حذف موزیک",
     "areSureYouWantToDeleteSong": "آیا برای حذف این موزیک مطمئن هستید؟",
     "cancel": "انصراف",
-    "delete": "حذف",
+    "deleteFromDevice": "حذف از دستگاه",
     "favoriteSongs": "موزیک های محبوب",
     "allSongs": "همه موزیک ها",
     "searchSongs": "جستجوی موزیک ها",
