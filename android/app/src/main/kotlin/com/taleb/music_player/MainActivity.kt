@@ -1,4 +1,4 @@
-package com.example.music_player
+package com.taleb.music_player
 
 import android.content.ContentResolver
 import android.content.ContentValues
