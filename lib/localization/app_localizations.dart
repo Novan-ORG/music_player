@@ -500,17 +500,23 @@ abstract class AppLocalizations {
   /// **'Up Next'**
   String get upNext;
 
-  /// AboutMe page localization
+  /// AboutUs page localization
   ///
   /// In en, this message translates to:
   /// **''**
-  String get aboutMePage;
+  String get aboutUsPage;
 
   /// No description provided for @talebStory.
   ///
   /// In en, this message translates to:
-  /// **'Hi! I\'m Taleb, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people\'s lives easier.'**
+  /// **'Hi! I\'m Taleb Rafiepour, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people\'s lives easier.'**
   String get talebStory;
+
+  /// No description provided for @caroStory.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello! I\'m Caro Zamani, a Product Designer.\nI\'m delighted to have As a designer at the beginning of my professional journey, your feedback is truly valuable and important to me.\nSo, feel free to visit my social media pages so we can share our knowledge and experiences together.'**
+  String get caroStory;
 
   /// No description provided for @appPurpose.
   ///

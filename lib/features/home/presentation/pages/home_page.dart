@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/extensions/extensions.dart';
-import 'package:music_player/features/mini_player/presentation/pages/pages.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
+import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/play_list/presentation/pages/pages.dart';
 import 'package:music_player/features/settings/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/pages/pages.dart';

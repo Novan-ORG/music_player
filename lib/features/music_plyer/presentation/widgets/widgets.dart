@@ -1,4 +1,5 @@
 export 'audio_progress.dart';
+export 'mini_cover_and_progress.dart';
 export 'more_action_buttons.dart';
 export 'player_action_buttons.dart';
 export 'song_artwork.dart';

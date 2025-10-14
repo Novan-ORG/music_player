@@ -49,65 +49,69 @@ class MusicPlayerPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(title: Text(context.localization.appTitle)),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 24),
-                Hero(
-                  tag: 'mini_cover_${state.currentSong?.id ?? 'no_song'}',
-                  child: SongArtwork(song: state.currentSong),
-                ),
-                const SizedBox(height: 24),
-                SongInfo(
-                  song: state.currentSong,
-                  onLikePressed: () {
-                    if (state.currentSong != null) {
-                      musicPlayerBloc.add(
-                        ToggleLikeMusicEvent(state.currentSong!.id),
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: Scaffold(
+            appBar: AppBar(title: Text(context.localization.appTitle)),
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 24),
+                  Hero(
+                    tag: 'mini_cover_${state.currentSong?.id ?? 'no_song'}',
+                    child: SongArtwork(song: state.currentSong),
+                  ),
+                  const SizedBox(height: 24),
+                  SongInfo(
+                    song: state.currentSong,
+                    onLikePressed: () {
+                      if (state.currentSong != null) {
+                        musicPlayerBloc.add(
+                          ToggleLikeMusicEvent(state.currentSong!.id),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  AudioProgress(
+                    durationStream: musicPlayerBloc.durationStream,
+                    positionStream: musicPlayerBloc.positionStream,
+                    onSeek: (duration) {
+                      musicPlayerBloc.add(SeekMusicEvent(position: duration));
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  MoreActionButtons(
+                    onAddToPlaylistPressed: () async {
+                      await PlaylistsPage.showSheet(
+                        context: context,
+                        songId: state.currentSong?.id,
                       );
-                    }
-                  },
-                ),
-                const SizedBox(height: 16),
-                AudioProgress(
-                  durationStream: musicPlayerBloc.durationStream,
-                  positionStream: musicPlayerBloc.positionStream,
-                  onSeek: (duration) {
-                    musicPlayerBloc.add(SeekMusicEvent(position: duration));
-                  },
-                ),
-                const SizedBox(height: 16),
-                MoreActionButtons(
-                  onAddToPlaylistPressed: () async {
-                    await PlaylistsPage.showSheet(
-                      context: context,
-                      songId: state.currentSong?.id,
-                    );
-                  },
-                  onSharePressed: () async {
-                    await SharePlus.instance.share(
-                      ShareParams(
-                        text: state.currentSong?.title ?? 'Unknown Song',
-                        subject: state.currentSong?.artist ?? 'Unknown Artist',
-                        files: [XFile(state.currentSong?.uri ?? '')],
-                      ),
-                    );
-                  },
-                  onMusicQueuePressed: () async {
-                    await UpnextMusicsSheet.show(context);
-                  },
-                ),
-                VolumeSlider(volumeController: getIt.get<VolumeController>()),
-              ],
-            ).paddingSymmetric(horizontal: 16, vertical: 8),
-          ),
-          bottomSheet: SafeArea(
-            child: const PlayerActionButtons().paddingSymmetric(
-              vertical: 10,
-              horizontal: 16,
+                    },
+                    onSharePressed: () async {
+                      await SharePlus.instance.share(
+                        ShareParams(
+                          text: state.currentSong?.title ?? 'Unknown Song',
+                          subject:
+                              state.currentSong?.artist ?? 'Unknown Artist',
+                          files: [XFile(state.currentSong?.uri ?? '')],
+                        ),
+                      );
+                    },
+                    onMusicQueuePressed: () async {
+                      await UpnextMusicsSheet.show(context);
+                    },
+                  ),
+                  VolumeSlider(volumeController: getIt.get<VolumeController>()),
+                ],
+              ).paddingSymmetric(horizontal: 16, vertical: 8),
+            ),
+            bottomSheet: SafeArea(
+              child: const PlayerActionButtons().paddingSymmetric(
+                vertical: 10,
+                horizontal: 16,
+              ),
             ),
           ),
         );

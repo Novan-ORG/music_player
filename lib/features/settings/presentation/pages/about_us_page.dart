@@ -46,9 +46,9 @@ class AboutUsPage extends StatelessWidget {
               email: StringsConstants.talebEmail,
               linkTreeUrl: StringsConstants.talebLinktreeUrl,
             ),
-            const ContributerItem(
+            ContributerItem(
               imagePath: ImageAssets.caroAvatar,
-              aboutContributer: 'Product Designer',
+              aboutContributer: context.localization.caroStory,
               email: StringsConstants.caroEmail,
               linkTreeUrl: StringsConstants.caroLinktreeUrl,
             ),

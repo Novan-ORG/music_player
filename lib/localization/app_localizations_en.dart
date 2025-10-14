@@ -213,11 +213,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get upNext => 'Up Next';
 
   @override
-  String get aboutMePage => '';
+  String get aboutUsPage => '';
 
   @override
   String get talebStory =>
-      'Hi! I\'m Taleb, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people\'s lives easier.';
+      'Hi! I\'m Taleb Rafiepour, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people\'s lives easier.';
+
+  @override
+  String get caroStory =>
+      'Hello! I\'m Caro Zamani, a Product Designer.\nI\'m delighted to have As a designer at the beginning of my professional journey, your feedback is truly valuable and important to me.\nSo, feel free to visit my social media pages so we can share our knowledge and experiences together.';
 
   @override
   String get appPurpose =>

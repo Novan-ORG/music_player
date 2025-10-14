@@ -177,7 +177,13 @@ class _Header extends StatelessWidget {
             letterSpacing: 1.2,
           ),
         ),
-        Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey[600]),
+        IconButton(
+          onPressed: Navigator.of(context).pop,
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Colors.grey[600],
+          ),
+        ),
       ],
     );
   }
