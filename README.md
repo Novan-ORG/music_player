@@ -2,6 +2,10 @@
 
 A new Flutter project.
 
+![PR Checks](https://github.com/TalebRafiepour/music_player/actions/workflows/pr-checks.yml/badge.svg)
+![Build Artifacts](https://github.com/TalebRafiepour/music_player/actions/workflows/publish-new-version.yml/badge.svg)
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
