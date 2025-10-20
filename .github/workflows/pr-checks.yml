@@ -1,0 +1,53 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  pr:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        flutter-version: [stable]  # can add 'beta', 'dev' if you want a matrix
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache pub
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: pub-cache-${{ matrix.flutter-version }}-${{ hashFiles('**/pubspec.*') }}
+          restore-keys: |
+            pub-cache-${{ matrix.flutter-version }}-
+            pub-cache-
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ matrix.flutter-version }}
+
+      - name: Flutter -- Version
+        run: flutter --version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Format check
+        run: |
+          flutter format --set-exit-if-changed .
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run unit & widget tests
+        run: flutter test --coverage
+
+      - name: Upload coverage (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ github.head_ref }}
+          path: coverage/
