@@ -22,22 +22,22 @@ class MiniCoverAndProgress extends StatelessWidget {
         QueryArtworkWidget(
           id: songId,
           type: ArtworkType.AUDIO,
-          artworkBorder: BorderRadius.circular(38),
-          artworkWidth: 38,
-          artworkHeight: 38,
+          artworkBorder: BorderRadius.circular(48),
+          artworkWidth: 48,
+          artworkHeight: 48,
           nullArtworkWidget: ClipRRect(
-            borderRadius: BorderRadius.circular(38),
+            borderRadius: BorderRadius.circular(48),
             child: Image.asset(
               ImageAssets.songCover,
               fit: BoxFit.cover,
-              width: 38,
-              height: 38,
+              width: 48,
+              height: 48,
             ),
           ),
         ),
         SizedBox(
-          width: 42,
-          height: 42,
+          width: 50,
+          height: 50,
           child: StreamBuilder(
             stream: durationStream,
             builder: (context, durationShot) {

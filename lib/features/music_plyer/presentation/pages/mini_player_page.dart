@@ -6,8 +6,67 @@ import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/widgets.dart';
 
-class MiniPlayerPage extends StatelessWidget {
+class MiniPlayerPage extends StatefulWidget {
   const MiniPlayerPage({super.key});
+
+  @override
+  State<MiniPlayerPage> createState() => _MiniPlayerPageState();
+}
+
+class _MiniPlayerPageState extends State<MiniPlayerPage>
+    with TickerProviderStateMixin {
+  bool _isMinimized = false;
+  late AnimationController _animationController;
+  late Animation<double> _sizeAnimation;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
+    _sizeAnimation =
+        Tween<double>(
+          begin: 1,
+          end: 0,
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeInOut,
+          ),
+        );
+
+    _fadeAnimation =
+        Tween<double>(
+          begin: 1,
+          end: 0,
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeInOut,
+          ),
+        );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _toggleMinimize() {
+    setState(() {
+      _isMinimized = !_isMinimized;
+    });
+    if (_isMinimized) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,104 +77,150 @@ class MiniPlayerPage extends StatelessWidget {
           previous.currentSong?.id != current.currentSong?.id ||
           previous.status != current.status,
       builder: (context, state) {
-        final isLiked = state.likedSongIds.contains(state.currentSong?.id);
+        final currentId = state.currentSong?.id ?? -1;
+        final isLiked = state.likedSongIds.contains(currentId);
         final isPlaying = state.status == MusicPlayerStatus.playing;
-        return Card(
-          elevation: 6,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: () async {
-              await Navigator.of(
+
+        return AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) {
+            if (_isMinimized) {
+              return _buildMinimizedPlayer(
                 context,
-              ).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const MusicPlayerPage(),
-                ),
+                musicPlayerBloc,
+                state.currentSong?.id ?? 0,
+                isPlaying,
               );
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Theme.of(context).colorScheme.primary.withAlpha(8),
-                    Theme.of(context).colorScheme.secondary.withAlpha(6),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                leading: Hero(
-                  tag: 'mini_cover_${state.currentSong?.id}',
-                  child: MiniCoverAndProgress(
-                    positionStream: musicPlayerBloc.positionStream,
-                    durationStream: musicPlayerBloc.durationStream,
-                    songId: state.currentSong?.id ?? 0,
+            }
+
+            return Transform.scale(
+              scale: _sizeAnimation.value,
+              child: Opacity(
+                opacity: _fadeAnimation.value,
+                child: Card(
+                  elevation: 6,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: () async {
+                      await Navigator.of(
+                        context,
+                      ).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const MusicPlayerPage(),
+                        ),
+                      );
+                    },
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      leading: Hero(
+                        tag: 'mini_cover_${state.currentSong?.id ?? 0}',
+                        child: MiniCoverAndProgress(
+                          positionStream: musicPlayerBloc.positionStream,
+                          durationStream: musicPlayerBloc.durationStream,
+                          songId: state.currentSong?.id ?? 0,
+                        ),
+                      ),
+                      title: _buildTitle(
+                        context,
+                        state.currentSong?.title ?? 'No song',
+                      ),
+                      subtitle: _buildSubtitle(
+                        context,
+                        state.currentSong?.artist,
+                      ),
+                      trailing: _MiniPlayerControls(
+                        musicPlayerBloc: musicPlayerBloc,
+                        currentSongId: state.currentSong?.id ?? 0,
+                        isLiked: isLiked,
+                        isPlaying: isPlaying,
+                        onMinimize: _toggleMinimize,
+                      ),
+                    ),
                   ),
                 ),
-                title: _buildTitle(
-                  context,
-                  state.currentSong?.title ?? 'No song',
-                ),
-                subtitle: _buildSubtitle(context, state.currentSong?.artist),
-                trailing: _MiniPlayerControls(
-                  musicPlayerBloc: musicPlayerBloc,
-                  currentSongId: state.currentSong?.id ?? 0,
-                  isLiked: isLiked,
-                  isPlaying: isPlaying,
-                ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
+    );
+  }
+
+  Widget _buildMinimizedPlayer(
+    BuildContext context,
+    MusicPlayerBloc musicPlayerBloc,
+    int currentSongId,
+    bool isPlaying,
+  ) {
+    return GestureDetector(
+      onLongPress: _toggleMinimize,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Hero(
+            tag: 'mini_cover_$currentSongId',
+            child: MiniCoverAndProgress(
+              positionStream: musicPlayerBloc.positionStream,
+              durationStream: musicPlayerBloc.durationStream,
+              songId: currentSongId,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              musicPlayerBloc.add(const TogglePlayPauseEvent());
+            },
+            icon: Icon(
+              isPlaying ? Icons.pause : Icons.play_arrow,
+              color: Colors.white,
+              size: 28,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
 Widget _buildTitle(BuildContext context, String title) {
+  final baseStyle =
+      Theme.of(context).textTheme.bodyLarge ?? const TextStyle(fontSize: 14);
+  final style = baseStyle.copyWith(fontWeight: FontWeight.bold);
   return AutoSizeText(
     title,
-    style: Theme.of(
-      context,
-    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+    style: style,
     maxLines: 1,
     overflowReplacement: SizedBox(
       height: 18,
       child: Marquee(
         text: title,
         blankSpace: 60,
-        style: Theme.of(
-          context,
-        ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+        style: style,
       ),
     ),
   );
 }
 
 Widget _buildSubtitle(BuildContext context, String? artist) {
-  final displayArtist = artist?.isNotEmpty ?? false ? artist! : 'unknown';
+  final displayArtist = (artist?.isNotEmpty ?? false) ? artist! : 'unknown';
+  final baseStyle =
+      Theme.of(context).textTheme.bodySmall ?? const TextStyle(fontSize: 12);
+  final style = baseStyle.copyWith(color: Colors.grey[700]);
   return AutoSizeText(
     displayArtist,
-    style: Theme.of(
-      context,
-    ).textTheme.bodySmall?.copyWith(color: Colors.grey[700]),
+    style: style,
     maxLines: 1,
     overflowReplacement: SizedBox(
       height: 20,
       child: Marquee(
         text: displayArtist,
         blankSpace: 60,
-        style: Theme.of(
-          context,
-        ).textTheme.bodySmall?.copyWith(color: Colors.grey[700]),
+        style: style,
       ),
     ),
   );
@@ -127,12 +232,14 @@ class _MiniPlayerControls extends StatelessWidget {
     required this.currentSongId,
     required this.isLiked,
     required this.isPlaying,
+    required this.onMinimize,
   });
 
   final MusicPlayerBloc musicPlayerBloc;
   final int currentSongId;
   final bool isLiked;
   final bool isPlaying;
+  final VoidCallback onMinimize;
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +264,11 @@ class _MiniPlayerControls extends StatelessWidget {
           onPressed: () {
             musicPlayerBloc.add(const TogglePlayPauseEvent());
           },
+        ),
+        IconButton(
+          icon: const Icon(Icons.minimize),
+          tooltip: 'Minimize',
+          onPressed: onMinimize,
         ),
       ],
     );
