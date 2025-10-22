@@ -168,6 +168,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get dismiss => 'رد کردن';
 
   @override
+  String get undo => 'بازیابی';
+
+  @override
+  String get deleted => 'حذف شد';
+
+  @override
   String get playListPage => '';
 
   @override

@@ -410,6 +410,18 @@ abstract class AppLocalizations {
   /// **'DISMISS'**
   String get dismiss;
 
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'UNDO'**
+  String get undo;
+
+  /// No description provided for @deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get deleted;
+
   /// Playlist page localization
   ///
   /// In en, this message translates to:

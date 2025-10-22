@@ -68,6 +68,8 @@
     "ascending": "Ascending",
     "descending": "Descending",
     "dismiss": "DISMISS",
+    "undo": "UNDO",
+    "deleted": "Deleted",
 
     "playListPage":"",
     "@playListPage": {

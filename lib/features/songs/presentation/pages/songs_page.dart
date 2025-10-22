@@ -53,10 +53,27 @@ class _SongsPageState extends State<SongsPage> {
             onPressed: () {
               Navigator.of(context).pop();
               songsBloc.add(DeleteSongEvent(song));
+              _showUndoSnackbar(song);
             },
             child: Text(context.localization.deleteFromDevice),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showUndoSnackbar(Song song) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${song.title} ${context.localization.deleted}'),
+        action: SnackBarAction(
+          label: context.localization.undo,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          onPressed: () {
+            songsBloc.add(const UndoDeleteSongEvent());
+          },
+        ),
+        duration: const Duration(seconds: 20),
       ),
     );
   }

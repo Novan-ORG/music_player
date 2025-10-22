@@ -28,6 +28,7 @@ class MusicPlayerApp extends StatelessWidget {
           create: (_) => SongsBloc(
             getIt(),
             getIt(),
+            getIt(),
           )..add(const LoadSongsEvent()),
         ),
         BlocProvider(

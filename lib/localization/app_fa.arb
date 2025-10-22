@@ -67,6 +67,8 @@
     "dismiss": "رد کردن",
     "seeMore": "مشاهده بیشتر",
     "seeLess": "مشاهده کمتر",
+    "undo": "بازیابی",
+    "deleted": "حذف شد",
 
     "playListPage":"",
     "@playListPage": {

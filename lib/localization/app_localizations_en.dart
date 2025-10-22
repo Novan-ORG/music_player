@@ -168,6 +168,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dismiss => 'DISMISS';
 
   @override
+  String get undo => 'UNDO';
+
+  @override
+  String get deleted => 'Deleted';
+
+  @override
   String get playListPage => '';
 
   @override

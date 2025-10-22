@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_player/core/commands/commands.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/features/music_plyer/data/data.dart';
 import 'package:music_player/features/music_plyer/domain/domain.dart';
@@ -69,8 +70,9 @@ void setup() {
     /// Songs page feature
     ///
     // Usecases
+    ..registerLazySingleton(CommandManager.new)
     ..registerLazySingleton(() => QuerySongs(getIt.get()))
-    ..registerLazySingleton(() => DeleteSong(getIt.get()))
+    ..registerLazySingleton(() => DeleteSongWithUndo(getIt.get(), getIt.get()))
     // Repositories
     ..registerLazySingleton<SongsRepository>(
       () => SongsRepoImpl(songsDatasource: getIt.get()),
