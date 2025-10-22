@@ -13,6 +13,7 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     on<LoadPlayListsEvent>(_loadPlayLists);
     on<AddPlayListEvent>(_addPlayList);
     on<AddSongToPlaylistsEvent>(_addSongToPlaylists);
+    on<RemoveSongFromPlaylistEvent>(_removeSongFromPlaylist);
     on<DeletePlayListEvent>(_deletePlayList);
     on<RenamePlayListEvent>(_renamePlayList);
     on<UndoDeletePlayListEvent>(_undoDeletePlayList);
@@ -125,6 +126,34 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
           playlistBox.put(playlist);
         }
       }
+      final playLists = playlistBox.getAll();
+      emit(state.copyWith(playLists: playLists, status: PlayListStatus.loaded));
+    } on Exception catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.toString(),
+          status: PlayListStatus.error,
+        ),
+      );
+    }
+  }
+
+  Future<void> _removeSongFromPlaylist(
+    RemoveSongFromPlaylistEvent event,
+    Emitter<PlayListState> emit,
+  ) async {
+    try {
+      final playlistBox = objectBox.store.box<PlaylistModel>();
+      final playlist = playlistBox.get(event.playlistId);
+
+      if (playlist != null && playlist.songs.contains(event.songId)) {
+        final updatedSongs = List<int>.from(playlist.songs)
+          ..remove(event.songId);
+
+        final updatedPlaylist = playlist.copyWith(songs: updatedSongs);
+        playlistBox.put(updatedPlaylist);
+      }
+
       final playLists = playlistBox.getAll();
       emit(state.copyWith(playLists: playLists, status: PlayListStatus.loaded));
     } on Exception catch (e) {

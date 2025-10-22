@@ -70,6 +70,8 @@
     "dismiss": "DISMISS",
     "undo": "UNDO",
     "deleted": "Deleted",
+    "addToPlaylist": "Add to Playlist",
+    "removeFromPlaylist": "Remove from Playlist",
 
     "playListPage":"",
     "@playListPage": {

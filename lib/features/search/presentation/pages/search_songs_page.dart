@@ -7,6 +7,7 @@ import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
+import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
@@ -83,6 +84,31 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
                       leading: SongImageWidget(songId: song.id),
                       title: Text(song.title),
                       subtitle: Text(song.artist),
+                      trailing: PopupMenuButton<String>(
+                        onSelected: (value) async {
+                          if (value == 'add_to_playlist') {
+                            await PlaylistsPage.showSheet(
+                              context: context,
+                              songId: song.id,
+                            );
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 'add_to_playlist',
+                            child: Row(
+                              spacing: 8,
+                              children: [
+                                const Icon(
+                                  Icons.playlist_add,
+                                  color: Colors.green,
+                                ),
+                                Text(context.localization.addToPlaylist),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                       onTap: () async {
                         context.read<MusicPlayerBloc>().add(
                           PlayMusicEvent(index, filteredSongs),

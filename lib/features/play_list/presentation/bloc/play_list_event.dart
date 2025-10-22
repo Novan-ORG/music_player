@@ -57,3 +57,13 @@ final class CanUndoChangedEvent extends PlayListEvent {
   @override
   List<Object> get props => [canUndo];
 }
+
+final class RemoveSongFromPlaylistEvent extends PlayListEvent {
+  const RemoveSongFromPlaylistEvent(this.songId, this.playlistId);
+
+  final int songId;
+  final int playlistId;
+
+  @override
+  List<Object> get props => [songId, playlistId];
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/services/database/models/playlist_model.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
@@ -11,6 +12,9 @@ class SongItem extends StatelessWidget {
     this.onToggleLike,
     this.onDeletePressed,
     this.onSetAsRingtonePressed,
+    this.onAddToPlaylistPressed,
+    this.onRemoveFromPlaylistPressed,
+    this.currentPlaylist,
     super.key,
   });
 
@@ -20,6 +24,9 @@ class SongItem extends StatelessWidget {
   final VoidCallback? onToggleLike;
   final VoidCallback? onDeletePressed;
   final VoidCallback? onSetAsRingtonePressed;
+  final VoidCallback? onAddToPlaylistPressed;
+  final VoidCallback? onRemoveFromPlaylistPressed;
+  final PlaylistModel? currentPlaylist;
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +108,9 @@ class SongItem extends StatelessWidget {
   }
 
   Widget _buildPopupMenu(BuildContext context) {
+    final isInCurrentPlaylist =
+        currentPlaylist?.songs.contains(song.id) ?? false;
+
     return PopupMenuButton<String>(
       icon: const Icon(Icons.more_vert),
       tooltip: 'More options',
@@ -109,9 +119,37 @@ class SongItem extends StatelessWidget {
           onDeletePressed?.call();
         } else if (value == 'ringtone') {
           onSetAsRingtonePressed?.call();
+        } else if (value == 'add_to_playlist') {
+          onAddToPlaylistPressed?.call();
+        } else if (value == 'remove_from_playlist') {
+          // Add this condition
+          onRemoveFromPlaylistPressed?.call();
         }
       },
       itemBuilder: (context) => [
+        // Conditionally show either add or remove playlist option
+        if (isInCurrentPlaylist)
+          PopupMenuItem(
+            value: 'remove_from_playlist',
+            child: Row(
+              spacing: 8,
+              children: [
+                const Icon(Icons.playlist_remove, color: Colors.orange),
+                Text(context.localization.removeFromPlaylist),
+              ],
+            ),
+          )
+        else
+          PopupMenuItem(
+            value: 'add_to_playlist',
+            child: Row(
+              spacing: 8,
+              children: [
+                const Icon(Icons.playlist_add, color: Colors.green),
+                Text(context.localization.addToPlaylist),
+              ],
+            ),
+          ),
         PopupMenuItem(
           value: 'delete',
           child: Row(

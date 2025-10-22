@@ -6,6 +6,8 @@ import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
+import 'package:music_player/features/play_list/presentation/bloc/bloc.dart';
+import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
 import 'package:music_player/features/search/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
@@ -24,6 +26,7 @@ class SongsPage extends StatefulWidget {
 class _SongsPageState extends State<SongsPage> {
   SongsBloc get songsBloc => context.read<SongsBloc>();
   MusicPlayerBloc get musicPlayerBloc => context.read<MusicPlayerBloc>();
+  late Set<int>? playlistSongIds = widget.playlist?.songs.toSet();
 
   Future<void> _setAsRingtone(String songPath) async {
     if (await Permission.systemAlertWindow.request().isGranted) {
@@ -81,8 +84,8 @@ class _SongsPageState extends State<SongsPage> {
   List<Song> _filterSongs(SongsState state, Set<int> likedSongIds) {
     final songs = List<Song>.from(state.allSongs);
 
-    if (widget.playlist != null) {
-      songs.retainWhere((song) => widget.playlist!.songs.contains(song.id));
+    if (playlistSongIds != null) {
+      songs.retainWhere((song) => playlistSongIds!.contains(song.id));
     }
     if (widget.isFavorites) {
       songs.retainWhere((song) => likedSongIds.contains(song.id));
@@ -160,11 +163,29 @@ class _SongsPageState extends State<SongsPage> {
         final song = songs[index];
         return SongItem(
           song: song,
+          currentPlaylist: widget.playlist,
           isLiked: likedSongIds.contains(song.id),
           onSetAsRingtonePressed: () => _setAsRingtone(song.uri),
           onDeletePressed: () => _showDeleteDialog(song),
           onToggleLike: () =>
               musicPlayerBloc.add(ToggleLikeMusicEvent(song.id)),
+          onAddToPlaylistPressed: () async {
+            await PlaylistsPage.showSheet(
+              context: context,
+              songId: song.id,
+            );
+          },
+          onRemoveFromPlaylistPressed: () {
+            if (widget.playlist != null) {
+              context.read<PlayListBloc>().add(
+                RemoveSongFromPlaylistEvent(song.id, widget.playlist!.id),
+              );
+              _showRemovedFromPlaylistSnackbar(song);
+              setState(() {
+                playlistSongIds?.remove(song.id);
+              });
+            }
+          },
           onTap: () async {
             musicPlayerBloc.add(PlayMusicEvent(index, songs));
             await Navigator.of(
@@ -180,6 +201,17 @@ class _SongsPageState extends State<SongsPage> {
           },
         );
       },
+    );
+  }
+
+  void _showRemovedFromPlaylistSnackbar(Song song) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '${song.title} removed from ${widget.playlist?.name ?? "playlist"}',
+        ),
+        duration: const Duration(seconds: 3),
+      ),
     );
   }
 

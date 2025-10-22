@@ -174,6 +174,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get deleted => 'حذف شد';
 
   @override
+  String get addToPlaylist => 'اضافه کردن به لیست پخش';
+
+  @override
+  String get removeFromPlaylist => 'حذف از لیست پخش';
+
+  @override
   String get playListPage => '';
 
   @override

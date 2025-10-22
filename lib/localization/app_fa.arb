@@ -69,6 +69,8 @@
     "seeLess": "مشاهده کمتر",
     "undo": "بازیابی",
     "deleted": "حذف شد",
+    "addToPlaylist": "اضافه کردن به لیست پخش",
+    "removeFromPlaylist": "حذف از لیست پخش",
 
     "playListPage":"",
     "@playListPage": {

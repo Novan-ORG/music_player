@@ -174,6 +174,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleted => 'Deleted';
 
   @override
+  String get addToPlaylist => 'Add to Playlist';
+
+  @override
+  String get removeFromPlaylist => 'Remove from Playlist';
+
+  @override
   String get playListPage => '';
 
   @override
