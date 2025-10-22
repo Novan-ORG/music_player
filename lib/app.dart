@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:music_player/core/commands/commands.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/core/theme/app_themes.dart';
 import 'package:music_player/features/home/presentation/pages/pages.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
+import 'package:music_player/features/play_list/domain/usecases/usecases.dart';
 import 'package:music_player/features/play_list/presentation/bloc/bloc.dart';
 import 'package:music_player/features/settings/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
@@ -49,7 +51,13 @@ class MusicPlayerApp extends StatelessWidget {
             getIt(),
           ),
         ),
-        BlocProvider(create: (_) => PlayListBloc(getIt.get<ObjectBox>())),
+        BlocProvider(
+          create: (_) => PlayListBloc(
+            getIt.get<ObjectBox>(),
+            getIt.get<DeletePlaylistWithUndo>(),
+            getIt.get<CommandManager>(),
+          ),
+        ),
         BlocProvider(
           create: (_) => SettingsBloc(
             getIt.get<SharedPreferences>(),

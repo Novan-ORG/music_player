@@ -85,6 +85,9 @@
     "selectPlaylist": "انتخاب لیست پخش",
     "createPlaylist": "ایجاد لیست پخش",
     "playlistName": "نام لیست پخش",
+    "rename": "تغییر نام",
+    "delete": "حذف",
+    "renamePlaylist": "تغییر نام لیست پخش",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {

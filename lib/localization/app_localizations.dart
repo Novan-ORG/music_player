@@ -494,6 +494,24 @@ abstract class AppLocalizations {
   /// **'Playlist Name'**
   String get playlistName;
 
+  /// No description provided for @rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get rename;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @renamePlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename Playlist'**
+  String get renamePlaylist;
+
   /// Music Player page localization
   ///
   /// In en, this message translates to:

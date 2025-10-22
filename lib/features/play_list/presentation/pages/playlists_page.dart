@@ -42,6 +42,22 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
 
   Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
 
+  void _showUndoSnackbar(PlaylistModel playlist) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${playlist.name} ${context.localization.deleted}'),
+        action: SnackBarAction(
+          label: context.localization.undo,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          onPressed: () {
+            context.read<PlayListBloc>().add(UndoDeletePlayListEvent());
+          },
+        ),
+        duration: const Duration(seconds: 20),
+      ),
+    );
+  }
+
   Widget _buildEmptyState() {
     return Center(
       child: Column(
@@ -111,7 +127,29 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
             style: const TextStyle(fontWeight: FontWeight.w500),
           ),
           subtitle: Text(subtitle),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) {
+              if (value == 'delete') {
+                context.read<PlayListBloc>().add(
+                  DeletePlayListEvent(playlist.id),
+                );
+                _showUndoSnackbar(playlist);
+              } else if (value == 'rename') {
+                CreatePlaylistSheet.showEdit(context, playlist);
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'rename',
+                child: Text(context.localization.rename),
+              ),
+              PopupMenuItem(
+                value: 'delete',
+                child: Text(context.localization.delete),
+              ),
+            ],
+          ),
           onTap: () async {
             await Navigator.of(context).push(
               MaterialPageRoute<void>(

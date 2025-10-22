@@ -210,6 +210,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get playlistName => 'Playlist Name';
 
   @override
+  String get rename => 'Rename';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get renamePlaylist => 'Rename Playlist';
+
+  @override
   String get musicPlayerPage => '';
 
   @override

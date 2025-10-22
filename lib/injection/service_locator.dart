@@ -5,6 +5,7 @@ import 'package:music_player/core/commands/commands.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/features/music_plyer/data/data.dart';
 import 'package:music_player/features/music_plyer/domain/domain.dart';
+import 'package:music_player/features/play_list/domain/usecases/usecases.dart';
 import 'package:music_player/features/songs/data/data.dart';
 import 'package:music_player/features/songs/domain/domain.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
@@ -80,6 +81,13 @@ void setup() {
     // Datasources
     ..registerLazySingleton<SongsDatasource>(
       () => SongsDatasourceImpl(onAudioQuery: getIt.get()),
+    )
+    ///
+    /// Playlist feature
+    ///
+    // Usecases
+    ..registerLazySingleton(
+      () => DeletePlaylistWithUndo(getIt.get(), getIt.get()),
     );
 
   ///

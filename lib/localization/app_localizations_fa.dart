@@ -210,6 +210,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get playlistName => 'نام لیست پخش';
 
   @override
+  String get rename => 'تغییر نام';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get renamePlaylist => 'تغییر نام لیست پخش';
+
+  @override
   String get musicPlayerPage => '';
 
   @override

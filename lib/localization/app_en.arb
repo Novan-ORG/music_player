@@ -86,6 +86,9 @@
     "selectPlaylist": "Select Playlist",
     "createPlaylist": "Create Playlist",
     "playlistName": "Playlist Name",
+    "rename": "Rename",
+    "delete": "Delete",
+    "renamePlaylist": "Rename Playlist",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {

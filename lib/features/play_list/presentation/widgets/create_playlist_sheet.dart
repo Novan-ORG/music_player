@@ -5,8 +5,10 @@ import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/play_list/presentation/bloc/bloc.dart';
 
 class CreatePlaylistSheet extends StatefulWidget {
-  const CreatePlaylistSheet._();
+  const CreatePlaylistSheet._({this.initialPlaylist});
+  final PlaylistModel? initialPlaylist;
 
+  /// Show sheet for creating a new playlist
   static Future<void> show(BuildContext context) {
     return showModalBottomSheet(
       context: context,
@@ -16,13 +18,34 @@ class CreatePlaylistSheet extends StatefulWidget {
     );
   }
 
+  /// Show sheet for editing an existing playlist
+  static Future<void> showEdit(BuildContext context, PlaylistModel playlist) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => CreatePlaylistSheet._(initialPlaylist: playlist),
+    );
+  }
+
   @override
   State<CreatePlaylistSheet> createState() => _CreatePlaylistSheetState();
 }
 
 class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
-  final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller;
   bool _isValid = false;
+
+  bool get _isEditing => widget.initialPlaylist != null;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(
+      text: widget.initialPlaylist?.name ?? '',
+    );
+    _isValid = _controller.text.trim().isNotEmpty;
+  }
 
   @override
   void dispose() {
@@ -36,21 +59,38 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
     });
   }
 
-  void _createPlaylist() {
+  void _createOrUpdatePlaylist() {
     final name = _controller.text.trim();
     if (name.isEmpty) return;
     final bloc = context.read<PlayListBloc>();
-    bloc.add(
-      AddPlayListEvent(
-        PlaylistModel(id: bloc.state.playLists.length + 1, name: name),
-      ),
-    );
+    if (_isEditing) {
+      // Update existing playlist (keep the same id)
+      final id = widget.initialPlaylist!.id;
+      bloc.add(
+        RenamePlayListEvent(id, name),
+      );
+    } else {
+      // Add new playlist, id generated similarly to previous behavior
+      final id = bloc.state.playLists.length + 1;
+      bloc.add(
+        AddPlayListEvent(
+          PlaylistModel(id: id, name: name),
+        ),
+      );
+    }
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final title = _isEditing
+        ? context.localization.renamePlaylist
+        : context.localization.createNewPlaylist;
+    final actionLabel = _isEditing
+        ? context.localization.rename
+        : context.localization.createPlaylist;
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Padding(
@@ -95,7 +135,7 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                   ),
                 ),
                 Text(
-                  context.localization.createNewPlaylist,
+                  title,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
@@ -121,9 +161,9 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                   opacity: _isValid ? 1 : 0.5,
                   duration: const Duration(milliseconds: 200),
                   child: ElevatedButton.icon(
-                    onPressed: _isValid ? _createPlaylist : null,
+                    onPressed: _isValid ? _createOrUpdatePlaylist : null,
                     icon: const Icon(Icons.check_circle_outline),
-                    label: Text(context.localization.createPlaylist),
+                    label: Text(actionLabel),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(48),
                       shape: RoundedRectangleBorder(

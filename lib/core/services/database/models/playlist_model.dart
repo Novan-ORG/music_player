@@ -18,6 +18,22 @@ class PlaylistModel extends Equatable {
     this.description,
   });
 
+  PlaylistModel copyWith({
+    int? id,
+    String? name,
+    List<int>? songs,
+    String? description,
+    String? imagePath,
+  }) {
+    return PlaylistModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      songs: songs ?? this.songs,
+      description: description ?? this.description,
+      imagePath: imagePath ?? this.imagePath,
+    );
+  }
+
   @override
   List<Object?> get props => [id, name, songs, description, imagePath];
 }
