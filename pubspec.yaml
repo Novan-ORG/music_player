@@ -31,7 +31,7 @@ dependencies:
   marquee: ^2.3.0
   objectbox: ^5.0.0
   objectbox_flutter_libs: ^5.0.0
-  on_audio_query_pluse: ^2.9.4
+  on_audio_query_pluse: ^2.9.5
   package_info_plus: ^9.0.0
   path: ^1.9.1
   path_provider: ^2.1.5
