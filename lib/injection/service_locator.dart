@@ -20,7 +20,13 @@ void setup() {
   ///
   getIt
     ..registerSingletonAsync(ObjectBox.create)
-    ..registerLazySingleton(OnAudioQuery.new)
+    ..registerLazySingleton(
+      () {
+        return OnAudioQuery()..setLogConfig(
+          LogConfig(logType: LogType.ERROR, showDetailedLog: true),
+        );
+      },
+    )
     ..registerLazySingleton<AudioPlayer>(AudioPlayer.new)
     ..registerSingletonAsync<MAudioHandler>(
       () => AudioService.init(

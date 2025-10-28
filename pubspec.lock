@@ -689,18 +689,18 @@ packages:
     dependency: transitive
     description:
       name: on_audio_query_plus_android
-      sha256: "48429670efc815276e4a769842dae9110f22e188d5ea8c52a9b40ddfc8f97cad"
+      sha256: dcd0cd9f5f5de9084f2d0c9a2f6ecd6ce26a3197c8a7e50a9039e2a18a15384e
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   on_audio_query_pluse:
     dependency: "direct main"
     description:
       name: on_audio_query_pluse
-      sha256: fa25f29fafc7c71178d2d5a9272cda1f087d4e1e46656a067f8230b36f45ac21
+      sha256: ab7a221e8a21d0fb1cef7d3d16efe3706da7b2504e2e53d0e3d4a91056d27ec8
       url: "https://pub.dev"
     source: hosted
-    version: "2.9.5"
+    version: "2.9.6"
   on_audio_query_web:
     dependency: transitive
     description:

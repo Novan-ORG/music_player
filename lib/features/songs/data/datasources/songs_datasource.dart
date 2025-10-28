@@ -40,12 +40,9 @@ class SongsDatasourceImpl implements SongsDatasource {
 
   @override
   Future<List<SongModel>> querySongs() async {
-    final permissionsGranted = await _onAudioQuery.permissionsStatus();
+    final permissionsGranted = await _onAudioQuery.checkAndRequest();
     if (!permissionsGranted) {
-      final permissions = await _onAudioQuery.permissionsRequest();
-      if (!permissions) {
-        throw Exception('Permission not granted!');
-      }
+      throw Exception('Permission not granted!');
     }
     final result = await _onAudioQuery.querySongs();
     return result.map(SongModelMapper.fromAudioQueryModel).toList();
