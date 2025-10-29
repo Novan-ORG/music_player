@@ -12,6 +12,7 @@ import 'package:music_player/features/search/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SongsPage extends StatefulWidget {
   const SongsPage({super.key, this.playlist, this.isFavorites = false});
@@ -27,6 +28,16 @@ class _SongsPageState extends State<SongsPage> {
   SongsBloc get songsBloc => context.read<SongsBloc>();
   MusicPlayerBloc get musicPlayerBloc => context.read<MusicPlayerBloc>();
   late Set<int>? playlistSongIds = widget.playlist?.songs.toSet();
+
+  Future<void> _shareSong(Song song) async {
+    await SharePlus.instance.share(
+      ShareParams(
+        text: song.title,
+        subject: song.artist,
+        files: [XFile(song.uri)],
+      ),
+    );
+  }
 
   Future<void> _setAsRingtone(String songPath) async {
     if (await Permission.systemAlertWindow.request().isGranted) {
@@ -175,6 +186,7 @@ class _SongsPageState extends State<SongsPage> {
               songId: song.id,
             );
           },
+          onSharePressed: () => _shareSong(song),
           onRemoveFromPlaylistPressed: () {
             if (widget.playlist != null) {
               context.read<PlayListBloc>().add(

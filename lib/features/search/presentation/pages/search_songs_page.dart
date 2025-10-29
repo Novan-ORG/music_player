@@ -10,6 +10,7 @@ import 'package:music_player/features/music_plyer/presentation/pages/pages.dart'
 import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SearchSongsPage extends StatefulWidget {
   const SearchSongsPage({super.key});
@@ -91,6 +92,14 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
                               context: context,
                               songId: song.id,
                             );
+                          } else if (value == 'share') {
+                            await SharePlus.instance.share(
+                              ShareParams(
+                                text: song.title,
+                                subject: song.artist,
+                                files: [XFile(song.uri)],
+                              ),
+                            );
                           }
                         },
                         itemBuilder: (context) => [
@@ -104,6 +113,19 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
                                   color: Colors.green,
                                 ),
                                 Text(context.localization.addToPlaylist),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: 'share',
+                            child: Row(
+                              spacing: 8,
+                              children: [
+                                const Icon(
+                                  Icons.share,
+                                  color: Colors.blue,
+                                ),
+                                Text(context.localization.share),
                               ],
                             ),
                           ),

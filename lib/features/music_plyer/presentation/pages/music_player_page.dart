@@ -90,12 +90,13 @@ class MusicPlayerPage extends StatelessWidget {
                       );
                     },
                     onSharePressed: () async {
+                      final songUri = state.currentSong?.uri;
                       await SharePlus.instance.share(
                         ShareParams(
                           text: state.currentSong?.title ?? 'Unknown Song',
                           subject:
                               state.currentSong?.artist ?? 'Unknown Artist',
-                          files: [XFile(state.currentSong?.uri ?? '')],
+                          files: songUri != null ? [XFile(songUri)] : null,
                         ),
                       );
                     },

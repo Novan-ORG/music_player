@@ -434,6 +434,12 @@ abstract class AppLocalizations {
   /// **'Remove from Playlist'**
   String get removeFromPlaylist;
 
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
   /// Playlist page localization
   ///
   /// In en, this message translates to:

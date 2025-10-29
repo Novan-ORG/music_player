@@ -180,6 +180,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get removeFromPlaylist => 'حذف از لیست پخش';
 
   @override
+  String get share => 'اشتراک گذاری';
+
+  @override
   String get playListPage => '';
 
   @override

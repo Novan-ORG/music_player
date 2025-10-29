@@ -72,6 +72,7 @@
     "deleted": "Deleted",
     "addToPlaylist": "Add to Playlist",
     "removeFromPlaylist": "Remove from Playlist",
+    "share": "Share",
 
     "playListPage":"",
     "@playListPage": {

@@ -71,6 +71,7 @@
     "deleted": "حذف شد",
     "addToPlaylist": "اضافه کردن به لیست پخش",
     "removeFromPlaylist": "حذف از لیست پخش",
+    "share": "اشتراک گذاری",
 
     "playListPage":"",
     "@playListPage": {

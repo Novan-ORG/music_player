@@ -14,6 +14,7 @@ class SongItem extends StatelessWidget {
     this.onSetAsRingtonePressed,
     this.onAddToPlaylistPressed,
     this.onRemoveFromPlaylistPressed,
+    this.onSharePressed,
     this.currentPlaylist,
     super.key,
   });
@@ -26,6 +27,7 @@ class SongItem extends StatelessWidget {
   final VoidCallback? onSetAsRingtonePressed;
   final VoidCallback? onAddToPlaylistPressed;
   final VoidCallback? onRemoveFromPlaylistPressed;
+  final VoidCallback? onSharePressed;
   final PlaylistModel? currentPlaylist;
 
   @override
@@ -122,8 +124,9 @@ class SongItem extends StatelessWidget {
         } else if (value == 'add_to_playlist') {
           onAddToPlaylistPressed?.call();
         } else if (value == 'remove_from_playlist') {
-          // Add this condition
           onRemoveFromPlaylistPressed?.call();
+        } else if (value == 'share') {
+          onSharePressed?.call();
         }
       },
       itemBuilder: (context) => [
@@ -150,6 +153,16 @@ class SongItem extends StatelessWidget {
               ],
             ),
           ),
+        PopupMenuItem(
+          value: 'share',
+          child: Row(
+            spacing: 8,
+            children: [
+              const Icon(Icons.share, color: Colors.blue),
+              Text(context.localization.share),
+            ],
+          ),
+        ),
         PopupMenuItem(
           value: 'delete',
           child: Row(

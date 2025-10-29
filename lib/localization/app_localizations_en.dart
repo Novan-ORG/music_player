@@ -180,6 +180,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get removeFromPlaylist => 'Remove from Playlist';
 
   @override
+  String get share => 'Share';
+
+  @override
   String get playListPage => '';
 
   @override
