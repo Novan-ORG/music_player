@@ -8,12 +8,19 @@ import 'package:music_player/features/play_list/presentation/widgets/widgets.dar
 import 'package:music_player/features/songs/presentation/pages/pages.dart';
 
 class PlaylistsPage extends StatefulWidget {
-  const PlaylistsPage({super.key, this.isSelectionMode = false, this.songId});
+  const PlaylistsPage({
+    super.key,
+    this.isSelectionMode = false,
+    this.songIds,
+  });
 
   final bool isSelectionMode;
-  final int? songId;
+  final Set<int>? songIds;
 
-  static Future<void> showSheet({required BuildContext context, int? songId}) {
+  static Future<void> showSheet({
+    required BuildContext context,
+    Set<int>? songIds,
+  }) {
     return showModalBottomSheet(
       context: context,
       useSafeArea: true,
@@ -22,7 +29,7 @@ class PlaylistsPage extends StatefulWidget {
       ),
       builder: (_) => Padding(
         padding: const EdgeInsets.all(16),
-        child: PlaylistsPage(isSelectionMode: true, songId: songId),
+        child: PlaylistsPage(isSelectionMode: true, songIds: songIds),
       ),
     );
   }
@@ -208,7 +215,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   }
 
   Widget? _buildBottomBar() {
-    if (widget.isSelectionMode && widget.songId != null) {
+    if (widget.isSelectionMode && widget.songIds != null) {
       return Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -228,8 +235,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
               ? null
               : () {
                   context.read<PlayListBloc>().add(
-                    AddSongToPlaylistsEvent(
-                      widget.songId!,
+                    AddSongsToPlaylistsEvent(
+                      widget.songIds!,
                       selectedPlaylistIds.toList(),
                     ),
                   );

@@ -8,48 +8,69 @@ class SongItem extends StatelessWidget {
   const SongItem({
     required this.song,
     this.onTap,
+    this.onLongPress,
     this.isLiked = false,
+    this.isSelected = false,
+    this.isSelectionMode = false,
     this.onToggleLike,
     this.onDeletePressed,
     this.onSetAsRingtonePressed,
     this.onAddToPlaylistPressed,
     this.onRemoveFromPlaylistPressed,
     this.onSharePressed,
+    this.onSelectionChanged,
     this.currentPlaylist,
     super.key,
   });
 
   final Song song;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final bool isLiked;
+  final bool isSelected;
+  final bool isSelectionMode;
   final VoidCallback? onToggleLike;
   final VoidCallback? onDeletePressed;
   final VoidCallback? onSetAsRingtonePressed;
   final VoidCallback? onAddToPlaylistPressed;
   final VoidCallback? onRemoveFromPlaylistPressed;
   final VoidCallback? onSharePressed;
+  final ValueChanged<bool?>? onSelectionChanged;
   final PlaylistModel? currentPlaylist;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: isSelected ? 6 : 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: isSelected
+            ? BorderSide(color: Theme.of(context).colorScheme.primary, width: 2)
+            : BorderSide.none,
+      ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
+        onTap: isSelectionMode
+            ? () => onSelectionChanged?.call(!isSelected)
+            : onTap,
+        onLongPress: onLongPress,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
           child: Row(
             children: [
-              Hero(
-                tag: 'song_image_${song.id}',
-                child: ClipRRect(
+              if (isSelectionMode)
+                Checkbox(
+                  value: isSelected,
+                  onChanged: onSelectionChanged,
+                  activeColor: Theme.of(context).colorScheme.primary,
+                  checkColor: Theme.of(context).colorScheme.onPrimary,
+                )
+              else
+                ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: SongImageWidget(songId: song.id, size: 54),
                 ),
-              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -61,6 +82,9 @@ class SongItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
+                        color: isSelected
+                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            : null,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -74,7 +98,14 @@ class SongItem extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(color: Colors.grey[700]),
+                              ?.copyWith(
+                                color: isSelected
+                                    ? Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryContainer
+                                          .withAlpha(70)
+                                    : Colors.grey[700],
+                              ),
                         ),
                       ],
                     ),
@@ -82,7 +113,7 @@ class SongItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              _buildTrailing(context),
+              if (!isSelectionMode) _buildTrailing(context),
             ],
           ),
         ),

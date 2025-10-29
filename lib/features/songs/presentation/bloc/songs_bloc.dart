@@ -20,6 +20,12 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     on<DeleteSongEvent>(onDeleteSong);
     on<UndoDeleteSongEvent>(onUndoDeleteSong);
     on<CanUndoChangedEvent>(onCanUndoChanged);
+    on<ToggleSelectionModeEvent>(_onToggleSelectionMode);
+    on<SelectSongEvent>(_onSelectSong);
+    on<DeselectSongEvent>(_onDeselectSong);
+    on<SelectAllSongsEvent>(_onSelectAllSongs);
+    on<ClearSelectionEvent>(_onClearSelection);
+    on<DeleteSelectedSongsEvent>(_onDeleteSelectedSongs);
     commandManager.canUndoNotifier.addListener(_onCanUndoChanged);
   }
 
@@ -31,23 +37,98 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     add(CanUndoChangedEvent(canUndo: commandManager.canUndo));
   }
 
+  void _onToggleSelectionMode(
+    ToggleSelectionModeEvent event,
+    Emitter<SongsState> emit,
+  ) {
+    if (state.isSelectionMode) {
+      emit(
+        state.copyWith(
+          isSelectionMode: false,
+          selectedSongIds: <int>{},
+        ),
+      );
+    } else {
+      emit(state.copyWith(isSelectionMode: true));
+    }
+  }
+
+  void _onSelectSong(SelectSongEvent event, Emitter<SongsState> emit) {
+    final newSelectedIds = Set<int>.from(state.selectedSongIds)
+      ..add(event.songId);
+    emit(state.copyWith(selectedSongIds: newSelectedIds));
+  }
+
+  void _onDeselectSong(DeselectSongEvent event, Emitter<SongsState> emit) {
+    final newSelectedIds = Set<int>.from(state.selectedSongIds)
+      ..remove(event.songId);
+    emit(state.copyWith(selectedSongIds: newSelectedIds));
+  }
+
+  void _onSelectAllSongs(SelectAllSongsEvent event, Emitter<SongsState> emit) {
+    final allSongIds = event.songs.map((song) => song.id).toSet();
+    emit(state.copyWith(selectedSongIds: allSongIds));
+  }
+
+  void _onClearSelection(ClearSelectionEvent event, Emitter<SongsState> emit) {
+    emit(
+      state.copyWith(
+        isSelectionMode: false,
+        selectedSongIds: <int>{},
+      ),
+    );
+  }
+
+  Future<void> _onDeleteSelectedSongs(
+    DeleteSelectedSongsEvent event,
+    Emitter<SongsState> emit,
+  ) async {
+    final selectedSongs = state.allSongs
+        .where((song) => state.selectedSongIds.contains(song.id))
+        .toList();
+
+    for (final song in selectedSongs) {
+      final result = await deleteSong(song: song);
+      if (result.isFailure) {
+        emit(state.copyWith(errorMessage: result.error));
+        return;
+      }
+    }
+
+    // Reload songs and clear selection
+    final queryResult = await querySongs();
+    if (queryResult.isSuccess) {
+      emit(
+        state.copyWith(
+          allSongs: queryResult.value,
+          isSelectionMode: false,
+          selectedSongIds: <int>{},
+          canUndo: commandManager.canUndo,
+        ),
+      );
+    }
+  }
+
   Future<void> onDeleteSong(
     DeleteSongEvent event,
     Emitter<SongsState> emit,
   ) async {
-    final songDeleteResult = await deleteSong(song: event.song);
-    if (songDeleteResult.isSuccess && (songDeleteResult.value ?? false)) {
-      final updatedSongList = List<Song>.from(state.allSongs)
-        ..removeWhere((e) => e.id == event.song.id);
+    final result = await deleteSong(song: event.song);
+    if (result.isFailure) {
+      emit(state.copyWith(errorMessage: result.error));
+      return;
+    }
+    // Reload songs to reflect the changes
+    final queryResult = await querySongs();
+    if (queryResult.isSuccess) {
       emit(
         state.copyWith(
-          allSongs: updatedSongList,
+          allSongs: queryResult.value,
           canUndo: commandManager.canUndo,
-          lastDeletedSong: event.song,
         ),
       );
     } else {
-      emit(state.copyWith(errorMessage: songDeleteResult.error));
+      emit(state.copyWith(errorMessage: queryResult.error));
     }
   }
 
@@ -55,7 +136,7 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     UndoDeleteSongEvent event,
     Emitter<SongsState> emit,
   ) async {
-    final undoResult = await deleteSong.undo();
+    final undoResult = await commandManager.undo();
     if (undoResult.isSuccess) {
       // Reload songs to reflect the restored file
       final queryResult = await querySongs();

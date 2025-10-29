@@ -12,8 +12,8 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     : super(const PlayListState()) {
     on<LoadPlayListsEvent>(_loadPlayLists);
     on<AddPlayListEvent>(_addPlayList);
-    on<AddSongToPlaylistsEvent>(_addSongToPlaylists);
-    on<RemoveSongFromPlaylistEvent>(_removeSongFromPlaylist);
+    on<AddSongsToPlaylistsEvent>(_addSongToPlaylists);
+    on<RemoveSongsFromPlaylistEvent>(_removeSongFromPlaylist);
     on<DeletePlayListEvent>(_deletePlayList);
     on<RenamePlayListEvent>(_renamePlayList);
     on<UndoDeletePlayListEvent>(_undoDeletePlayList);
@@ -113,7 +113,7 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
   }
 
   Future<void> _addSongToPlaylists(
-    AddSongToPlaylistsEvent event,
+    AddSongsToPlaylistsEvent event,
     Emitter<PlayListState> emit,
   ) async {
     try {
@@ -121,8 +121,9 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
 
       for (final playlistId in event.playlistIds) {
         final playlist = playlistBox.get(playlistId);
-        if (playlist != null && !playlist.songs.contains(event.songId)) {
-          playlist.songs.add(event.songId);
+        if (playlist != null) {
+          final songIdsToAdd = event.songIds.difference(playlist.songs.toSet());
+          playlist.songs.addAll(songIdsToAdd);
           playlistBox.put(playlist);
         }
       }
@@ -139,16 +140,16 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
   }
 
   Future<void> _removeSongFromPlaylist(
-    RemoveSongFromPlaylistEvent event,
+    RemoveSongsFromPlaylistEvent event,
     Emitter<PlayListState> emit,
   ) async {
     try {
       final playlistBox = objectBox.store.box<PlaylistModel>();
       final playlist = playlistBox.get(event.playlistId);
 
-      if (playlist != null && playlist.songs.contains(event.songId)) {
+      if (playlist != null) {
         final updatedSongs = List<int>.from(playlist.songs)
-          ..remove(event.songId);
+          ..removeWhere((songId) => event.songIds.contains(songId));
 
         final updatedPlaylist = playlist.copyWith(songs: updatedSongs);
         playlistBox.put(updatedPlaylist);

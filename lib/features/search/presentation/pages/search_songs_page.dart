@@ -90,7 +90,7 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
                           if (value == 'add_to_playlist') {
                             await PlaylistsPage.showSheet(
                               context: context,
-                              songId: song.id,
+                              songIds: {song.id},
                             );
                           } else if (value == 'share') {
                             await SharePlus.instance.share(

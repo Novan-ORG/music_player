@@ -72,6 +72,29 @@
     "addToPlaylist": "اضافه کردن به لیست پخش",
     "removeFromPlaylist": "حذف از لیست پخش",
     "share": "اشتراک گذاری",
+    "selected": "انتخاب شده",
+    "deleteSongsAlertTitle": "حذف {count} موزیک؟",
+    "@deleteSongsAlertTitle": {
+        "description": "عنوان دیالوگ هشدار حذف موزیک ها",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "deleteSongsAlertContent": "آیا برای حذف موزیک های انتخاب شده از دستگاه مطمئن هستید؟",
+    "shareSongsSubject": "اشتراک گذاری {count} موزیک:\n{songsTitleList}",
+    "@shareSongsSubject": {
+        "description": "موضوع برای اشتراک گذاری موزیک ها",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "songsTitleList": {
+                "type": "String"
+            }
+        }
+    },
 
     "playListPage":"",
     "@playListPage": {

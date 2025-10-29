@@ -183,6 +183,23 @@ class AppLocalizationsFa extends AppLocalizations {
   String get share => 'اشتراک گذاری';
 
   @override
+  String get selected => 'انتخاب شده';
+
+  @override
+  String deleteSongsAlertTitle(int count) {
+    return 'حذف $count موزیک؟';
+  }
+
+  @override
+  String get deleteSongsAlertContent =>
+      'آیا برای حذف موزیک های انتخاب شده از دستگاه مطمئن هستید؟';
+
+  @override
+  String shareSongsSubject(int count, String songsTitleList) {
+    return 'اشتراک گذاری $count موزیک:\n$songsTitleList';
+  }
+
+  @override
   String get playListPage => '';
 
   @override

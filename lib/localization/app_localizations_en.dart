@@ -183,6 +183,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get share => 'Share';
 
   @override
+  String get selected => 'selected';
+
+  @override
+  String deleteSongsAlertTitle(int count) {
+    return 'Delete $count songs?';
+  }
+
+  @override
+  String get deleteSongsAlertContent =>
+      'Are you sure you want to delete the selected songs from device?';
+
+  @override
+  String shareSongsSubject(int count, String songsTitleList) {
+    return 'Sharing $count songs:\n$songsTitleList';
+  }
+
+  @override
   String get playListPage => '';
 
   @override
@@ -249,7 +266,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appPurpose =>
-      'This app is completely free. If you enjoy using it, please consider supporting me by rating it 5 stars and leaving a kind comment on the app store!';
+      'This app is completely free. If you enjoy using it, please consider supporting us by rating it 5 stars and leaving a kind comment on the app store!';
 
   @override
   String get connectWithMe => 'Connect with me';

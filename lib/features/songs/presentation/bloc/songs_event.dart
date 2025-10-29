@@ -30,3 +30,33 @@ final class CanUndoChangedEvent extends SongsEvent {
 
   final bool canUndo;
 }
+
+final class ToggleSelectionModeEvent extends SongsEvent {
+  const ToggleSelectionModeEvent();
+}
+
+final class SelectSongEvent extends SongsEvent {
+  const SelectSongEvent(this.songId);
+
+  final int songId;
+}
+
+final class DeselectSongEvent extends SongsEvent {
+  const DeselectSongEvent(this.songId);
+
+  final int songId;
+}
+
+final class SelectAllSongsEvent extends SongsEvent {
+  const SelectAllSongsEvent(this.songs);
+
+  final List<Song> songs;
+}
+
+final class ClearSelectionEvent extends SongsEvent {
+  const ClearSelectionEvent();
+}
+
+final class DeleteSelectedSongsEvent extends SongsEvent {
+  const DeleteSelectedSongsEvent();
+}

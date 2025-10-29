@@ -18,14 +18,14 @@ final class AddPlayListEvent extends PlayListEvent {
   List<Object> get props => [playlistModel];
 }
 
-final class AddSongToPlaylistsEvent extends PlayListEvent {
-  const AddSongToPlaylistsEvent(this.songId, this.playlistIds);
+final class AddSongsToPlaylistsEvent extends PlayListEvent {
+  const AddSongsToPlaylistsEvent(this.songIds, this.playlistIds);
 
-  final int songId;
+  final Set<int> songIds;
   final List<int> playlistIds;
 
   @override
-  List<Object> get props => [songId, playlistIds];
+  List<Object> get props => [songIds, playlistIds];
 }
 
 final class DeletePlayListEvent extends PlayListEvent {
@@ -58,12 +58,12 @@ final class CanUndoChangedEvent extends PlayListEvent {
   List<Object> get props => [canUndo];
 }
 
-final class RemoveSongFromPlaylistEvent extends PlayListEvent {
-  const RemoveSongFromPlaylistEvent(this.songId, this.playlistId);
+final class RemoveSongsFromPlaylistEvent extends PlayListEvent {
+  const RemoveSongsFromPlaylistEvent(this.songIds, this.playlistId);
 
-  final int songId;
+  final Set<int> songIds;
   final int playlistId;
 
   @override
-  List<Object> get props => [songId, playlistId];
+  List<Object> get props => [songIds, playlistId];
 }

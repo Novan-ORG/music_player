@@ -86,7 +86,9 @@ class MusicPlayerPage extends StatelessWidget {
                     onAddToPlaylistPressed: () async {
                       await PlaylistsPage.showSheet(
                         context: context,
-                        songId: state.currentSong?.id,
+                        songIds: state.currentSong?.id != null
+                            ? {state.currentSong!.id}
+                            : null,
                       );
                     },
                     onSharePressed: () async {

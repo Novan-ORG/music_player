@@ -440,6 +440,30 @@ abstract class AppLocalizations {
   /// **'Share'**
   String get share;
 
+  /// No description provided for @selected.
+  ///
+  /// In en, this message translates to:
+  /// **'selected'**
+  String get selected;
+
+  /// Title for delete songs alert dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {count} songs?'**
+  String deleteSongsAlertTitle(int count);
+
+  /// No description provided for @deleteSongsAlertContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the selected songs from device?'**
+  String get deleteSongsAlertContent;
+
+  /// Subject for sharing songs
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing {count} songs:\n{songsTitleList}'**
+  String shareSongsSubject(int count, String songsTitleList);
+
   /// Playlist page localization
   ///
   /// In en, this message translates to:
@@ -569,7 +593,7 @@ abstract class AppLocalizations {
   /// No description provided for @appPurpose.
   ///
   /// In en, this message translates to:
-  /// **'This app is completely free. If you enjoy using it, please consider supporting me by rating it 5 stars and leaving a kind comment on the app store!'**
+  /// **'This app is completely free. If you enjoy using it, please consider supporting us by rating it 5 stars and leaving a kind comment on the app store!'**
   String get appPurpose;
 
   /// No description provided for @connectWithMe.
