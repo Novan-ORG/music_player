@@ -28,10 +28,12 @@ class _SearchSongsPageState extends State<SearchSongsPage>
         SongDeletionMixin {
   MusicPlayerBloc get _musicPlayerBloc => context.read<MusicPlayerBloc>();
   final searchStream = StreamController<String>();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void dispose() {
     unawaited(searchStream.close());
+    _controller.dispose();
     super.dispose();
   }
 
@@ -65,14 +67,30 @@ class _SearchSongsPageState extends State<SearchSongsPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-          decoration: InputDecoration(
-            hintText: context.localization.searchSongs,
-            border: InputBorder.none,
-          ),
-          style: Theme.of(context).textTheme.titleMedium,
-          autofocus: true,
-          onChanged: searchStream.add,
+        title: StreamBuilder<String>(
+          stream: searchStream.stream,
+          initialData: '',
+          builder: (context, asyncSnapshot) {
+            return TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                hintText: context.localization.searchSongs,
+                border: InputBorder.none,
+                suffixIcon: asyncSnapshot.data!.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          searchStream.add('');
+                          _controller.clear();
+                        },
+                      )
+                    : null,
+              ),
+              style: Theme.of(context).textTheme.titleMedium,
+              autofocus: true,
+              onChanged: searchStream.add,
+            );
+          },
         ),
       ),
       body: BlocBuilder<SongsBloc, SongsState>(
