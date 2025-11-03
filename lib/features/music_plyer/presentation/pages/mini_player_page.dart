@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marquee/marquee.dart';
+import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/widgets.dart';
@@ -73,12 +74,9 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
     final musicPlayerBloc = context.read<MusicPlayerBloc>();
     return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
       buildWhen: (previous, current) =>
-          previous.likedSongIds != current.likedSongIds ||
           previous.currentSong?.id != current.currentSong?.id ||
           previous.status != current.status,
       builder: (context, state) {
-        final currentId = state.currentSong?.id ?? -1;
-        final isLiked = state.likedSongIds.contains(currentId);
         final isPlaying = state.status == MusicPlayerStatus.playing;
 
         return AnimatedBuilder(
@@ -134,13 +132,29 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                         context,
                         state.currentSong?.artist,
                       ),
-                      trailing: _MiniPlayerControls(
-                        musicPlayerBloc: musicPlayerBloc,
-                        currentSongId: state.currentSong?.id ?? 0,
-                        isLiked: isLiked,
-                        isPlaying: isPlaying,
-                        onMinimize: _toggleMinimize,
-                      ),
+                      trailing:
+                          BlocSelector<
+                            FavoriteSongsBloc,
+                            FavoriteSongsState,
+                            Set<int>
+                          >(
+                            selector: (state) {
+                              return state.favoriteSongIds;
+                            },
+                            builder: (context, favoriteSongIds) {
+                              final currentId = state.currentSong?.id ?? -1;
+                              final isLiked = favoriteSongIds.contains(
+                                currentId,
+                              );
+                              return _MiniPlayerControls(
+                                musicPlayerBloc: musicPlayerBloc,
+                                currentSongId: state.currentSong?.id ?? 0,
+                                isLiked: isLiked,
+                                isPlaying: isPlaying,
+                                onMinimize: _toggleMinimize,
+                              );
+                            },
+                          ),
                     ),
                   ),
                 ),
@@ -255,7 +269,9 @@ class _MiniPlayerControls extends StatelessWidget {
           ),
           tooltip: isLiked ? 'Unlike' : 'Like',
           onPressed: () {
-            musicPlayerBloc.add(ToggleLikeMusicEvent(currentSongId));
+            context.read<FavoriteSongsBloc>().add(
+              ToggleFavoriteSongEvent(currentSongId),
+            );
           },
         ),
         IconButton(

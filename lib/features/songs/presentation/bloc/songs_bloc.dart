@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart' show immutable;
 import 'package:music_player/core/commands/commands.dart';
 import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/domain/usecases/usecases.dart';
 import 'package:music_player/features/songs/domain/usecases/usecases.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
@@ -11,6 +12,7 @@ part 'songs_state.dart';
 
 class SongsBloc extends Bloc<SongsEvent, SongsState> {
   SongsBloc(
+    this.ensureMediaPermission,
     this.deleteSong,
     this.querySongs,
     this.commandManager,
@@ -32,6 +34,7 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
   final CommandManager commandManager;
   final DeleteSongWithUndo deleteSong;
   final QuerySongs querySongs;
+  final EnsureMediaPermission ensureMediaPermission;
 
   void _onCanUndoChanged() {
     add(CanUndoChangedEvent(canUndo: commandManager.canUndo));

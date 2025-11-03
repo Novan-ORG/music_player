@@ -12,11 +12,9 @@ part 'music_player_state.dart';
 class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   MusicPlayerBloc(
     this.playSong,
-    this.getLikedSongs,
     this.pauseSong,
     this.seekSong,
     this.stopSong,
-    this.toggleSongLike,
     this.resumeSong,
     this.setShuffleEnabled,
     this.hasNextSong,
@@ -25,11 +23,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     this.watchSongDuration,
     this.watchSongPosition,
     this.setLoopMode,
-  ) : super(
-        MusicPlayerState(
-          likedSongIds: getLikedSongs().value?.toSet() ?? <int>{},
-        ),
-      ) {
+  ) : super(const MusicPlayerState()) {
     _playerIndexSubscription = watchPlayerIndex().distinct().listen(
       _watchPlayerIndex,
     );
@@ -40,18 +34,15 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<StopMusicEvent>(_handleStopMusic);
     on<TogglePlayPauseEvent>(_handleTogglePlayPause);
     on<ShuffleMusicEvent>(_handleShuffleMusics);
-    on<ToggleLikeMusicEvent>(_handleToggleLike);
     on<SetShuffleEnabledEvent>(_handleSetShuffleEnabled);
     on<SeekMusicEvent>(_handleSeekMusic);
     on<SetPlayerLoopModeEvent>(_handleSetPlayerLoopMode);
   }
 
   final PlaySong playSong;
-  final GetLikedSongs getLikedSongs;
   final PauseSong pauseSong;
   final SeekSong seekSong;
   final StopSong stopSong;
-  final ToggleSongLike toggleSongLike;
   final ResumeSong resumeSong;
   final SetShuffleEnabled setShuffleEnabled;
   final HasNextSong hasNextSong;
@@ -175,24 +166,6 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     } else {
       emit(state.copyWith(shuffleEnabled: event.isEnabled));
     }
-  }
-
-  Future<void> _handleToggleLike(
-    ToggleLikeMusicEvent event,
-    Emitter<MusicPlayerState> emit,
-  ) async {
-    final result = await toggleSongLike(event.songId);
-    if (result.isFailure) {
-      emit(
-        state.copyWith(
-          status: MusicPlayerStatus.error,
-          errorMessage: result.error,
-        ),
-      );
-      return;
-    }
-    final likedSongIds = result.value!;
-    emit(state.copyWith(likedSongIds: likedSongIds));
   }
 
   Future<void> _handleShuffleMusics(

@@ -245,6 +245,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get renamePlaylist => 'تغییر نام لیست پخش';
 
   @override
+  String get addSongs => 'اضافه کردن موزیک ها';
+
+  @override
+  String get noSongInThePlaylist =>
+      'هیچ موزیکی در این لیست پخش وجود ندارد. برای دیدن موزیک ها، موزیک اضافه کنید.';
+
+  @override
   String get musicPlayerPage => '';
 
   @override
@@ -288,4 +295,14 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get cancelTimer => 'لغو تایمر';
+
+  @override
+  String get favoriteSongsPage => '';
+
+  @override
+  String get clearAll => 'حذف همه';
+
+  @override
+  String get areYouSureYouWantToClearAllFavorites =>
+      'آیا برای حذف همه موزیک های محبوب مطمئن هستید؟';
 }

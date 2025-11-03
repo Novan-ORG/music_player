@@ -22,7 +22,7 @@ class DeleteSongCommand implements BaseCommand<bool> {
   Future<Result<bool>> execute() async {
     try {
       // Create backup before deletion
-      final originalFile = File(song.uri);
+      final originalFile = File(song.data);
       if (!originalFile.existsSync()) {
         return Result.failure('Original file does not exist');
       }
@@ -36,7 +36,7 @@ class DeleteSongCommand implements BaseCommand<bool> {
       await originalFile.copy(_backupFile!.path);
 
       // Proceed with deletion
-      final result = await repository.deleteSong(song.uri);
+      final result = await repository.deleteSong(song.data);
       if (result.isSuccess && (result.value ?? false)) {
         _wasDeleted = true;
         return Result.success(true);
@@ -66,7 +66,7 @@ class DeleteSongCommand implements BaseCommand<bool> {
       }
 
       // Restore file from backup
-      final restoredFile = File(song.uri);
+      final restoredFile = File(song.data);
       await _backupFile!.copy(restoredFile.path);
 
       // Clean up backup

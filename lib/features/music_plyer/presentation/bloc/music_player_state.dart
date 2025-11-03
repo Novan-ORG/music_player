@@ -8,7 +8,6 @@ final class MusicPlayerState extends Equatable {
     this.hasNext = false,
     this.hasPrevious = false,
     this.playList = const [],
-    this.likedSongIds = const {},
     this.currentSongIndex = 0,
     this.errorMessage,
   });
@@ -19,7 +18,6 @@ final class MusicPlayerState extends Equatable {
   final PlayerLoopMode loopMode;
   final bool hasNext;
   final bool hasPrevious;
-  final Set<int> likedSongIds;
   final String? errorMessage;
   final int currentSongIndex;
 
@@ -27,7 +25,6 @@ final class MusicPlayerState extends Equatable {
     MusicPlayerStatus? status,
     int? currentSongIndex,
     List<Song>? playList,
-    Set<int>? likedSongIds,
     String? errorMessage,
     bool? shuffleEnabled,
     bool? hasNext,
@@ -39,7 +36,6 @@ final class MusicPlayerState extends Equatable {
       shuffleEnabled: shuffleEnabled ?? this.shuffleEnabled,
       errorMessage: errorMessage ?? this.errorMessage,
       playList: playList ?? this.playList,
-      likedSongIds: likedSongIds ?? this.likedSongIds,
       hasNext: hasNext ?? this.hasNext,
       hasPrevious: hasPrevious ?? this.hasPrevious,
       loopMode: loopMode ?? this.loopMode,
@@ -63,7 +59,6 @@ final class MusicPlayerState extends Equatable {
     hasPrevious,
     shuffleEnabled,
     currentSongIndex,
-    likedSongIds,
     errorMessage ?? '',
   ];
 }

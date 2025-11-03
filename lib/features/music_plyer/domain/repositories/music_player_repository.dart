@@ -13,10 +13,6 @@ abstract interface class MusicPlayerRepository {
 
   Future<Result<void>> seek(Duration position, {int? index});
 
-  Future<Result<Set<int>>> toggleLike(int songId);
-
-  Result<Set<int>> getLikedSongIds();
-
   Future<Result<void>> setShuffleModeEnabled({required bool isEnabled});
 
   Result<bool> hasNext();

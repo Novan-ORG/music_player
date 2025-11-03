@@ -51,8 +51,6 @@ class SongsUIBuilder {
       required bool isSelected,
     })
     itemBuilder,
-    bool showAddButton = false,
-    VoidCallback? onAddPressed,
   }) {
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
@@ -60,27 +58,14 @@ class SongsUIBuilder {
         vertical: SongsPageConstants.listVerticalPadding,
         horizontal: SongsPageConstants.listHorizontalPadding,
       ),
-      itemCount: showAddButton ? songs.length + 1 : songs.length,
+      itemCount: songs.length,
       itemBuilder: (context, index) {
-        // Show add button for playlists
-        if (showAddButton && index == 0) {
-          return Container(
-            padding: const EdgeInsets.all(SongsPageConstants.addButtonPadding),
-            child: ElevatedButton.icon(
-              onPressed: onAddPressed,
-              icon: const Icon(Icons.add),
-              label: const Text('Add Songs'),
-            ),
-          );
-        }
-
-        final songIndex = showAddButton ? index - 1 : index;
-        final song = songs[songIndex];
+        final song = songs[index];
         final isSelected = songsState.selectedSongIds.contains(song.id);
 
         return itemBuilder(
           context: context,
-          songIndex: songIndex,
+          songIndex: index,
           song: song,
           isSelected: isSelected,
         );

@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/mixins/mixins.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
-import 'package:music_player/features/play_list/presentation/pages/playlists_page.dart';
+import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
-import 'package:share_plus/share_plus.dart';
 
 class SearchSongsPage extends StatefulWidget {
   const SearchSongsPage({super.key});
@@ -19,7 +19,8 @@ class SearchSongsPage extends StatefulWidget {
   State<SearchSongsPage> createState() => _SearchSongsPageState();
 }
 
-class _SearchSongsPageState extends State<SearchSongsPage> {
+class _SearchSongsPageState extends State<SearchSongsPage>
+    with SongSharingMixin {
   final searchStream = StreamController<String>();
 
   @override
@@ -93,13 +94,7 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
                               songIds: {song.id},
                             );
                           } else if (value == 'share') {
-                            await SharePlus.instance.share(
-                              ShareParams(
-                                text: song.title,
-                                subject: song.artist,
-                                files: [XFile(song.uri)],
-                              ),
-                            );
+                            await shareSong(song);
                           }
                         },
                         itemBuilder: (context) => [

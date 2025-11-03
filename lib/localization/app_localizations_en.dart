@@ -245,6 +245,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get renamePlaylist => 'Rename Playlist';
 
   @override
+  String get addSongs => 'Add Songs';
+
+  @override
+  String get noSongInThePlaylist =>
+      'No song in the playlist. Add songs to see them here.';
+
+  @override
   String get musicPlayerPage => '';
 
   @override
@@ -288,4 +295,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancelTimer => 'Cancel Timer';
+
+  @override
+  String get favoriteSongsPage => '';
+
+  @override
+  String get clearAll => 'Clear All';
+
+  @override
+  String get areYouSureYouWantToClearAllFavorites =>
+      'Are you sure you want to clear all favorite songs?';
 }

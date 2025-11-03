@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
-import 'package:music_player/core/services/database/models/playlist_model.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
@@ -9,12 +8,12 @@ import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
 class SongSelectionPage extends StatefulWidget {
   const SongSelectionPage({
-    required this.playlist,
+    required this.listName,
     required this.excludeIds,
     super.key,
   });
 
-  final PlaylistModel playlist;
+  final String listName;
   final Set<int> excludeIds;
 
   @override
@@ -36,7 +35,7 @@ class _SongSelectionPageState extends State<SongSelectionPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF7F53AC),
-        title: Text('Add to ${widget.playlist.name}'),
+        title: Text('Add to ${widget.listName}'),
         actions: [
           TextButton(
             onPressed: selectedSongIds.isEmpty

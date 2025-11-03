@@ -11,4 +11,8 @@ class Logger {
       debugPrint('Stack trace: $stackTrace');
     }
   }
+
+  static void info(String message) {
+    debugPrint('Info: $message');
+  }
 }

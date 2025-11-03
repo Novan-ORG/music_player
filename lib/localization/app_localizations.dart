@@ -554,6 +554,18 @@ abstract class AppLocalizations {
   /// **'Rename Playlist'**
   String get renamePlaylist;
 
+  /// No description provided for @addSongs.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Songs'**
+  String get addSongs;
+
+  /// No description provided for @noSongInThePlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'No song in the playlist. Add songs to see them here.'**
+  String get noSongInThePlaylist;
+
   /// Music Player page localization
   ///
   /// In en, this message translates to:
@@ -637,6 +649,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel Timer'**
   String get cancelTimer;
+
+  /// Favorite songs page localization
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get favoriteSongsPage;
+
+  /// No description provided for @clearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All'**
+  String get clearAll;
+
+  /// No description provided for @areYouSureYouWantToClearAllFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear all favorite songs?'**
+  String get areYouSureYouWantToClearAllFavorites;
 }
 
 class _AppLocalizationsDelegate

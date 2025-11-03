@@ -1,0 +1,187 @@
+import 'package:flutter/material.dart';
+import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
+
+class SongItem extends StatelessWidget {
+  const SongItem({
+    required this.song,
+    this.onTap,
+    this.onLongPress,
+    this.isLiked = false,
+    this.onToggleLike,
+    this.onDeletePressed,
+    this.onSetAsRingtonePressed,
+    this.onAddToPlaylistPressed,
+    this.onRemoveFromPlaylistPressed,
+    this.onSharePressed,
+    this.existInPlaylist = false,
+    super.key,
+  });
+
+  final Song song;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+  final bool isLiked;
+  final VoidCallback? onToggleLike;
+  final VoidCallback? onDeletePressed;
+  final VoidCallback? onSetAsRingtonePressed;
+  final VoidCallback? onAddToPlaylistPressed;
+  final VoidCallback? onRemoveFromPlaylistPressed;
+  final VoidCallback? onSharePressed;
+  final bool existInPlaylist;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        onLongPress: onLongPress,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SongImageWidget(songId: song.id, size: 54),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      song.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 4,
+                      children: [
+                        const Icon(Icons.person, size: 14, color: Colors.grey),
+                        Text(
+                          song.artist,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: Colors.grey[700]),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              _buildTrailing(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTrailing(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Tooltip(
+          message: isLiked ? 'Unlike' : 'Like',
+          child: IconButton(
+            icon: Icon(
+              isLiked ? Icons.favorite : Icons.favorite_border,
+              color: isLiked ? Colors.red : Colors.grey,
+            ),
+            onPressed: onToggleLike,
+          ),
+        ),
+        _buildPopupMenu(context),
+      ],
+    );
+  }
+
+  Widget _buildPopupMenu(BuildContext context) {
+    return PopupMenuButton<String>(
+      icon: const Icon(Icons.more_vert),
+      tooltip: 'More options',
+      onSelected: (value) {
+        if (value == 'delete') {
+          onDeletePressed?.call();
+        } else if (value == 'ringtone') {
+          onSetAsRingtonePressed?.call();
+        } else if (value == 'add_to_playlist') {
+          onAddToPlaylistPressed?.call();
+        } else if (value == 'remove_from_playlist') {
+          onRemoveFromPlaylistPressed?.call();
+        } else if (value == 'share') {
+          onSharePressed?.call();
+        }
+      },
+      itemBuilder: (context) => [
+        // Conditionally show either add or remove playlist option
+        if (existInPlaylist)
+          PopupMenuItem(
+            value: 'remove_from_playlist',
+            child: Row(
+              spacing: 8,
+              children: [
+                const Icon(Icons.playlist_remove, color: Colors.orange),
+                Text(context.localization.removeFromPlaylist),
+              ],
+            ),
+          )
+        else
+          PopupMenuItem(
+            value: 'add_to_playlist',
+            child: Row(
+              spacing: 8,
+              children: [
+                const Icon(Icons.playlist_add, color: Colors.green),
+                Text(context.localization.addToPlaylist),
+              ],
+            ),
+          ),
+        PopupMenuItem(
+          value: 'share',
+          child: Row(
+            spacing: 8,
+            children: [
+              const Icon(Icons.share, color: Colors.blue),
+              Text(context.localization.share),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'delete',
+          child: Row(
+            spacing: 8,
+            children: [
+              const Icon(Icons.delete, color: Colors.red),
+              Text(context.localization.deleteFromDevice),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'ringtone',
+          child: Row(
+            spacing: 8,
+            children: [
+              const Icon(Icons.music_note, color: Colors.blue),
+              Text(context.localization.setAsRingtone),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}

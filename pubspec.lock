@@ -321,14 +321,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  flat_buffers:
-    dependency: transitive
-    description:
-      name: flat_buffers
-      sha256: "380bdcba5664a718bfd4ea20a45d39e13684f5318fcd8883066a55e21f37f4c3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "23.5.26"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -637,30 +629,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  objectbox:
-    dependency: "direct main"
-    description:
-      name: objectbox
-      sha256: "825b3106bbd8b15b2e7a08d75345a218db020fd87bd5dc246acae65ec08ebc06"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
-  objectbox_flutter_libs:
-    dependency: "direct main"
-    description:
-      name: objectbox_flutter_libs
-      sha256: f5fd388ffebda310a1acda5c0076f854d7c0cb49634710eb88937ea4ae6c8e10
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
-  objectbox_generator:
-    dependency: "direct dev"
-    description:
-      name: objectbox_generator
-      sha256: "62c1015e733267eef73b3f70f1b6ab3b483008714d8ad43b4c79af3a4d459474"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
   objective_c:
     dependency: transitive
     description:
@@ -689,18 +657,18 @@ packages:
     dependency: transitive
     description:
       name: on_audio_query_plus_android
-      sha256: dcd0cd9f5f5de9084f2d0c9a2f6ecd6ce26a3197c8a7e50a9039e2a18a15384e
+      sha256: a1805293daecb44c48f427cc77222b62b9abd119a5b54693c0f16ec8b49f8489
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.1.9"
   on_audio_query_pluse:
     dependency: "direct main"
     description:
       name: on_audio_query_pluse
-      sha256: ab7a221e8a21d0fb1cef7d3d16efe3706da7b2504e2e53d0e3d4a91056d27ec8
+      sha256: "71cf336dc891b7e85eb4b629f44a627b06684db4c277964e95c1a851fa874ba0"
       url: "https://pub.dev"
     source: hosted
-    version: "2.9.6"
+    version: "3.0.3"
   on_audio_query_web:
     dependency: transitive
     description:
@@ -861,14 +829,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-  pointycastle:
-    dependency: transitive
-    description:
-      name: pointycastle
-      sha256: "92aa3841d083cc4b0f4709b5c74fd6409a3e6ba833ffc7dc6a8fee096366acf5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.0"
   pool:
     dependency: transitive
     description:
@@ -1066,14 +1026,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  source_gen:
-    dependency: transitive
-    description:
-      name: source_gen
-      sha256: "7b19d6ba131c6eb98bfcbf8d56c1a7002eba438af2e7ae6f8398b2b0f4f381e3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
   source_span:
     dependency: transitive
     description:

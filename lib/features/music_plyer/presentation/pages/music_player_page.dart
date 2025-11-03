@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/mixins/mixins.dart';
 import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/widgets.dart';
-import 'package:music_player/features/play_list/presentation/pages/pages.dart';
+import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/injection/service_locator.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:volume_controller/volume_controller.dart';
 
-class MusicPlayerPage extends StatelessWidget {
+class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
   const MusicPlayerPage({super.key});
 
   void _showErrorBanner(BuildContext context, String message) {
@@ -67,8 +68,8 @@ class MusicPlayerPage extends StatelessWidget {
                     song: state.currentSong,
                     onLikePressed: () {
                       if (state.currentSong != null) {
-                        musicPlayerBloc.add(
-                          ToggleLikeMusicEvent(state.currentSong!.id),
+                        context.read<FavoriteSongsBloc>().add(
+                          ToggleFavoriteSongEvent(state.currentSong!.id),
                         );
                       }
                     },
@@ -91,17 +92,7 @@ class MusicPlayerPage extends StatelessWidget {
                             : null,
                       );
                     },
-                    onSharePressed: () async {
-                      final songUri = state.currentSong?.uri;
-                      await SharePlus.instance.share(
-                        ShareParams(
-                          text: state.currentSong?.title ?? 'Unknown Song',
-                          subject:
-                              state.currentSong?.artist ?? 'Unknown Artist',
-                          files: songUri != null ? [XFile(songUri)] : null,
-                        ),
-                      );
-                    },
+                    onSharePressed: () => shareSong(state.currentSong!),
                     onMusicQueuePressed: () async {
                       await UpnextMusicsSheet.show(context);
                     },

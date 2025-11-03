@@ -1,8 +1,5 @@
 import 'dart:io';
-
-import 'package:music_player/core/data/mappers/mappers.dart';
-import 'package:music_player/core/data/models/models.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart' as aq;
+import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 abstract interface class SongsDatasource {
@@ -11,10 +8,11 @@ abstract interface class SongsDatasource {
 }
 
 class SongsDatasourceImpl implements SongsDatasource {
-  const SongsDatasourceImpl({required aq.OnAudioQuery onAudioQuery})
-    : _onAudioQuery = onAudioQuery;
+  const SongsDatasourceImpl({
+    required OnAudioQuery onAudioQuery,
+  }) : _onAudioQuery = onAudioQuery;
 
-  final aq.OnAudioQuery _onAudioQuery;
+  final OnAudioQuery _onAudioQuery;
 
   @override
   Future<bool> deleteSong(String songUri) async {
@@ -39,12 +37,5 @@ class SongsDatasourceImpl implements SongsDatasource {
   }
 
   @override
-  Future<List<SongModel>> querySongs() async {
-    final permissionsGranted = await _onAudioQuery.checkAndRequest();
-    if (!permissionsGranted) {
-      throw Exception('Permission not granted!');
-    }
-    final result = await _onAudioQuery.querySongs();
-    return result.map(SongModelMapper.fromAudioQueryModel).toList();
-  }
+  Future<List<SongModel>> querySongs() => _onAudioQuery.querySongs();
 }

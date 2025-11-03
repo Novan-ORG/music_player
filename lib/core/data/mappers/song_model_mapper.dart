@@ -1,47 +1,40 @@
-import 'package:music_player/core/data/models/models.dart';
 import 'package:music_player/core/domain/entities/song.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart' as aq;
+import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 sealed class SongModelMapper {
-  static SongModel fromAudioQueryModel(aq.SongModel song) {
-    return SongModel(
-      id: song.id,
-      title: song.title,
-      artist: song.artist ?? 'Unknown Artist',
-      album: song.album ?? 'Unknown Album',
-      uri: song.data,
-      duration: Duration(milliseconds: song.duration ?? 0),
-      albumId: song.albumId,
-      size: song.size,
-      dateAdded: DateTime.fromMillisecondsSinceEpoch(song.dateAdded ?? 0),
-    );
-  }
-
   static SongModel fromDomain(Song song) {
-    return SongModel(
-      id: song.id,
-      title: song.title,
-      artist: song.artist,
-      album: song.album,
-      uri: song.uri,
-      duration: song.duration,
-      albumId: song.albumId,
-      dateAdded: song.dateAdded,
-      size: song.size,
-    );
+    final result = SongModel({
+      '_id': song.id,
+      '_display_name_wo_ext': song.displayNameWOExt,
+      'title': song.title,
+      '_display_name': song.displayName,
+      'artist': song.artist,
+      'album': song.album,
+      '_data': song.data,
+      '_uri': song.uri,
+      'duration': song.duration.inMilliseconds,
+      'album_id': song.albumId,
+      'date_added': song.dateAdded.millisecondsSinceEpoch,
+      '_size': song.size,
+    });
+
+    return result;
   }
 
   static Song toDomain(SongModel songModel) {
     return Song(
       id: songModel.id,
       title: songModel.title,
-      artist: songModel.artist,
-      album: songModel.album,
+      displayNameWOExt: songModel.displayNameWOExt,
+      displayName: songModel.displayName,
+      data: songModel.data,
+      artist: songModel.artist ?? 'Unknown Artist',
+      album: songModel.album ?? 'Unknown Album',
       uri: songModel.uri,
-      duration: songModel.duration,
+      duration: Duration(milliseconds: songModel.duration ?? 0),
       albumId: songModel.albumId,
       size: songModel.size,
-      dateAdded: songModel.dateAdded,
+      dateAdded: DateTime.fromMillisecondsSinceEpoch(songModel.dateAdded ?? 0),
     );
   }
 }

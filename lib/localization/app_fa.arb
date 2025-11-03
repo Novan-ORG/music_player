@@ -114,6 +114,8 @@
     "rename": "تغییر نام",
     "delete": "حذف",
     "renamePlaylist": "تغییر نام لیست پخش",
+    "addSongs": "اضافه کردن موزیک ها",
+    "noSongInThePlaylist": "هیچ موزیکی در این لیست پخش وجود ندارد. برای دیدن موزیک ها، موزیک اضافه کنید.",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {
@@ -135,5 +137,12 @@
     "close": "بستن",
     "setAsRingtone": "تنظیم به عنوان آهنگ زنگ",
     "sleepTimerActive": "تایمر خواب فعال است",
-    "cancelTimer": "لغو تایمر"
+    "cancelTimer": "لغو تایمر",
+
+    "favoriteSongsPage": "",
+    "@favoriteSongsPage": {
+        "description": "محلی سازی صفحه موزیک های محبوب"
+    },
+    "clearAll": "حذف همه",
+    "areYouSureYouWantToClearAllFavorites": "آیا برای حذف همه موزیک های محبوب مطمئن هستید؟"
 }

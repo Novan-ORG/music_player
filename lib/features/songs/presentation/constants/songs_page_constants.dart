@@ -19,7 +19,7 @@ class SongsPageConstants {
   // Padding and Margins
   static const listVerticalPadding = 12.0;
   static const listHorizontalPadding = 8.0;
-  static const addButtonPadding = 8.0;
+  static const addButtonPadding = 4.0;
   static const minPlayerHeight = 80.0;
   static const headerSpacing = 8.0;
 

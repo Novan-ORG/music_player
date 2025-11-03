@@ -115,6 +115,8 @@
     "rename": "Rename",
     "delete": "Delete",
     "renamePlaylist": "Rename Playlist",
+    "addSongs": "Add Songs",
+    "noSongInThePlaylist": "No song in the playlist. Add songs to see them here.",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {
@@ -136,6 +138,13 @@
     "close": "Close",
     "setAsRingtone": "Set as ringtone",
     "sleepTimerActive": "Sleep Timer is Active",
-    "cancelTimer": "Cancel Timer"
+    "cancelTimer": "Cancel Timer",
+
+    "favoriteSongsPage": "",
+    "@favoriteSongsPage": {
+        "description": "Favorite songs page localization"
+    },
+    "clearAll": "Clear All",
+    "areYouSureYouWantToClearAllFavorites": "Are you sure you want to clear all favorite songs?"
 
 }
