@@ -111,10 +111,15 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
                 songs.map((e) => e.id).toSet(),
               );
               if (result != null) {
+                await Future<void>.delayed(
+                  const Duration(milliseconds: 200),
+                );
                 _loadPlaylistSongs();
               }
             },
-            onPlaylistRenamed: () {},
+            onPlaylistRenamed: () {
+              Navigator.pop(context);
+            },
           ),
           body: state.status == PlaylistDetailsStatus.loading
               ? const Center(
@@ -127,41 +132,55 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
                 )
               : RefreshIndicator.adaptive(
                   onRefresh: onRefresh,
-                  child: ListView.builder(
-                    itemCount: songs.length,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 12,
-                    ),
-                    itemBuilder: (context, index) {
-                      final song = songs[index];
-                      return SongItem(
-                        song: song,
-                        existInPlaylist: true,
-                        isLiked: context
-                            .read<FavoriteSongsBloc>()
-                            .state
-                            .favoriteSongIds
-                            .contains(song.id),
-                        onSetAsRingtonePressed: () => setAsRingtone(song.data),
-                        onDeletePressed: () => showDeleteSongDialog(song),
-                        onToggleLike: () => context
-                            .read<FavoriteSongsBloc>()
-                            .add(ToggleFavoriteSongEvent(song.id)),
-                        onSharePressed: () => shareSong(song),
-                        onRemoveFromPlaylistPressed: () {
-                          removeSongsFromPlaylist({
-                            song.id,
-                          }, state.playlist);
+                  child:
+                      BlocSelector<
+                        FavoriteSongsBloc,
+                        FavoriteSongsState,
+                        Set<int>
+                      >(
+                        selector: (state) {
+                          return state.favoriteSongIds;
                         },
-                        onLongPress: () => _handleSongLongPress(song),
-                        onTap: () async {
-                          await _handleSongTap(index, songs);
+                        builder: (context, favoriteSongs) {
+                          return ListView.builder(
+                            itemCount: songs.length,
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 12,
+                            ),
+                            itemBuilder: (context, index) {
+                              final song = songs[index];
+                              return SongItem(
+                                song: song,
+                                existInPlaylist: true,
+                                isLiked: favoriteSongs.contains(song.id),
+                                onSetAsRingtonePressed: () =>
+                                    setAsRingtone(song.data),
+                                onDeletePressed: () =>
+                                    showDeleteSongDialog(song),
+                                onToggleLike: () => context
+                                    .read<FavoriteSongsBloc>()
+                                    .add(ToggleFavoriteSongEvent(song.id)),
+                                onSharePressed: () => shareSong(song),
+                                onRemoveFromPlaylistPressed: () async {
+                                  removeSongsFromPlaylist({
+                                    song.id,
+                                  }, state.playlist);
+                                  await Future<void>.delayed(
+                                    const Duration(milliseconds: 200),
+                                  );
+                                  _loadPlaylistSongs();
+                                },
+                                onLongPress: () => _handleSongLongPress(song),
+                                onTap: () async {
+                                  await _handleSongTap(index, songs);
+                                },
+                              );
+                            },
+                          );
                         },
-                      );
-                    },
-                  ),
+                      ),
                 ),
         );
       },
