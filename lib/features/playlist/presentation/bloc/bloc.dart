@@ -1,1 +1,2 @@
-export 'play_list_bloc.dart';
+export 'playlist_bloc.dart';
+export 'playlist_details_bloc.dart';

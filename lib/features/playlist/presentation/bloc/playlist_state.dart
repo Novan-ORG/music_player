@@ -1,4 +1,4 @@
-part of 'play_list_bloc.dart';
+part of 'playlist_bloc.dart';
 
 final class PlayListState extends Equatable {
   const PlayListState({
@@ -7,7 +7,6 @@ final class PlayListState extends Equatable {
     this.errorMessage,
     this.canUndo = false,
     this.lastDeletedPlaylist,
-    this.currentPlaylistSongs = const [],
     this.currentPlaylistId,
   });
 
@@ -16,7 +15,6 @@ final class PlayListState extends Equatable {
   final String? errorMessage;
   final bool canUndo;
   final Playlist? lastDeletedPlaylist;
-  final List<Song> currentPlaylistSongs;
   final int? currentPlaylistId;
 
   PlayListState copyWith({
@@ -25,7 +23,6 @@ final class PlayListState extends Equatable {
     String? errorMessage,
     bool? canUndo,
     Playlist? lastDeletedPlaylist,
-    List<Song>? currentPlaylistSongs,
     int? currentPlaylistId,
   }) {
     return PlayListState(
@@ -34,7 +31,6 @@ final class PlayListState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
       canUndo: canUndo ?? this.canUndo,
       lastDeletedPlaylist: lastDeletedPlaylist ?? this.lastDeletedPlaylist,
-      currentPlaylistSongs: currentPlaylistSongs ?? this.currentPlaylistSongs,
       currentPlaylistId: currentPlaylistId ?? this.currentPlaylistId,
     );
   }
@@ -46,7 +42,6 @@ final class PlayListState extends Equatable {
     errorMessage,
     canUndo,
     lastDeletedPlaylist,
-    currentPlaylistSongs,
     currentPlaylistId,
   ];
 }

@@ -1,4 +1,4 @@
-part of 'play_list_bloc.dart';
+part of 'playlist_bloc.dart';
 
 sealed class PlayListEvent extends Equatable {
   const PlayListEvent();
@@ -66,13 +66,4 @@ final class RemoveSongsFromPlaylistEvent extends PlayListEvent {
 
   @override
   List<Object> get props => [songIds, playlistId];
-}
-
-class GetPlaylistSongsEvent extends PlayListEvent {
-  const GetPlaylistSongsEvent({required this.playlistId});
-
-  final int playlistId;
-
-  @override
-  List<Object> get props => [playlistId];
 }

@@ -1,12 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:music_player/core/commands/commands.dart';
-import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
 
-part 'play_list_event.dart';
-part 'play_list_state.dart';
+part 'playlist_event.dart';
+part 'playlist_state.dart';
 
 class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
   PlayListBloc(
@@ -17,7 +16,6 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     this._addSongsToPlaylist,
     this._removeSongsFromPlaylist,
     this._getPlaylistById,
-    this._getPlaylistSongs,
     this._commandManager,
   ) : super(const PlayListState()) {
     on<LoadPlayListsEvent>(_loadPlayLists);
@@ -28,7 +26,6 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     on<RenamePlayListEvent>(_renamePlayList);
     on<UndoDeletePlayListEvent>(_undoDeletePlayList);
     on<CanUndoChangedEvent>(_canUndoChanged);
-    on<GetPlaylistSongsEvent>(_getThePlaylistSongs);
     _commandManager.canUndoNotifier.addListener(_onCanUndoChanged);
   }
 
@@ -39,7 +36,6 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
   final AddSongsToPlaylist _addSongsToPlaylist;
   final RemoveSongsFromPlaylist _removeSongsFromPlaylist;
   final GetPlaylistById _getPlaylistById;
-  final GetPlaylistSongs _getPlaylistSongs;
   final CommandManager _commandManager;
 
   void _onCanUndoChanged() {
@@ -201,12 +197,6 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
         ),
       );
     }
-
-    if (state.currentPlaylistId != null) {
-      add(
-        GetPlaylistSongsEvent(playlistId: state.currentPlaylistId!),
-      );
-    }
   }
 
   Future<void> _removeSongFromPlaylist(
@@ -241,12 +231,6 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
           errorMessage: result.error,
           status: PlayListStatus.error,
         ),
-      );
-    }
-
-    if (state.currentPlaylistId != null) {
-      add(
-        GetPlaylistSongsEvent(playlistId: state.currentPlaylistId!),
       );
     }
   }
@@ -295,32 +279,6 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
       emit(
         state.copyWith(
           playLists: result.value ?? [],
-          status: PlayListStatus.loaded,
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          errorMessage: result.error,
-          status: PlayListStatus.error,
-        ),
-      );
-    }
-  }
-
-  Future<void> _getThePlaylistSongs(
-    GetPlaylistSongsEvent event,
-    Emitter<PlayListState> emit,
-  ) async {
-    emit(state.copyWith(status: PlayListStatus.loading));
-
-    final result = await _getPlaylistSongs(event.playlistId);
-
-    if (result.isSuccess) {
-      emit(
-        state.copyWith(
-          currentPlaylistSongs: result.value ?? [],
-          currentPlaylistId: event.playlistId,
           status: PlayListStatus.loaded,
         ),
       );

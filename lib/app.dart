@@ -90,7 +90,6 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
             getIt.get<AddSongsToPlaylist>(),
             getIt.get<RemoveSongsFromPlaylist>(),
             getIt.get<GetPlaylistById>(),
-            getIt.get<GetPlaylistSongs>(),
             getIt.get<CommandManager>(),
           ),
         ),

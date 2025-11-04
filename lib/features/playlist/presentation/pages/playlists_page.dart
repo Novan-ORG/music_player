@@ -49,33 +49,6 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
 
   Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
 
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.playlist_play, size: 64, color: Colors.grey[400]),
-          const SizedBox(height: 16),
-          Text(
-            context.localization.noPlaylistFound,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 8),
-          ElevatedButton.icon(
-            icon: const Icon(Icons.add),
-            label: Text(context.localization.createFirstPlaylist),
-            onPressed: _showCreatePlaylistSheet,
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildPlaylistTile(Playlist playlist) {
     final subtitle =
         '${playlist.numOfSongs} ${context.localization.song}'
@@ -158,21 +131,22 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   }
 
   Widget _buildBody(PlayListState state) {
-    switch (state.status) {
-      case PlayListStatus.loading:
-        return const Center(child: CircularProgressIndicator());
-      case PlayListStatus.error:
-        return Center(
-          child: Text('${context.localization.error}: ${state.errorMessage}'),
+    if (state.status case PlayListStatus.loading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (state.status case PlayListStatus.error) {
+      return Center(
+        child: Text('${context.localization.error}: ${state.errorMessage}'),
+      );
+    } else if (state.status case PlayListStatus.initial) {
+      return Center(child: Text(context.localization.playListPage));
+    } else {
+      if (state.playLists.isEmpty) {
+        return EmptyPlaylist(
+          onAddPressed: _showCreatePlaylistSheet,
         );
-      case PlayListStatus.loaded:
-        if (state.playLists.isEmpty) {
-          return _buildEmptyState();
-        }
+      } else {
         return _buildPlaylistsList(state.playLists);
-
-      case PlayListStatus.initial:
-        return Center(child: Text(context.localization.playListPage));
+      }
     }
   }
 
