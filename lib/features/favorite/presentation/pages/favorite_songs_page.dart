@@ -59,6 +59,11 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
     );
   }
 
+  Future<void> onRefresh() async {
+    await Future<void>.delayed(const Duration(milliseconds: 200));
+    favSongsBloc.add(const LoadFavoriteSongsEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,28 +139,35 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
   }
 
   Widget _buildFavoritesList(List<Song> favoriteSongs) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      itemCount: favoriteSongs.length,
-      itemBuilder: (context, index) {
-        final song = favoriteSongs[index];
-        return SongItem(
-          song: song,
-          isLiked: true,
-          onTap: () => _handleSongTap(index, favoriteSongs),
-          onLongPress: () => onLongPress(song),
-          onToggleLike: () => _handleToggleLike(song.id),
-          onSharePressed: () => shareSong(song),
-          onSetAsRingtonePressed: () => setAsRingtone(song.data),
-          onDeletePressed: () => showDeleteSongDialog(song),
-          onAddToPlaylistPressed: () async {
-            await PlaylistsPage.showSheet(
-              context: context,
-              songIds: {song.id},
-            );
-          },
-        );
-      },
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        itemCount: favoriteSongs.length,
+        physics: const AlwaysScrollableScrollPhysics(
+          parent: BouncingScrollPhysics(),
+        ),
+        itemBuilder: (context, index) {
+          final song = favoriteSongs[index];
+          return SongItem(
+            song: song,
+            isLiked: true,
+            onTap: () => _handleSongTap(index, favoriteSongs),
+            onLongPress: () => onLongPress(song),
+            onToggleLike: () => _handleToggleLike(song.id),
+            onSharePressed: () => shareSong(song),
+            onSetAsRingtonePressed: () => setAsRingtone(song.data),
+            onDeletePressed: () => showDeleteSongDialog(song),
+            onAddToPlaylistPressed: () async {
+              await PlaylistsPage.showSheet(
+                context: context,
+                songIds: {song.id},
+              );
+            },
+          );
+        },
+      ),
     );
   }
 

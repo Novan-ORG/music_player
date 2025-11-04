@@ -57,8 +57,8 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
   }
 
   Future<void> onRefresh() async {
-    _loadPlaylistSongs();
     await Future<void>.delayed(const Duration(milliseconds: 200));
+    _loadPlaylistSongs();
   }
 
   void _handleSongLongPress(Song song) {
@@ -130,7 +130,7 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
                   message: context.localization.noSongInPlaylist,
                   onRefresh: onRefresh,
                 )
-              : RefreshIndicator.adaptive(
+              : RefreshIndicator(
                   onRefresh: onRefresh,
                   child:
                       BlocSelector<
@@ -144,7 +144,9 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
                         builder: (context, favoriteSongs) {
                           return ListView.builder(
                             itemCount: songs.length,
-                            physics: const BouncingScrollPhysics(),
+                            physics: const AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics(),
+                            ),
                             padding: const EdgeInsets.symmetric(
                               vertical: 10,
                               horizontal: 12,
