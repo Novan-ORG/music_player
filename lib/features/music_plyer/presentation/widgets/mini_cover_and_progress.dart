@@ -22,22 +22,22 @@ class MiniCoverAndProgress extends StatelessWidget {
         QueryArtworkWidget(
           id: songId,
           type: ArtworkType.AUDIO,
-          artworkBorder: BorderRadius.circular(48),
-          artworkWidth: 48,
-          artworkHeight: 48,
+          artworkBorder: BorderRadius.circular(46),
+          artworkWidth: 46,
+          artworkHeight: 46,
           nullArtworkWidget: ClipRRect(
-            borderRadius: BorderRadius.circular(48),
+            borderRadius: BorderRadius.circular(46),
             child: Image.asset(
               ImageAssets.songCover,
               fit: BoxFit.cover,
-              width: 48,
-              height: 48,
+              width: 46,
+              height: 46,
             ),
           ),
         ),
         SizedBox(
-          width: 50,
-          height: 50,
+          width: 48,
+          height: 48,
           child: StreamBuilder(
             stream: durationStream,
             builder: (context, durationShot) {
@@ -57,7 +57,7 @@ class MiniCoverAndProgress extends StatelessWidget {
                   return CircularProgressIndicator(
                     value: value,
                     strokeCap: StrokeCap.round,
-                    strokeWidth: 2,
+                    strokeWidth: 4,
                   );
                 },
               );

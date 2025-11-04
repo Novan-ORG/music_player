@@ -191,8 +191,8 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
             },
             icon: Icon(
               isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Colors.white,
-              size: 28,
+              color: Theme.of(context).colorScheme.primary,
+              size: 24,
             ),
           ),
         ],
@@ -263,9 +263,7 @@ class _MiniPlayerControls extends StatelessWidget {
         IconButton(
           icon: Icon(
             isLiked ? Icons.favorite : Icons.favorite_border,
-            color: isLiked
-                ? Theme.of(context).colorScheme.secondary
-                : Colors.grey,
+            color: Colors.red,
           ),
           tooltip: isLiked ? 'Unlike' : 'Like',
           onPressed: () {
@@ -282,7 +280,7 @@ class _MiniPlayerControls extends StatelessWidget {
           },
         ),
         IconButton(
-          icon: const Icon(Icons.minimize),
+          icon: const Icon(Icons.close_fullscreen),
           tooltip: 'Minimize',
           onPressed: onMinimize,
         ),

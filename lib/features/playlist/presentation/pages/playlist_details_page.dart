@@ -105,10 +105,15 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
           appBar: PlaylistDetailsAppbar(
             playlist: state.playlist,
             songCount: songCount,
-            onAddSongs: () => addSongsToPlaylist(
-              state.playlist,
-              songs.map((e) => e.id).toSet(),
-            ),
+            onAddSongs: () async {
+              final result = await addSongsToPlaylist(
+                state.playlist,
+                songs.map((e) => e.id).toSet(),
+              );
+              if (result != null) {
+                _loadPlaylistSongs();
+              }
+            },
             onPlaylistRenamed: () {},
           ),
           body: state.status == PlaylistDetailsStatus.loading

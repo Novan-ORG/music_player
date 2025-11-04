@@ -145,6 +145,22 @@
         "description": "Favorite songs page localization"
     },
     "clearAll": "Clear All",
-    "areYouSureYouWantToClearAllFavorites": "Are you sure you want to clear all favorite songs?"
+    "areYouSureYouWantToClearAllFavorites": "Are you sure you want to clear all favorite songs?",
+
+    "addSongsPage": "",
+    "@addSongsPage": {
+        "description": "Add songs to playlist page localization"
+    },
+    "allSongsAlreadyExistInPlaylist": "All songs already exist in the playlist",
+    "addTo": "Add to",
+    "add": "Add ({count})",
+    "@add":{
+        "description":"Button text for adding songs to playlist",
+        "placeholders":{
+            "count":{
+                "type":"int"
+            }
+        }
+    }
 
 }

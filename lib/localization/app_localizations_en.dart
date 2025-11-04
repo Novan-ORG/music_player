@@ -305,4 +305,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get areYouSureYouWantToClearAllFavorites =>
       'Are you sure you want to clear all favorite songs?';
+
+  @override
+  String get addSongsPage => '';
+
+  @override
+  String get allSongsAlreadyExistInPlaylist =>
+      'All songs already exist in the playlist';
+
+  @override
+  String get addTo => 'Add to';
+
+  @override
+  String add(int count) {
+    return 'Add ($count)';
+  }
 }

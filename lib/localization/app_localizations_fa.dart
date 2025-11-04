@@ -305,4 +305,19 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get areYouSureYouWantToClearAllFavorites =>
       'آیا برای حذف همه موزیک های محبوب مطمئن هستید؟';
+
+  @override
+  String get addSongsPage => '';
+
+  @override
+  String get allSongsAlreadyExistInPlaylist =>
+      'همه موزیک ها در لیست پخش وجود دارند';
+
+  @override
+  String get addTo => 'اضافه کردن به';
+
+  @override
+  String add(int count) {
+    return 'اضافه کردن ($count)';
+  }
 }

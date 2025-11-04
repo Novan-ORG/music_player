@@ -54,7 +54,8 @@ class _HomePageState extends State<HomePage> {
         duration: const Duration(milliseconds: 300),
         child: _pages[_currentIndex],
       ),
-      bottomSheet: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
         bloc: _musicPlayerBloc,
         builder: (_, state) {
           if (state.playList.isEmpty) {

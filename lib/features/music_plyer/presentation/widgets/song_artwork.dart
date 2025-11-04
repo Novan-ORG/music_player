@@ -10,7 +10,7 @@ class SongArtwork extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size.height * 0.33;
+    final size = MediaQuery.of(context).size.height * 0.3;
     return Center(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),

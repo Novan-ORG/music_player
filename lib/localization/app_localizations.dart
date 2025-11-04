@@ -667,6 +667,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to clear all favorite songs?'**
   String get areYouSureYouWantToClearAllFavorites;
+
+  /// Add songs to playlist page localization
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get addSongsPage;
+
+  /// No description provided for @allSongsAlreadyExistInPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'All songs already exist in the playlist'**
+  String get allSongsAlreadyExistInPlaylist;
+
+  /// No description provided for @addTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to'**
+  String get addTo;
+
+  /// Button text for adding songs to playlist
+  ///
+  /// In en, this message translates to:
+  /// **'Add ({count})'**
+  String add(int count);
 }
 
 class _AppLocalizationsDelegate

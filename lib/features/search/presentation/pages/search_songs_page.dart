@@ -10,6 +10,7 @@ import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
+import 'package:music_player/features/songs/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
 class SearchSongsPage extends StatefulWidget {
@@ -27,6 +28,18 @@ class _SearchSongsPageState extends State<SearchSongsPage>
   void dispose() {
     unawaited(searchStream.close());
     super.dispose();
+  }
+
+  void onLongPress(Song song, List<Song> allSongs) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => SongsSelectionPage(
+          title: context.localization.searchSongs,
+          availableSongs: allSongs,
+          selectedSongIds: {song.id},
+        ),
+      ),
+    );
   }
 
   @override
@@ -86,6 +99,9 @@ class _SearchSongsPageState extends State<SearchSongsPage>
                       leading: SongImageWidget(songId: song.id),
                       title: Text(song.title),
                       subtitle: Text(song.artist),
+                      onLongPress: () {
+                        onLongPress(song, filteredSongs);
+                      },
                       trailing: PopupMenuButton<String>(
                         onSelected: (value) async {
                           if (value == 'add_to_playlist') {

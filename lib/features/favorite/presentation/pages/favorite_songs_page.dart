@@ -53,6 +53,7 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
         builder: (_) => SongsSelectionPage(
           title: context.localization.favoriteSongs,
           availableSongs: favSongsBloc.state.favoriteSongs,
+          selectedSongIds: {song.id},
         ),
       ),
     );

@@ -144,5 +144,22 @@
         "description": "محلی سازی صفحه موزیک های محبوب"
     },
     "clearAll": "حذف همه",
-    "areYouSureYouWantToClearAllFavorites": "آیا برای حذف همه موزیک های محبوب مطمئن هستید؟"
+    "areYouSureYouWantToClearAllFavorites": "آیا برای حذف همه موزیک های محبوب مطمئن هستید؟",
+
+    "addSongsPage": "",
+    "@addSongsPage": {
+        "description": "محلی سازی صفحه اضافه کردن موزیک ها به لیست پخش"
+    },
+    "allSongsAlreadyExistInPlaylist": "همه موزیک ها در لیست پخش وجود دارند",
+    "addTo": "اضافه کردن به",
+    "add": "اضافه کردن ({count})",
+    "@add": {
+        "description": "متن دکمه اضافه کردن موزیک ها به لیست پخش",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    }
+
 }

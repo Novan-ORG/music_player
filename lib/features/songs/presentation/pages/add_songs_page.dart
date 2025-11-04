@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
 class AddSongsPage extends StatefulWidget {
@@ -20,19 +21,27 @@ class AddSongsPage extends StatefulWidget {
 }
 
 class _AddSongsPageState extends State<AddSongsPage> {
+  final Set<int> _selectedSongIds = {};
+
+  @override
+  void initState() {
+    _selectedSongIds.addAll(widget.selectedSongIds);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF7F53AC),
-        title: Text('Add to ${widget.listName}'),
+        title: Text('${context.localization.addTo} ${widget.listName}'),
         actions: [
           TextButton(
-            onPressed: widget.selectedSongIds.isEmpty
+            onPressed: _selectedSongIds.isEmpty
                 ? null
-                : () => Navigator.of(context).pop(widget.selectedSongIds),
+                : () => Navigator.of(context).pop(_selectedSongIds),
             child: Text(
-              'Add (${widget.selectedSongIds.length})',
+              context.localization.add(_selectedSongIds.length),
               style: const TextStyle(color: Colors.white),
             ),
           ),
@@ -42,7 +51,7 @@ class _AddSongsPageState extends State<AddSongsPage> {
         child: widget.availableSongs.isEmpty
             ? Center(
                 child: Text(
-                  'All songs are already in this playlist',
+                  context.localization.allSongsAlreadyExistInPlaylist,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               )
@@ -54,7 +63,7 @@ class _AddSongsPageState extends State<AddSongsPage> {
                 itemCount: widget.availableSongs.length,
                 itemBuilder: (context, index) {
                   final song = widget.availableSongs[index];
-                  final isSelected = widget.selectedSongIds.contains(song.id);
+                  final isSelected = _selectedSongIds.contains(song.id);
 
                   return Card(
                     margin: const EdgeInsets.symmetric(
@@ -66,9 +75,9 @@ class _AddSongsPageState extends State<AddSongsPage> {
                       onChanged: (selected) {
                         setState(() {
                           if (selected ?? false) {
-                            widget.selectedSongIds.add(song.id);
+                            _selectedSongIds.add(song.id);
                           } else {
-                            widget.selectedSongIds.remove(song.id);
+                            _selectedSongIds.remove(song.id);
                           }
                         });
                       },

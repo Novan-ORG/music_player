@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:music_player/core/constants/constants.dart';
 import 'package:music_player/features/favorite/data/models/models.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,7 +20,6 @@ class FavoriteSongsDatasourceImpl implements FavoriteSongsDatasource {
   });
 
   final SharedPreferences preferences;
-  static const String _favoriteSongsKey = 'favorite_songs';
   final OnAudioQuery audioQuery;
 
   @override
@@ -32,7 +32,8 @@ class FavoriteSongsDatasourceImpl implements FavoriteSongsDatasource {
   }
 
   List<FavoriteSongModel> _getAllFavorites() {
-    final jsonList = preferences.getStringList(_favoriteSongsKey) ?? [];
+    final jsonList =
+        preferences.getStringList(PreferencesKeys.favoriteSongs) ?? [];
     return jsonList.map((jsonString) {
       final json = Map<String, dynamic>.from(
         jsonDecode(jsonString) as Map,
@@ -74,11 +75,11 @@ class FavoriteSongsDatasourceImpl implements FavoriteSongsDatasource {
 
   @override
   Future<void> clearAllFavorites() async {
-    await preferences.remove(_favoriteSongsKey);
+    await preferences.remove(PreferencesKeys.favoriteSongs);
   }
 
   Future<void> _saveFavorites(List<FavoriteSongModel> favorites) async {
     final jsonList = favorites.map((fav) => jsonEncode(fav.toJson())).toList();
-    await preferences.setStringList(_favoriteSongsKey, jsonList);
+    await preferences.setStringList(PreferencesKeys.favoriteSongs, jsonList);
   }
 }
