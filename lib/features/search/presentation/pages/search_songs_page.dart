@@ -6,12 +6,12 @@ import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/mixins/mixins.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/favorite/favorite.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/pages/pages.dart';
-import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
 class SearchSongsPage extends StatefulWidget {
   const SearchSongsPage({super.key});
@@ -21,7 +21,12 @@ class SearchSongsPage extends StatefulWidget {
 }
 
 class _SearchSongsPageState extends State<SearchSongsPage>
-    with SongSharingMixin {
+    with
+        SongSharingMixin,
+        RingtoneMixin,
+        PlaylistManagementMixin,
+        SongDeletionMixin {
+  MusicPlayerBloc get _musicPlayerBloc => context.read<MusicPlayerBloc>();
   final searchStream = StreamController<String>();
 
   @override
@@ -40,6 +45,20 @@ class _SearchSongsPageState extends State<SearchSongsPage>
         ),
       ),
     );
+  }
+
+  // Event handlers for song actions
+  Future<void> _handleSongTap(int songIndex, List<Song> songs) async {
+    _musicPlayerBloc.add(PlayMusicEvent(songIndex, songs));
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const MusicPlayerPage(),
+      ),
+    );
+  }
+
+  void onToggleLike(int songId) {
+    context.read<FavoriteSongsBloc>().add(ToggleFavoriteSongEvent(songId));
   }
 
   @override
@@ -91,65 +110,35 @@ class _SearchSongsPageState extends State<SearchSongsPage>
                 } else {
                   filteredSongs = state.allSongs;
                 }
-                return ListView.builder(
-                  itemCount: filteredSongs.length,
-                  itemBuilder: (context, index) {
-                    final song = filteredSongs[index];
-                    return ListTile(
-                      leading: SongImageWidget(songId: song.id),
-                      title: Text(song.title),
-                      subtitle: Text(song.artist),
-                      onLongPress: () {
-                        onLongPress(song, filteredSongs);
-                      },
-                      trailing: PopupMenuButton<String>(
-                        onSelected: (value) async {
-                          if (value == 'add_to_playlist') {
+                return BlocSelector<
+                  FavoriteSongsBloc,
+                  FavoriteSongsState,
+                  Set<int>
+                >(
+                  selector: (state) {
+                    return state.favoriteSongIds;
+                  },
+                  builder: (context, favoriteSongIds) {
+                    return ListView.builder(
+                      itemCount: filteredSongs.length,
+                      itemBuilder: (context, index) {
+                        final song = filteredSongs[index];
+                        return SongItem(
+                          song: song,
+                          isLiked: favoriteSongIds.contains(song.id),
+                          onSetAsRingtonePressed: () =>
+                              setAsRingtone(song.data),
+                          onDeletePressed: () => showDeleteSongDialog(song),
+                          onToggleLike: () => onToggleLike(song.id),
+                          onAddToPlaylistPressed: () async {
                             await PlaylistsPage.showSheet(
                               context: context,
                               songIds: {song.id},
                             );
-                          } else if (value == 'share') {
-                            await shareSong(song);
-                          }
-                        },
-                        itemBuilder: (context) => [
-                          PopupMenuItem(
-                            value: 'add_to_playlist',
-                            child: Row(
-                              spacing: 8,
-                              children: [
-                                const Icon(
-                                  Icons.playlist_add,
-                                  color: Colors.green,
-                                ),
-                                Text(context.localization.addToPlaylist),
-                              ],
-                            ),
-                          ),
-                          PopupMenuItem(
-                            value: 'share',
-                            child: Row(
-                              spacing: 8,
-                              children: [
-                                const Icon(
-                                  Icons.share,
-                                  color: Colors.blue,
-                                ),
-                                Text(context.localization.share),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      onTap: () async {
-                        context.read<MusicPlayerBloc>().add(
-                          PlayMusicEvent(index, filteredSongs),
-                        );
-                        await Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (_) => const MusicPlayerPage(),
-                          ),
+                          },
+                          onSharePressed: () => shareSong(song),
+                          onLongPress: () => onLongPress(song, filteredSongs),
+                          onTap: () => _handleSongTap(index, filteredSongs),
                         );
                       },
                     );

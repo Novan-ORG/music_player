@@ -49,6 +49,10 @@ class _SongsPageState extends State<SongsPage>
     );
   }
 
+  void onToggleLike(int songId) {
+    context.read<FavoriteSongsBloc>().add(ToggleFavoriteSongEvent(songId));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SongsBloc, SongsState>(
@@ -74,6 +78,18 @@ class _SongsPageState extends State<SongsPage>
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => const SearchSongsPage(),
+      ),
+    );
+  }
+
+  Future<void> onLongPress(Song song, List<Song> songs) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => SongsSelectionPage(
+          title: context.localization.songs,
+          availableSongs: songs,
+          selectedSongIds: {song.id},
+        ),
       ),
     );
   }
@@ -128,10 +144,7 @@ class _SongsPageState extends State<SongsPage>
                           onSetAsRingtonePressed: () =>
                               setAsRingtone(song.data),
                           onDeletePressed: () => showDeleteSongDialog(song),
-                          onToggleLike: () =>
-                              context.read<FavoriteSongsBloc>().add(
-                                ToggleFavoriteSongEvent(song.id),
-                              ),
+                          onToggleLike: () => onToggleLike(song.id),
                           onAddToPlaylistPressed: () async {
                             await PlaylistsPage.showSheet(
                               context: context,
@@ -139,15 +152,7 @@ class _SongsPageState extends State<SongsPage>
                             );
                           },
                           onSharePressed: () => shareSong(song),
-                          onLongPress: () => Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                              builder: (_) => SongsSelectionPage(
-                                title: context.localization.songs,
-                                availableSongs: songs,
-                                selectedSongIds: {song.id},
-                              ),
-                            ),
-                          ),
+                          onLongPress: () => onLongPress(song, songs),
                           onTap: () => _handleSongTap(index, songs),
                         );
                       },
