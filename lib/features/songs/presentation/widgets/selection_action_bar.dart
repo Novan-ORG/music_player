@@ -10,7 +10,6 @@ class SelectionActionBar extends StatelessWidget {
     required this.onShare,
     required this.onSelectAll,
     required this.onDeselectAll,
-    required this.onClearSelection,
     this.onRemoveFromPlaylist,
     this.isInPlaylist = false,
     super.key,
@@ -24,7 +23,6 @@ class SelectionActionBar extends StatelessWidget {
   final VoidCallback onShare;
   final VoidCallback onSelectAll;
   final VoidCallback onDeselectAll;
-  final VoidCallback onClearSelection;
   final bool isInPlaylist;
 
   bool get isAllSelected => selectedCount == totalCount && totalCount > 0;
@@ -33,6 +31,7 @@ class SelectionActionBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
+      padding: const EdgeInsets.only(left: 12),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
         boxShadow: const [
@@ -45,12 +44,6 @@ class SelectionActionBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: onClearSelection,
-            tooltip: 'Clear selection',
-          ),
-          const SizedBox(width: 8),
           Expanded(
             child: Text(
               '$selectedCount ${context.localization.song}'
@@ -74,6 +67,7 @@ class SelectionActionBar extends StatelessWidget {
           ),
           PopupMenuButton(
             enabled: selectedCount > 0,
+            icon: const Icon(Icons.more_vert),
             itemBuilder: (context) => [
               if (isInPlaylist)
                 PopupMenuItem(

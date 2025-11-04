@@ -34,7 +34,6 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
   /// Show delete confirmation dialog for multiple songs
   Future<void> showDeleteSongsDialog(
     List<Song> songs,
-    SongsBloc songsBloc,
   ) async {
     await showDialog<void>(
       context: context,
@@ -49,7 +48,9 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              songsBloc.add(const DeleteSelectedSongsEvent());
+              context.read<SongsBloc>().add(
+                DeleteSongsEvent(songs),
+              );
               _showDeletedSnackbar(songs.length);
             },
             child: Text(context.localization.deleteFromDevice),

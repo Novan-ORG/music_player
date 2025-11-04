@@ -4,7 +4,8 @@ import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/playlist/playlist.dart';
-import 'package:music_player/features/songs/presentation/pages/song_selection_page.dart';
+import 'package:music_player/features/songs/presentation/bloc/songs_bloc.dart';
+import 'package:music_player/features/songs/presentation/pages/add_songs_page.dart';
 
 /// Mixin that provides playlist management functionality
 mixin PlaylistManagementMixin<T extends StatefulWidget> on State<T> {
@@ -15,9 +16,11 @@ mixin PlaylistManagementMixin<T extends StatefulWidget> on State<T> {
   ) async {
     final selectedSongIds = await Navigator.of(context).push<Set<int>>(
       MaterialPageRoute<Set<int>>(
-        builder: (_) => SongSelectionPage(
+        builder: (_) => AddSongsPage(
           listName: playlist.name,
-          excludeIds: currentSongIds ?? {},
+          availableSongs: _availableSongs(
+            currentSongIdsToExclude: currentSongIds,
+          ),
         ),
       ),
     );
@@ -36,14 +39,25 @@ mixin PlaylistManagementMixin<T extends StatefulWidget> on State<T> {
     return selectedSongIds;
   }
 
+  List<Song> _availableSongs({Set<int>? currentSongIdsToExclude}) {
+    final songsBloc = context.read<SongsBloc>();
+    return currentSongIdsToExclude != null
+        ? songsBloc.state.allSongs
+              .where((song) => !currentSongIdsToExclude.contains(song.id))
+              .toList()
+        : songsBloc.state.allSongs;
+  }
+
   Future<Set<int>?> addSongsToFavorite(
     Set<int>? currentSongIds,
   ) async {
     final selectedSongIds = await Navigator.of(context).push<Set<int>>(
       MaterialPageRoute<Set<int>>(
-        builder: (_) => SongSelectionPage(
+        builder: (_) => AddSongsPage(
           listName: context.localization.favorites,
-          excludeIds: currentSongIds ?? {},
+          availableSongs: _availableSongs(
+            currentSongIdsToExclude: currentSongIds,
+          ),
         ),
       ),
     );
@@ -71,9 +85,11 @@ mixin PlaylistManagementMixin<T extends StatefulWidget> on State<T> {
     _showSongsRemovedMessage(songIds.length, playlist.name);
   }
 
-  /// Remove a single song from a playlist
-  void removeSongFromPlaylist(Song song, Playlist playlist) {
-    removeSongsFromPlaylist({song.id}, playlist);
+  Future<void> showPlaylistSheetForAddingSongs(List<Song> selectedSongs) async {
+    await PlaylistsPage.showSheet(
+      context: context,
+      songIds: selectedSongs.map((song) => song.id).toSet(),
+    );
   }
 
   void _showSongsAddedMessage(int count, String playlistName) {

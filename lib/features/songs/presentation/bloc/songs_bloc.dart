@@ -22,12 +22,6 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     on<DeleteSongEvent>(onDeleteSong);
     on<UndoDeleteSongEvent>(onUndoDeleteSong);
     on<CanUndoChangedEvent>(onCanUndoChanged);
-    on<ToggleSelectionModeEvent>(_onToggleSelectionMode);
-    on<SelectSongEvent>(_onSelectSong);
-    on<DeselectSongEvent>(_onDeselectSong);
-    on<SelectAllSongsEvent>(_onSelectAllSongs);
-    on<ClearSelectionEvent>(_onClearSelection);
-    on<DeleteSelectedSongsEvent>(_onDeleteSelectedSongs);
     commandManager.canUndoNotifier.addListener(_onCanUndoChanged);
   }
 
@@ -38,78 +32,6 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
 
   void _onCanUndoChanged() {
     add(CanUndoChangedEvent(canUndo: commandManager.canUndo));
-  }
-
-  void _onToggleSelectionMode(
-    ToggleSelectionModeEvent event,
-    Emitter<SongsState> emit,
-  ) {
-    if (state.isSelectionMode) {
-      emit(
-        state.copyWith(
-          isSelectionMode: false,
-          selectedSongIds: <int>{},
-        ),
-      );
-    } else {
-      emit(state.copyWith(isSelectionMode: true));
-    }
-  }
-
-  void _onSelectSong(SelectSongEvent event, Emitter<SongsState> emit) {
-    final newSelectedIds = Set<int>.from(state.selectedSongIds)
-      ..add(event.songId);
-    emit(state.copyWith(selectedSongIds: newSelectedIds));
-  }
-
-  void _onDeselectSong(DeselectSongEvent event, Emitter<SongsState> emit) {
-    final newSelectedIds = Set<int>.from(state.selectedSongIds)
-      ..remove(event.songId);
-    emit(state.copyWith(selectedSongIds: newSelectedIds));
-  }
-
-  void _onSelectAllSongs(SelectAllSongsEvent event, Emitter<SongsState> emit) {
-    final allSongIds = event.songs.map((song) => song.id).toSet();
-    emit(state.copyWith(selectedSongIds: allSongIds));
-  }
-
-  void _onClearSelection(ClearSelectionEvent event, Emitter<SongsState> emit) {
-    emit(
-      state.copyWith(
-        isSelectionMode: false,
-        selectedSongIds: <int>{},
-      ),
-    );
-  }
-
-  Future<void> _onDeleteSelectedSongs(
-    DeleteSelectedSongsEvent event,
-    Emitter<SongsState> emit,
-  ) async {
-    final selectedSongs = state.allSongs
-        .where((song) => state.selectedSongIds.contains(song.id))
-        .toList();
-
-    for (final song in selectedSongs) {
-      final result = await deleteSong(song: song);
-      if (result.isFailure) {
-        emit(state.copyWith(errorMessage: result.error));
-        return;
-      }
-    }
-
-    // Reload songs and clear selection
-    final queryResult = await querySongs();
-    if (queryResult.isSuccess) {
-      emit(
-        state.copyWith(
-          allSongs: queryResult.value,
-          isSelectionMode: false,
-          selectedSongIds: <int>{},
-          canUndo: commandManager.canUndo,
-        ),
-      );
-    }
   }
 
   Future<void> onDeleteSong(

@@ -61,13 +61,13 @@ class SongsUIBuilder {
       itemCount: songs.length,
       itemBuilder: (context, index) {
         final song = songs[index];
-        final isSelected = songsState.selectedSongIds.contains(song.id);
+        //final isSelected = songsState.selectedSongIds.contains(song.id);
 
         return itemBuilder(
           context: context,
           songIndex: index,
           song: song,
-          isSelected: isSelected,
+          isSelected: false,
         );
       },
     );

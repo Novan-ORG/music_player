@@ -11,6 +11,7 @@ import 'package:music_player/features/playlist/presentation/pages/playlists_page
 import 'package:music_player/features/search/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/helpers/helpers.dart';
+import 'package:music_player/features/songs/presentation/pages/songs_selection_page.dart';
 import 'package:music_player/features/songs/presentation/widgets/songs_appbar.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
@@ -48,35 +49,22 @@ class _SongsPageState extends State<SongsPage>
     );
   }
 
-  void _handleSongLongPress(Song song) {
-    if (!_songsBloc.state.isSelectionMode) {
-      _songsBloc
-        ..add(const ToggleSelectionModeEvent())
-        ..add(SelectSongEvent(song.id));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SongsBloc, SongsState>(
       bloc: _songsBloc,
       builder: (context, songsState) {
-        return BlocSelector<FavoriteSongsBloc, FavoriteSongsState, Set<int>>(
-          selector: (state) => state.favoriteSongIds,
-          builder: (context, likedSongIds) {
-            return Scaffold(
-              appBar: SongsAppbar(
-                numOfSongs: songsState.allSongs.length,
-                sortType: songsState.sortType,
-                onSearchButtonPressed: _onSearchButtonPressed,
-                onShuffleAll: () => _onShufflePressed(songsState.allSongs),
-                onSortSongs: _onSortSongs,
-              ),
-              body: BackgroundGradient(
-                child: _buildSongsContent(songsState, likedSongIds),
-              ),
-            );
-          },
+        return Scaffold(
+          appBar: SongsAppbar(
+            numOfSongs: songsState.allSongs.length,
+            sortType: songsState.sortType,
+            onSearchButtonPressed: _onSearchButtonPressed,
+            onShuffleAll: () => _onShufflePressed(songsState.allSongs),
+            onSortSongs: _onSortSongs,
+          ),
+          body: BackgroundGradient(
+            child: _buildSongsContent(songsState),
+          ),
         );
       },
     );
@@ -90,7 +78,7 @@ class _SongsPageState extends State<SongsPage>
     );
   }
 
-  Widget _buildSongsContent(SongsState songsState, Set<int> likedSongIds) {
+  Widget _buildSongsContent(SongsState songsState) {
     // Handle loading state
     if (songsState.status == SongsStatus.loading) {
       return const Loading();
@@ -119,35 +107,53 @@ class _SongsPageState extends State<SongsPage>
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async => _songsBloc.add(const LoadSongsEvent()),
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(
-                vertical: SongsPageConstants.listVerticalPadding,
-                horizontal: SongsPageConstants.listHorizontalPadding,
-              ),
-              itemCount: songs.length,
-              itemBuilder: (context, index) {
-                final song = songs[index];
-                return SongItem(
-                  song: song,
-                  isLiked: likedSongIds.contains(song.id),
-                  onSetAsRingtonePressed: () => setAsRingtone(song.data),
-                  onDeletePressed: () => showDeleteSongDialog(song),
-                  onToggleLike: () => context.read<FavoriteSongsBloc>().add(
-                    ToggleFavoriteSongEvent(song.id),
-                  ),
-                  onAddToPlaylistPressed: () async {
-                    await PlaylistsPage.showSheet(
-                      context: context,
-                      songIds: {song.id},
+            child:
+                BlocSelector<FavoriteSongsBloc, FavoriteSongsState, Set<int>>(
+                  selector: (state) {
+                    return state.favoriteSongIds;
+                  },
+                  builder: (context, favoriteSongIds) {
+                    return ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: SongsPageConstants.listVerticalPadding,
+                        horizontal: SongsPageConstants.listHorizontalPadding,
+                      ),
+                      itemCount: songs.length,
+                      itemBuilder: (context, index) {
+                        final song = songs[index];
+                        return SongItem(
+                          song: song,
+                          isLiked: favoriteSongIds.contains(song.id),
+                          onSetAsRingtonePressed: () =>
+                              setAsRingtone(song.data),
+                          onDeletePressed: () => showDeleteSongDialog(song),
+                          onToggleLike: () =>
+                              context.read<FavoriteSongsBloc>().add(
+                                ToggleFavoriteSongEvent(song.id),
+                              ),
+                          onAddToPlaylistPressed: () async {
+                            await PlaylistsPage.showSheet(
+                              context: context,
+                              songIds: {song.id},
+                            );
+                          },
+                          onSharePressed: () => shareSong(song),
+                          onLongPress: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => SongsSelectionPage(
+                                title: context.localization.songs,
+                                availableSongs: songs,
+                                selectedSongIds: {song.id},
+                              ),
+                            ),
+                          ),
+                          onTap: () => _handleSongTap(index, songs),
+                        );
+                      },
                     );
                   },
-                  onSharePressed: () => shareSong(song),
-                  onLongPress: () => _handleSongLongPress(song),
-                  onTap: () => _handleSongTap(index, songs),
-                );
-              },
-            ),
+                ),
           ),
         ),
 

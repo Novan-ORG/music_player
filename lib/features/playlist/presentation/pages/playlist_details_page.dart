@@ -10,6 +10,7 @@ import 'package:music_player/features/music_plyer/presentation/pages/pages.dart'
 import 'package:music_player/features/playlist/domain/domain.dart';
 import 'package:music_player/features/playlist/presentation/bloc/play_list_bloc.dart';
 import 'package:music_player/features/playlist/presentation/widgets/widgets.dart';
+import 'package:music_player/features/songs/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
 class PlaylistDetailsPage extends StatefulWidget {
@@ -46,7 +47,15 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage>
   }
 
   void _handleSongLongPress(Song song) {
-    // Implement your long press logic here
+    Navigator.of(context).push<Set<int>>(
+      MaterialPageRoute<Set<int>>(
+        builder: (_) => SongsSelectionPage(
+          title: widget.playlistModel.name,
+          availableSongs: _playlistBloc.state.currentPlaylistSongs,
+          selectedSongIds: {song.id},
+        ),
+      ),
+    );
   }
 
   // Event handlers for song actions
@@ -135,7 +144,9 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage>
                             .add(ToggleFavoriteSongEvent(song.id)),
                         onSharePressed: () => shareSong(song),
                         onRemoveFromPlaylistPressed: () {
-                          removeSongFromPlaylist(song, widget.playlistModel);
+                          removeSongsFromPlaylist({
+                            song.id,
+                          }, widget.playlistModel);
                         },
                         onLongPress: () => _handleSongLongPress(song),
                         onTap: () async {

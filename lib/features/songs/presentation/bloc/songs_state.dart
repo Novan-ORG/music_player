@@ -9,8 +9,6 @@ final class SongsState extends Equatable {
     this.canUndo = false,
     this.lastDeletedSong,
     this.errorMessage,
-    this.isSelectionMode = false,
-    this.selectedSongIds = const {},
   });
 
   final List<Song> allSongs;
@@ -19,8 +17,6 @@ final class SongsState extends Equatable {
   final bool canUndo;
   final Song? lastDeletedSong;
   final String? errorMessage;
-  final bool isSelectionMode;
-  final Set<int> selectedSongIds;
 
   SongsState copyWith({
     List<Song>? allSongs,
@@ -29,8 +25,6 @@ final class SongsState extends Equatable {
     bool? canUndo,
     Song? lastDeletedSong,
     String? errorMessage,
-    bool? isSelectionMode,
-    Set<int>? selectedSongIds,
   }) {
     return SongsState(
       allSongs: allSongs ?? this.allSongs,
@@ -39,8 +33,6 @@ final class SongsState extends Equatable {
       canUndo: canUndo ?? this.canUndo,
       lastDeletedSong: lastDeletedSong,
       errorMessage: errorMessage,
-      isSelectionMode: isSelectionMode ?? this.isSelectionMode,
-      selectedSongIds: selectedSongIds ?? this.selectedSongIds,
     );
   }
 
@@ -52,8 +44,6 @@ final class SongsState extends Equatable {
     canUndo,
     lastDeletedSong,
     if (errorMessage != null) errorMessage!,
-    isSelectionMode,
-    selectedSongIds,
   ];
 }
 

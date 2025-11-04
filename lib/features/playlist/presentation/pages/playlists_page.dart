@@ -119,8 +119,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           ),
           subtitle: Text(subtitle),
           trailing: PlaylistItemMoreAction(playlist: playlist),
-          onTap: () async {
-            await Navigator.of(context).push(
+          onTap: () {
+            Navigator.of(context).push(
               MaterialPageRoute<void>(
                 builder: (_) => PlaylistDetailsPage(playlistModel: playlist),
               ),
