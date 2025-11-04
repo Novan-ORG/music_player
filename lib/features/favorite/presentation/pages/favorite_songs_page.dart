@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
-import 'package:music_player/core/mixins/song_actions_mixin.dart';
+import 'package:music_player/core/mixins/mixins.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/favorite/presentation/widgets/widgets.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
+import 'package:music_player/features/playlist/playlist.dart';
+import 'package:music_player/features/songs/presentation/pages/songs_selection_page.dart';
 
 class FavoriteSongsPage extends StatefulWidget {
   const FavoriteSongsPage({super.key});
@@ -17,11 +19,16 @@ class FavoriteSongsPage extends StatefulWidget {
 }
 
 class _FavoriteSongsPageState extends State<FavoriteSongsPage>
-    with SongSharingMixin {
+    with
+        SongSharingMixin,
+        RingtoneMixin,
+        PlaylistManagementMixin,
+        SongDeletionMixin {
+  late final FavoriteSongsBloc favSongsBloc = context.read<FavoriteSongsBloc>();
   @override
   void initState() {
     super.initState();
-    context.read<FavoriteSongsBloc>().add(const LoadFavoriteSongsEvent());
+    favSongsBloc.add(const LoadFavoriteSongsEvent());
   }
 
   Future<void> _handleSongTap(int songIndex, List<Song> favoriteSongs) async {
@@ -37,7 +44,18 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
   }
 
   void _handleToggleLike(int songId) {
-    context.read<FavoriteSongsBloc>().add(ToggleFavoriteSongEvent(songId));
+    favSongsBloc.add(ToggleFavoriteSongEvent(songId));
+  }
+
+  void onLongPress(Song song) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => SongsSelectionPage(
+          title: context.localization.favoriteSongs,
+          availableSongs: favSongsBloc.state.favoriteSongs,
+        ),
+      ),
+    );
   }
 
   @override
@@ -97,7 +115,7 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
     if (favoriteState.status == FavoriteSongsStatus.error) {
       return FavoriteErrorWidget(
         message: context.localization.errorLoadingSongs,
-        onRetry: () => context.read<FavoriteSongsBloc>().add(
+        onRetry: () => favSongsBloc.add(
           const LoadFavoriteSongsEvent(),
         ),
       );
@@ -106,7 +124,7 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
     if (favoriteState.favoriteSongs.isEmpty) {
       return FavoriteEmptyWidget(
         onRefresh: () {
-          context.read<FavoriteSongsBloc>().add(const LoadFavoriteSongsEvent());
+          favSongsBloc.add(const LoadFavoriteSongsEvent());
         },
       );
     }
@@ -124,8 +142,17 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
           song: song,
           isLiked: true,
           onTap: () => _handleSongTap(index, favoriteSongs),
+          onLongPress: () => onLongPress(song),
           onToggleLike: () => _handleToggleLike(song.id),
           onSharePressed: () => shareSong(song),
+          onSetAsRingtonePressed: () => setAsRingtone(song.data),
+          onDeletePressed: () => showDeleteSongDialog(song),
+          onAddToPlaylistPressed: () async {
+            await PlaylistsPage.showSheet(
+              context: context,
+              songIds: {song.id},
+            );
+          },
         );
       },
     );
@@ -147,7 +174,7 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              context.read<FavoriteSongsBloc>().add(
+              favSongsBloc.add(
                 const ClearAllFavoritesEvent(),
               );
             },

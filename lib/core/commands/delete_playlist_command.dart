@@ -108,8 +108,20 @@ class DeletePlaylistCommand implements BaseCommand<bool> {
     }
 
     if (_songIdsBackup.isNotEmpty) {
+      // get the new playlist id
+      var newPlaylistId = playlistId;
+      final allPlaylists = await playlistRepository.getAllPlaylists();
+      if (allPlaylists.isSuccess) {
+        // Notice that this is temporary and may not work correctly if multiple
+        // playlists with the same name exist. A more robust solution would
+        // require the repository to return the created playlist's ID directly.
+        final newPlaylist = allPlaylists.value!.firstWhere(
+          (playlist) => playlist.name == _playlistBackup!.name,
+        );
+        newPlaylistId = newPlaylist.id;
+      }
       final addSongsResult = await playlistRepository.addSongsToPlaylist(
-        playlistId,
+        newPlaylistId,
         _songIdsBackup,
       );
       if (addSongsResult.isFailure) {

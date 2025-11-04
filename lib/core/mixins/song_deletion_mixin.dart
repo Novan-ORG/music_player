@@ -8,6 +8,7 @@ import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
   /// Show delete confirmation dialog for a single song
   Future<void> showDeleteSongDialog(Song song) async {
+    final songBloc = context.read<SongsBloc>();
     await showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
@@ -21,7 +22,7 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              context.read<SongsBloc>().add(DeleteSongEvent(song));
+              songBloc.add(DeleteSongEvent(song));
               _showUndoDeleteSnackbar(song);
             },
             child: Text(context.localization.deleteFromDevice),
@@ -35,6 +36,7 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
   Future<void> showDeleteSongsDialog(
     List<Song> songs,
   ) async {
+    final songBloc = context.read<SongsBloc>();
     await showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
@@ -47,11 +49,11 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
-              context.read<SongsBloc>().add(
+              songBloc.add(
                 DeleteSongsEvent(songs),
               );
               _showDeletedSnackbar(songs.length);
+              Navigator.of(context).pop();
             },
             child: Text(context.localization.deleteFromDevice),
           ),
@@ -62,6 +64,7 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
 
   void _showUndoDeleteSnackbar(Song song) {
     if (!mounted) return;
+    final songBloc = context.read<SongsBloc>();
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -69,8 +72,7 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
         action: SnackBarAction(
           label: context.localization.undo,
           backgroundColor: Theme.of(context).colorScheme.primary,
-          onPressed: () =>
-              context.read<SongsBloc>().add(const UndoDeleteSongEvent()),
+          onPressed: () => songBloc.add(const UndoDeleteSongEvent()),
         ),
         duration: const Duration(seconds: 20),
       ),

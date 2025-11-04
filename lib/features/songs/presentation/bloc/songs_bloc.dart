@@ -22,6 +22,7 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     on<DeleteSongEvent>(onDeleteSong);
     on<UndoDeleteSongEvent>(onUndoDeleteSong);
     on<CanUndoChangedEvent>(onCanUndoChanged);
+    on<DeleteSongsEvent>(onDeleteSongs);
     commandManager.canUndoNotifier.addListener(_onCanUndoChanged);
   }
 
@@ -32,6 +33,30 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
 
   void _onCanUndoChanged() {
     add(CanUndoChangedEvent(canUndo: commandManager.canUndo));
+  }
+
+  Future<void> onDeleteSongs(
+    DeleteSongsEvent event,
+    Emitter<SongsState> emit,
+  ) async {
+    for (final song in event.songs) {
+      final result = await deleteSong(song: song);
+      if (result.isFailure) {
+        emit(state.copyWith(errorMessage: result.error));
+      }
+    }
+    // Reload songs to reflect the changes
+    final queryResult = await querySongs();
+    if (queryResult.isSuccess) {
+      emit(
+        state.copyWith(
+          allSongs: queryResult.value,
+          canUndo: commandManager.canUndo,
+        ),
+      );
+    } else {
+      emit(state.copyWith(errorMessage: queryResult.error));
+    }
   }
 
   Future<void> onDeleteSong(

@@ -102,9 +102,10 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
               ).paddingSymmetric(horizontal: 16, vertical: 8),
             ),
             bottomSheet: SafeArea(
-              child: const PlayerActionButtons().paddingSymmetric(
-                vertical: 10,
-                horizontal: 16,
+              child: const PlayerActionButtons().paddingOnly(
+                bottom: 48,
+                left: 16,
+                right: 16,
               ),
             ),
           ),

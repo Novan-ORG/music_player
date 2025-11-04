@@ -22,8 +22,10 @@ class SongsSelectionPage extends StatefulWidget {
 
 class _SongsSelectionPageState extends State<SongsSelectionPage>
     with SongSharingMixin, SongDeletionMixin, PlaylistManagementMixin {
+  final Set<int> selectedSongIds = {};
+
   List<Song> get _selectedSongs => widget.availableSongs
-      .where((song) => widget.selectedSongIds.contains(song.id))
+      .where((song) => selectedSongIds.contains(song.id))
       .toList();
 
   void onAddToPlaylist() {
@@ -46,16 +48,20 @@ class _SongsSelectionPageState extends State<SongsSelectionPage>
 
   void onSelectAll() {
     setState(() {
-      widget.selectedSongIds.addAll(
+      selectedSongIds.addAll(
         widget.availableSongs.map((song) => song.id),
       );
     });
   }
 
   void onDeselectAll() {
-    setState(() {
-      widget.selectedSongIds.clear();
-    });
+    setState(selectedSongIds.clear);
+  }
+
+  @override
+  void initState() {
+    selectedSongIds.addAll(widget.selectedSongIds);
+    super.initState();
   }
 
   @override
@@ -66,8 +72,8 @@ class _SongsSelectionPageState extends State<SongsSelectionPage>
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: SelectionActionBar(
-            selectedCount: widget.selectedSongIds.length,
-            totalCount: widget.availableSongs.length,
+            selectedCount: selectedSongIds.length,
+            totalCount: widget.availableSongs.map((e) => e.id).toSet().length,
             onAddToPlaylist: onAddToPlaylist,
             onDelete: onDelete,
             onShare: onShare,
@@ -87,7 +93,7 @@ class _SongsSelectionPageState extends State<SongsSelectionPage>
                 itemCount: widget.availableSongs.length,
                 itemBuilder: (context, index) {
                   final song = widget.availableSongs[index];
-                  final isSelected = widget.selectedSongIds.contains(song.id);
+                  final isSelected = selectedSongIds.contains(song.id);
 
                   return Card(
                     margin: const EdgeInsets.symmetric(
@@ -99,9 +105,9 @@ class _SongsSelectionPageState extends State<SongsSelectionPage>
                       onChanged: (selected) {
                         setState(() {
                           if (selected ?? false) {
-                            widget.selectedSongIds.add(song.id);
+                            selectedSongIds.add(song.id);
                           } else {
-                            widget.selectedSongIds.remove(song.id);
+                            selectedSongIds.remove(song.id);
                           }
                         });
                       },

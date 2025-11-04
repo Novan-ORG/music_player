@@ -10,12 +10,14 @@ class PlaylistDetailsAppbar extends StatelessWidget
     required this.playlist,
     required this.songCount,
     required this.onAddSongs,
+    this.onPlaylistRenamed,
     super.key,
   });
 
   final Playlist playlist;
   final int songCount;
   final VoidCallback onAddSongs;
+  final VoidCallback? onPlaylistRenamed;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,15 @@ class PlaylistDetailsAppbar extends StatelessWidget
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
-      actions: [PlaylistItemMoreAction(playlist: playlist)],
+      actions: [
+        PlaylistItemMoreAction(
+          playlist: playlist,
+          onDeleted: () {
+            Navigator.of(context).pop();
+          },
+          onRenamed: onPlaylistRenamed,
+        ),
+      ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Container(

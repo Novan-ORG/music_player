@@ -24,13 +24,11 @@ class PlaylistsPage extends StatefulWidget {
     return showModalBottomSheet(
       context: context,
       useSafeArea: true,
+      backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: PlaylistsPage(isSelectionMode: true, songIds: songIds),
-      ),
+      builder: (_) => PlaylistsPage(isSelectionMode: true, songIds: songIds),
     );
   }
 
@@ -152,36 +150,38 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
 
   Widget? _buildBottomBar() {
     if (widget.isSelectionMode && widget.songIds != null) {
-      return Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-              offset: Offset(0, -2),
-            ),
-          ],
-        ),
-        child: ElevatedButton.icon(
-          icon: const Icon(Icons.playlist_add_check),
-          label: Text(context.localization.addToSelectedPlaylist),
-          onPressed: selectedPlaylistIds.isEmpty
-              ? null
-              : () {
-                  context.read<PlayListBloc>().add(
-                    AddSongsToPlaylistsEvent(
-                      widget.songIds!,
-                      selectedPlaylistIds.toList(),
-                    ),
-                  );
-                  Navigator.of(context).pop(selectedPlaylistIds.toList());
-                },
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size.fromHeight(48),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+      return SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 8,
+                offset: Offset(0, -2),
+              ),
+            ],
+          ),
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.playlist_add_check),
+            label: Text(context.localization.addToSelectedPlaylist),
+            onPressed: selectedPlaylistIds.isEmpty
+                ? null
+                : () {
+                    context.read<PlayListBloc>().add(
+                      AddSongsToPlaylistsEvent(
+                        widget.songIds!,
+                        selectedPlaylistIds.toList(),
+                      ),
+                    );
+                    Navigator.of(context).pop(selectedPlaylistIds.toList());
+                  },
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(48),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
           ),
         ),
@@ -213,7 +213,10 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
       ),
       body: BackgroundGradient(
         child: BlocBuilder<PlayListBloc, PlayListState>(
-          builder: (context, state) => _buildBody(state),
+          builder: (context, state) => Padding(
+            padding: const EdgeInsets.all(16),
+            child: _buildBody(state),
+          ),
         ),
       ),
       bottomNavigationBar: _buildBottomBar(),

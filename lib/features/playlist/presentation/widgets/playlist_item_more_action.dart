@@ -4,21 +4,30 @@ import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/playlist.dart';
 
 class PlaylistItemMoreAction extends StatelessWidget {
-  const PlaylistItemMoreAction({required this.playlist, super.key});
+  const PlaylistItemMoreAction({
+    required this.playlist,
+    this.onDeleted,
+    this.onRenamed,
+    super.key,
+  });
   final Playlist playlist;
+  final VoidCallback? onDeleted;
+  final VoidCallback? onRenamed;
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
       icon: const Icon(Icons.more_vert),
-      onSelected: (value) {
+      onSelected: (value) async {
         if (value == 'delete') {
           context.read<PlayListBloc>().add(
             DeletePlayListEvent(playlist.id),
           );
           _showUndoSnackbar(context, playlist);
+          onDeleted?.call();
         } else if (value == 'rename') {
-          CreatePlaylistSheet.showEdit(context, playlist);
+          await CreatePlaylistSheet.showEdit(context, playlist);
+          onRenamed?.call();
         }
       },
       itemBuilder: (context) => [
@@ -35,6 +44,7 @@ class PlaylistItemMoreAction extends StatelessWidget {
   }
 
   void _showUndoSnackbar(BuildContext context, Playlist playlist) {
+    final playlistBloc = context.read<PlayListBloc>();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('${playlist.name} ${context.localization.deleted}'),
@@ -42,7 +52,7 @@ class PlaylistItemMoreAction extends StatelessWidget {
           label: context.localization.undo,
           backgroundColor: Theme.of(context).colorScheme.primary,
           onPressed: () {
-            context.read<PlayListBloc>().add(UndoDeletePlayListEvent());
+            playlistBloc.add(UndoDeletePlayListEvent());
           },
         ),
         duration: const Duration(seconds: 20),

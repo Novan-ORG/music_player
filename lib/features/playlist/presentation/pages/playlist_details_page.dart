@@ -109,6 +109,7 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
               state.playlist,
               songs.map((e) => e.id).toSet(),
             ),
+            onPlaylistRenamed: () {},
           ),
           body: state.status == PlaylistDetailsStatus.loading
               ? const Center(
