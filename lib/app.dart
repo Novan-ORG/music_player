@@ -18,7 +18,6 @@ import 'package:music_player/features/settings/presentation/presentation.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/injection/service_locator.dart';
 import 'package:music_player/localization/app_localizations.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MusicPlayerApp extends StatefulWidget {
@@ -122,9 +121,6 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
             debugShowCheckedModeBanner: false,
             locale: state.currentLocale,
             supportedLocales: AppLocalizations.supportedLocales,
-            navigatorObservers: [
-              SentryNavigatorObserver(),
-            ],
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,

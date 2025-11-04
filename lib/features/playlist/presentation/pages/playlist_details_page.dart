@@ -136,12 +136,6 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage>
                         onSharePressed: () => shareSong(song),
                         onRemoveFromPlaylistPressed: () {
                           removeSongFromPlaylist(song, widget.playlistModel);
-                          context.read<PlayListBloc>().add(
-                            RemoveSongsFromPlaylistEvent(
-                              {song.id},
-                              widget.playlistModel.id,
-                            ),
-                          );
                         },
                         onLongPress: () => _handleSongLongPress(song),
                         onTap: () async {

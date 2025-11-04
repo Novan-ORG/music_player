@@ -63,7 +63,13 @@ class PlaylistDatasourceImpl implements PlaylistDatasource {
     List<int> songIds,
   ) async {
     for (var i = 0; i < songIds.length; i++) {
-      await audioQuery.removeFromPlaylist(playlistId, songIds[i]);
+      final result = await audioQuery.removeFromPlaylist(
+        playlistId,
+        songIds[i],
+      );
+      Logger.info(
+        'Removed song with ID ${songIds[i]} from playlist $playlistId: $result',
+      );
     }
   }
 

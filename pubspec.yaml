@@ -29,14 +29,13 @@ dependencies:
   intl: ^0.20.2
   just_audio: ^0.10.4
   marquee: ^2.3.0
-  on_audio_query_pluse: ^3.0.3
+  on_audio_query_pluse: ^3.0.5
   package_info_plus: ^9.0.0
   path: ^1.9.1
   path_provider: ^2.1.5
   permission_handler: ^12.0.1
   scrollable_positioned_list: ^0.3.8
   see_more_text: ^1.1.1
-  sentry_flutter: ^9.7.0
   share_plus: ^12.0.0
   shared_preferences: ^2.5.3
   stream_transform: ^2.1.1
@@ -88,9 +87,3 @@ flutter:
     - family: IranSans
       fonts:
         - asset: assets/fonts/iran_sans/irsans.ttf
-
-sentry:
-  upload_debug_symbols: true
-  upload_source_maps: true
-  project: flutter
-  org: self-employed-30o
