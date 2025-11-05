@@ -60,7 +60,7 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
                 children: [
                   const SizedBox(height: 24),
                   Hero(
-                    tag: 'mini_cover_${state.currentSong?.id ?? 'no_song'}',
+                    tag: 'song_cover_${state.currentSong?.id ?? 0}',
                     child: SongArtwork(song: state.currentSong),
                   ),
                   const SizedBox(height: 24),

@@ -16,6 +16,7 @@ class MiniPlayerPage extends StatefulWidget {
 
 class _MiniPlayerPageState extends State<MiniPlayerPage>
     with TickerProviderStateMixin {
+  late final MusicPlayerBloc musicPlayerBloc = context.read<MusicPlayerBloc>();
   bool _isMinimized = false;
   late AnimationController _animationController;
   late Animation<double> _sizeAnimation;
@@ -71,7 +72,6 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
 
   @override
   Widget build(BuildContext context) {
-    final musicPlayerBloc = context.read<MusicPlayerBloc>();
     return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
       buildWhen: (previous, current) =>
           previous.currentSong?.id != current.currentSong?.id ||
@@ -79,88 +79,91 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
       builder: (context, state) {
         final isPlaying = state.status == MusicPlayerStatus.playing;
 
-        return AnimatedBuilder(
-          animation: _animationController,
-          builder: (context, child) {
-            if (_isMinimized) {
-              return _buildMinimizedPlayer(
-                context,
-                musicPlayerBloc,
-                state.currentSong?.id ?? 0,
-                isPlaying,
-              );
-            }
+        return Material(
+          color: Colors.transparent,
+          child: AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) {
+              if (_isMinimized) {
+                return _buildMinimizedPlayer(
+                  context,
+                  musicPlayerBloc,
+                  state.currentSong?.id ?? 0,
+                  isPlaying,
+                );
+              }
 
-            return Transform.scale(
-              scale: _sizeAnimation.value,
-              child: Opacity(
-                opacity: _fadeAnimation.value,
-                child: Card(
-                  elevation: 6,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onTap: () async {
-                      await Navigator.of(
-                        context,
-                      ).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) => const MusicPlayerPage(),
-                        ),
-                      );
-                    },
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      leading: Hero(
-                        tag: 'mini_cover_${state.currentSong?.id ?? 0}',
-                        child: MiniCoverAndProgress(
-                          positionStream: musicPlayerBloc.positionStream,
-                          durationStream: musicPlayerBloc.durationStream,
-                          songId: state.currentSong?.id ?? 0,
-                        ),
-                      ),
-                      title: _buildTitle(
-                        context,
-                        state.currentSong?.title ?? 'No song',
-                      ),
-                      subtitle: _buildSubtitle(
-                        context,
-                        state.currentSong?.artist,
-                      ),
-                      trailing:
-                          BlocSelector<
-                            FavoriteSongsBloc,
-                            FavoriteSongsState,
-                            Set<int>
-                          >(
-                            selector: (state) {
-                              return state.favoriteSongIds;
-                            },
-                            builder: (context, favoriteSongIds) {
-                              final currentId = state.currentSong?.id ?? -1;
-                              final isLiked = favoriteSongIds.contains(
-                                currentId,
-                              );
-                              return _MiniPlayerControls(
-                                musicPlayerBloc: musicPlayerBloc,
-                                currentSongId: state.currentSong?.id ?? 0,
-                                isLiked: isLiked,
-                                isPlaying: isPlaying,
-                                onMinimize: _toggleMinimize,
-                              );
-                            },
+              return Transform.scale(
+                scale: _sizeAnimation.value,
+                child: Opacity(
+                  opacity: _fadeAnimation.value,
+                  child: Card(
+                    elevation: 6,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: InkWell(
+                      onTap: () async {
+                        await Navigator.of(
+                          context,
+                        ).push(
+                          MaterialPageRoute<void>(
+                            builder: (_) => const MusicPlayerPage(),
                           ),
+                        );
+                      },
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        leading: Hero(
+                          tag: 'song_cover_${state.currentSong?.id ?? 0}',
+                          child: MiniCoverAndProgress(
+                            positionStream: musicPlayerBloc.positionStream,
+                            durationStream: musicPlayerBloc.durationStream,
+                            songId: state.currentSong?.id ?? 0,
+                          ),
+                        ),
+                        title: _buildTitle(
+                          context,
+                          state.currentSong?.title ?? 'No song',
+                        ),
+                        subtitle: _buildSubtitle(
+                          context,
+                          state.currentSong?.artist,
+                        ),
+                        trailing:
+                            BlocSelector<
+                              FavoriteSongsBloc,
+                              FavoriteSongsState,
+                              Set<int>
+                            >(
+                              selector: (state) {
+                                return state.favoriteSongIds;
+                              },
+                              builder: (context, favoriteSongIds) {
+                                final currentId = state.currentSong?.id ?? -1;
+                                final isLiked = favoriteSongIds.contains(
+                                  currentId,
+                                );
+                                return _MiniPlayerControls(
+                                  musicPlayerBloc: musicPlayerBloc,
+                                  currentSongId: state.currentSong?.id ?? 0,
+                                  isLiked: isLiked,
+                                  isPlaying: isPlaying,
+                                  onMinimize: _toggleMinimize,
+                                );
+                              },
+                            ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         );
       },
     );
