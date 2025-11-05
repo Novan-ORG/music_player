@@ -1,2 +1,2 @@
-export 'delete_song.dart';
+export 'delete_song_with_undo.dart';
 export 'query_songs.dart';

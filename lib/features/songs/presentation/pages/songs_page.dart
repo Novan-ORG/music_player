@@ -1,258 +1,184 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
-import 'package:music_player/core/services/services.dart';
+import 'package:music_player/core/mixins/mixins.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
+import 'package:music_player/features/playlist/presentation/pages/playlists_page.dart';
 import 'package:music_player/features/search/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
+import 'package:music_player/features/songs/presentation/constants/constants.dart';
+import 'package:music_player/features/songs/presentation/pages/songs_selection_page.dart';
+import 'package:music_player/features/songs/presentation/widgets/songs_appbar.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class SongsPage extends StatefulWidget {
-  const SongsPage({super.key, this.playlist, this.isFavorites = false});
-
-  final PlaylistModel? playlist;
-  final bool isFavorites;
+  const SongsPage({
+    super.key,
+  });
 
   @override
   State<SongsPage> createState() => _SongsPageState();
 }
 
-class _SongsPageState extends State<SongsPage> {
-  SongsBloc get songsBloc => context.read<SongsBloc>();
-  MusicPlayerBloc get musicPlayerBloc => context.read<MusicPlayerBloc>();
+class _SongsPageState extends State<SongsPage>
+    with
+        SongSharingMixin,
+        RingtoneMixin,
+        PlaylistManagementMixin,
+        SongDeletionMixin {
+  // Getters for BLoCs
+  SongsBloc get _songsBloc => context.read<SongsBloc>();
+  MusicPlayerBloc get _musicPlayerBloc => context.read<MusicPlayerBloc>();
 
-  Future<void> _setAsRingtone(String songPath) async {
-    if (await Permission.systemAlertWindow.request().isGranted) {
-      await RingtoneSet.setRingtone(songPath);
-    } else {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.localization.permissionDeniedForRingtone),
-        ),
-      );
-    }
+  @override
+  void initState() {
+    super.initState();
   }
 
-  Future<void> _showDeleteDialog(Song song) async {
-    await showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.localization.deleteSong),
-        content: Text(context.localization.areSureYouWantToDeleteSong),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.localization.cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              songsBloc.add(DeleteSongEvent(song));
-            },
-            child: Text(context.localization.deleteFromDevice),
-          ),
-        ],
+  // Event handlers for song actions
+  Future<void> _handleSongTap(int songIndex, List<Song> songs) async {
+    _musicPlayerBloc.add(PlayMusicEvent(songIndex, songs));
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const MusicPlayerPage(),
       ),
     );
   }
 
-  List<Song> _filterSongs(SongsState state, Set<int> likedSongIds) {
-    final songs = List<Song>.from(state.allSongs);
-
-    if (widget.playlist != null) {
-      songs.retainWhere((song) => widget.playlist!.songs.contains(song.id));
-    }
-    if (widget.isFavorites) {
-      songs.retainWhere((song) => likedSongIds.contains(song.id));
-    }
-    return songs;
+  void onToggleLike(int songId) {
+    context.read<FavoriteSongsBloc>().add(ToggleFavoriteSongEvent(songId));
   }
 
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: const Color(0xFF7F53AC),
-      elevation: 0,
-      title: Text(
-        widget.isFavorites
-            ? context.localization.favoriteSongs
-            : widget.playlist?.name ?? context.localization.allSongs,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 26,
-          letterSpacing: 1.2,
-        ),
-      ),
-      centerTitle: true,
-      actions: [
-        IconButton(
-          onPressed: () async {
-            await Navigator.of(
-              context,
-            ).push(
-              MaterialPageRoute<void>(builder: (_) => const SearchSongsPage()),
-            );
-          },
-          icon: const Icon(Icons.search, size: 28),
-          tooltip: context.localization.searchSongs,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEmptyState(String message, VoidCallback onRefresh) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.music_off, size: 80, color: Colors.grey),
-          const SizedBox(height: 16),
-          Text(
-            message,
-            style: const TextStyle(fontSize: 18, color: Colors.grey),
-            textAlign: TextAlign.center,
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SongsBloc, SongsState>(
+      bloc: _songsBloc,
+      builder: (context, songsState) {
+        return Scaffold(
+          appBar: SongsAppbar(
+            numOfSongs: songsState.allSongs.length,
+            sortType: songsState.sortType,
+            onSearchButtonPressed: _onSearchButtonPressed,
+            onShuffleAll: () => _onShufflePressed(songsState.allSongs),
+            onSortSongs: _onSortSongs,
           ),
-          const SizedBox(height: 24),
-          ElevatedButton.icon(
-            onPressed: onRefresh,
-            icon: const Icon(Icons.refresh),
-            label: Text(context.localization.refresh),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepPurple,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
-            ),
+          body: BackgroundGradient(
+            child: _buildSongsContent(songsState),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSongList(List<Song> songs, Set<int> likedSongIds) {
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      itemCount: songs.length,
-      itemBuilder: (context, index) {
-        final song = songs[index];
-        return SongItem(
-          song: song,
-          isLiked: likedSongIds.contains(song.id),
-          onSetAsRingtonePressed: () => _setAsRingtone(song.uri),
-          onDeletePressed: () => _showDeleteDialog(song),
-          onToggleLike: () =>
-              musicPlayerBloc.add(ToggleLikeMusicEvent(song.id)),
-          onTap: () async {
-            musicPlayerBloc.add(PlayMusicEvent(index, songs));
-            await Navigator.of(
-              context,
-            ).push(
-              MaterialPageRoute<void>(
-                builder: (_) => BlocProvider.value(
-                  value: musicPlayerBloc,
-                  child: const MusicPlayerPage(),
-                ),
-              ),
-            );
-          },
         );
       },
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.of(
-            context,
-          ).push(
-            MaterialPageRoute<void>(builder: (_) => const SearchSongsPage()),
-          );
-        },
-        tooltip: context.localization.searchSongs,
-        child: const Icon(Icons.search, size: 28, color: Colors.white),
+  Future<void> _onSearchButtonPressed() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const SearchSongsPage(),
       ),
-      body: BackgroundGradient(
-        child: BlocBuilder<SongsBloc, SongsState>(
-          bloc: songsBloc,
-          builder: (context, state) {
-            if (state.status == SongsStatus.loading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state.status == SongsStatus.error) {
-              return _buildEmptyState(
-                context.localization.errorLoadingSongs,
-                () {
-                  songsBloc.add(const LoadSongsEvent());
-                },
-              );
-            }
-            if (state.allSongs.isEmpty) {
-              return _buildEmptyState(
-                context.localization.noSongTryAgain,
-                () => songsBloc.add(const LoadSongsEvent()),
-              );
-            }
-            return BlocSelector<MusicPlayerBloc, MusicPlayerState, Set<int>>(
-              bloc: musicPlayerBloc,
-              selector: (state) => state.likedSongIds,
-              builder: (context, likedSongIds) {
-                final filteredSongs = _filterSongs(state, likedSongIds);
+    );
+  }
 
-                if (filteredSongs.isEmpty) {
-                  return _buildEmptyState(
-                    widget.isFavorites
-                        ? context.localization.noSongTryAgain
-                        : context.localization.noSongInPlaylist,
-                    () => songsBloc.add(const LoadSongsEvent()),
-                  );
-                }
-
-                return Column(
-                  children: [
-                    TopHeadActions(
-                      songCount: filteredSongs.length,
-                      onShuffleAll: () async {
-                        musicPlayerBloc.add(
-                          ShuffleMusicEvent(songs: filteredSongs),
-                        );
-                        await Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (_) => const MusicPlayerPage(),
-                          ),
-                        );
-                      },
-                      onSortSongs: (sortType) {
-                        songsBloc.add(SortSongsEvent(sortType));
-                      },
-                      sortType: state.sortType,
-                    ),
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () async =>
-                            songsBloc.add(const LoadSongsEvent()),
-                        child: _buildSongList(filteredSongs, likedSongIds),
-                      ),
-                    ),
-                    if (musicPlayerBloc.state.playList.isNotEmpty)
-                      const SizedBox(height: 80),
-                  ],
-                );
-              },
-            );
-          },
+  Future<void> onLongPress(Song song, List<Song> songs) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => SongsSelectionPage(
+          title: context.localization.songs,
+          availableSongs: songs,
+          selectedSongIds: {song.id},
         ),
       ),
     );
+  }
+
+  Widget _buildSongsContent(SongsState songsState) {
+    // Handle loading state
+    if (songsState.status == SongsStatus.loading) {
+      return const Loading();
+    }
+
+    // Handle error state
+    if (songsState.status == SongsStatus.error) {
+      return SongsErrorLoading(
+        message: context.localization.errorLoadingSongs,
+        onRetry: () => _songsBloc.add(const LoadSongsEvent()),
+      );
+    }
+
+    // Handle empty songs
+    if (songsState.allSongs.isEmpty) {
+      return NoSongsWidget(
+        message: context.localization.noSongTryAgain,
+        onRefresh: () => _songsBloc.add(const LoadSongsEvent()),
+      );
+    }
+
+    final songs = songsState.allSongs;
+
+    return Column(
+      children: [
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: () async => _songsBloc.add(const LoadSongsEvent()),
+            child:
+                BlocSelector<FavoriteSongsBloc, FavoriteSongsState, Set<int>>(
+                  selector: (state) {
+                    return state.favoriteSongIds;
+                  },
+                  builder: (context, favoriteSongIds) {
+                    return ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: SongsPageConstants.listVerticalPadding,
+                        horizontal: SongsPageConstants.listHorizontalPadding,
+                      ),
+                      itemCount: songs.length,
+                      itemBuilder: (context, index) {
+                        final song = songs[index];
+                        return SongItem(
+                          song: song,
+                          isLiked: favoriteSongIds.contains(song.id),
+                          onSetAsRingtonePressed: () =>
+                              setAsRingtone(song.data),
+                          onDeletePressed: () => showDeleteSongDialog(song),
+                          onToggleLike: () => onToggleLike(song.id),
+                          onAddToPlaylistPressed: () async {
+                            await PlaylistsPage.showSheet(
+                              context: context,
+                              songIds: {song.id},
+                            );
+                          },
+                          onSharePressed: () => shareSong(song),
+                          onLongPress: () => onLongPress(song, songs),
+                          onTap: () => _handleSongTap(index, songs),
+                        );
+                      },
+                    );
+                  },
+                ),
+          ),
+        ),
+
+        // Bottom spacing for mini player
+        if (_musicPlayerBloc.state.playList.isNotEmpty)
+          const SizedBox(height: SongsPageConstants.minPlayerHeight),
+      ],
+    );
+  }
+
+  void _onShufflePressed(List<Song> songs) {
+    _musicPlayerBloc.add(ShuffleMusicEvent(songs: songs));
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const MusicPlayerPage(),
+      ),
+    );
+  }
+
+  void _onSortSongs(SortType sortType) {
+    _songsBloc.add(SortSongsEvent(sortType));
   }
 }

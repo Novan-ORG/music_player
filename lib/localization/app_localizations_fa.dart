@@ -168,6 +168,38 @@ class AppLocalizationsFa extends AppLocalizations {
   String get dismiss => 'رد کردن';
 
   @override
+  String get undo => 'بازیابی';
+
+  @override
+  String get deleted => 'حذف شد';
+
+  @override
+  String get addToPlaylist => 'اضافه کردن به لیست پخش';
+
+  @override
+  String get removeFromPlaylist => 'حذف از لیست پخش';
+
+  @override
+  String get share => 'اشتراک گذاری';
+
+  @override
+  String get selected => 'انتخاب شده';
+
+  @override
+  String deleteSongsAlertTitle(int count) {
+    return 'حذف $count موزیک؟';
+  }
+
+  @override
+  String get deleteSongsAlertContent =>
+      'آیا برای حذف موزیک های انتخاب شده از دستگاه مطمئن هستید؟';
+
+  @override
+  String shareSongsSubject(int count, String songsTitleList) {
+    return 'اشتراک گذاری $count موزیک:\n$songsTitleList';
+  }
+
+  @override
   String get playListPage => '';
 
   @override
@@ -202,6 +234,22 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get playlistName => 'نام لیست پخش';
+
+  @override
+  String get rename => 'تغییر نام';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get renamePlaylist => 'تغییر نام لیست پخش';
+
+  @override
+  String get addSongs => 'اضافه کردن موزیک ها';
+
+  @override
+  String get noSongInThePlaylist =>
+      'هیچ موزیکی در این لیست پخش وجود ندارد. برای دیدن موزیک ها، موزیک اضافه کنید.';
 
   @override
   String get musicPlayerPage => '';
@@ -247,4 +295,29 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get cancelTimer => 'لغو تایمر';
+
+  @override
+  String get favoriteSongsPage => '';
+
+  @override
+  String get clearAll => 'حذف همه';
+
+  @override
+  String get areYouSureYouWantToClearAllFavorites =>
+      'آیا برای حذف همه موزیک های محبوب مطمئن هستید؟';
+
+  @override
+  String get addSongsPage => '';
+
+  @override
+  String get allSongsAlreadyExistInPlaylist =>
+      'همه موزیک ها در لیست پخش وجود دارند';
+
+  @override
+  String get addTo => 'اضافه کردن به';
+
+  @override
+  String add(int count) {
+    return 'اضافه کردن ($count)';
+  }
 }

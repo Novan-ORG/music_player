@@ -410,6 +410,60 @@ abstract class AppLocalizations {
   /// **'DISMISS'**
   String get dismiss;
 
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'UNDO'**
+  String get undo;
+
+  /// No description provided for @deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get deleted;
+
+  /// No description provided for @addToPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Playlist'**
+  String get addToPlaylist;
+
+  /// No description provided for @removeFromPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from Playlist'**
+  String get removeFromPlaylist;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @selected.
+  ///
+  /// In en, this message translates to:
+  /// **'selected'**
+  String get selected;
+
+  /// Title for delete songs alert dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {count} songs?'**
+  String deleteSongsAlertTitle(int count);
+
+  /// No description provided for @deleteSongsAlertContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the selected songs from device?'**
+  String get deleteSongsAlertContent;
+
+  /// Subject for sharing songs
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing {count} songs:\n{songsTitleList}'**
+  String shareSongsSubject(int count, String songsTitleList);
+
   /// Playlist page localization
   ///
   /// In en, this message translates to:
@@ -482,6 +536,36 @@ abstract class AppLocalizations {
   /// **'Playlist Name'**
   String get playlistName;
 
+  /// No description provided for @rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get rename;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @renamePlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename Playlist'**
+  String get renamePlaylist;
+
+  /// No description provided for @addSongs.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Songs'**
+  String get addSongs;
+
+  /// No description provided for @noSongInThePlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'No song in the playlist. Add songs to see them here.'**
+  String get noSongInThePlaylist;
+
   /// Music Player page localization
   ///
   /// In en, this message translates to:
@@ -521,7 +605,7 @@ abstract class AppLocalizations {
   /// No description provided for @appPurpose.
   ///
   /// In en, this message translates to:
-  /// **'This app is completely free. If you enjoy using it, please consider supporting me by rating it 5 stars and leaving a kind comment on the app store!'**
+  /// **'This app is completely free. If you enjoy using it, please consider supporting us by rating it 5 stars and leaving a kind comment on the app store!'**
   String get appPurpose;
 
   /// No description provided for @connectWithMe.
@@ -565,6 +649,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel Timer'**
   String get cancelTimer;
+
+  /// Favorite songs page localization
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get favoriteSongsPage;
+
+  /// No description provided for @clearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All'**
+  String get clearAll;
+
+  /// No description provided for @areYouSureYouWantToClearAllFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear all favorite songs?'**
+  String get areYouSureYouWantToClearAllFavorites;
+
+  /// Add songs to playlist page localization
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get addSongsPage;
+
+  /// No description provided for @allSongsAlreadyExistInPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'All songs already exist in the playlist'**
+  String get allSongsAlreadyExistInPlaylist;
+
+  /// No description provided for @addTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to'**
+  String get addTo;
+
+  /// Button text for adding songs to playlist
+  ///
+  /// In en, this message translates to:
+  /// **'Add ({count})'**
+  String add(int count);
 }
 
 class _AppLocalizationsDelegate

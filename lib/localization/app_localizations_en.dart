@@ -168,6 +168,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dismiss => 'DISMISS';
 
   @override
+  String get undo => 'UNDO';
+
+  @override
+  String get deleted => 'Deleted';
+
+  @override
+  String get addToPlaylist => 'Add to Playlist';
+
+  @override
+  String get removeFromPlaylist => 'Remove from Playlist';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get selected => 'selected';
+
+  @override
+  String deleteSongsAlertTitle(int count) {
+    return 'Delete $count songs?';
+  }
+
+  @override
+  String get deleteSongsAlertContent =>
+      'Are you sure you want to delete the selected songs from device?';
+
+  @override
+  String shareSongsSubject(int count, String songsTitleList) {
+    return 'Sharing $count songs:\n$songsTitleList';
+  }
+
+  @override
   String get playListPage => '';
 
   @override
@@ -204,6 +236,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get playlistName => 'Playlist Name';
 
   @override
+  String get rename => 'Rename';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get renamePlaylist => 'Rename Playlist';
+
+  @override
+  String get addSongs => 'Add Songs';
+
+  @override
+  String get noSongInThePlaylist =>
+      'No song in the playlist. Add songs to see them here.';
+
+  @override
   String get musicPlayerPage => '';
 
   @override
@@ -225,7 +273,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appPurpose =>
-      'This app is completely free. If you enjoy using it, please consider supporting me by rating it 5 stars and leaving a kind comment on the app store!';
+      'This app is completely free. If you enjoy using it, please consider supporting us by rating it 5 stars and leaving a kind comment on the app store!';
 
   @override
   String get connectWithMe => 'Connect with me';
@@ -247,4 +295,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancelTimer => 'Cancel Timer';
+
+  @override
+  String get favoriteSongsPage => '';
+
+  @override
+  String get clearAll => 'Clear All';
+
+  @override
+  String get areYouSureYouWantToClearAllFavorites =>
+      'Are you sure you want to clear all favorite songs?';
+
+  @override
+  String get addSongsPage => '';
+
+  @override
+  String get allSongsAlreadyExistInPlaylist =>
+      'All songs already exist in the playlist';
+
+  @override
+  String get addTo => 'Add to';
+
+  @override
+  String add(int count) {
+    return 'Add ($count)';
+  }
 }

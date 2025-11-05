@@ -20,3 +20,25 @@ final class DeleteSongEvent extends SongsEvent {
 
   final Song song;
 }
+
+final class DeleteSongsEvent extends SongsEvent {
+  const DeleteSongsEvent(this.songs);
+
+  final List<Song> songs;
+}
+
+final class UndoDeleteSongEvent extends SongsEvent {
+  const UndoDeleteSongEvent();
+}
+
+final class CanUndoChangedEvent extends SongsEvent {
+  const CanUndoChangedEvent({required this.canUndo});
+
+  final bool canUndo;
+}
+
+final class DeselectSongEvent extends SongsEvent {
+  const DeselectSongEvent(this.songId);
+
+  final int songId;
+}

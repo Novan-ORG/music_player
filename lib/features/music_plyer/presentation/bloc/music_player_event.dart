@@ -39,15 +39,6 @@ final class ShuffleMusicEvent extends MusicPlayerEvent {
   List<Object> get props => [...super.props, ...songs];
 }
 
-final class ToggleLikeMusicEvent extends MusicPlayerEvent {
-  const ToggleLikeMusicEvent(this.songId);
-
-  final int songId;
-
-  @override
-  List<Object> get props => [...super.props, songId];
-}
-
 final class SetShuffleEnabledEvent extends MusicPlayerEvent {
   const SetShuffleEnabledEvent({required this.isEnabled});
 

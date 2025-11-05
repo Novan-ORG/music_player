@@ -67,6 +67,34 @@
     "dismiss": "رد کردن",
     "seeMore": "مشاهده بیشتر",
     "seeLess": "مشاهده کمتر",
+    "undo": "بازیابی",
+    "deleted": "حذف شد",
+    "addToPlaylist": "اضافه کردن به لیست پخش",
+    "removeFromPlaylist": "حذف از لیست پخش",
+    "share": "اشتراک گذاری",
+    "selected": "انتخاب شده",
+    "deleteSongsAlertTitle": "حذف {count} موزیک؟",
+    "@deleteSongsAlertTitle": {
+        "description": "عنوان دیالوگ هشدار حذف موزیک ها",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "deleteSongsAlertContent": "آیا برای حذف موزیک های انتخاب شده از دستگاه مطمئن هستید؟",
+    "shareSongsSubject": "اشتراک گذاری {count} موزیک:\n{songsTitleList}",
+    "@shareSongsSubject": {
+        "description": "موضوع برای اشتراک گذاری موزیک ها",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "songsTitleList": {
+                "type": "String"
+            }
+        }
+    },
 
     "playListPage":"",
     "@playListPage": {
@@ -83,6 +111,11 @@
     "selectPlaylist": "انتخاب لیست پخش",
     "createPlaylist": "ایجاد لیست پخش",
     "playlistName": "نام لیست پخش",
+    "rename": "تغییر نام",
+    "delete": "حذف",
+    "renamePlaylist": "تغییر نام لیست پخش",
+    "addSongs": "اضافه کردن موزیک ها",
+    "noSongInThePlaylist": "هیچ موزیکی در این لیست پخش وجود ندارد. برای دیدن موزیک ها، موزیک اضافه کنید.",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {
@@ -104,5 +137,29 @@
     "close": "بستن",
     "setAsRingtone": "تنظیم به عنوان آهنگ زنگ",
     "sleepTimerActive": "تایمر خواب فعال است",
-    "cancelTimer": "لغو تایمر"
+    "cancelTimer": "لغو تایمر",
+
+    "favoriteSongsPage": "",
+    "@favoriteSongsPage": {
+        "description": "محلی سازی صفحه موزیک های محبوب"
+    },
+    "clearAll": "حذف همه",
+    "areYouSureYouWantToClearAllFavorites": "آیا برای حذف همه موزیک های محبوب مطمئن هستید؟",
+
+    "addSongsPage": "",
+    "@addSongsPage": {
+        "description": "محلی سازی صفحه اضافه کردن موزیک ها به لیست پخش"
+    },
+    "allSongsAlreadyExistInPlaylist": "همه موزیک ها در لیست پخش وجود دارند",
+    "addTo": "اضافه کردن به",
+    "add": "اضافه کردن ({count})",
+    "@add": {
+        "description": "متن دکمه اضافه کردن موزیک ها به لیست پخش",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    }
+
 }

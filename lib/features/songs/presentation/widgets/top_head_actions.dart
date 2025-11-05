@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:music_player/core/widgets/songs_count.dart';
 import 'package:music_player/extensions/extensions.dart';
-
-typedef OnSortSongs = void Function(SortType sortType);
+import 'package:music_player/features/songs/presentation/widgets/songs_appbar.dart';
 
 enum SortType {
   recentlyAdded,
@@ -23,8 +23,8 @@ class TopHeadActions extends StatelessWidget {
   });
 
   final int songCount;
-  final VoidCallback onShuffleAll;
-  final OnSortSongs onSortSongs;
+  final VoidCallback? onShuffleAll;
+  final OnSortSongsCallback? onSortSongs;
   final SortType sortType;
 
   String _sortTypeLabel(BuildContext context, SortType type) {
@@ -69,18 +69,7 @@ class TopHeadActions extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
         children: [
-          Row(
-            children: [
-              Icon(Icons.library_music, color: theme.primaryColor),
-              const SizedBox(width: 8),
-              Text(
-                '${context.localization.songs}: $songCount',
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
+          SongsCount(songCount: songCount),
           const Spacer(),
           Tooltip(
             message: context.localization.shuffleAllSongs,

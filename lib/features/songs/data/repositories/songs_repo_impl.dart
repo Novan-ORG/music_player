@@ -1,3 +1,4 @@
+import 'package:music_player/core/data/mappers/song_model_mapper.dart';
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/result.dart';
 import 'package:music_player/features/songs/data/datasources/datasources.dart';
@@ -23,7 +24,9 @@ class SongsRepoImpl implements SongsRepository {
   Future<Result<List<Song>>> querySongs() async {
     try {
       final quriedSongs = await _songsDatasource.querySongs();
-      return Result.success(quriedSongs);
+      return Result.success(
+        quriedSongs.map(SongModelMapper.toDomain).toList(),
+      );
     } on Exception catch (e) {
       return Result.failure('Error in loading songs, $e');
     }

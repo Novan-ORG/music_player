@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/favorite/presentation/pages/pages.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
-import 'package:music_player/features/play_list/presentation/pages/pages.dart';
+import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/features/settings/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/pages/pages.dart';
 
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = const [
     SongsPage(),
     PlaylistsPage(),
-    SongsPage(isFavorites: true),
+    FavoriteSongsPage(),
     SettingsPage(),
   ];
 
@@ -53,7 +54,8 @@ class _HomePageState extends State<HomePage> {
         duration: const Duration(milliseconds: 300),
         child: _pages[_currentIndex],
       ),
-      bottomSheet: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
         bloc: _musicPlayerBloc,
         builder: (_, state) {
           if (state.playList.isEmpty) {

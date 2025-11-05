@@ -68,6 +68,34 @@
     "ascending": "Ascending",
     "descending": "Descending",
     "dismiss": "DISMISS",
+    "undo": "UNDO",
+    "deleted": "Deleted",
+    "addToPlaylist": "Add to Playlist",
+    "removeFromPlaylist": "Remove from Playlist",
+    "share": "Share",
+    "selected": "selected",
+    "deleteSongsAlertTitle": "Delete {count} songs?",
+    "@deleteSongsAlertTitle": {
+        "description": "Title for delete songs alert dialog",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "deleteSongsAlertContent": "Are you sure you want to delete the selected songs from device?",
+    "shareSongsSubject": "Sharing {count} songs:\n{songsTitleList}",
+    "@shareSongsSubject": {
+        "description": "Subject for sharing songs",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "songsTitleList": {
+                "type": "String"
+            }
+        }
+    },
 
     "playListPage":"",
     "@playListPage": {
@@ -84,6 +112,11 @@
     "selectPlaylist": "Select Playlist",
     "createPlaylist": "Create Playlist",
     "playlistName": "Playlist Name",
+    "rename": "Rename",
+    "delete": "Delete",
+    "renamePlaylist": "Rename Playlist",
+    "addSongs": "Add Songs",
+    "noSongInThePlaylist": "No song in the playlist. Add songs to see them here.",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {
@@ -98,13 +131,36 @@
     },
     "talebStory": "Hi! I'm Taleb Rafiepour, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people's lives easier.",
     "caroStory": "Hello! I'm Caro Zamani, a Product Designer.\nI'm delighted to have As a designer at the beginning of my professional journey, your feedback is truly valuable and important to me.\nSo, feel free to visit my social media pages so we can share our knowledge and experiences together.",
-    "appPurpose": "This app is completely free. If you enjoy using it, please consider supporting me by rating it 5 stars and leaving a kind comment on the app store!",
+    "appPurpose": "This app is completely free. If you enjoy using it, please consider supporting us by rating it 5 stars and leaving a kind comment on the app store!",
     "connectWithMe": "Connect with me",
     "gmail": "Gmail",
     "linktree": "LinkTree",
     "close": "Close",
     "setAsRingtone": "Set as ringtone",
     "sleepTimerActive": "Sleep Timer is Active",
-    "cancelTimer": "Cancel Timer"
+    "cancelTimer": "Cancel Timer",
+
+    "favoriteSongsPage": "",
+    "@favoriteSongsPage": {
+        "description": "Favorite songs page localization"
+    },
+    "clearAll": "Clear All",
+    "areYouSureYouWantToClearAllFavorites": "Are you sure you want to clear all favorite songs?",
+
+    "addSongsPage": "",
+    "@addSongsPage": {
+        "description": "Add songs to playlist page localization"
+    },
+    "allSongsAlreadyExistInPlaylist": "All songs already exist in the playlist",
+    "addTo": "Add to",
+    "add": "Add ({count})",
+    "@add":{
+        "description":"Button text for adding songs to playlist",
+        "placeholders":{
+            "count":{
+                "type":"int"
+            }
+        }
+    }
 
 }

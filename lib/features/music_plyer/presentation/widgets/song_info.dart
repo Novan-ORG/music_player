@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocSelector;
 import 'package:music_player/core/domain/entities/song.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
+import 'package:music_player/features/favorite/favorite.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/widgets.dart';
 
 class SongInfo extends StatelessWidget {
@@ -23,8 +23,8 @@ class SongInfo extends StatelessWidget {
         song?.artist ?? 'Unknown Artist',
         style: Theme.of(context).textTheme.bodyMedium,
       ),
-      trailing: BlocSelector<MusicPlayerBloc, MusicPlayerState, Set<int>>(
-        selector: (state) => state.likedSongIds,
+      trailing: BlocSelector<FavoriteSongsBloc, FavoriteSongsState, Set<int>>(
+        selector: (state) => state.favoriteSongIds,
         builder: (context, likedSongIds) {
           final isLiked = likedSongIds.contains(song?.id ?? -1);
           return IconButton(

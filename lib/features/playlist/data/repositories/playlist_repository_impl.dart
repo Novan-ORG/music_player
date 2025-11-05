@@ -1,0 +1,105 @@
+import 'package:music_player/core/data/mappers/mappers.dart';
+import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/result.dart';
+import 'package:music_player/features/playlist/data/data.dart';
+import 'package:music_player/features/playlist/domain/domain.dart';
+
+class PlaylistRepositoryImpl implements PlaylistRepository {
+  const PlaylistRepositoryImpl(this.datasource);
+
+  final PlaylistDatasource datasource;
+
+  @override
+  Future<Result<List<Playlist>>> getAllPlaylists() async {
+    try {
+      final playlists = await datasource.getAllPlaylists();
+      return Result.success(
+        playlists.map(PlaylistMapper.fromModel).toList(),
+      );
+    } on Exception catch (e) {
+      return Result.failure('Failed to get all playlists: $e');
+    }
+  }
+
+  @override
+  Future<Result<Playlist>> getPlaylistById(int id) async {
+    try {
+      final playlist = await datasource.getPlaylistById(id);
+      if (playlist == null) {
+        return Result.failure('Playlist not found');
+      } else {
+        return Result.success(PlaylistMapper.fromModel(playlist));
+      }
+    } on Exception catch (e) {
+      return Result.failure('Failed to get playlist by id: $e');
+    }
+  }
+
+  @override
+  Future<Result<bool>> createPlaylist(String name) async {
+    try {
+      final result = await datasource.createPlaylist(name);
+      return Result.success(result);
+    } on Exception catch (e) {
+      return Result.failure('Failed to save playlist: $e');
+    }
+  }
+
+  @override
+  Future<Result<bool>> deletePlaylist(int id) async {
+    try {
+      final result = await datasource.deletePlaylist(id);
+      return Result.success(result);
+    } on Exception catch (e) {
+      return Result.failure('Failed to delete playlist: $e');
+    }
+  }
+
+  @override
+  Future<Result<List<Song>>> getPlaylistSongs(int playlistId) async {
+    try {
+      final songModels = await datasource.getPlaylistSongs(playlistId);
+      final songs = songModels.map(SongModelMapper.toDomain).toList();
+
+      return Result.success(songs);
+    } on Exception catch (e) {
+      return Result.failure('Failed to get playlist songs: $e');
+    }
+  }
+
+  @override
+  Future<Result<void>> addSongsToPlaylist(
+    int playlistId,
+    List<int> songIds,
+  ) async {
+    try {
+      await datasource.addSongsToPlaylist(playlistId, songIds);
+      return Result.success(null);
+    } on Exception catch (e) {
+      return Result.failure('Failed to add songs to playlist: $e');
+    }
+  }
+
+  @override
+  Future<Result<void>> removeSongsFromPlaylist(
+    int playlistId,
+    List<int> songIds,
+  ) async {
+    try {
+      await datasource.removeSongsFromPlaylist(playlistId, songIds);
+      return Result.success(null);
+    } on Exception catch (e) {
+      return Result.failure('Failed to remove songs from playlist: $e');
+    }
+  }
+
+  @override
+  Future<Result<bool>> renamePlaylist(int id, String newName) async {
+    try {
+      final result = await datasource.renamePlaylist(id, newName);
+      return Result.success(result);
+    } on Exception catch (e) {
+      return Result.failure('Failed to rename playlist: $e');
+    }
+  }
+}

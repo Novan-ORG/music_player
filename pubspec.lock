@@ -321,14 +321,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  flat_buffers:
-    dependency: transitive
-    description:
-      name: flat_buffers
-      sha256: "380bdcba5664a718bfd4ea20a45d39e13684f5318fcd8883066a55e21f37f4c3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "23.5.26"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -509,14 +501,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  jni:
-    dependency: transitive
-    description:
-      name: jni
-      sha256: d2c361082d554d4593c3012e26f6b188f902acd291330f13d6427641a92b3da1
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.14.2"
   js:
     dependency: transitive
     description:
@@ -637,46 +621,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  objectbox:
-    dependency: "direct main"
-    description:
-      name: objectbox
-      sha256: "825b3106bbd8b15b2e7a08d75345a218db020fd87bd5dc246acae65ec08ebc06"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
-  objectbox_flutter_libs:
-    dependency: "direct main"
-    description:
-      name: objectbox_flutter_libs
-      sha256: f5fd388ffebda310a1acda5c0076f854d7c0cb49634710eb88937ea4ae6c8e10
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
-  objectbox_generator:
-    dependency: "direct dev"
-    description:
-      name: objectbox_generator
-      sha256: "62c1015e733267eef73b3f70f1b6ab3b483008714d8ad43b4c79af3a4d459474"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
-  objective_c:
-    dependency: transitive
-    description:
-      name: objective_c
-      sha256: "64e35e1e2e79da4e83f2ace3bf4e5437cef523f46c7db2eba9a1419c49573790"
-      url: "https://pub.dev"
-    source: hosted
-    version: "8.0.0"
-  on_audio_query_android:
-    dependency: transitive
-    description:
-      name: on_audio_query_android
-      sha256: c0b946011ee7aa8ec76b21837f0cb0007120ac291202ed6c6fb4c498ba2ff6fe
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   on_audio_query_ios:
     dependency: transitive
     description:
@@ -693,14 +637,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.7.0"
+  on_audio_query_plus_android:
+    dependency: transitive
+    description:
+      name: on_audio_query_plus_android
+      sha256: "8906f8fa0dd11c5f9db6e59c6392545b6592a330ee7aa2cb61d70ac1588dce87"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   on_audio_query_pluse:
     dependency: "direct main"
     description:
       name: on_audio_query_pluse
-      sha256: "03d14ed79b1470a5436b1202d84554368c8308b5d9cab3649089535fe32be28f"
+      sha256: "1c37fdc9cf6448c825df6ede3a5d25b734274b62fc3c1a84f39772b750f975b8"
       url: "https://pub.dev"
     source: hosted
-    version: "2.9.4"
+    version: "3.0.5"
   on_audio_query_web:
     dependency: transitive
     description:
@@ -861,14 +813,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-  pointycastle:
-    dependency: transitive
-    description:
-      name: pointycastle
-      sha256: "92aa3841d083cc4b0f4709b5c74fd6409a3e6ba833ffc7dc6a8fee096366acf5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.0"
   pool:
     dependency: transitive
     description:
@@ -949,14 +893,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  sentry:
-    dependency: transitive
-    description:
-      name: sentry
-      sha256: "0a3a1e6b3b3873070d4dbefc6968f0d31e698ed55b4eb8ee185b230f35733b59"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.7.0"
   sentry_dart_plugin:
     dependency: "direct dev"
     description:
@@ -965,14 +901,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
-  sentry_flutter:
-    dependency: "direct main"
-    description:
-      name: sentry_flutter
-      sha256: "493b4adb378dfc93fb1595acca91834bbf56194a9038c400c9306588ad6a2f88"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.7.0"
   share_plus:
     dependency: "direct main"
     description:
@@ -1066,14 +994,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  source_gen:
-    dependency: transitive
-    description:
-      name: source_gen
-      sha256: "7b19d6ba131c6eb98bfcbf8d56c1a7002eba438af2e7ae6f8398b2b0f4f381e3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
   source_span:
     dependency: transitive
     description:
