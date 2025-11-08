@@ -10,6 +10,7 @@ import 'package:music_player/features/favorite/favorite.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/playlist/presentation/pages/pages.dart';
+import 'package:music_player/features/search/presentation/widgets/search_songs_appbar.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/pages/pages.dart';
 
@@ -28,12 +29,10 @@ class _SearchSongsPageState extends State<SearchSongsPage>
         SongDeletionMixin {
   MusicPlayerBloc get _musicPlayerBloc => context.read<MusicPlayerBloc>();
   final searchStream = StreamController<String>();
-  final TextEditingController _controller = TextEditingController();
 
   @override
   void dispose() {
     unawaited(searchStream.close());
-    _controller.dispose();
     super.dispose();
   }
 
@@ -66,33 +65,7 @@ class _SearchSongsPageState extends State<SearchSongsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: StreamBuilder<String>(
-          stream: searchStream.stream,
-          initialData: '',
-          builder: (context, asyncSnapshot) {
-            return TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                hintText: context.localization.searchSongs,
-                border: InputBorder.none,
-                suffixIcon: asyncSnapshot.data!.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          searchStream.add('');
-                          _controller.clear();
-                        },
-                      )
-                    : null,
-              ),
-              style: Theme.of(context).textTheme.titleMedium,
-              autofocus: true,
-              onChanged: searchStream.add,
-            );
-          },
-        ),
-      ),
+      appBar: SearchSongsAppbar(searchStream: searchStream),
       body: BlocBuilder<SongsBloc, SongsState>(
         builder: (_, state) {
           if (state.status == SongsStatus.loading) {
