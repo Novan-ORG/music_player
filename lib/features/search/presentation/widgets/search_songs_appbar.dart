@@ -20,7 +20,7 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
 
   late stt.SpeechToText _speechToText;
   bool _speechEnabled = false;
-  String _lastWords = '';
+  String _recognizedWords = '';
 
   @override
   void initState() {
@@ -28,36 +28,56 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
     _speechToText = stt.SpeechToText();
     _initSpeech();
 
-    _controller.addListener(() => setState(() {}));
+    _controller.addListener(() {
+      if (mounted) setState(() {});
+    });
   }
 
   Future<void> _initSpeech() async {
-    _speechEnabled = await _speechToText.initialize();
-    setState(() {});
+    _speechEnabled = await _speechToText.initialize(
+      onStatus: (val) {
+        if (mounted) setState(() {});
+      },
+      onError: (val) {
+        if (mounted) setState(() {});
+      },
+    );
+
+    if (mounted) setState(() {});
   }
 
   Future<void> _startListening() async {
-    if (!_speechEnabled) return;
+    if (!_speechEnabled) {
+      return;
+    }
+
+    FocusScope.of(context).unfocus();
 
     await _speechToText.listen(
       onResult: _onSpeechResult,
+      partialResults: true,
+      listenFor: const Duration(seconds: 10),
     );
-    setState(() {});
+
+    if (mounted) setState(() {});
   }
 
   Future<void> _stopListening() async {
     await _speechToText.stop();
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   void _onSpeechResult(SpeechRecognitionResult result) {
+    if (!mounted) return;
+
     setState(() {
-      _lastWords = result.recognizedWords;
-      _controller.text = _lastWords;
+      _recognizedWords = result.recognizedWords;
+      _controller.text = _recognizedWords;
       _controller.selection = TextSelection.fromPosition(
         TextPosition(offset: _controller.text.length),
       );
-      widget.searchStream.add(_lastWords);
+
+      widget.searchStream.add(_recognizedWords);
     });
   }
 
@@ -88,12 +108,13 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
   }
 
   Widget _buildMicButton() {
+    final listening = _speechToText.isListening;
     return IconButton(
       icon: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          boxShadow: _speechToText.isListening
+          boxShadow: listening
               ? [
                   BoxShadow(
                     color: Colors.redAccent.withOpacity(0.6),
@@ -104,18 +125,27 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
               : [],
         ),
         child: Icon(
-          _speechToText.isListening ? Icons.mic : Icons.mic,
-          color: _speechToText.isListening ? Colors.red : Colors.black,
+          listening ? Icons.mic : Icons.mic,
+          color: !_speechEnabled
+              ? Colors.grey
+              : (listening ? Colors.red : Colors.black),
         ),
       ),
-      onPressed: _speechToText.isListening ? _stopListening : _startListening,
+      onPressed: !_speechEnabled
+          ? null
+          : (listening ? _stopListening : _startListening),
+      tooltip: _speechEnabled
+          ? (listening ? 'Stop listening' : 'Listen')
+          : 'Speech unavailable',
     );
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _speechToText.stop();
+    _speechToText
+      ..stop()
+      ..cancel();
     super.dispose();
   }
 }
