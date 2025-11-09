@@ -66,9 +66,7 @@ class _SongsPageState extends State<SongsPage>
             onShuffleAll: () => _onShufflePressed(songsState.allSongs),
             onSortSongs: _onSortSongs,
           ),
-          body: BackgroundGradient(
-            child: _buildSongsContent(songsState),
-          ),
+          body: _buildSongsContent(songsState),
         );
       },
     );

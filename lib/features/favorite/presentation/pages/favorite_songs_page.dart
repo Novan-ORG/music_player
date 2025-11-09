@@ -99,14 +99,12 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
           ),
         ],
       ),
-      body: BackgroundGradient(
-        child: BlocBuilder<FavoriteSongsBloc, FavoriteSongsState>(
-          builder: (context, favoriteState) {
-            return _buildContent(
-              favoriteState,
-            );
-          },
-        ),
+      body: BlocBuilder<FavoriteSongsBloc, FavoriteSongsState>(
+        builder: (context, favoriteState) {
+          return _buildContent(
+            favoriteState,
+          );
+        },
       ),
     );
   }

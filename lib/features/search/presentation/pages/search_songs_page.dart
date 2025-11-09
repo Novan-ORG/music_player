@@ -75,79 +75,76 @@ class _SearchSongsPageState extends State<SearchSongsPage>
           onChanged: searchStream.add,
         ),
       ),
-      body: BackgroundGradient(
-        child: BlocBuilder<SongsBloc, SongsState>(
-          builder: (_, state) {
-            if (state.status == SongsStatus.loading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state.status == SongsStatus.error) {
-              return Center(
-                child: Text(context.localization.errorLoadingSongs),
-              );
-            }
-            if (state.allSongs.isEmpty) {
-              return NoSongsWidget(
-                onRefresh: () {
-                  context.read<SongsBloc>().add(const LoadSongsEvent());
-                },
-              );
-            }
-            return StreamBuilder(
-              stream: searchStream.stream,
-              builder: (context, searchQuery) {
-                final query = searchQuery.data?.toLowerCase() ?? '';
-                List<Song> filteredSongs;
-                if (query.isNotEmpty) {
-                  filteredSongs = state.allSongs.where((song) {
-                    final title = song.title.toLowerCase();
-                    final artist = song.artist.toLowerCase();
-                    final album = song.album.toLowerCase();
-                    return title.contains(query) ||
-                        artist.contains(query) ||
-                        album.contains(query);
-                  }).toList();
-                } else {
-                  filteredSongs = state.allSongs;
-                }
-                return BlocSelector<
-                  FavoriteSongsBloc,
-                  FavoriteSongsState,
-                  Set<int>
-                >(
-                  selector: (state) {
-                    return state.favoriteSongIds;
-                  },
-                  builder: (context, favoriteSongIds) {
-                    return ListView.builder(
-                      itemCount: filteredSongs.length,
-                      itemBuilder: (context, index) {
-                        final song = filteredSongs[index];
-                        return SongItem(
-                          song: song,
-                          isLiked: favoriteSongIds.contains(song.id),
-                          onSetAsRingtonePressed: () =>
-                              setAsRingtone(song.data),
-                          onDeletePressed: () => showDeleteSongDialog(song),
-                          onToggleLike: () => onToggleLike(song.id),
-                          onAddToPlaylistPressed: () async {
-                            await PlaylistsPage.showSheet(
-                              context: context,
-                              songIds: {song.id},
-                            );
-                          },
-                          onSharePressed: () => shareSong(song),
-                          onLongPress: () => onLongPress(song, filteredSongs),
-                          onTap: () => _handleSongTap(index, filteredSongs),
-                        );
-                      },
-                    );
-                  },
-                );
+      body: BlocBuilder<SongsBloc, SongsState>(
+        builder: (_, state) {
+          if (state.status == SongsStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state.status == SongsStatus.error) {
+            return Center(
+              child: Text(context.localization.errorLoadingSongs),
+            );
+          }
+          if (state.allSongs.isEmpty) {
+            return NoSongsWidget(
+              onRefresh: () {
+                context.read<SongsBloc>().add(const LoadSongsEvent());
               },
             );
-          },
-        ),
+          }
+          return StreamBuilder(
+            stream: searchStream.stream,
+            builder: (context, searchQuery) {
+              final query = searchQuery.data?.toLowerCase() ?? '';
+              List<Song> filteredSongs;
+              if (query.isNotEmpty) {
+                filteredSongs = state.allSongs.where((song) {
+                  final title = song.title.toLowerCase();
+                  final artist = song.artist.toLowerCase();
+                  final album = song.album.toLowerCase();
+                  return title.contains(query) ||
+                      artist.contains(query) ||
+                      album.contains(query);
+                }).toList();
+              } else {
+                filteredSongs = state.allSongs;
+              }
+              return BlocSelector<
+                FavoriteSongsBloc,
+                FavoriteSongsState,
+                Set<int>
+              >(
+                selector: (state) {
+                  return state.favoriteSongIds;
+                },
+                builder: (context, favoriteSongIds) {
+                  return ListView.builder(
+                    itemCount: filteredSongs.length,
+                    itemBuilder: (context, index) {
+                      final song = filteredSongs[index];
+                      return SongItem(
+                        song: song,
+                        isLiked: favoriteSongIds.contains(song.id),
+                        onSetAsRingtonePressed: () => setAsRingtone(song.data),
+                        onDeletePressed: () => showDeleteSongDialog(song),
+                        onToggleLike: () => onToggleLike(song.id),
+                        onAddToPlaylistPressed: () async {
+                          await PlaylistsPage.showSheet(
+                            context: context,
+                            songIds: {song.id},
+                          );
+                        },
+                        onSharePressed: () => shareSong(song),
+                        onLongPress: () => onLongPress(song, filteredSongs),
+                        onTap: () => _handleSongTap(index, filteredSongs),
+                      );
+                    },
+                  );
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }
