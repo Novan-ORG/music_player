@@ -3,9 +3,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart' show immutable;
 import 'package:music_player/core/commands/commands.dart';
 import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/domain/enums/enums.dart';
 import 'package:music_player/core/domain/usecases/usecases.dart';
 import 'package:music_player/features/songs/domain/usecases/usecases.dart';
-import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
 part 'songs_event.dart';
 part 'songs_state.dart';
@@ -131,20 +131,16 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     }
   }
 
-  void _sortSongs(List<Song> songs, SortType sortType) {
+  void _sortSongs(List<Song> songs, SongsSortType sortType) {
     switch (sortType) {
-      case SortType.recentlyAdded:
+      case SongsSortType.recentlyAdded:
         songs.sort((a, b) => b.dateAdded.compareTo(a.dateAdded));
-      case SortType.dateAdded:
+      case SongsSortType.dateAdded:
         songs.sort((a, b) => a.dateAdded.compareTo(b.dateAdded));
-      case SortType.duration:
+      case SongsSortType.duration:
         songs.sort((a, b) => a.duration.compareTo(b.duration));
-      case SortType.size:
+      case SongsSortType.size:
         songs.sort((a, b) => a.size.compareTo(b.size));
-      case SortType.ascendingOrder:
-        songs.sort((a, b) => a.title.compareTo(b.title));
-      case SortType.descendingOrder:
-        songs.sort((a, b) => b.title.compareTo(a.title));
     }
   }
 

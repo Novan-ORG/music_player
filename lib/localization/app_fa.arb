@@ -49,7 +49,15 @@
     "cancel": "انصراف",
     "deleteFromDevice": "حذف از دستگاه",
     "favoriteSongs": "موزیک های محبوب",
-    "allSongs": "همه موزیک ها",
+    "allSongs": "همه موزیک ها({count})",
+    "@allSongs": {
+        "description": "",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "searchSongs": "جستجوی موزیک ها",
     "refresh": "تازه سازی",
     "errorLoadingSongs": "در هنگام باگزاری موزیک ها خطایی رخ داده است",

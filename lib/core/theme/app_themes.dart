@@ -65,8 +65,11 @@ final ThemeData darkTheme = ThemeData(
   canvasColor: AppDarkColors.background,
   cardColor: AppDarkColors.surface,
   secondaryHeaderColor: AppDarkColors.primary,
+  tabBarTheme: const TabBarThemeData(
+    dividerColor: AppDarkColors.accent,
+  ),
   appBarTheme: const AppBarTheme(
-    backgroundColor: AppDarkColors.surface,
+    backgroundColor: AppDarkColors.background,
     iconTheme: IconThemeData(color: AppDarkColors.textPrimary),
     titleTextStyle: TextStyle(
       color: AppDarkColors.textPrimary,
@@ -106,8 +109,11 @@ final ThemeData lightTheme = ThemeData(
   canvasColor: AppLightColors.background,
   cardColor: AppLightColors.surface,
   secondaryHeaderColor: AppLightColors.primary,
+  tabBarTheme: const TabBarThemeData(
+    dividerColor: AppLightColors.accent,
+  ),
   appBarTheme: const AppBarTheme(
-    backgroundColor: AppLightColors.surface,
+    backgroundColor: AppLightColors.background,
     iconTheme: IconThemeData(color: AppLightColors.textPrimary),
     titleTextStyle: TextStyle(
       color: AppLightColors.textPrimary,

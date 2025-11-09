@@ -119,7 +119,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get favoriteSongs => 'موزیک های محبوب';
 
   @override
-  String get allSongs => 'همه موزیک ها';
+  String allSongs(int count) {
+    return 'همه موزیک ها($count)';
+  }
 
   @override
   String get searchSongs => 'جستجوی موزیک ها';

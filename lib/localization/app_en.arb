@@ -52,7 +52,15 @@
     "cancel": "Cancel",
     "deleteFromDevice": "Delete from device",
     "favoriteSongs": "Favorite Songs",
-    "allSongs": "All Songs",
+    "allSongs": "All Songs({count})",
+    "@allSongs": {
+        "description": "",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "searchSongs": "Search Songs",
     "refresh": "Refresh",
     "errorLoadingSongs": "Some error happend while loading songs",
