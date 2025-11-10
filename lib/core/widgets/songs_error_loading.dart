@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/constants/constants.dart';
+import 'package:music_player/extensions/extensions.dart';
 
 class SongsErrorLoading extends StatelessWidget {
   const SongsErrorLoading({
@@ -14,16 +16,14 @@ class SongsErrorLoading extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(
-          Icons.error_outline,
-          size: 64,
-          color: Colors.red,
+        Image.asset(
+          ImageAssets.errorLoadSongs,
+          width: 85,
         ),
         const SizedBox(height: 16),
         Text(
           message,
-          style: const TextStyle(
-            fontSize: 16,
+          style: context.theme.textTheme.titleMedium?.copyWith(
             color: Colors.grey,
           ),
         ),
@@ -31,7 +31,7 @@ class SongsErrorLoading extends StatelessWidget {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: onRetry,
-            child: const Text('Retry'),
+            child: Text(context.localization.retry),
           ),
         ],
       ],

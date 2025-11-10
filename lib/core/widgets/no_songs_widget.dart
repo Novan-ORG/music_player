@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/constants/constants.dart';
+import 'package:music_player/extensions/extensions.dart';
 
 class NoSongsWidget extends StatelessWidget {
   const NoSongsWidget({
@@ -24,20 +26,17 @@ class NoSongsWidget extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.music_off,
-                size: 64,
-                color: theme.colorScheme.primary.withAlpha(
-                  (0.6 * 2555).round(),
-                ),
+              Image.asset(
+                ImageAssets.emptySongs,
+                width: 85,
               ),
               const SizedBox(height: 20),
               Text(
                 message,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withAlpha(
-                    (0.8 * 255).round(),
+                  color: theme.colorScheme.onSurface.withValues(
+                    alpha: 0.8,
                   ),
                   fontWeight: FontWeight.w600,
                 ),
@@ -46,7 +45,7 @@ class NoSongsWidget extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRefresh,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Refresh'),
+                label: Text(context.localization.refresh),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,

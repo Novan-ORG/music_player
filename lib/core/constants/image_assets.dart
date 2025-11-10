@@ -2,6 +2,8 @@ sealed class ImageAssets {
   static const String logo = 'assets/logo/app_logo.png';
   static const String logoBranding = 'assets/logo/logo_branding.png';
   static const String songCover = 'assets/images/song_cover.png';
+  static const String emptySongs = 'assets/images/empty_songs.png';
+  static const String errorLoadSongs = 'assets/images/error_load_songs.png';
 
   // Avatars in size of 80 width and height
   static const String talebAvatar = 'assets/images/taleb_avatar.jpg';

@@ -202,6 +202,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get retry => 'Retry';
+
+  @override
   String get playListPage => '';
 
   @override

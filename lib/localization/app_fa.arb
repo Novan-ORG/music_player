@@ -103,6 +103,7 @@
             }
         }
     },
+    "retry": "تلاش مجدد",
 
     "playListPage":"",
     "@playListPage": {

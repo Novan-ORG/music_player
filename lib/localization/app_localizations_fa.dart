@@ -202,6 +202,9 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String get retry => 'تلاش مجدد';
+
+  @override
   String get playListPage => '';
 
   @override

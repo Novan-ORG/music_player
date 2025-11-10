@@ -464,6 +464,12 @@ abstract class AppLocalizations {
   /// **'Sharing {count} songs:\n{songsTitleList}'**
   String shareSongsSubject(int count, String songsTitleList);
 
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
   /// Playlist page localization
   ///
   /// In en, this message translates to:
