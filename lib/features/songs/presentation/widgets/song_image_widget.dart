@@ -20,7 +20,7 @@ class SongImageWidget extends StatelessWidget {
       id: songId,
       quality: 70,
       type: ArtworkType.AUDIO,
-      // I used the size for radiuse to make it circular by default
+      // I used the size for radius to make it circular by default
       artworkBorder: BorderRadius.circular(borderRadius ?? size),
       nullArtworkWidget: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius ?? size),
