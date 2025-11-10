@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/mixins/mixins.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
@@ -53,15 +54,25 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
         return Directionality(
           textDirection: TextDirection.ltr,
           child: Scaffold(
-            appBar: AppBar(title: Text(context.localization.appTitle)),
+            appBar: AppBar(
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.share),
+                  onPressed: () => shareSong(state.currentSong!),
+                ),
+              ],
+            ),
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 24),
                   Hero(
                     tag: 'song_cover_${state.currentSong?.id ?? 0}',
-                    child: SongArtwork(song: state.currentSong),
+                    child: SongImageWidget(
+                      qualitySize: 400,
+                      songId: state.currentSong?.id ?? 0,
+                      size: MediaQuery.of(context).size.height * 0.35,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   SongInfo(
@@ -92,7 +103,6 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
                             : null,
                       );
                     },
-                    onSharePressed: () => shareSong(state.currentSong!),
                     onMusicQueuePressed: () async {
                       await UpnextMusicsSheet.show(context);
                     },

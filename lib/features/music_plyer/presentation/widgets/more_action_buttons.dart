@@ -4,12 +4,10 @@ class MoreActionButtons extends StatelessWidget {
   const MoreActionButtons({
     super.key,
     this.onAddToPlaylistPressed,
-    this.onSharePressed,
     this.onMusicQueuePressed,
   });
 
   final VoidCallback? onAddToPlaylistPressed;
-  final VoidCallback? onSharePressed;
   final VoidCallback? onMusicQueuePressed;
 
   @override
@@ -25,7 +23,6 @@ class MoreActionButtons extends StatelessWidget {
           onPressed: onMusicQueuePressed,
           icon: const Icon(Icons.queue_music_rounded),
         ),
-        IconButton(icon: const Icon(Icons.share), onPressed: onSharePressed),
       ],
     );
   }
