@@ -54,8 +54,8 @@ TextTheme appTextTheme(Color textPrimary, Color textSecondary) => TextTheme(
 
 // Dark ThemeData
 final ThemeData darkTheme = ThemeData(
-  fontFamily: 'OpenSans',
-  fontFamilyFallback: const ['IranSans'],
+  fontFamily: 'Inter',
+  fontFamilyFallback: const ['Vazirmatn'],
   brightness: Brightness.dark,
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: AppDarkColors.background,
@@ -104,8 +104,8 @@ final ThemeData darkTheme = ThemeData(
 
 // Light ThemeData
 final ThemeData lightTheme = ThemeData(
-  fontFamily: 'OpenSans',
-  fontFamilyFallback: const ['IranSans'],
+  fontFamily: 'Inter',
+  fontFamilyFallback: const ['Vazirmatn'],
   brightness: Brightness.light,
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: AppLightColors.background,
