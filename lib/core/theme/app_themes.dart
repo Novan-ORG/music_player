@@ -119,7 +119,7 @@ final ThemeData lightTheme = ThemeData(
     backgroundColor: Colors.white,
     elevation: 5,
     unselectedItemColor: Colors.black,
-    selectedItemColor: AppDarkColors.primary,
+    selectedItemColor: AppLightColors.primary,
   ),
   tabBarTheme: const TabBarThemeData(
     dividerColor: AppLightColors.accent,
