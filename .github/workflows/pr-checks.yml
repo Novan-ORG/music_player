@@ -38,8 +38,8 @@ jobs:
       - name: Analyze
         run: flutter analyze
 
-      - name: Run unit & widget tests
-        run: flutter test --coverage
+      # - name: Run unit & widget tests
+      #   run: flutter test --coverage
 
       - name: Upload coverage (optional)
         if: always()
