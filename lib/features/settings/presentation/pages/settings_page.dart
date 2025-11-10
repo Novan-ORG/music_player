@@ -24,7 +24,6 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: Text(context.localization.settings),
         elevation: 0,
-        backgroundColor: const Color(0xFF7F53AC),
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(
         bloc: settingsBloc,

@@ -69,7 +69,6 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(context.localization.favoriteSongs),
-        backgroundColor: const Color(0xFF7F53AC),
         elevation: 0,
         actions: [
           BlocBuilder<FavoriteSongsBloc, FavoriteSongsState>(

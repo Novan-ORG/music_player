@@ -193,7 +193,6 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF7F53AC),
         title: Text(
           widget.isSelectionMode
               ? context.localization.selectPlaylist
