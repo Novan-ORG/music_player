@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/domain/enums/enums.dart';
 import 'package:music_player/core/mixins/mixins.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
@@ -61,14 +62,9 @@ class _SongsPageState extends State<SongsPage>
         return Scaffold(
           appBar: SongsAppbar(
             numOfSongs: songsState.allSongs.length,
-            sortType: songsState.sortType,
             onSearchButtonPressed: _onSearchButtonPressed,
-            onShuffleAll: () => _onShufflePressed(songsState.allSongs),
-            onSortSongs: _onSortSongs,
           ),
-          body: BackgroundGradient(
-            child: _buildSongsContent(songsState),
-          ),
+          body: _buildSongsContent(songsState),
         );
       },
     );
@@ -120,6 +116,11 @@ class _SongsPageState extends State<SongsPage>
 
     return Column(
       children: [
+        SortTypeRuler(
+          currentSortType: songsState.sortType,
+          onSortTypeChanged: _onSortSongs,
+        ),
+
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async => _songsBloc.add(const LoadSongsEvent()),
@@ -169,16 +170,7 @@ class _SongsPageState extends State<SongsPage>
     );
   }
 
-  void _onShufflePressed(List<Song> songs) {
-    _musicPlayerBloc.add(ShuffleMusicEvent(songs: songs));
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const MusicPlayerPage(),
-      ),
-    );
-  }
-
-  void _onSortSongs(SortType sortType) {
+  void _onSortSongs(SongsSortType sortType) {
     _songsBloc.add(SortSongsEvent(sortType));
   }
 }

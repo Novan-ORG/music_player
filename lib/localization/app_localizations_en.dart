@@ -119,7 +119,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favoriteSongs => 'Favorite Songs';
 
   @override
-  String get allSongs => 'All Songs';
+  String allSongs(int count) {
+    return 'All Songs($count)';
+  }
 
   @override
   String get searchSongs => 'Search Songs';

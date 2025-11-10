@@ -5,7 +5,7 @@ final class SongsState extends Equatable {
   const SongsState({
     this.allSongs = const [],
     this.status = SongsStatus.initial,
-    this.sortType = SortType.recentlyAdded,
+    this.sortType = SongsSortType.recentlyAdded,
     this.canUndo = false,
     this.lastDeletedSong,
     this.errorMessage,
@@ -13,7 +13,7 @@ final class SongsState extends Equatable {
 
   final List<Song> allSongs;
   final SongsStatus status;
-  final SortType sortType;
+  final SongsSortType sortType;
   final bool canUndo;
   final Song? lastDeletedSong;
   final String? errorMessage;
@@ -21,7 +21,7 @@ final class SongsState extends Equatable {
   SongsState copyWith({
     List<Song>? allSongs,
     SongsStatus? status,
-    SortType? sortType,
+    SongsSortType? sortType,
     bool? canUndo,
     Song? lastDeletedSong,
     String? errorMessage,

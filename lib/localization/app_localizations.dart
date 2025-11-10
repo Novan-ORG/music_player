@@ -314,11 +314,11 @@ abstract class AppLocalizations {
   /// **'Favorite Songs'**
   String get favoriteSongs;
 
-  /// No description provided for @allSongs.
+  ///
   ///
   /// In en, this message translates to:
-  /// **'All Songs'**
-  String get allSongs;
+  /// **'All Songs({count})'**
+  String allSongs(int count);
 
   /// No description provided for @searchSongs.
   ///

@@ -74,7 +74,6 @@ flutter:
     - assets/images/
     - assets/logo/
     - assets/fonts/open_sans/
-    - .env
 
   fonts:
     - family: OpenSans
