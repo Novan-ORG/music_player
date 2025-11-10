@@ -79,9 +79,10 @@ class _AddSongsPageState extends State<AddSongsPage> {
                         }
                       });
                     },
-                    secondary: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: SongImageWidget(songId: song.id, size: 54),
+                    secondary: SongImageWidget(
+                      songId: song.id,
+                      size: 54,
+                      borderRadius: 8,
                     ),
                     title: Text(
                       song.title,

@@ -110,10 +110,7 @@ class _SongsSelectionPageState extends State<SongsSelectionPage>
                         }
                       });
                     },
-                    secondary: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: SongImageWidget(songId: song.id, size: 54),
-                    ),
+                    secondary: SongImageWidget(songId: song.id, size: 54),
                     title: Text(
                       song.title,
                       maxLines: 1,
