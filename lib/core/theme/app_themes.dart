@@ -13,7 +13,7 @@ class AppDarkColors {
 // Define custom colors for light theme
 class AppLightColors {
   static const Color primary = Color(0xFF9C27B0); // Purple
-  static const Color background = Colors.white;
+  static const Color background = Color(0xFFFDFCF2);
   static const Color surface = Color(0xFFF5F5F5);
   static const Color accent = Color(0xFFE0E0E0);
   static const Color textPrimary = Color(0xFF181818);
@@ -65,6 +65,12 @@ final ThemeData darkTheme = ThemeData(
   canvasColor: AppDarkColors.background,
   cardColor: AppDarkColors.surface,
   secondaryHeaderColor: AppDarkColors.primary,
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    backgroundColor: Colors.black,
+    elevation: 5,
+    unselectedItemColor: Colors.white,
+    selectedItemColor: AppDarkColors.primary,
+  ),
   tabBarTheme: const TabBarThemeData(
     dividerColor: AppDarkColors.accent,
   ),
@@ -109,6 +115,12 @@ final ThemeData lightTheme = ThemeData(
   canvasColor: AppLightColors.background,
   cardColor: AppLightColors.surface,
   secondaryHeaderColor: AppLightColors.primary,
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    backgroundColor: Colors.white,
+    elevation: 5,
+    unselectedItemColor: Colors.black,
+    selectedItemColor: AppDarkColors.primary,
+  ),
   tabBarTheme: const TabBarThemeData(
     dividerColor: AppLightColors.accent,
   ),

@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         label: context.localization.songs,
       ),
       BottomNavigationBarItem(
-        icon: const Icon(Icons.queue_music_rounded),
+        icon: const Icon(Icons.library_music),
         label: context.localization.playlists,
       ),
       BottomNavigationBarItem(
@@ -70,11 +70,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
         items: navBarItems,
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: theme.disabledColor,
         showUnselectedLabels: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
       ),
     );
   }
