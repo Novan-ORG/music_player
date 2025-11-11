@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/mixins/mixins.dart';
@@ -37,8 +39,22 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
     );
   }
 
+  List<double> _generateSampleWaveformData(BuildContext context) {
+    final random = math.Random();
+    const waveBarWidth = 5; // barWidth + spacing
+    const padding = 32;
+    final screenWidth = MediaQuery.of(context).size.width - padding;
+    final totalWaveBarNum = (screenWidth / waveBarWidth).toInt();
+    // the max height of waveBar is 38
+    return List.generate(
+      totalWaveBarNum,
+      (index) => random.nextDouble() * 33 + 5,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    var waveformData = _generateSampleWaveformData(context);
     final musicPlayerBloc = context.read<MusicPlayerBloc>();
     return BlocConsumer<MusicPlayerBloc, MusicPlayerState>(
       bloc: musicPlayerBloc,
@@ -49,6 +65,12 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
         if (state.errorMessage != null) {
           _showErrorBanner(context, state.errorMessage!);
         }
+      },
+      buildWhen: (previous, current) {
+        if (previous.currentSongIndex != current.currentSongIndex) {
+          waveformData = _generateSampleWaveformData(context);
+        }
+        return true;
       },
       builder: (context, state) {
         return Directionality(
@@ -85,10 +107,11 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
                       }
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   AudioProgress(
                     durationStream: musicPlayerBloc.durationStream,
                     positionStream: musicPlayerBloc.positionStream,
+                    waveformData: waveformData,
                     onSeek: (duration) {
                       musicPlayerBloc.add(SeekMusicEvent(position: duration));
                     },

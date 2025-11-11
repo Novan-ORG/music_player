@@ -41,6 +41,7 @@ dependencies:
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
   volume_controller: ^3.4.0
+  wave_player: ^0.0.4
 
 objectbox:
   output_dir: core/services/database
