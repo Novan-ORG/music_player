@@ -43,6 +43,7 @@ class AudioProgress extends StatelessWidget {
                 return BasicAudioSlider(
                   value: value,
                   activeColor: context.theme.primaryColor,
+                  inactiveColor: context.theme.colorScheme.secondary,
                   height: 38,
                   max: 1,
                   barSpacing: 2,

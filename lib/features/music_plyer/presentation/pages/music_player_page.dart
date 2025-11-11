@@ -12,9 +12,19 @@ import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/injection/service_locator.dart';
 import 'package:volume_controller/volume_controller.dart';
 
-class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
+class MusicPlayerPage extends StatefulWidget {
   const MusicPlayerPage({super.key});
 
+  @override
+  State<MusicPlayerPage> createState() => _MusicPlayerPageState();
+}
+
+class _MusicPlayerPageState extends State<MusicPlayerPage>
+    with
+        SongSharingMixin,
+        RingtoneMixin,
+        PlaylistManagementMixin,
+        SongDeletionMixin {
   void _showErrorBanner(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
@@ -42,7 +52,7 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
   List<double> _generateSampleWaveformData(BuildContext context) {
     final random = math.Random();
     const waveBarWidth = 5; // barWidth + spacing
-    const padding = 32;
+    const padding = 64; // horizontal padding of AudioProgress
     final screenWidth = MediaQuery.of(context).size.width - padding;
     final totalWaveBarNum = (screenWidth / waveBarWidth).toInt();
     // the max height of waveBar is 38
@@ -87,6 +97,7 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 16,
                 children: [
                   Hero(
                     tag: 'song_cover_${state.currentSong?.id ?? 0}',
@@ -96,7 +107,6 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
                       size: MediaQuery.of(context).size.height * 0.35,
                     ),
                   ),
-                  const SizedBox(height: 24),
                   SongInfo(
                     song: state.currentSong,
                     onLikePressed: () {
@@ -106,8 +116,19 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
                         );
                       }
                     },
+                    onDeletePressed: () =>
+                        showDeleteSongDialog(state.currentSong!),
+                    onSetAsRingtonePressed: () =>
+                        setAsRingtone(state.currentSong!.data),
+                    onAddToPlaylistPressed: () {
+                      PlaylistsPage.showSheet(
+                        context: context,
+                        songIds: state.currentSong?.id != null
+                            ? {state.currentSong!.id}
+                            : null,
+                      );
+                    },
                   ),
-                  const SizedBox(height: 8),
                   AudioProgress(
                     durationStream: musicPlayerBloc.durationStream,
                     positionStream: musicPlayerBloc.positionStream,
@@ -116,29 +137,24 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
                       musicPlayerBloc.add(SeekMusicEvent(position: duration));
                     },
                   ),
-                  const SizedBox(height: 16),
-                  MoreActionButtons(
-                    onAddToPlaylistPressed: () async {
-                      await PlaylistsPage.showSheet(
-                        context: context,
-                        songIds: state.currentSong?.id != null
-                            ? {state.currentSong!.id}
-                            : null,
-                      );
-                    },
-                    onMusicQueuePressed: () async {
-                      await UpnextMusicsSheet.show(context);
-                    },
-                  ),
-                  VolumeSlider(volumeController: getIt.get<VolumeController>()),
+                  const PlayerActionButtons(),
+                  VolumeSlider(
+                    volumeController: getIt.get<VolumeController>(),
+                  ).paddingSymmetric(horizontal: 32),
                 ],
               ).paddingSymmetric(horizontal: 16, vertical: 8),
             ),
-            bottomSheet: SafeArea(
-              child: const PlayerActionButtons().paddingOnly(
-                bottom: 48,
-                left: 16,
-                right: 16,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                UpnextMusicsSheet.show(context);
+              },
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              child: Icon(
+                Icons.arrow_upward_outlined,
+                color: context.theme.colorScheme.secondary,
               ),
             ),
           ),

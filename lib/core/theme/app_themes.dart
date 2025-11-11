@@ -65,6 +65,13 @@ final ThemeData darkTheme = ThemeData(
   canvasColor: AppDarkColors.background,
   cardColor: AppDarkColors.surface,
   secondaryHeaderColor: AppDarkColors.primary,
+  sliderTheme: const SliderThemeData(
+    activeTrackColor: AppDarkColors.primary,
+    inactiveTrackColor: AppDarkColors.accent,
+    thumbColor: AppDarkColors.primary,
+    trackHeight: 4,
+    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
+  ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.black,
     elevation: 5,
@@ -115,6 +122,13 @@ final ThemeData lightTheme = ThemeData(
   canvasColor: AppLightColors.background,
   cardColor: AppLightColors.surface,
   secondaryHeaderColor: AppLightColors.primary,
+  sliderTheme: const SliderThemeData(
+    activeTrackColor: AppLightColors.primary,
+    inactiveTrackColor: AppLightColors.accent,
+    thumbColor: AppLightColors.primary,
+    trackHeight: 4,
+    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
+  ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.white,
     elevation: 5,
