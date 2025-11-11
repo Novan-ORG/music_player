@@ -79,10 +79,14 @@ class _AddSongsPageState extends State<AddSongsPage> {
                         }
                       });
                     },
-                    secondary: SongImageWidget(
-                      songId: song.id,
-                      size: 54,
-                      borderRadius: 8,
+                    secondary: SizedBox(
+                      width: 54,
+                      height: 54,
+                      child: SongImageWidget(
+                        songId: song.id,
+                        size: 54,
+                        borderRadius: 8,
+                      ),
                     ),
                     title: Text(
                       song.title,

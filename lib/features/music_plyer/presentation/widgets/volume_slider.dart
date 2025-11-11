@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/extensions/extensions.dart';
 import 'package:volume_controller/volume_controller.dart';
 
 class VolumeSlider extends StatefulWidget {
@@ -69,7 +70,10 @@ class _VolumeSliderState extends State<VolumeSlider> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            icon: Icon(_volumeIcon),
+            icon: Icon(
+              _volumeIcon,
+              color: _volume == 0 ? context.theme.colorScheme.secondary : null,
+            ),
             onPressed: _mute,
           ),
           Expanded(
