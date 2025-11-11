@@ -2,6 +2,7 @@ export 'glass_card.dart';
 export 'grant_audio_permission.dart';
 export 'loading.dart';
 export 'no_songs_widget.dart';
+export 'song_image_widget.dart';
 export 'song_item.dart';
 export 'songs_count.dart';
 export 'songs_error_loading.dart';

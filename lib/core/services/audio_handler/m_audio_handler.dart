@@ -31,7 +31,7 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
 
   Stream<Duration> get positionStream => _player.positionStream;
 
-  Stream<PlayerState> get palyerStateStream => _player.playerStateStream;
+  Stream<PlayerState> get playerStateStream => _player.playerStateStream;
 
   Stream<LoopMode> get loopModeStream => _player.loopModeStream;
 

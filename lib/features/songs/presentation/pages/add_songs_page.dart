@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
-import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
 class AddSongsPage extends StatefulWidget {
   const AddSongsPage({
@@ -79,10 +79,14 @@ class _AddSongsPageState extends State<AddSongsPage> {
                         }
                       });
                     },
-                    secondary: SongImageWidget(
-                      songId: song.id,
-                      size: 54,
-                      borderRadius: 8,
+                    secondary: SizedBox(
+                      width: 54,
+                      height: 54,
+                      child: SongImageWidget(
+                        songId: song.id,
+                        size: 54,
+                        borderRadius: 8,
+                      ),
                     ),
                     title: Text(
                       song.title,

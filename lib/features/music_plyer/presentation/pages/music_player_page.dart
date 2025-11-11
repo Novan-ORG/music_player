@@ -1,6 +1,10 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/constants/constants.dart';
 import 'package:music_player/core/mixins/mixins.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
@@ -9,9 +13,19 @@ import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/injection/service_locator.dart';
 import 'package:volume_controller/volume_controller.dart';
 
-class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
+class MusicPlayerPage extends StatefulWidget {
   const MusicPlayerPage({super.key});
 
+  @override
+  State<MusicPlayerPage> createState() => _MusicPlayerPageState();
+}
+
+class _MusicPlayerPageState extends State<MusicPlayerPage>
+    with
+        SongSharingMixin,
+        RingtoneMixin,
+        PlaylistManagementMixin,
+        SongDeletionMixin {
   void _showErrorBanner(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
@@ -36,8 +50,22 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
     );
   }
 
+  List<double> _generateSampleWaveformData(BuildContext context) {
+    final random = math.Random();
+    const waveBarWidth = 5; // barWidth + spacing
+    const padding = 64; // horizontal padding of AudioProgress
+    final screenWidth = MediaQuery.of(context).size.width - padding;
+    final totalWaveBarNum = (screenWidth / waveBarWidth).toInt();
+    // the max height of waveBar is 38
+    return List.generate(
+      totalWaveBarNum,
+      (index) => random.nextDouble() * 33 + 5,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    var waveformData = _generateSampleWaveformData(context);
     final musicPlayerBloc = context.read<MusicPlayerBloc>();
     return BlocConsumer<MusicPlayerBloc, MusicPlayerState>(
       bloc: musicPlayerBloc,
@@ -49,21 +77,37 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
           _showErrorBanner(context, state.errorMessage!);
         }
       },
+      buildWhen: (previous, current) {
+        if (previous.currentSongIndex != current.currentSongIndex) {
+          waveformData = _generateSampleWaveformData(context);
+        }
+        return true;
+      },
       builder: (context, state) {
         return Directionality(
           textDirection: TextDirection.ltr,
           child: Scaffold(
-            appBar: AppBar(title: Text(context.localization.appTitle)),
+            appBar: AppBar(
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.share),
+                  onPressed: state.currentSong != null ? () => shareSong(state.currentSong!) : null,
+                ),
+              ],
+            ),
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 16,
                 children: [
-                  const SizedBox(height: 24),
                   Hero(
                     tag: 'song_cover_${state.currentSong?.id ?? 0}',
-                    child: SongArtwork(song: state.currentSong),
+                    child: SongImageWidget(
+                      qualitySize: 400,
+                      songId: state.currentSong?.id ?? 0,
+                      size: MediaQuery.of(context).size.height * 0.35,
+                    ),
                   ),
-                  const SizedBox(height: 24),
                   SongInfo(
                     song: state.currentSong,
                     onLikePressed: () {
@@ -73,39 +117,46 @@ class MusicPlayerPage extends StatelessWidget with SongSharingMixin {
                         );
                       }
                     },
-                  ),
-                  const SizedBox(height: 16),
-                  AudioProgress(
-                    durationStream: musicPlayerBloc.durationStream,
-                    positionStream: musicPlayerBloc.positionStream,
-                    onSeek: (duration) {
-                      musicPlayerBloc.add(SeekMusicEvent(position: duration));
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  MoreActionButtons(
-                    onAddToPlaylistPressed: () async {
-                      await PlaylistsPage.showSheet(
+                    onDeletePressed: () =>
+                        showDeleteSongDialog(state.currentSong!),
+                    onSetAsRingtonePressed: () =>
+                        setAsRingtone(state.currentSong!.data),
+                    onAddToPlaylistPressed: () {
+                      PlaylistsPage.showSheet(
                         context: context,
                         songIds: state.currentSong?.id != null
                             ? {state.currentSong!.id}
                             : null,
                       );
                     },
-                    onSharePressed: () => shareSong(state.currentSong!),
-                    onMusicQueuePressed: () async {
-                      await UpnextMusicsSheet.show(context);
+                  ),
+                  AudioProgress(
+                    durationStream: musicPlayerBloc.durationStream,
+                    positionStream: musicPlayerBloc.positionStream,
+                    waveformData: waveformData,
+                    onSeek: (duration) {
+                      musicPlayerBloc.add(SeekMusicEvent(position: duration));
                     },
                   ),
-                  VolumeSlider(volumeController: getIt.get<VolumeController>()),
+                  const PlayerActionButtons(),
+                  VolumeSlider(
+                    volumeController: getIt.get<VolumeController>(),
+                  ).paddingSymmetric(horizontal: 32),
                 ],
               ).paddingSymmetric(horizontal: 16, vertical: 8),
             ),
-            bottomSheet: SafeArea(
-              child: const PlayerActionButtons().paddingOnly(
-                bottom: 48,
-                left: 16,
-                right: 16,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                UpnextMusicsSheet.show(context);
+              },
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              child: ImageIcon(
+                const AssetImage(ImageAssets.arrowUp),
+                size: 28,
+                color: context.theme.colorScheme.secondary,
               ),
             ),
           ),
