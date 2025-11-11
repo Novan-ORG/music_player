@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/constants/constants.dart';
 import 'package:music_player/core/mixins/mixins.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
@@ -152,8 +153,9 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
               },
               backgroundColor: Colors.transparent,
               elevation: 0,
-              child: Icon(
-                Icons.arrow_upward_outlined,
+              child: ImageIcon(
+                const AssetImage(ImageAssets.arrowUp),
+                size: 28,
                 color: context.theme.colorScheme.secondary,
               ),
             ),
