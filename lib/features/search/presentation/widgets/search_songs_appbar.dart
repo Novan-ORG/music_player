@@ -55,7 +55,6 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
 
     await _speechToText.listen(
       onResult: _onSpeechResult,
-      partialResults: true,
       listenFor: const Duration(seconds: 10),
     );
 
@@ -117,7 +116,10 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
           boxShadow: listening
               ? [
                   BoxShadow(
-                    color: Colors.redAccent.withOpacity(0.6),
+                    color: Colors.redAccent.withValues(
+                      alpha: 0.6 * 255,
+                      red: 200,
+                    ),
                     spreadRadius: 4,
                     blurRadius: 16,
                   ),
