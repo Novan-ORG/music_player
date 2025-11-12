@@ -26,14 +26,13 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
   void initState() {
     super.initState();
     _speechToText = stt.SpeechToText();
-    _initSpeech();
 
     _controller.addListener(() {
       if (mounted) setState(() {});
     });
   }
 
-  Future<void> _initSpeech() async {
+  Future<void> _initAndStartListening() async {
     _speechEnabled = await _speechToText.initialize(
       onStatus: (val) {
         if (mounted) setState(() {});
@@ -43,7 +42,9 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
       },
     );
 
-    if (mounted) setState(() {});
+    if (!_speechEnabled) return;
+
+    await _startListening();
   }
 
   Future<void> _startListening() async {
@@ -125,17 +126,11 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
         ),
         child: Icon(
           listening ? Icons.mic : Icons.mic,
-          color: !_speechEnabled
-              ? Colors.grey
-              : (listening ? Colors.red : Colors.black),
+          color: (listening ? Colors.red : Colors.black),
         ),
       ),
-      onPressed: !_speechEnabled
-          ? null
-          : (listening ? _stopListening : _startListening),
-      tooltip: _speechEnabled
-          ? (listening ? 'Stop listening' : 'Listen')
-          : 'Speech unavailable',
+      onPressed: (listening ? _stopListening : _initAndStartListening),
+      tooltip: (listening ? 'Stop listening' : 'Listen'),
     );
   }
 
