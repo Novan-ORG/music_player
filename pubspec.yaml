@@ -38,6 +38,7 @@ dependencies:
   see_more_text: ^1.1.1
   share_plus: ^12.0.0
   shared_preferences: ^2.5.3
+  speech_to_text: ^7.3.0
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
   volume_controller: ^3.4.0
