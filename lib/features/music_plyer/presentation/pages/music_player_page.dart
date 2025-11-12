@@ -91,7 +91,9 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
               actions: [
                 IconButton(
                   icon: const Icon(Icons.share),
-                  onPressed: state.currentSong != null ? () => shareSong(state.currentSong!) : null,
+                  onPressed: state.currentSong != null
+                      ? () => shareSong(state.currentSong!)
+                      : null,
                 ),
               ],
             ),
