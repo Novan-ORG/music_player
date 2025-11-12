@@ -116,10 +116,7 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
           boxShadow: listening
               ? [
                   BoxShadow(
-                    color: Colors.redAccent.withValues(
-                      alpha: 0.6 * 255,
-                      red: 200,
-                    ),
+                    color: Colors.redAccent.withOpacity(0.6),
                     spreadRadius: 4,
                     blurRadius: 16,
                   ),
