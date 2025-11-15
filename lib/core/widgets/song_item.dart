@@ -5,127 +5,155 @@ import 'package:music_player/extensions/extensions.dart';
 
 class SongItem extends StatelessWidget {
   const SongItem({
-    required this.song,
+    required this.track,
+    this.margin = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    this.borderRadius = 32,
     this.onTap,
     this.onLongPress,
-    this.isLiked = false,
-    this.onToggleLike,
-    this.onDeletePressed,
-    this.onSetAsRingtonePressed,
-    this.onAddToPlaylistPressed,
-    this.onRemoveFromPlaylistPressed,
-    this.onSharePressed,
-    this.existInPlaylist = false,
+    this.isCurrentTrack = false,
+    this.isPlayingNow = false,
+    this.isFavorite = false,
+    this.onPlayPause,
+    this.onFavoriteToggle,
+    this.onDelete,
+    this.onSetAsRingtone,
+    this.onAddToPlaylist,
+    this.onRemoveFromPlaylist,
+    this.onShare,
+    this.isInPlaylist = false,
     super.key,
   });
 
-  final Song song;
+  final Song track;
+  final EdgeInsets margin;
+  final EdgeInsets padding;
+  final double borderRadius;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
-  final bool isLiked;
-  final VoidCallback? onToggleLike;
-  final VoidCallback? onDeletePressed;
-  final VoidCallback? onSetAsRingtonePressed;
-  final VoidCallback? onAddToPlaylistPressed;
-  final VoidCallback? onRemoveFromPlaylistPressed;
-  final VoidCallback? onSharePressed;
-  final bool existInPlaylist;
+
+  // Playback / state flags
+  final bool isCurrentTrack;
+  final bool isPlayingNow;
+
+  // Like / favorite
+  final bool isFavorite;
+
+  // Callbacks
+  final VoidCallback? onPlayPause;
+  final VoidCallback? onFavoriteToggle;
+  final VoidCallback? onDelete;
+  final VoidCallback? onSetAsRingtone;
+  final VoidCallback? onAddToPlaylist;
+  final VoidCallback? onRemoveFromPlaylist;
+  final VoidCallback? onShare;
+
+  final bool isInPlaylist;
 
   @override
   Widget build(BuildContext context) {
     return GlassCard(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      borderRadius: 32,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      margin: margin,
+      borderRadius: borderRadius,
+      padding: padding,
       onTap: onTap,
       onLongPress: onLongPress,
       child: Row(
         children: [
-          SongImageWidget(songId: song.id, size: 54),
+          SongImageWidget(songId: track.id, size: 54),
           const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  song.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 4,
-                  children: [
-                    const Icon(
-                      Icons.person,
-                      size: 14,
-                      color: Colors.grey,
-                    ),
-                    Text(
-                      song.artist,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodySmall?.copyWith(color: Colors.grey[700]),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          Expanded(child: _buildTitleAndArtist(context)),
           const SizedBox(width: 8),
-          _buildTrailing(context),
+          _buildActionButtons(context),
         ],
       ),
     );
   }
 
-  Widget _buildTrailing(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
+  Widget _buildTitleAndArtist(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Tooltip(
-          message: isLiked ? 'Unlike' : 'Like',
-          child: IconButton(
-            icon: Icon(
-              isLiked ? Icons.favorite : Icons.favorite_border,
-              color: isLiked ? Colors.red : Colors.grey,
-            ),
-            onPressed: onToggleLike,
+        Text(
+          track.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
           ),
         ),
-        _buildPopupMenu(context),
+        const SizedBox(height: 4),
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 4,
+          children: [
+            const Icon(Icons.person, size: 14, color: Colors.grey),
+            Text(
+              track.artist,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: Colors.grey[700]),
+            ),
+          ],
+        ),
       ],
     );
   }
 
-  Widget _buildPopupMenu(BuildContext context) {
-    return PopupMenuButton<String>(
+  Widget _buildActionButtons(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (isCurrentTrack)
+          Tooltip(
+            // When current track is playing, action is to pause; otherwise play
+            message: isPlayingNow ? 'Pause' : 'Play',
+            child: IconButton(
+              icon: Icon(isPlayingNow ? Icons.pause : Icons.play_arrow),
+              onPressed: onPlayPause,
+            ),
+          )
+        else
+          Tooltip(
+            message: isFavorite ? 'Unlike' : 'Like',
+            child: IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: isFavorite ? Colors.red : Colors.grey,
+              ),
+              onPressed: onFavoriteToggle,
+            ),
+          ),
+        _buildOptionsMenu(context),
+      ],
+    );
+  }
+
+  // Use an enum for menu actions to make intent explicit
+  PopupMenuButton<_MenuAction> _buildOptionsMenu(BuildContext context) {
+    return PopupMenuButton<_MenuAction>(
       icon: const Icon(Icons.more_vert),
       tooltip: 'More options',
-      onSelected: (value) {
-        if (value == 'delete') {
-          onDeletePressed?.call();
-        } else if (value == 'ringtone') {
-          onSetAsRingtonePressed?.call();
-        } else if (value == 'add_to_playlist') {
-          onAddToPlaylistPressed?.call();
-        } else if (value == 'remove_from_playlist') {
-          onRemoveFromPlaylistPressed?.call();
-        } else if (value == 'share') {
-          onSharePressed?.call();
+      onSelected: (action) {
+        switch (action) {
+          case _MenuAction.addToPlaylist:
+            onAddToPlaylist?.call();
+          case _MenuAction.removeFromPlaylist:
+            onRemoveFromPlaylist?.call();
+          case _MenuAction.share:
+            onShare?.call();
+          case _MenuAction.delete:
+            onDelete?.call();
+          case _MenuAction.setAsRingtone:
+            onSetAsRingtone?.call();
         }
       },
       itemBuilder: (context) => [
-        // Conditionally show either add or remove playlist option
-        if (existInPlaylist)
+        if (isInPlaylist)
           PopupMenuItem(
-            value: 'remove_from_playlist',
+            value: _MenuAction.removeFromPlaylist,
             child: Row(
               spacing: 8,
               children: [
@@ -136,7 +164,7 @@ class SongItem extends StatelessWidget {
           )
         else
           PopupMenuItem(
-            value: 'add_to_playlist',
+            value: _MenuAction.addToPlaylist,
             child: Row(
               spacing: 8,
               children: [
@@ -146,7 +174,7 @@ class SongItem extends StatelessWidget {
             ),
           ),
         PopupMenuItem(
-          value: 'share',
+          value: _MenuAction.share,
           child: Row(
             spacing: 8,
             children: [
@@ -156,7 +184,7 @@ class SongItem extends StatelessWidget {
           ),
         ),
         PopupMenuItem(
-          value: 'delete',
+          value: _MenuAction.delete,
           child: Row(
             spacing: 8,
             children: [
@@ -166,7 +194,7 @@ class SongItem extends StatelessWidget {
           ),
         ),
         PopupMenuItem(
-          value: 'ringtone',
+          value: _MenuAction.setAsRingtone,
           child: Row(
             spacing: 8,
             children: [
@@ -178,4 +206,12 @@ class SongItem extends StatelessWidget {
       ],
     );
   }
+}
+
+enum _MenuAction {
+  addToPlaylist,
+  removeFromPlaylist,
+  share,
+  delete,
+  setAsRingtone,
 }

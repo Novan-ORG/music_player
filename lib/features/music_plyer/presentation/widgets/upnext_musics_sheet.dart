@@ -91,7 +91,7 @@ class _UpNextMusicsView extends StatelessWidget {
                     itemScrollController: scrollController,
                     padding: EdgeInsets.zero,
                     itemCount: playList.length,
-                    separatorBuilder: (_, _) => const Divider(height: 1),
+                    separatorBuilder: (_, _) => const Divider(height: 0.4),
                     itemBuilder: (context, index) {
                       final song = playList[index];
                       final isPlaying = currentSongIndex == index;
