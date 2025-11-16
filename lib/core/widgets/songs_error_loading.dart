@@ -13,28 +13,35 @@ class SongsErrorLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(
-          ImageAssets.errorLoadSongs,
-          width: 85,
-        ),
-        const SizedBox(height: 16),
-        Text(
-          message,
-          style: context.theme.textTheme.titleMedium?.copyWith(
-            color: Colors.grey,
+    final theme = Theme.of(context);
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            ImageAssets.errorLoadSongs,
+            width: 97,
           ),
-        ),
-        if (onRetry != null) ...[
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onRetry,
-            child: Text(context.localization.retry),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(
+                alpha: 0.8,
+              ),
+            ),
           ),
+          if (onRetry != null) ...[
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: onRetry,
+              child: Text(context.localization.retry),
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }

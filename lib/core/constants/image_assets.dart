@@ -6,6 +6,7 @@ sealed class ImageAssets {
   static const String errorLoadSongs = 'assets/images/error_load_songs.png';
   // Icons
   static const String arrowUp = 'assets/icons/arrow_up.png';
+  static const String search = 'assets/icons/search.png';
 
   // Avatars in size of 80 width and height
   static const String talebAvatar = 'assets/images/taleb_avatar.jpg';

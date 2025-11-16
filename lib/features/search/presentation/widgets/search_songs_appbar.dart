@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:music_player/core/constants/image_assets.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -83,31 +84,85 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return AppBar(
-      title: SizedBox(
-        height: kToolbarHeight * 0.6,
-        child: TextField(
-          controller: _controller,
-          decoration: InputDecoration(
-            hintText: 'Search songs...',
-            border: InputBorder.none,
-            suffixIcon: _controller.text.isNotEmpty
-                ? IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      _controller.clear();
-                      widget.searchStream.add('');
-                    },
-                  )
-                : _buildMicButton(),
+      automaticallyImplyLeading: false,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 16,
+        children: [
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Icon(
+              Icons.arrow_back,
+              color: isDark ? Colors.white : Colors.black,
+              size: 28,
+            ),
           ),
-          onChanged: widget.searchStream.add,
-        ),
+          Expanded(
+            child: Container(
+              height: 49,
+              //  kToolbarHeight * 0.6,
+              padding: EdgeInsets.only(
+                left: _controller.text.isNotEmpty ? 12 : 0,
+              ),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.14)
+                    : Colors.black.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: TextField(
+                controller: _controller,
+                decoration: InputDecoration(
+                  hintText: 'Search...',
+                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(
+                      alpha: 0.6,
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                  border: InputBorder.none,
+                  prefixIcon: _controller.text.isNotEmpty
+                      ? null
+                      : _buildMicButton(isDark),
+                  suffixIcon: _controller.text.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.clear,
+                            color: isDark ? Colors.white : Colors.black,
+                            size: 24,
+                          ),
+                          onPressed: () {
+                            _controller.clear();
+                            widget.searchStream.add('');
+                          },
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            _controller.clear();
+                            widget.searchStream.add('');
+                          },
+                          child: Image.asset(
+                            ImageAssets.search,
+                            color: isDark ? Colors.white : Colors.black,
+                            height: 24,
+                            width: 24,
+                          ),
+                        ),
+                ),
+                onChanged: widget.searchStream.add,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildMicButton() {
+  Widget _buildMicButton(bool isDark) {
     final listening = _speechToText.isListening;
     return IconButton(
       icon: AnimatedContainer(
@@ -126,7 +181,12 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
         ),
         child: Icon(
           listening ? Icons.mic : Icons.mic,
-          color: (listening ? Colors.red : Colors.black),
+          color: (listening
+              ? Colors.red
+              : isDark
+              ? Colors.white
+              : Colors.black),
+          size: 24,
         ),
       ),
       onPressed: (listening ? _stopListening : _initAndStartListening),
