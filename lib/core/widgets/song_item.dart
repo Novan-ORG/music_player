@@ -11,6 +11,7 @@ class SongItem extends StatelessWidget {
     this.borderRadius = 32,
     this.onTap,
     this.onLongPress,
+    this.blurBackground = true,
     this.isCurrentTrack = false,
     this.isPlayingNow = false,
     this.isFavorite = false,
@@ -29,6 +30,7 @@ class SongItem extends StatelessWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
   final double borderRadius;
+  final bool blurBackground;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
 
@@ -52,20 +54,52 @@ class SongItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlassCard(
+    // Common row content used by both blurred and plain variants
+    final content = Row(
+      children: [
+        SongImageWidget(songId: track.id, size: 54),
+        const SizedBox(width: 12),
+        Expanded(child: _buildTitleAndArtist(context)),
+        const SizedBox(width: 8),
+        _buildActionButtons(context),
+      ],
+    );
+
+    if (blurBackground) {
+      // GlassCard already provides padding, tap and highlight behaviour.
+      return GlassCard(
+        margin: margin,
+        borderRadius: borderRadius,
+        padding: padding,
+        onTap: onTap,
+        onLongPress: onLongPress,
+        child: Card(
+          color: Colors.transparent,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+          child: Padding(padding: EdgeInsets.zero, child: content),
+        ),
+      );
+    }
+
+    // Plain card without blur
+    return Card(
+      color: Colors.transparent,
       margin: margin,
-      borderRadius: borderRadius,
-      padding: padding,
-      onTap: onTap,
-      onLongPress: onLongPress,
-      child: Row(
-        children: [
-          SongImageWidget(songId: track.id, size: 54),
-          const SizedBox(width: 12),
-          Expanded(child: _buildTitleAndArtist(context)),
-          const SizedBox(width: 8),
-          _buildActionButtons(context),
-        ],
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(borderRadius),
+        onTap: onTap,
+        onLongPress: onLongPress,
+        child: Padding(
+          padding: padding,
+          child: content,
+        ),
       ),
     );
   }
@@ -80,6 +114,7 @@ class SongItem extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
+            color: isCurrentTrack ? context.theme.colorScheme.primary : null,
           ),
         ),
         const SizedBox(height: 4),
@@ -87,14 +122,22 @@ class SongItem extends StatelessWidget {
           crossAxisAlignment: WrapCrossAlignment.center,
           spacing: 4,
           children: [
-            const Icon(Icons.person, size: 14, color: Colors.grey),
+            Icon(
+              Icons.person,
+              size: 14,
+              color: isCurrentTrack
+                  ? context.theme.colorScheme.primary
+                  : Colors.grey,
+            ),
             Text(
               track.artist,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: Colors.grey[700]),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: isCurrentTrack
+                    ? context.theme.colorScheme.primary
+                    : Colors.grey[700],
+              ),
             ),
           ],
         ),
@@ -111,7 +154,10 @@ class SongItem extends StatelessWidget {
             // When current track is playing, action is to pause; otherwise play
             message: isPlayingNow ? 'Pause' : 'Play',
             child: IconButton(
-              icon: Icon(isPlayingNow ? Icons.pause : Icons.play_arrow),
+              icon: Icon(
+                isPlayingNow ? Icons.pause : Icons.play_arrow,
+                color: context.theme.colorScheme.primary,
+              ),
               onPressed: onPlayPause,
             ),
           )
@@ -134,20 +180,28 @@ class SongItem extends StatelessWidget {
   // Use an enum for menu actions to make intent explicit
   PopupMenuButton<_MenuAction> _buildOptionsMenu(BuildContext context) {
     return PopupMenuButton<_MenuAction>(
-      icon: const Icon(Icons.more_vert),
+      icon: Icon(
+        Icons.more_vert,
+        color: isCurrentTrack ? context.theme.colorScheme.primary : null,
+      ),
       tooltip: 'More options',
       onSelected: (action) {
         switch (action) {
           case _MenuAction.addToPlaylist:
             onAddToPlaylist?.call();
+            return;
           case _MenuAction.removeFromPlaylist:
             onRemoveFromPlaylist?.call();
+            return;
           case _MenuAction.share:
             onShare?.call();
+            return;
           case _MenuAction.delete:
             onDelete?.call();
+            return;
           case _MenuAction.setAsRingtone:
             onSetAsRingtone?.call();
+            return;
         }
       },
       itemBuilder: (context) => [
