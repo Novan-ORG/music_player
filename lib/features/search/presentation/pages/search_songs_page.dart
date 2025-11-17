@@ -71,11 +71,13 @@ class _SearchSongsPageState extends State<SearchSongsPage>
           if (state.status == SongsStatus.loading) {
             return const Center(child: CircularProgressIndicator());
           }
+
           if (state.status == SongsStatus.error) {
-            return Center(
-              child: Text(context.localization.errorLoadingSongs),
+            return SongsErrorLoading(
+              message: context.localization.errorLoadingSongs,
             );
           }
+
           if (state.allSongs.isEmpty) {
             return NoSongsWidget(
               onRefresh: () {
@@ -83,6 +85,7 @@ class _SearchSongsPageState extends State<SearchSongsPage>
               },
             );
           }
+
           return StreamBuilder(
             stream: searchStream.stream,
             builder: (context, searchQuery) {
@@ -109,8 +112,13 @@ class _SearchSongsPageState extends State<SearchSongsPage>
                   return state.favoriteSongIds;
                 },
                 builder: (context, favoriteSongIds) {
+                  if (filteredSongs.isEmpty) {
+                    return const NoSongsWidget2();
+                  }
                   return ListView.builder(
+                    padding: const EdgeInsets.only(top: 24),
                     itemCount: filteredSongs.length,
+
                     itemBuilder: (context, index) {
                       final song = filteredSongs[index];
                       return SongItem(
