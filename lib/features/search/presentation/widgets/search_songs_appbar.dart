@@ -111,7 +111,7 @@ class _SearchSongsAppbarState extends State<SearchSongsAppbar> {
               decoration: BoxDecoration(
                 color: isDark
                     ? Colors.white.withValues(alpha: 0.14)
-                    : Colors.black.withValues(alpha: 0.1),
+                    : Colors.grey.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: TextField(
