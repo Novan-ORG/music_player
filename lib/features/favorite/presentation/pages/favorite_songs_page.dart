@@ -148,15 +148,15 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
         itemBuilder: (context, index) {
           final song = favoriteSongs[index];
           return SongItem(
-            song: song,
-            isLiked: true,
+            track: song,
+            isFavorite: true,
             onTap: () => _handleSongTap(index, favoriteSongs),
             onLongPress: () => onLongPress(song),
-            onToggleLike: () => _handleToggleLike(song.id),
-            onSharePressed: () => shareSong(song),
-            onSetAsRingtonePressed: () => setAsRingtone(song.data),
-            onDeletePressed: () => showDeleteSongDialog(song),
-            onAddToPlaylistPressed: () async {
+            onFavoriteToggle: () => _handleToggleLike(song.id),
+            onShare: () => shareSong(song),
+            onSetAsRingtone: () => setAsRingtone(song.data),
+            onDelete: () => showDeleteSongDialog(song),
+            onAddToPlaylist: () async {
               await PlaylistsPage.showSheet(
                 context: context,
                 songIds: {song.id},
