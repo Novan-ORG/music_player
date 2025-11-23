@@ -6,9 +6,10 @@ import 'package:music_player/extensions/extensions.dart';
 class SongItem extends StatelessWidget {
   const SongItem({
     required this.track,
-    this.margin = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    this.margin = const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+    this.padding = const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
     this.borderRadius = 32,
+    this.songImageSize = 54,
     this.onTap,
     this.onLongPress,
     this.blurBackground = true,
@@ -30,6 +31,7 @@ class SongItem extends StatelessWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
   final double borderRadius;
+  final double songImageSize;
   final bool blurBackground;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
@@ -57,7 +59,7 @@ class SongItem extends StatelessWidget {
     // Common row content used by both blurred and plain variants
     final content = Row(
       children: [
-        SongImageWidget(songId: track.id, size: 54),
+        SongImageWidget(songId: track.id, size: songImageSize),
         const SizedBox(width: 12),
         Expanded(child: _buildTitleAndArtist(context)),
         const SizedBox(width: 8),
@@ -118,8 +120,7 @@ class SongItem extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
+        Row(
           spacing: 4,
           children: [
             Icon(
@@ -129,14 +130,16 @@ class SongItem extends StatelessWidget {
                   ? context.theme.colorScheme.primary
                   : Colors.grey,
             ),
-            Text(
-              track.artist,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: isCurrentTrack
-                    ? context.theme.colorScheme.primary
-                    : Colors.grey[700],
+            Flexible(
+              child: Text(
+                track.artist,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: isCurrentTrack
+                      ? context.theme.colorScheme.primary
+                      : Colors.grey[700],
+                ),
               ),
             ),
           ],

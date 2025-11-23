@@ -4,7 +4,13 @@ import 'package:music_player/features/music_plyer/domain/entities/entities.dart'
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 
 class PlayerActionButtons extends StatelessWidget {
-  const PlayerActionButtons({super.key});
+  const PlayerActionButtons({
+    super.key,
+    this.playIconSize = 48,
+  });
+
+  // Other icon sizes are defined relative to playIconSize
+  final double playIconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +21,31 @@ class PlayerActionButtons extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _ShuffleButton(state: state, musicPlayer: musicPlayer),
-            _PreviousButton(state: state, musicPlayer: musicPlayer),
-            _PlayPauseButton(state: state, musicPlayer: musicPlayer),
-            _NextButton(state: state, musicPlayer: musicPlayer),
-            _LoopButton(state: state, musicPlayer: musicPlayer),
+            _ShuffleButton(
+              state: state,
+              musicPlayer: musicPlayer,
+              iconSize: playIconSize / 2,
+            ),
+            _PreviousButton(
+              state: state,
+              musicPlayer: musicPlayer,
+              iconSize: playIconSize / 1.5,
+            ),
+            _PlayPauseButton(
+              state: state,
+              musicPlayer: musicPlayer,
+              iconSize: playIconSize,
+            ),
+            _NextButton(
+              state: state,
+              musicPlayer: musicPlayer,
+              iconSize: playIconSize / 1.5,
+            ),
+            _LoopButton(
+              state: state,
+              musicPlayer: musicPlayer,
+              iconSize: playIconSize / 2,
+            ),
           ],
         );
       },
@@ -31,10 +57,12 @@ class _ShuffleButton extends StatelessWidget {
   const _ShuffleButton({
     required this.state,
     required this.musicPlayer,
+    required this.iconSize,
   });
 
   final MusicPlayerState state;
   final MusicPlayerBloc musicPlayer;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +76,12 @@ class _ShuffleButton extends StatelessWidget {
           key: ValueKey(state.shuffleEnabled),
           icon: Icon(
             state.shuffleEnabled ? Icons.shuffle_on_rounded : Icons.shuffle,
-            size: 24,
+            size: iconSize,
             color: state.shuffleEnabled
                 ? colorScheme.primary
                 : colorScheme.onSurface.withAlpha(70),
           ),
-          splashRadius: 24,
+          splashRadius: iconSize,
           onPressed: () => musicPlayer.add(
             SetShuffleEnabledEvent(isEnabled: !state.shuffleEnabled),
           ),
@@ -67,18 +95,20 @@ class _PreviousButton extends StatelessWidget {
   const _PreviousButton({
     required this.state,
     required this.musicPlayer,
+    required this.iconSize,
   });
 
   final MusicPlayerState state;
   final MusicPlayerBloc musicPlayer;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
       message: 'Previous',
       child: IconButton(
-        icon: const Icon(Icons.skip_previous, size: 32),
-        splashRadius: 32,
+        icon: Icon(Icons.skip_previous, size: iconSize),
+        splashRadius: iconSize,
         onPressed: state.hasPrevious
             ? () => musicPlayer.add(
                 SeekMusicEvent(index: state.currentSongIndex - 1),
@@ -93,10 +123,12 @@ class _PlayPauseButton extends StatelessWidget {
   const _PlayPauseButton({
     required this.state,
     required this.musicPlayer,
+    required this.iconSize,
   });
 
   final MusicPlayerState state;
   final MusicPlayerBloc musicPlayer;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -118,8 +150,8 @@ class _PlayPauseButton extends StatelessWidget {
           ),
           child: IconButton(
             key: ValueKey(isPlaying),
-            iconSize: 48,
-            splashRadius: 48,
+            iconSize: iconSize,
+            splashRadius: iconSize,
             icon: Icon(
               isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
               color: colorScheme.primary,
@@ -136,18 +168,20 @@ class _NextButton extends StatelessWidget {
   const _NextButton({
     required this.state,
     required this.musicPlayer,
+    required this.iconSize,
   });
 
   final MusicPlayerState state;
   final MusicPlayerBloc musicPlayer;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
       message: 'Next',
       child: IconButton(
-        icon: const Icon(Icons.skip_next, size: 32),
-        splashRadius: 32,
+        icon: Icon(Icons.skip_next, size: iconSize),
+        splashRadius: iconSize,
         onPressed: state.hasNext
             ? () => musicPlayer.add(
                 SeekMusicEvent(index: state.currentSongIndex + 1),
@@ -162,10 +196,12 @@ class _LoopButton extends StatelessWidget {
   const _LoopButton({
     required this.state,
     required this.musicPlayer,
+    required this.iconSize,
   });
 
   final MusicPlayerState state;
   final MusicPlayerBloc musicPlayer;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -181,9 +217,9 @@ class _LoopButton extends StatelessWidget {
           icon: Icon(
             loopConfig.icon,
             color: loopConfig.color,
-            size: 24,
+            size: iconSize,
           ),
-          splashRadius: 24,
+          splashRadius: iconSize,
           onPressed: () => musicPlayer.add(
             SetPlayerLoopModeEvent(state.loopMode),
           ),
