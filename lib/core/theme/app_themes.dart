@@ -73,8 +73,7 @@ final ThemeData darkTheme = ThemeData(
     thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: Colors.black,
-    elevation: 5,
+    elevation: 10,
     unselectedItemColor: Colors.white,
     selectedItemColor: AppDarkColors.primary,
   ),
@@ -130,8 +129,7 @@ final ThemeData lightTheme = ThemeData(
     thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: Colors.white,
-    elevation: 5,
+    elevation: 10,
     unselectedItemColor: Colors.black,
     selectedItemColor: AppLightColors.primary,
   ),
