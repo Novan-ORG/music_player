@@ -6,7 +6,6 @@ import 'package:music_player/core/constants/constants.dart';
 import 'package:music_player/core/mixins/mixins.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
-import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/widgets.dart';
 import 'package:music_player/features/playlist/presentation/pages/pages.dart';
@@ -25,7 +24,8 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
         SongSharingMixin,
         RingtoneMixin,
         PlaylistManagementMixin,
-        SongDeletionMixin {
+        SongDeletionMixin,
+        ToggleLikeMixin {
   void _showErrorBanner(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
@@ -114,9 +114,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
                     song: state.currentSong,
                     onLikePressed: () {
                       if (state.currentSong != null) {
-                        context.read<FavoriteSongsBloc>().add(
-                          ToggleFavoriteSongEvent(state.currentSong!.id),
-                        );
+                        onToggleLike(state.currentSong!.id);
                       }
                     },
                     onDeletePressed: () =>

@@ -30,7 +30,8 @@ class _SongsPageState extends State<SongsPage>
         SongSharingMixin,
         RingtoneMixin,
         PlaylistManagementMixin,
-        SongDeletionMixin {
+        SongDeletionMixin,
+        ToggleLikeMixin {
   // Getters for BLoCs
   SongsBloc get _songsBloc => context.read<SongsBloc>();
   MusicPlayerBloc get _musicPlayerBloc => context.read<MusicPlayerBloc>();
@@ -48,10 +49,6 @@ class _SongsPageState extends State<SongsPage>
         builder: (_) => const MusicPlayerPage(),
       ),
     );
-  }
-
-  void onToggleLike(int songId) {
-    context.read<FavoriteSongsBloc>().add(ToggleFavoriteSongEvent(songId));
   }
 
   @override
