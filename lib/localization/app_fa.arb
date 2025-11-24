@@ -104,6 +104,8 @@
         }
     },
     "retry": "تلاش مجدد",
+    "selectAll": "انتخاب همه",
+    "deselectAll": "لغو انتخاب همه",
 
     "playListPage":"",
     "@playListPage": {

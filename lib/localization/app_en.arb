@@ -105,6 +105,8 @@
         }
     },
     "retry": "Retry",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
 
     "playListPage":"",
     "@playListPage": {

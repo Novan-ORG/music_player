@@ -120,29 +120,9 @@ class SongItem extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Row(
-          spacing: 4,
-          children: [
-            Icon(
-              Icons.person,
-              size: 14,
-              color: isCurrentTrack
-                  ? context.theme.colorScheme.primary
-                  : Colors.grey,
-            ),
-            Flexible(
-              child: Text(
-                track.artist,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: isCurrentTrack
-                      ? context.theme.colorScheme.primary
-                      : Colors.grey[700],
-                ),
-              ),
-            ),
-          ],
+        ArtistWidget(
+          artist: track.artist,
+          isCurrentTrack: isCurrentTrack,
         ),
       ],
     );

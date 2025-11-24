@@ -205,6 +205,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get retry => 'تلاش مجدد';
 
   @override
+  String get selectAll => 'انتخاب همه';
+
+  @override
+  String get deselectAll => 'لغو انتخاب همه';
+
+  @override
   String get playListPage => '';
 
   @override
