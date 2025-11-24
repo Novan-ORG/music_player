@@ -9,4 +9,7 @@ sealed class StringsConstants {
   //
   static const caroLinktreeUrl = 'https://linktr.ee/carozamani';
   static const caroEmail = 'carozamani@proton.me';
+  // Elham
+  static const elhamLinktreeUrl = 'https://linktr.ee/ebrahimpourelham44';
+  static const elhamEmail = 'ebrahimpourelham44@gmail.com';
 }

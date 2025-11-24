@@ -11,4 +11,5 @@ sealed class ImageAssets {
   // Avatars in size of 80 width and height
   static const String talebAvatar = 'assets/images/taleb_avatar.jpg';
   static const String caroAvatar = 'assets/images/caro_avatar.jpg';
+  static const String elhamAvatar = 'assets/images/elham_avatar.jpg';
 }

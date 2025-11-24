@@ -52,6 +52,12 @@ class AboutUsPage extends StatelessWidget {
               email: StringsConstants.caroEmail,
               linkTreeUrl: StringsConstants.caroLinktreeUrl,
             ),
+            ContributerItem(
+              imagePath: ImageAssets.elhamAvatar,
+              aboutContributer: context.localization.elhamStory,
+              email: StringsConstants.elhamEmail,
+              linkTreeUrl: StringsConstants.elhamLinktreeUrl,
+            ),
 
             /// uncomment to add rate button after publishing the app
             // const SizedBox(height: 16),

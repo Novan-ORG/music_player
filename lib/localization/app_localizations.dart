@@ -608,6 +608,12 @@ abstract class AppLocalizations {
   /// **'Hello! I\'m Caro Zamani, a Product Designer.\nI\'m delighted to have As a designer at the beginning of my professional journey, your feedback is truly valuable and important to me.\nSo, feel free to visit my social media pages so we can share our knowledge and experiences together.'**
   String get caroStory;
 
+  /// No description provided for @elhamStory.
+  ///
+  /// In en, this message translates to:
+  /// **'I am a mobile developer specializing in Flutter. I focus on clean, reliable, and scalable architecture. I have worked on smart apps, banking systems, and social platforms, and I am always exploring new technologies to improve my skills.'**
+  String get elhamStory;
+
   /// No description provided for @appPurpose.
   ///
   /// In en, this message translates to:
