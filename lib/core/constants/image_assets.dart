@@ -4,6 +4,7 @@ sealed class ImageAssets {
   static const String songCover = 'assets/images/song_cover.png';
   static const String emptySongs = 'assets/images/empty_songs.png';
   static const String errorLoadSongs = 'assets/images/error_load_songs.png';
+  static const String emptyPlaylists = 'assets/images/empty_playlist.png';
   // Icons
   static const String arrowUp = 'assets/icons/arrow_up.png';
   static const String search = 'assets/icons/search.png';

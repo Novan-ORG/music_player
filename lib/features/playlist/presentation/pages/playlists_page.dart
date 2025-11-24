@@ -4,7 +4,11 @@ import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
 import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
 import 'package:music_player/features/playlist/presentation/pages/pages.dart';
+import 'package:music_player/features/playlist/presentation/widgets/playlist_appbar.dart';
+import 'package:music_player/features/playlist/presentation/widgets/playlist_item.dart';
+import 'package:music_player/features/playlist/presentation/widgets/recently_playlist_item.dart';
 import 'package:music_player/features/playlist/presentation/widgets/widgets.dart';
+import 'package:music_player/features/search/presentation/pages/search_songs_page.dart';
 
 class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({
@@ -46,105 +50,108 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
 
   Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
 
-  Widget _buildPlaylistTile(Playlist playlist) {
-    final subtitle =
-        '${playlist.numOfSongs} ${context.localization.song}'
-        '${playlist.numOfSongs <= 1 ? '' : context.localization.s}';
-    if (widget.isSelectionMode) {
-      return Card(
-        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-        child: CheckboxListTile(
-          value: selectedPlaylistIds.contains(playlist.id),
-          title: Text(
-            playlist.name,
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
-          subtitle: Text(subtitle),
-          secondary: const Icon(Icons.queue_music),
-          activeColor: Theme.of(context).colorScheme.primary,
-          onChanged: (value) {
-            setState(() {
-              if (value ?? false) {
-                selectedPlaylistIds.add(playlist.id);
-              } else {
-                selectedPlaylistIds.remove(playlist.id);
-              }
-            });
-          },
-        ),
-      );
-    } else {
-      return Card(
-        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Theme.of(
-              context,
-            ).colorScheme.primary.withAlpha(10),
-            child: const Icon(Icons.queue_music, color: Colors.black54),
-          ),
-          title: Text(
-            playlist.name,
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
-          subtitle: Text(subtitle),
-          trailing: PlaylistItemMoreAction(playlist: playlist),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => PlaylistDetailsPage(playlistModel: playlist),
-              ),
-            );
-          },
-        ),
-      );
-    }
-  }
+  // Widget _buildPlaylistTile(Playlist playlist) {
+  //   final subtitle =
+  //       '${playlist.numOfSongs} ${context.localization.song}'
+  //       '${playlist.numOfSongs <= 1 ? '' : context.localization.s}';
+  //   if (widget.isSelectionMode) {
+  //     return Card(
+  //       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+  //       child: CheckboxListTile(
+  //         value: selectedPlaylistIds.contains(playlist.id),
+  //         title: Text(
+  //           playlist.name,
+  //           style: const TextStyle(fontWeight: FontWeight.w500),
+  //         ),
+  //         subtitle: Text(subtitle),
+  //         secondary: const Icon(Icons.queue_music),
+  //         activeColor: Theme.of(context).colorScheme.primary,
+  //         onChanged: (value) {
+  //           setState(() {
+  //             if (value ?? false) {
+  //               selectedPlaylistIds.add(playlist.id);
+  //             } else {
+  //               selectedPlaylistIds.remove(playlist.id);
+  //             }
+  //           });
+  //         },
+  //       ),
+  //     );
+  //   } else {
+  //     return Card(
+  //       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+  //       child: ListTile(
+  //         leading: CircleAvatar(
+  //           backgroundColor: Theme.of(
+  //             context,
+  //           ).colorScheme.primary.withAlpha(10),
+  //           child: const Icon(Icons.queue_music, color: Colors.black54),
+  //         ),
+  //         title: Text(
+  //           playlist.name,
+  //           style: const TextStyle(fontWeight: FontWeight.w500),
+  //         ),
+  //         subtitle: Text(subtitle),
+  //         trailing: PlaylistItemMoreAction(playlist: playlist),
+  //         onTap: () {
+  //           Navigator.of(context).push(
+  //             MaterialPageRoute<void>(
+  //               builder: (_) => PlaylistDetailsPage(playlistModel: playlist),
+  //             ),
+  //           );
+  //         },
+  //       ),
+  //     );
+  //   }
+  // }
 
-  Widget _buildPlaylistsList(List<Playlist> playlists) {
-    return ListView.separated(
-      padding: const EdgeInsets.only(top: 8, bottom: 80),
-      itemCount: playlists.length + 1,
-      separatorBuilder: (_, _) => const SizedBox(height: 2),
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return Card(
-            color: Theme.of(context).colorScheme.primary.withAlpha(8),
-            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-            child: ListTile(
-              leading: const Icon(Icons.add, color: Colors.blueAccent),
-              title: Text(
-                context.localization.createNewPlaylist,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              onTap: _showCreatePlaylistSheet,
-            ),
-          );
-        }
-        final playlist = playlists[index - 1];
-        return _buildPlaylistTile(playlist);
-      },
+  Widget _buildAllPlaylists(List<Playlist> playlists) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 16,
+        ),
+        Text(
+          'All Playlist',
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: playlists.length,
+            itemBuilder: (context, index) {
+              return PlaylistItem(
+                playlist: playlists[index],
+                onAddMusicToPlaylist: () {
+                  setState(() {
+                    selectedPlaylistIds.add(playlists[index].id);
+                  });
+                },
+                onDelete: () {
+                  setState(() {
+                    selectedPlaylistIds.remove(playlists[index].id);
+                  });
+                },
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => PlaylistDetailsPage(
+                        playlistModel: playlists[index],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ],
     );
-  }
-
-  Widget _buildBody(PlayListState state) {
-    if (state.status case PlayListStatus.loading) {
-      return const Center(child: CircularProgressIndicator());
-    } else if (state.status case PlayListStatus.error) {
-      return Center(
-        child: Text('${context.localization.error}: ${state.errorMessage}'),
-      );
-    } else if (state.status case PlayListStatus.initial) {
-      return Center(child: Text(context.localization.playListPage));
-    } else {
-      if (state.playLists.isEmpty) {
-        return EmptyPlaylist(
-          onAddPressed: _showCreatePlaylistSheet,
-        );
-      } else {
-        return _buildPlaylistsList(state.playLists);
-      }
-    }
   }
 
   Widget? _buildBottomBar() {
@@ -189,33 +196,101 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
     return null;
   }
 
+  Future<void> _onSearchButtonPressed() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const SearchSongsPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.isSelectionMode
-              ? context.localization.selectPlaylist
-              : context.localization.playlists,
-        ),
-        centerTitle: true,
-        elevation: 1,
-        actions: [
-          if (!widget.isSelectionMode)
-            IconButton(
-              icon: const Icon(Icons.add),
-              tooltip: context.localization.createPlaylist,
-              onPressed: _showCreatePlaylistSheet,
-            ),
-        ],
+      appBar: PlaylistAppbar(
+        onSearchButtonPressed: _onSearchButtonPressed,
       ),
       body: BlocBuilder<PlayListBloc, PlayListState>(
         builder: (context, state) => Padding(
           padding: const EdgeInsets.all(16),
-          child: _buildBody(state),
+          child: _buildBody(theme),
         ),
       ),
       bottomNavigationBar: _buildBottomBar(),
+
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: theme.colorScheme.surface,
+
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        onPressed: _showCreatePlaylistSheet,
+        tooltip: context.localization.createPlaylist,
+        child: Icon(
+          Icons.add,
+          color: theme.colorScheme.primary,
+          size: 38,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBody(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Favorite Playlist',
+          style: theme.textTheme.labelLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(
+          height: 6,
+        ),
+        SizedBox(
+          height: 120,
+          child: ListView.builder(
+            itemCount: 1,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return const RecentlyPlaylistItem();
+            },
+          ),
+        ),
+        const Divider(
+          color: Colors.grey,
+          thickness: 0.3,
+          indent: 6,
+          endIndent: 6,
+          height: 6,
+        ),
+        Expanded(
+          child: BlocBuilder<PlayListBloc, PlayListState>(
+            builder: (context, state) {
+              if (state.status == PlayListStatus.loading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state.status == PlayListStatus.error) {
+                return Center(
+                  child: Text(
+                    '${context.localization.error}: ${state.errorMessage}',
+                  ),
+                );
+              } else if (state.status == PlayListStatus.initial) {
+                return Center(child: Text(context.localization.playListPage));
+              } else {
+                if (state.playLists.isEmpty) {
+                  return const EmptyPlaylist();
+                } else {
+                  return _buildAllPlaylists(state.playLists);
+                }
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 }
