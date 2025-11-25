@@ -74,6 +74,7 @@ final ThemeData darkTheme = ThemeData(
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     elevation: 10,
+    backgroundColor: AppDarkColors.surface,
     unselectedItemColor: Colors.white,
     selectedItemColor: AppDarkColors.primary,
   ),
@@ -130,6 +131,7 @@ final ThemeData lightTheme = ThemeData(
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     elevation: 10,
+    backgroundColor: AppLightColors.surface,
     unselectedItemColor: Colors.black,
     selectedItemColor: AppLightColors.primary,
   ),
