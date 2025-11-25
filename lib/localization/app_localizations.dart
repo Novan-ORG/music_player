@@ -314,11 +314,11 @@ abstract class AppLocalizations {
   /// **'Favorite Songs'**
   String get favoriteSongs;
 
-  /// No description provided for @allSongs.
+  ///
   ///
   /// In en, this message translates to:
-  /// **'All Songs'**
-  String get allSongs;
+  /// **'All Songs({count})'**
+  String allSongs(int count);
 
   /// No description provided for @searchSongs.
   ///
@@ -464,6 +464,24 @@ abstract class AppLocalizations {
   /// **'Sharing {count} songs:\n{songsTitleList}'**
   String shareSongsSubject(int count, String songsTitleList);
 
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @selectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select All'**
+  String get selectAll;
+
+  /// No description provided for @deselectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect All'**
+  String get deselectAll;
+
   /// Playlist page localization
   ///
   /// In en, this message translates to:
@@ -601,6 +619,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hello! I\'m Caro Zamani, a Product Designer.\nI\'m delighted to have As a designer at the beginning of my professional journey, your feedback is truly valuable and important to me.\nSo, feel free to visit my social media pages so we can share our knowledge and experiences together.'**
   String get caroStory;
+
+  /// No description provided for @elhamStory.
+  ///
+  /// In en, this message translates to:
+  /// **'I am a mobile developer specializing in Flutter. I focus on clean, reliable, and scalable architecture. I have worked on smart apps, banking systems, and social platforms, and I am always exploring new technologies to improve my skills.'**
+  String get elhamStory;
 
   /// No description provided for @appPurpose.
   ///

@@ -69,7 +69,6 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(context.localization.favoriteSongs),
-        backgroundColor: const Color(0xFF7F53AC),
         elevation: 0,
         actions: [
           BlocBuilder<FavoriteSongsBloc, FavoriteSongsState>(
@@ -99,14 +98,12 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
           ),
         ],
       ),
-      body: BackgroundGradient(
-        child: BlocBuilder<FavoriteSongsBloc, FavoriteSongsState>(
-          builder: (context, favoriteState) {
-            return _buildContent(
-              favoriteState,
-            );
-          },
-        ),
+      body: BlocBuilder<FavoriteSongsBloc, FavoriteSongsState>(
+        builder: (context, favoriteState) {
+          return _buildContent(
+            favoriteState,
+          );
+        },
       ),
     );
   }
@@ -151,15 +148,15 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
         itemBuilder: (context, index) {
           final song = favoriteSongs[index];
           return SongItem(
-            song: song,
-            isLiked: true,
+            track: song,
+            isFavorite: true,
             onTap: () => _handleSongTap(index, favoriteSongs),
             onLongPress: () => onLongPress(song),
-            onToggleLike: () => _handleToggleLike(song.id),
-            onSharePressed: () => shareSong(song),
-            onSetAsRingtonePressed: () => setAsRingtone(song.data),
-            onDeletePressed: () => showDeleteSongDialog(song),
-            onAddToPlaylistPressed: () async {
+            onFavoriteToggle: () => _handleToggleLike(song.id),
+            onShare: () => shareSong(song),
+            onSetAsRingtone: () => setAsRingtone(song.data),
+            onDelete: () => showDeleteSongDialog(song),
+            onAddToPlaylist: () async {
               await PlaylistsPage.showSheet(
                 context: context,
                 songIds: {song.id},

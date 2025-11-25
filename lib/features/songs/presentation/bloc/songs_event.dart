@@ -12,7 +12,7 @@ final class LoadSongsEvent extends SongsEvent {
 final class SortSongsEvent extends SongsEvent {
   const SortSongsEvent(this.sortType);
 
-  final SortType sortType;
+  final SongsSortType sortType;
 }
 
 final class DeleteSongEvent extends SongsEvent {

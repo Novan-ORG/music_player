@@ -13,7 +13,7 @@ class AppDarkColors {
 // Define custom colors for light theme
 class AppLightColors {
   static const Color primary = Color(0xFF9C27B0); // Purple
-  static const Color background = Colors.white;
+  static const Color background = Color(0xFFFDFCF2);
   static const Color surface = Color(0xFFF5F5F5);
   static const Color accent = Color(0xFFE0E0E0);
   static const Color textPrimary = Color(0xFF181818);
@@ -54,8 +54,8 @@ TextTheme appTextTheme(Color textPrimary, Color textSecondary) => TextTheme(
 
 // Dark ThemeData
 final ThemeData darkTheme = ThemeData(
-  fontFamily: 'OpenSans',
-  fontFamilyFallback: const ['IranSans'],
+  fontFamily: 'Inter',
+  fontFamilyFallback: const ['Vazirmatn'],
   brightness: Brightness.dark,
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: AppDarkColors.background,
@@ -65,8 +65,24 @@ final ThemeData darkTheme = ThemeData(
   canvasColor: AppDarkColors.background,
   cardColor: AppDarkColors.surface,
   secondaryHeaderColor: AppDarkColors.primary,
-  appBarTheme: const AppBarTheme(
+  sliderTheme: const SliderThemeData(
+    activeTrackColor: AppDarkColors.primary,
+    inactiveTrackColor: AppDarkColors.accent,
+    thumbColor: AppDarkColors.primary,
+    trackHeight: 4,
+    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
+  ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    elevation: 10,
     backgroundColor: AppDarkColors.surface,
+    unselectedItemColor: Colors.white,
+    selectedItemColor: AppDarkColors.primary,
+  ),
+  tabBarTheme: const TabBarThemeData(
+    dividerColor: AppDarkColors.accent,
+  ),
+  appBarTheme: const AppBarTheme(
+    backgroundColor: AppDarkColors.background,
     iconTheme: IconThemeData(color: AppDarkColors.textPrimary),
     titleTextStyle: TextStyle(
       color: AppDarkColors.textPrimary,
@@ -95,8 +111,8 @@ final ThemeData darkTheme = ThemeData(
 
 // Light ThemeData
 final ThemeData lightTheme = ThemeData(
-  fontFamily: 'OpenSans',
-  fontFamilyFallback: const ['IranSans'],
+  fontFamily: 'Inter',
+  fontFamilyFallback: const ['Vazirmatn'],
   brightness: Brightness.light,
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: AppLightColors.background,
@@ -106,8 +122,24 @@ final ThemeData lightTheme = ThemeData(
   canvasColor: AppLightColors.background,
   cardColor: AppLightColors.surface,
   secondaryHeaderColor: AppLightColors.primary,
-  appBarTheme: const AppBarTheme(
+  sliderTheme: const SliderThemeData(
+    activeTrackColor: AppLightColors.primary,
+    inactiveTrackColor: AppLightColors.accent,
+    thumbColor: AppLightColors.primary,
+    trackHeight: 4,
+    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
+  ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    elevation: 10,
     backgroundColor: AppLightColors.surface,
+    unselectedItemColor: Colors.black,
+    selectedItemColor: AppLightColors.primary,
+  ),
+  tabBarTheme: const TabBarThemeData(
+    dividerColor: AppLightColors.accent,
+  ),
+  appBarTheme: const AppBarTheme(
+    backgroundColor: AppLightColors.background,
     iconTheme: IconThemeData(color: AppLightColors.textPrimary),
     titleTextStyle: TextStyle(
       color: AppLightColors.textPrimary,

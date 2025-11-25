@@ -10,6 +10,7 @@ import 'package:music_player/features/favorite/favorite.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/playlist/presentation/pages/pages.dart';
+import 'package:music_player/features/search/presentation/widgets/search_songs_appbar.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/pages/pages.dart';
 
@@ -64,90 +65,85 @@ class _SearchSongsPageState extends State<SearchSongsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          decoration: InputDecoration(
-            hintText: context.localization.searchSongs,
-            border: InputBorder.none,
-          ),
-          style: Theme.of(context).textTheme.titleMedium,
-          autofocus: true,
-          onChanged: searchStream.add,
-        ),
-      ),
-      body: BackgroundGradient(
-        child: BlocBuilder<SongsBloc, SongsState>(
-          builder: (_, state) {
-            if (state.status == SongsStatus.loading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state.status == SongsStatus.error) {
-              return Center(
-                child: Text(context.localization.errorLoadingSongs),
-              );
-            }
-            if (state.allSongs.isEmpty) {
-              return NoSongsWidget(
-                onRefresh: () {
-                  context.read<SongsBloc>().add(const LoadSongsEvent());
-                },
-              );
-            }
-            return StreamBuilder(
-              stream: searchStream.stream,
-              builder: (context, searchQuery) {
-                final query = searchQuery.data?.toLowerCase() ?? '';
-                List<Song> filteredSongs;
-                if (query.isNotEmpty) {
-                  filteredSongs = state.allSongs.where((song) {
-                    final title = song.title.toLowerCase();
-                    final artist = song.artist.toLowerCase();
-                    final album = song.album.toLowerCase();
-                    return title.contains(query) ||
-                        artist.contains(query) ||
-                        album.contains(query);
-                  }).toList();
-                } else {
-                  filteredSongs = state.allSongs;
-                }
-                return BlocSelector<
-                  FavoriteSongsBloc,
-                  FavoriteSongsState,
-                  Set<int>
-                >(
-                  selector: (state) {
-                    return state.favoriteSongIds;
-                  },
-                  builder: (context, favoriteSongIds) {
-                    return ListView.builder(
-                      itemCount: filteredSongs.length,
-                      itemBuilder: (context, index) {
-                        final song = filteredSongs[index];
-                        return SongItem(
-                          song: song,
-                          isLiked: favoriteSongIds.contains(song.id),
-                          onSetAsRingtonePressed: () =>
-                              setAsRingtone(song.data),
-                          onDeletePressed: () => showDeleteSongDialog(song),
-                          onToggleLike: () => onToggleLike(song.id),
-                          onAddToPlaylistPressed: () async {
-                            await PlaylistsPage.showSheet(
-                              context: context,
-                              songIds: {song.id},
-                            );
-                          },
-                          onSharePressed: () => shareSong(song),
-                          onLongPress: () => onLongPress(song, filteredSongs),
-                          onTap: () => _handleSongTap(index, filteredSongs),
-                        );
-                      },
-                    );
-                  },
-                );
+      appBar: SearchSongsAppbar(searchStream: searchStream),
+      body: BlocBuilder<SongsBloc, SongsState>(
+        builder: (_, state) {
+          if (state.status == SongsStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (state.status == SongsStatus.error) {
+            return SongsErrorLoading(
+              message: context.localization.errorLoadingSongs,
+            );
+          }
+
+          if (state.allSongs.isEmpty) {
+            return NoSongsWidget(
+              onRefresh: () {
+                context.read<SongsBloc>().add(const LoadSongsEvent());
               },
             );
-          },
-        ),
+          }
+
+          return StreamBuilder(
+            stream: searchStream.stream,
+            builder: (context, searchQuery) {
+              final query = searchQuery.data?.toLowerCase() ?? '';
+              List<Song> filteredSongs;
+              if (query.isNotEmpty) {
+                filteredSongs = state.allSongs.where((song) {
+                  final title = song.title.toLowerCase();
+                  final artist = song.artist.toLowerCase();
+                  final album = song.album.toLowerCase();
+                  return title.contains(query) ||
+                      artist.contains(query) ||
+                      album.contains(query);
+                }).toList();
+              } else {
+                filteredSongs = state.allSongs;
+              }
+              return BlocSelector<
+                FavoriteSongsBloc,
+                FavoriteSongsState,
+                Set<int>
+              >(
+                selector: (state) {
+                  return state.favoriteSongIds;
+                },
+                builder: (context, favoriteSongIds) {
+                  if (filteredSongs.isEmpty) {
+                    return const NoSongsWidget2();
+                  }
+                  return ListView.builder(
+                    padding: const EdgeInsets.only(top: 24),
+                    itemCount: filteredSongs.length,
+
+                    itemBuilder: (context, index) {
+                      final song = filteredSongs[index];
+                      return SongItem(
+                        track: song,
+                        isFavorite: favoriteSongIds.contains(song.id),
+                        onSetAsRingtone: () => setAsRingtone(song.data),
+                        onDelete: () => showDeleteSongDialog(song),
+                        onFavoriteToggle: () => onToggleLike(song.id),
+                        onAddToPlaylist: () async {
+                          await PlaylistsPage.showSheet(
+                            context: context,
+                            songIds: {song.id},
+                          );
+                        },
+                        onShare: () => shareSong(song),
+                        onLongPress: () => onLongPress(song, filteredSongs),
+                        onTap: () => _handleSongTap(index, filteredSongs),
+                      );
+                    },
+                  );
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }

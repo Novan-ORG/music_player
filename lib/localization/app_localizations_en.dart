@@ -119,7 +119,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favoriteSongs => 'Favorite Songs';
 
   @override
-  String get allSongs => 'All Songs';
+  String allSongs(int count) {
+    return 'All Songs($count)';
+  }
 
   @override
   String get searchSongs => 'Search Songs';
@@ -200,6 +202,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get retry => 'Retry';
+
+  @override
+  String get selectAll => 'Select All';
+
+  @override
+  String get deselectAll => 'Deselect All';
+
+  @override
   String get playListPage => '';
 
   @override
@@ -270,6 +281,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get caroStory =>
       'Hello! I\'m Caro Zamani, a Product Designer.\nI\'m delighted to have As a designer at the beginning of my professional journey, your feedback is truly valuable and important to me.\nSo, feel free to visit my social media pages so we can share our knowledge and experiences together.';
+
+  @override
+  String get elhamStory =>
+      'I am a mobile developer specializing in Flutter. I focus on clean, reliable, and scalable architecture. I have worked on smart apps, banking systems, and social platforms, and I am always exploring new technologies to improve my skills.';
 
   @override
   String get appPurpose =>

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/favorite/favorite.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -70,5 +72,11 @@ mixin RingtoneMixin<T extends StatefulWidget> on State<T> {
         content: Text(context.localization.permissionDeniedForRingtone),
       ),
     );
+  }
+}
+
+mixin ToggleLikeMixin<T extends StatefulWidget> on State<T> {
+  void onToggleLike(int songId) {
+    context.read<FavoriteSongsBloc>().add(ToggleFavoriteSongEvent(songId));
   }
 }

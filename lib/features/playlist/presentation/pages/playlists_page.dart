@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
 import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
@@ -194,7 +193,6 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF7F53AC),
         title: Text(
           widget.isSelectionMode
               ? context.localization.selectPlaylist
@@ -211,12 +209,10 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
             ),
         ],
       ),
-      body: BackgroundGradient(
-        child: BlocBuilder<PlayListBloc, PlayListState>(
-          builder: (context, state) => Padding(
-            padding: const EdgeInsets.all(16),
-            child: _buildBody(state),
-          ),
+      body: BlocBuilder<PlayListBloc, PlayListState>(
+        builder: (context, state) => Padding(
+          padding: const EdgeInsets.all(16),
+          child: _buildBody(state),
         ),
       ),
       bottomNavigationBar: _buildBottomBar(),

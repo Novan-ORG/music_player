@@ -3,9 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/mixins/mixins.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/favorite/favorite.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:music_player/features/music_plyer/presentation/widgets/widgets.dart';
+import 'package:music_player/features/playlist/playlist.dart';
 
 class UpnextMusicsSheet extends StatelessWidget {
   const UpnextMusicsSheet({super.key});
@@ -13,7 +17,7 @@ class UpnextMusicsSheet extends StatelessWidget {
   static Future<void> show(BuildContext context) {
     return showModalBottomSheet(
       context: context,
-      scrollControlDisabledMaxHeightRatio: 0.5,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => const UpnextMusicsSheet(),
     );
@@ -22,149 +26,260 @@ class UpnextMusicsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final musicPlayerBloc = context.read<MusicPlayerBloc>();
-    return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
-      bloc: musicPlayerBloc,
-      buildWhen: (state, newState) =>
-          state.currentSongIndex != newState.currentSongIndex ||
-          state.playList != newState.playList,
-      builder: (context, newState) {
-        return _UpNextMusicsView(
-          currentSongIndex: newState.currentSongIndex,
-          playList: newState.playList,
-          onTapSong: (index) {
-            musicPlayerBloc.add(SeekMusicEvent(index: index));
+
+    return Container(
+      decoration: BoxDecoration(
+        color: context.theme.scaffoldBackgroundColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      child: DraggableScrollableSheet(
+        minChildSize: 0.5,
+        expand: false,
+        builder: (context, innerScrollController) {
+          return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+            bloc: musicPlayerBloc,
+            buildWhen: (previous, next) =>
+                previous.currentSongIndex != next.currentSongIndex ||
+                previous.playList != next.playList,
+            builder: (context, state) {
+              return _UpNextMusicsView(
+                innerScrollController: innerScrollController,
+                currentSongIndex: state.currentSongIndex,
+                playList: state.playList,
+                onTapSong: (index) =>
+                    musicPlayerBloc.add(SeekMusicEvent(index: index)),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _UpNextMusicsView extends StatefulWidget {
+  const _UpNextMusicsView({
+    required this.playList,
+    this.onTapSong,
+    this.currentSongIndex,
+    this.innerScrollController,
+  });
+
+  final void Function(int)? onTapSong;
+  final int? currentSongIndex;
+  final List<Song> playList;
+  final ScrollController? innerScrollController;
+
+  @override
+  State<_UpNextMusicsView> createState() => _UpNextMusicsViewState();
+}
+
+class _UpNextMusicsViewState extends State<_UpNextMusicsView> {
+  static const double _itemHeight = 68;
+  bool _isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToCurrent());
+  }
+
+  void _scrollToCurrent() {
+    final idx = widget.currentSongIndex;
+    if (idx == null || idx <= 0) return;
+
+    widget.innerScrollController?.animateTo(
+      idx * _itemHeight,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _UpNextMusicsView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentSongIndex != widget.currentSongIndex) {
+      _scrollToCurrent();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<MusicPlayerBloc, MusicPlayerState, MusicPlayerStatus>(
+      selector: (state) => state.status,
+      builder: (context, playerStatus) {
+        return NotificationListener<DraggableScrollableNotification>(
+          onNotification: (notification) {
+            final expanded = notification.extent >= 0.7;
+            if (expanded != _isExpanded) {
+              setState(() => _isExpanded = expanded);
+            }
+            return false;
           },
+          child: Column(
+            children: [
+              if (_isExpanded)
+                _ExpandedHeader(
+                  currentSong: widget.playList[widget.currentSongIndex ?? 0],
+                ),
+              Flexible(
+                child: _UpNextList(
+                  playList: widget.playList,
+                  currentSongIndex: widget.currentSongIndex,
+                  playerStatus: playerStatus,
+                  innerScrollController: widget.innerScrollController,
+                  onTapSong: widget.onTapSong,
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
   }
 }
 
-class _UpNextMusicsView extends StatelessWidget {
-  const _UpNextMusicsView({
+class _UpNextList extends StatefulWidget {
+  const _UpNextList({
     required this.playList,
-    this.onTapSong,
+    required this.playerStatus,
+    this.innerScrollController,
     this.currentSongIndex,
+    this.onTapSong,
   });
 
-  final void Function(int)? onTapSong;
-  final int? currentSongIndex;
   final List<Song> playList;
+  final MusicPlayerStatus playerStatus;
+  final ScrollController? innerScrollController;
+  final int? currentSongIndex;
+  final void Function(int)? onTapSong;
 
   @override
+  State<_UpNextList> createState() => _UpNextListState();
+}
+
+class _UpNextListState extends State<_UpNextList>
+    with
+        SongSharingMixin,
+        RingtoneMixin,
+        PlaylistManagementMixin,
+        SongDeletionMixin,
+        ToggleLikeMixin {
+  @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).colorScheme.primary;
-    final cardColor = Theme.of(context).cardColor;
-    final scrollController = ItemScrollController();
-    scheduleMicrotask(() {
-      if (currentSongIndex == null || currentSongIndex! <= 0) return;
-      unawaited(
-        scrollController.scrollTo(
-          index: currentSongIndex!,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeInOut,
-        ),
-      );
-    });
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
-      ),
-      child: Column(
-        children: [
-          _Header(),
-          const SizedBox(height: 12),
-          Flexible(
-            child: playList.isEmpty
-                ? Center(
-                    child: Text(
-                      context.localization.noSongInQueue,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  )
-                : ScrollablePositionedList.separated(
-                    itemScrollController: scrollController,
-                    padding: EdgeInsets.zero,
-                    itemCount: playList.length,
-                    separatorBuilder: (_, _) => const Divider(height: 1),
-                    itemBuilder: (context, index) {
-                      final song = playList[index];
-                      final isPlaying = currentSongIndex == index;
-                      return ListTile(
-                        dense: true,
-                        visualDensity: VisualDensity.compact,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 4,
-                        ),
-                        leading: Transform.scale(
-                          scale: isPlaying ? 1.2 : 1,
-                          child: Icon(
-                            Icons.music_note,
-                            color: isPlaying ? primaryColor : Colors.blueAccent,
-                            size: 20,
-                          ),
-                        ),
-                        title: Text(
-                          song.title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                color: isPlaying ? primaryColor : null,
-                              ),
-                        ),
-                        subtitle: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          spacing: 4,
-                          children: [
-                            Icon(
-                              Icons.person,
-                              size: 12,
-                              color: isPlaying ? primaryColor : null,
-                            ),
-                            Flexible(
-                              child: Text(
-                                song.artist,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.labelSmall
-                                    ?.copyWith(
-                                      color: isPlaying ? primaryColor : null,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        trailing: Text(
-                          song.duration.format(),
-                          style: Theme.of(context).textTheme.labelSmall
-                              ?.copyWith(
-                                color: isPlaying ? primaryColor : null,
-                              ),
-                        ),
-                        onTap: () => onTapSong?.call(index),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        hoverColor: Theme.of(
-                          context,
-                        ).colorScheme.primary.withAlpha(5),
-                      );
-                    },
-                  ),
+        color: context.theme.cardColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withValues(alpha: 0.3),
+            offset: const Offset(0, -3),
+            blurRadius: 10,
           ),
         ],
+      ),
+      child: SafeArea(
+        child: widget.playList.isEmpty
+            ? Center(
+                child: Text(
+                  context.localization.noSongInQueue,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              )
+            : Column(
+                children: [
+                  const _Header(),
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child:
+                        BlocSelector<
+                          FavoriteSongsBloc,
+                          FavoriteSongsState,
+                          Set<int>
+                        >(
+                          selector: (state) {
+                            return state.favoriteSongIds;
+                          },
+                          builder: (context, favoriteSongIds) {
+                            return ListView.builder(
+                              controller: widget.innerScrollController,
+                              itemCount: widget.playList.length,
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                final song = widget.playList[index];
+                                final isCurrent =
+                                    widget.currentSongIndex == index;
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SongItem(
+                                      track: song,
+                                      blurBackground: false,
+                                      songImageSize: 48,
+                                      onTap: () =>
+                                          widget.onTapSong?.call(index),
+                                      isCurrentTrack: isCurrent,
+                                      borderRadius: 0,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 6,
+                                        horizontal: 2,
+                                      ),
+                                      isPlayingNow:
+                                          widget.playerStatus ==
+                                              MusicPlayerStatus.playing &&
+                                          isCurrent,
+                                      onPlayPause: () {
+                                        context.read<MusicPlayerBloc>().add(
+                                          const TogglePlayPauseEvent(),
+                                        );
+                                      },
+                                      isFavorite: favoriteSongIds.contains(
+                                        song.id,
+                                      ),
+                                      onSetAsRingtone: () =>
+                                          setAsRingtone(song.data),
+                                      onDelete: () =>
+                                          showDeleteSongDialog(song),
+                                      onFavoriteToggle: () =>
+                                          onToggleLike(song.id),
+                                      onAddToPlaylist: () async {
+                                        await PlaylistsPage.showSheet(
+                                          context: context,
+                                          songIds: {song.id},
+                                        );
+                                      },
+                                      onShare: () => shareSong(song),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
+                                      child: Divider(
+                                        height: 0.1,
+                                        thickness: 0.1,
+                                        color: context.theme.dividerColor,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                  ),
+                ],
+              ),
       ),
     );
   }
 }
 
 class _Header extends StatelessWidget {
+  const _Header();
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -178,7 +293,7 @@ class _Header extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: Navigator.of(context).pop,
+          onPressed: () => Navigator.pop(context),
           icon: Icon(
             Icons.keyboard_arrow_down_rounded,
             color: Colors.grey[600],
@@ -186,5 +301,39 @@ class _Header extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _ExpandedHeader extends StatelessWidget {
+  const _ExpandedHeader({required this.currentSong});
+  final Song currentSong;
+
+  @override
+  Widget build(BuildContext context) {
+    final title = currentSong.title;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            const PlayerActionButtons(playIconSize: 30),
+          ],
+        ),
+        const SizedBox(width: 12),
+        Hero(
+          tag: 'song_cover_${currentSong.id}',
+          child: SongImageWidget(
+            songId: currentSong.id,
+            size: MediaQuery.of(context).size.width * 0.2,
+          ),
+        ),
+      ],
+    ).paddingOnly(top: 48, bottom: 16);
   }
 }

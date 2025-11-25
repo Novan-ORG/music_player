@@ -127,7 +127,7 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
               GlobalWidgetsLocalizations.delegate,
             ],
             home: isLoading
-                ? const BackgroundGradient(child: Loading())
+                ? const Material(child: Loading())
                 : hasAudioPermission
                 ? const HomePage()
                 : GrantAudioPermission(

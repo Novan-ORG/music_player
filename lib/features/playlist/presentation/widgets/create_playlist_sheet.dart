@@ -146,6 +146,15 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                   decoration: InputDecoration(
                     labelText: context.localization.playlistName,
                     prefixIcon: const Icon(Icons.playlist_add),
+                    suffixIcon: _controller.text.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              _controller.clear();
+                              _onChanged('');
+                            },
+                          )
+                        : null,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

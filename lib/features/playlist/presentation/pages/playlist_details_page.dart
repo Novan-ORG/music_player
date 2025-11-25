@@ -154,18 +154,16 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
                             itemBuilder: (context, index) {
                               final song = songs[index];
                               return SongItem(
-                                song: song,
-                                existInPlaylist: true,
-                                isLiked: favoriteSongs.contains(song.id),
-                                onSetAsRingtonePressed: () =>
-                                    setAsRingtone(song.data),
-                                onDeletePressed: () =>
-                                    showDeleteSongDialog(song),
-                                onToggleLike: () => context
+                                track: song,
+                                isInPlaylist: true,
+                                isFavorite: favoriteSongs.contains(song.id),
+                                onSetAsRingtone: () => setAsRingtone(song.data),
+                                onDelete: () => showDeleteSongDialog(song),
+                                onFavoriteToggle: () => context
                                     .read<FavoriteSongsBloc>()
                                     .add(ToggleFavoriteSongEvent(song.id)),
-                                onSharePressed: () => shareSong(song),
-                                onRemoveFromPlaylistPressed: () async {
+                                onShare: () => shareSong(song),
+                                onRemoveFromPlaylist: () async {
                                   removeSongsFromPlaylist({
                                     song.id,
                                   }, state.playlist);
