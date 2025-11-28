@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:music_player/core/widgets/playlist_image_widget.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
+import 'package:music_player/features/playlist/presentation/widgets/playlist_item_more_action.dart';
 
 class PlaylistItem extends StatelessWidget {
   const PlaylistItem({
@@ -13,9 +14,8 @@ class PlaylistItem extends StatelessWidget {
     this.onTap,
     this.blurBackground = true,
     this.isPinned = false,
-    this.onAddMusicToPlaylist,
-    this.onDelete,
     this.onPinned,
+    this.onAddMusicToPlaylist,
     super.key,
   });
 
@@ -30,9 +30,8 @@ class PlaylistItem extends StatelessWidget {
   final bool isPinned;
 
   // Callbacks
-  final VoidCallback? onAddMusicToPlaylist;
-  final VoidCallback? onDelete;
   final VoidCallback? onPinned;
+  final VoidCallback? onAddMusicToPlaylist;
 
   @override
   Widget build(BuildContext context) {
@@ -117,56 +116,11 @@ class PlaylistItem extends StatelessWidget {
             ),
           ),
         ),
-        _buildOptionsMenu(context),
-      ],
-    );
-  }
-
-  // Use an enum for menu actions to make intent explicit
-  PopupMenuButton<_MenuAction> _buildOptionsMenu(BuildContext context) {
-    return PopupMenuButton<_MenuAction>(
-      icon: const Icon(
-        Icons.more_vert,
-      ),
-      tooltip: 'More options',
-      onSelected: (action) {
-        switch (action) {
-          case _MenuAction.addMusicToPlaylist:
-            onAddMusicToPlaylist?.call();
-            return;
-          case _MenuAction.delete:
-            onDelete?.call();
-            return;
-        }
-      },
-      itemBuilder: (context) => [
-        const PopupMenuItem(
-          value: _MenuAction.delete,
-          child: Row(
-            spacing: 8,
-            children: [
-              Icon(Icons.delete, color: Colors.red),
-              Text('delete'),
-            ],
-          ),
-        ),
-
-        const PopupMenuItem(
-          value: _MenuAction.addMusicToPlaylist,
-          child: Row(
-            spacing: 8,
-            children: [
-              Icon(Icons.add, color: Colors.green),
-              Text('add music'),
-            ],
-          ),
+        PlaylistItemMoreAction(
+          playlist: playlist,
+          onAddMusicToPlaylist: onAddMusicToPlaylist,
         ),
       ],
     );
   }
-}
-
-enum _MenuAction {
-  addMusicToPlaylist,
-  delete,
 }

@@ -8,36 +8,66 @@ class PlaylistItemMoreAction extends StatelessWidget {
     required this.playlist,
     this.onDeleted,
     this.onRenamed,
+    this.onAddMusicToPlaylist,
     super.key,
   });
   final Playlist playlist;
   final VoidCallback? onDeleted;
   final VoidCallback? onRenamed;
+  final VoidCallback? onAddMusicToPlaylist;
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
       icon: const Icon(Icons.more_vert),
-      onSelected: (value) async {
-        if (value == 'delete') {
-          context.read<PlayListBloc>().add(
-            DeletePlayListEvent(playlist.id),
-          );
-          _showUndoSnackbar(context, playlist);
-          onDeleted?.call();
-        } else if (value == 'rename') {
-          await CreatePlaylistSheet.showEdit(context, playlist);
-          onRenamed?.call();
+      onSelected: (action) async {
+        switch (action) {
+          case _MenuAction.addMusicToPlaylist:
+            onAddMusicToPlaylist?.call();
+            return;
+          case _MenuAction.delete:
+            context.read<PlayListBloc>().add(
+              DeletePlayListEvent(playlist.id),
+            );
+            _showUndoSnackbar(context, playlist);
+            onDeleted?.call();
+            return;
+          case _MenuAction.edit:
+            await CreatePlaylistSheet.showEdit(context, playlist);
+            onRenamed?.call();
+            return;
         }
       },
       itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'rename',
-          child: Text(context.localization.rename),
+        const PopupMenuItem(
+          value: _MenuAction.addMusicToPlaylist,
+          child: Row(
+            spacing: 8,
+            children: [
+              Icon(Icons.add, color: Colors.green),
+              Text('Add music'),
+            ],
+          ),
         ),
-        PopupMenuItem(
-          value: 'delete',
-          child: Text(context.localization.delete),
+        const PopupMenuItem(
+          value: _MenuAction.edit,
+          child: Row(
+            spacing: 8,
+            children: [
+              Icon(Icons.edit, color: Colors.orange),
+              Text('Rename'),
+            ],
+          ),
+        ),
+        const PopupMenuItem(
+          value: _MenuAction.delete,
+          child: Row(
+            spacing: 8,
+            children: [
+              Icon(Icons.delete, color: Colors.red),
+              Text('Delete'),
+            ],
+          ),
         ),
       ],
     );
@@ -59,4 +89,10 @@ class PlaylistItemMoreAction extends StatelessWidget {
       ),
     );
   }
+}
+
+enum _MenuAction {
+  addMusicToPlaylist,
+  delete,
+  edit,
 }

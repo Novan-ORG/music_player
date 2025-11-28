@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/mixins/playlist_management_mixin.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
 import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
@@ -39,7 +40,8 @@ class PlaylistsPage extends StatefulWidget {
   State<PlaylistsPage> createState() => _PlaylistsPageState();
 }
 
-class _PlaylistsPageState extends State<PlaylistsPage> {
+class _PlaylistsPageState extends State<PlaylistsPage>
+    with PlaylistManagementMixin {
   final Set<int> selectedPlaylistIds = {};
 
   @override
@@ -50,60 +52,57 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
 
   Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
 
-  // Widget _buildPlaylistTile(Playlist playlist) {
-  //   final subtitle =
-  //       '${playlist.numOfSongs} ${context.localization.song}'
-  //       '${playlist.numOfSongs <= 1 ? '' : context.localization.s}';
-  //   if (widget.isSelectionMode) {
-  //     return Card(
-  //       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-  //       child: CheckboxListTile(
-  //         value: selectedPlaylistIds.contains(playlist.id),
-  //         title: Text(
-  //           playlist.name,
-  //           style: const TextStyle(fontWeight: FontWeight.w500),
-  //         ),
-  //         subtitle: Text(subtitle),
-  //         secondary: const Icon(Icons.queue_music),
-  //         activeColor: Theme.of(context).colorScheme.primary,
-  //         onChanged: (value) {
-  //           setState(() {
-  //             if (value ?? false) {
-  //               selectedPlaylistIds.add(playlist.id);
-  //             } else {
-  //               selectedPlaylistIds.remove(playlist.id);
-  //             }
-  //           });
-  //         },
-  //       ),
-  //     );
-  //   } else {
-  //     return Card(
-  //       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-  //       child: ListTile(
-  //         leading: CircleAvatar(
-  //           backgroundColor: Theme.of(
-  //             context,
-  //           ).colorScheme.primary.withAlpha(10),
-  //           child: const Icon(Icons.queue_music, color: Colors.black54),
-  //         ),
-  //         title: Text(
-  //           playlist.name,
-  //           style: const TextStyle(fontWeight: FontWeight.w500),
-  //         ),
-  //         subtitle: Text(subtitle),
-  //         trailing: PlaylistItemMoreAction(playlist: playlist),
-  //         onTap: () {
-  //           Navigator.of(context).push(
-  //             MaterialPageRoute<void>(
-  //               builder: (_) => PlaylistDetailsPage(playlistModel: playlist),
-  //             ),
-  //           );
-  //         },
-  //       ),
-  //     );
-  //   }
-  // }
+  Widget _buildPlaylistTile(Playlist playlist) {
+    final subtitle =
+        '${playlist.numOfSongs} ${context.localization.song}'
+        '${playlist.numOfSongs <= 1 ? '' : context.localization.s}';
+    if (widget.isSelectionMode) {
+      return Card(
+        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+        child: CheckboxListTile(
+          value: selectedPlaylistIds.contains(playlist.id),
+          title: Text(
+            playlist.name,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+          subtitle: Text(subtitle),
+          secondary: const Icon(Icons.queue_music),
+          activeColor: Theme.of(context).colorScheme.primary,
+          onChanged: (value) {
+            setState(() {
+              if (value ?? false) {
+                selectedPlaylistIds.add(playlist.id);
+              } else {
+                selectedPlaylistIds.remove(playlist.id);
+              }
+            });
+          },
+        ),
+      );
+    } else {
+      return PlaylistItem(
+        playlist: playlist,
+        onAddMusicToPlaylist: () {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => PlaylistDetailsPage(
+                playlistModel: playlist,
+              ),
+            ),
+          );
+        },
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => PlaylistDetailsPage(
+                playlistModel: playlist,
+              ),
+            ),
+          );
+        },
+      );
+    }
+  }
 
   Widget _buildAllPlaylists(List<Playlist> playlists) {
     return Column(
@@ -125,28 +124,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           child: ListView.builder(
             itemCount: playlists.length,
             itemBuilder: (context, index) {
-              return PlaylistItem(
-                playlist: playlists[index],
-                onAddMusicToPlaylist: () {
-                  setState(() {
-                    selectedPlaylistIds.add(playlists[index].id);
-                  });
-                },
-                onDelete: () {
-                  setState(() {
-                    selectedPlaylistIds.remove(playlists[index].id);
-                  });
-                },
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => PlaylistDetailsPage(
-                        playlistModel: playlists[index],
-                      ),
-                    ),
-                  );
-                },
-              );
+              return _buildPlaylistTile(playlists[index]);
             },
           ),
         ),
@@ -219,7 +197,6 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
         ),
       ),
       bottomNavigationBar: _buildBottomBar(),
-
       floatingActionButton: FloatingActionButton(
         backgroundColor: theme.colorScheme.surface,
 

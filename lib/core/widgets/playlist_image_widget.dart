@@ -28,7 +28,7 @@ class PlaylistImageWidget extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(borderRadius),
           child: Image.asset(
-            ImageAssets.talebAvatar,
+            ImageAssets.playlistCover,
             fit: artworkFit,
             width: size,
             height: size,

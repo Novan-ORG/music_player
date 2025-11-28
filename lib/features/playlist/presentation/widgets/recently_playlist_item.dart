@@ -32,7 +32,7 @@ class RecentlyPlaylistItem extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(borderRadius),
             child: Image.asset(
-              ImageAssets.caroAvatar,
+              ImageAssets.playlistCover,
               fit: artworkFit,
               width: size,
               height: size,
