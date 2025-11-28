@@ -83,22 +83,10 @@ class _PlaylistsPageState extends State<PlaylistsPage>
       return PlaylistItem(
         playlist: playlist,
         onAddMusicToPlaylist: () {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => PlaylistDetailsPage(
-                playlistModel: playlist,
-              ),
-            ),
-          );
+          _navigateToPlaylistDetails(playlist);
         },
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => PlaylistDetailsPage(
-                playlistModel: playlist,
-              ),
-            ),
-          );
+          _navigateToPlaylistDetails(playlist);
         },
       );
     }
@@ -182,6 +170,16 @@ class _PlaylistsPageState extends State<PlaylistsPage>
     );
   }
 
+  void _navigateToPlaylistDetails(Playlist playlist) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => PlaylistDetailsPage(
+          playlistModel: playlist,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -225,7 +223,7 @@ class _PlaylistsPageState extends State<PlaylistsPage>
           ),
         ),
         const SizedBox(
-          height: 6,
+          height: 8,
         ),
         SizedBox(
           height: 120,
@@ -233,7 +231,17 @@ class _PlaylistsPageState extends State<PlaylistsPage>
             itemCount: 1,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              return const RecentlyPlaylistItem();
+              return RecentlyPlaylistItem(
+                onTap: () => _navigateToPlaylistDetails(
+                  Playlist(
+                    id: 0,
+                    name: 'Recently',
+                    numOfSongs: 0,
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
+                  ),
+                ),
+              );
             },
           ),
         ),
