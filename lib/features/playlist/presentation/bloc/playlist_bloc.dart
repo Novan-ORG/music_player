@@ -308,7 +308,7 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
           PreferencesKeys.pinnedPlaylists,
         ) ??
         [];
-    final pinnedSet = pinnedIds.map((id) => int.parse(id)).toSet();
+    final pinnedSet = pinnedIds.map(int.parse).toSet();
     emit(state.copyWith(pinnedPlaylistIds: pinnedSet));
   }
 
