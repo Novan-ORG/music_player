@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/constants/image_assets.dart';
+import 'package:music_player/features/playlist/domain/entities/playlist.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
-class RecentlyPlaylistItem extends StatelessWidget {
-  const RecentlyPlaylistItem({
+class PinnedPlaylistItem extends StatelessWidget {
+  const PinnedPlaylistItem({
+    required this.playlist,
     super.key,
     this.size = 74,
     this.borderRadius = 16,
@@ -15,6 +17,7 @@ class RecentlyPlaylistItem extends StatelessWidget {
     this.onTap,
   });
 
+  final Playlist playlist;
   final double size;
   final double borderRadius;
   final double margin;
@@ -57,7 +60,7 @@ class RecentlyPlaylistItem extends StatelessWidget {
           height: 6,
         ),
         Text(
-          'Recently',
+          playlist.name,
           style: theme.textTheme.labelLarge?.copyWith(
             fontSize: 12,
           ),

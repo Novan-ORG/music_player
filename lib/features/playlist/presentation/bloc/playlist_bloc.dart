@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:music_player/core/commands/commands.dart';
+import 'package:music_player/core/constants/constants.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'playlist_event.dart';
 part 'playlist_state.dart';
@@ -17,6 +19,7 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     this._removeSongsFromPlaylist,
     this._getPlaylistById,
     this._commandManager,
+    this._preferences,
   ) : super(const PlayListState()) {
     on<LoadPlayListsEvent>(_loadPlayLists);
     on<CreatePlayListEvent>(_addPlayList);
@@ -26,7 +29,10 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     on<RenamePlayListEvent>(_renamePlayList);
     on<UndoDeletePlayListEvent>(_undoDeletePlayList);
     on<CanUndoChangedEvent>(_canUndoChanged);
+    on<LoadPinnedPlaylistsEvent>(_loadPinnedPlaylists);
+    on<PinnedPlaylistEvent>(_pinnedPlaylist);
     _commandManager.canUndoNotifier.addListener(_onCanUndoChanged);
+    add(const LoadPinnedPlaylistsEvent());
   }
 
   final RenamePlaylist _renamePlaylist;
@@ -37,6 +43,7 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
   final RemoveSongsFromPlaylist _removeSongsFromPlaylist;
   final GetPlaylistById _getPlaylistById;
   final CommandManager _commandManager;
+  final SharedPreferences _preferences;
 
   void _onCanUndoChanged() {
     add(CanUndoChangedEvent(canUndo: _commandManager.canUndo));
@@ -290,6 +297,39 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
         ),
       );
     }
+  }
+
+  Future<void> _loadPinnedPlaylists(
+    LoadPinnedPlaylistsEvent event,
+    Emitter<PlayListState> emit,
+  ) async {
+    final pinnedIds =
+        _preferences.getStringList(
+          PreferencesKeys.pinnedPlaylists,
+        ) ??
+        [];
+    final pinnedSet = pinnedIds.map((id) => int.parse(id)).toSet();
+    emit(state.copyWith(pinnedPlaylistIds: pinnedSet));
+  }
+
+  Future<void> _pinnedPlaylist(
+    PinnedPlaylistEvent event,
+    Emitter<PlayListState> emit,
+  ) async {
+    final currentPinned = Set<int>.from(state.pinnedPlaylistIds);
+
+    if (currentPinned.contains(event.playlistId)) {
+      currentPinned.remove(event.playlistId);
+    } else {
+      currentPinned.add(event.playlistId);
+    }
+
+    await _preferences.setStringList(
+      PreferencesKeys.pinnedPlaylists,
+      currentPinned.map((id) => id.toString()).toList(),
+    );
+
+    emit(state.copyWith(pinnedPlaylistIds: currentPinned));
   }
 
   @override

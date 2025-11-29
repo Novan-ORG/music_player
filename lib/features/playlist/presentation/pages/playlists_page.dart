@@ -10,6 +10,7 @@ import 'package:music_player/features/playlist/presentation/widgets/playlist_ite
 import 'package:music_player/features/playlist/presentation/widgets/recently_playlist_item.dart';
 import 'package:music_player/features/playlist/presentation/widgets/widgets.dart';
 import 'package:music_player/features/search/presentation/pages/search_songs_page.dart';
+import 'package:music_player/injection/service_locator.dart';
 
 class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({
@@ -50,9 +51,45 @@ class _PlaylistsPageState extends State<PlaylistsPage>
     context.read<PlayListBloc>().add(LoadPlayListsEvent());
   }
 
+  bool _isPinned(int playlistId, Set<int> pinnedIds) {
+    return pinnedIds.contains(playlistId);
+  }
+
   Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
 
-  Widget _buildPlaylistTile(Playlist playlist) {
+  Future<void> _handleAddMusicToPlaylist(Playlist playlist) async {
+    final detailsBloc = PlaylistDetailsBloc(
+      playlist: playlist,
+      getPlaylistSongs: getIt.get(),
+    )..add(const GetPlaylistSongsEvent());
+
+    try {
+      await detailsBloc.stream.firstWhere(
+        (state) => state.status != PlaylistDetailsStatus.loading,
+      );
+
+      Set<int>? currentSongIds;
+      final state = detailsBloc.state;
+      if (state.status == PlaylistDetailsStatus.success) {
+        currentSongIds = state.songs.map((song) => song.id).toSet();
+      }
+
+      await addSongsToPlaylist(
+        playlist,
+        currentSongIds,
+      );
+    } finally {
+      await detailsBloc.close();
+    }
+  }
+
+  void _handlePinPlaylist(Playlist playlist) {
+    context.read<PlayListBloc>().add(
+      PinnedPlaylistEvent(playlist.id),
+    );
+  }
+
+  Widget _buildPlaylistTile(Playlist playlist, Set<int> pinnedIds) {
     final subtitle =
         '${playlist.numOfSongs} ${context.localization.song}'
         '${playlist.numOfSongs <= 1 ? '' : context.localization.s}';
@@ -82,17 +119,15 @@ class _PlaylistsPageState extends State<PlaylistsPage>
     } else {
       return PlaylistItem(
         playlist: playlist,
-        onAddMusicToPlaylist: () {
-          _navigateToPlaylistDetails(playlist);
-        },
-        onTap: () {
-          _navigateToPlaylistDetails(playlist);
-        },
+        isPinned: _isPinned(playlist.id, pinnedIds),
+        onAddMusicToPlaylist: () => _handleAddMusicToPlaylist(playlist),
+        onTap: () => _navigateToPlaylistDetails(playlist),
+        onPinned: () => _handlePinPlaylist(playlist),
       );
     }
   }
 
-  Widget _buildAllPlaylists(List<Playlist> playlists) {
+  Widget _buildAllPlaylists(List<Playlist> playlists, Set<int> pinnedIds) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -112,7 +147,7 @@ class _PlaylistsPageState extends State<PlaylistsPage>
           child: ListView.builder(
             itemCount: playlists.length,
             itemBuilder: (context, index) {
-              return _buildPlaylistTile(playlists[index]);
+              return _buildPlaylistTile(playlists[index], pinnedIds);
             },
           ),
         ),
@@ -180,6 +215,95 @@ class _PlaylistsPageState extends State<PlaylistsPage>
     );
   }
 
+  Widget _buildBody(PlayListState state, ThemeData theme) {
+    if (state.status == PlayListStatus.loading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (state.status == PlayListStatus.error) {
+      return Center(
+        child: Text(
+          '${context.localization.error}: ${state.errorMessage}',
+        ),
+      );
+    } else if (state.status == PlayListStatus.initial) {
+      return Center(child: Text(context.localization.playListPage));
+    } else {
+      if (state.playLists.isEmpty) {
+        return const EmptyPlaylist();
+      } else {
+        final pinnedPlaylists = state.playLists
+            .where(
+              (playlist) =>
+                  playlist.id != 0 &&
+                  _isPinned(playlist.id, state.pinnedPlaylistIds),
+            )
+            .toList();
+        final allPlaylists = state.playLists;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Favorite Playlist',
+              style: theme.textTheme.labelLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            _buildPinnedPlaylists(pinnedPlaylists),
+            const Divider(
+              color: Colors.grey,
+              thickness: 0.3,
+              indent: 6,
+              endIndent: 6,
+              height: 6,
+            ),
+            Expanded(
+              child: _buildAllPlaylists(allPlaylists, state.pinnedPlaylistIds),
+            ),
+          ],
+        );
+      }
+    }
+  }
+
+  Widget _buildPinnedPlaylists(
+    List<Playlist> pinnedPlaylists,
+  ) {
+    return SizedBox(
+      height: 120,
+      child: ListView.builder(
+        itemCount: pinnedPlaylists.length + 1,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          final recently = Playlist(
+            id: 0,
+            name: 'Recently',
+            numOfSongs: 0,
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+          );
+
+          if (index == 0) {
+            return PinnedPlaylistItem(
+              playlist: recently,
+              onTap: () => _navigateToPlaylistDetails(recently),
+            );
+          }
+          final playlist = pinnedPlaylists[index - 1];
+          return Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: PinnedPlaylistItem(
+              playlist: playlist,
+              onTap: () => _navigateToPlaylistDetails(playlist),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -191,7 +315,7 @@ class _PlaylistsPageState extends State<PlaylistsPage>
       body: BlocBuilder<PlayListBloc, PlayListState>(
         builder: (context, state) => Padding(
           padding: const EdgeInsets.all(16),
-          child: _buildBody(theme),
+          child: _buildBody(state, theme),
         ),
       ),
       bottomNavigationBar: _buildBottomBar(),
@@ -209,73 +333,6 @@ class _PlaylistsPageState extends State<PlaylistsPage>
           size: 38,
         ),
       ),
-    );
-  }
-
-  Widget _buildBody(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Favorite Playlist',
-          style: theme.textTheme.labelLarge?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        SizedBox(
-          height: 120,
-          child: ListView.builder(
-            itemCount: 1,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              return RecentlyPlaylistItem(
-                onTap: () => _navigateToPlaylistDetails(
-                  Playlist(
-                    id: 0,
-                    name: 'Recently',
-                    numOfSongs: 0,
-                    createdAt: DateTime.now(),
-                    updatedAt: DateTime.now(),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        const Divider(
-          color: Colors.grey,
-          thickness: 0.3,
-          indent: 6,
-          endIndent: 6,
-          height: 6,
-        ),
-        Expanded(
-          child: BlocBuilder<PlayListBloc, PlayListState>(
-            builder: (context, state) {
-              if (state.status == PlayListStatus.loading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state.status == PlayListStatus.error) {
-                return Center(
-                  child: Text(
-                    '${context.localization.error}: ${state.errorMessage}',
-                  ),
-                );
-              } else if (state.status == PlayListStatus.initial) {
-                return Center(child: Text(context.localization.playListPage));
-              } else {
-                if (state.playLists.isEmpty) {
-                  return const EmptyPlaylist();
-                } else {
-                  return _buildAllPlaylists(state.playLists);
-                }
-              }
-            },
-          ),
-        ),
-      ],
     );
   }
 }

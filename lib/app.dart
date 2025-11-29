@@ -91,6 +91,7 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
             getIt.get<RemoveSongsFromPlaylist>(),
             getIt.get<GetPlaylistById>(),
             getIt.get<CommandManager>(),
+            getIt.get<SharedPreferences>(),
           ),
         ),
         BlocProvider(
