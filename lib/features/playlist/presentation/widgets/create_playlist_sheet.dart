@@ -81,6 +81,8 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     final title = _isEditing
         ? context.localization.renamePlaylist
         : context.localization.createNewPlaylist;
@@ -103,8 +105,8 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                 top: Radius.circular(24),
               ),
               boxShadow: [
-                const BoxShadow(
-                  color: Colors.white30,
+                BoxShadow(
+                  color: isDark ? Colors.white30 : Colors.white60,
                 ),
                 BoxShadow(
                   color: theme.colorScheme.surface,
@@ -126,8 +128,8 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: isDark ? Colors.white : Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
@@ -135,9 +137,9 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                     const Spacer(),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.keyboard_arrow_down,
-                        color: Colors.white,
+                        color: isDark ? Colors.white : Colors.black,
                       ),
                     ),
                   ],
@@ -148,7 +150,9 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.1),
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.1)
+                              : Colors.black.withValues(alpha: 0.1),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             bottomLeft: Radius.circular(12),
@@ -156,10 +160,14 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                         ),
                         child: TextField(
                           controller: _controller,
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            color: isDark ? Colors.white : Colors.black,
+                          ),
                           decoration: InputDecoration(
                             hintText: context.localization.playlistName,
-                            hintStyle: const TextStyle(color: Colors.white54),
+                            hintStyle: TextStyle(
+                              color: isDark ? Colors.white54 : Colors.black54,
+                            ),
                             border: InputBorder.none,
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 14,
