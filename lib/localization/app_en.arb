@@ -105,6 +105,8 @@
         }
     },
     "retry": "Retry",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
 
     "playListPage":"",
     "@playListPage": {
@@ -140,6 +142,7 @@
     },
     "talebStory": "Hi! I'm Taleb Rafiepour, a passionate mobile developer with years of experience building beautiful and reliable apps for Android and iOS. I love creating user-friendly, high-performance applications that make people's lives easier.",
     "caroStory": "Hello! I'm Caro Zamani, a Product Designer.\nI'm delighted to have As a designer at the beginning of my professional journey, your feedback is truly valuable and important to me.\nSo, feel free to visit my social media pages so we can share our knowledge and experiences together.",
+    "elhamStory": "I am a mobile developer specializing in Flutter. I focus on clean, reliable, and scalable architecture. I have worked on smart apps, banking systems, and social platforms, and I am always exploring new technologies to improve my skills.",
     "appPurpose": "This app is completely free. If you enjoy using it, please consider supporting us by rating it 5 stars and leaving a kind comment on the app store!",
     "connectWithMe": "Connect with me",
     "gmail": "Gmail",

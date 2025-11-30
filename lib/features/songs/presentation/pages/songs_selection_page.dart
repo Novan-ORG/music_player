@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/mixins/mixins.dart';
 import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
 class SongsSelectionPage extends StatefulWidget {
@@ -68,15 +69,24 @@ class _SongsSelectionPageState extends State<SongsSelectionPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: context.theme.textTheme.titleLarge,
+        ),
+        centerTitle: true,
+        actions: [
+          SelectionMoreButton(
+            onAddToPlaylist: onAddToPlaylist,
+            onDelete: onDelete,
+            onShare: onShare,
+            selectedCount: selectedSongIds.length,
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: SelectionActionBar(
             selectedCount: selectedSongIds.length,
             totalCount: widget.availableSongs.map((e) => e.id).toSet().length,
-            onAddToPlaylist: onAddToPlaylist,
-            onDelete: onDelete,
-            onShare: onShare,
             onSelectAll: onSelectAll,
             onDeselectAll: onDeselectAll,
           ),
@@ -84,51 +94,33 @@ class _SongsSelectionPageState extends State<SongsSelectionPage>
       ),
       body: widget.availableSongs.isEmpty
           ? const NoSongsWidget()
-          : ListView.builder(
+          : ListView.separated(
               padding: const EdgeInsets.symmetric(
                 vertical: 12,
                 horizontal: 8,
               ),
               itemCount: widget.availableSongs.length,
+              separatorBuilder: (context, index) => Container(
+                height: 0.3,
+                margin: const EdgeInsets.all(6),
+                color: Theme.of(context).dividerColor,
+              ),
               itemBuilder: (context, index) {
                 final song = widget.availableSongs[index];
                 final isSelected = selectedSongIds.contains(song.id);
 
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 2,
-                    horizontal: 4,
-                  ),
-                  child: CheckboxListTile(
-                    value: isSelected,
-                    onChanged: (selected) {
-                      setState(() {
-                        if (selected ?? false) {
-                          selectedSongIds.add(song.id);
-                        } else {
-                          selectedSongIds.remove(song.id);
-                        }
-                      });
-                    },
-                    secondary: SongImageWidget(songId: song.id, size: 54),
-                    title: Text(
-                      song.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    subtitle: Text(
-                      song.artist,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                    activeColor: Theme.of(context).colorScheme.primary,
-                  ),
+                return SelectionSongCard(
+                  song: song,
+                  isSelected: isSelected,
+                  onChanged: ({bool? isSelected}) {
+                    setState(() {
+                      if (isSelected ?? false) {
+                        selectedSongIds.add(song.id);
+                      } else {
+                        selectedSongIds.remove(song.id);
+                      }
+                    });
+                  },
                 );
               },
             ),

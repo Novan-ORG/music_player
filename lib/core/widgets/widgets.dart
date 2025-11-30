@@ -1,3 +1,4 @@
+export 'artist_widget.dart';
 export 'glass_card.dart';
 export 'grant_audio_permission.dart';
 export 'loading.dart';

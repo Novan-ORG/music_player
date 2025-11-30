@@ -205,6 +205,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get retry => 'تلاش مجدد';
 
   @override
+  String get selectAll => 'انتخاب همه';
+
+  @override
+  String get deselectAll => 'لغو انتخاب همه';
+
+  @override
   String get playListPage => '';
 
   @override
@@ -275,6 +281,10 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get caroStory =>
       'سلام من کارو زمانی هستم،طراح محصول.\nخوشحالم که در ساخت این اپلیکیشن مشارکت داشتم.\nبه عنوان یک طراح در ابتدای مسیر حرفه ای،بازخورد شما برای من بسیار ارزشمند و مهم است.\nپس به شبکه های اجتماعی من سر بزنید تا بتوانیم دانش و تجربه های خود را با هم به اشتراک بگذاریم.';
+
+  @override
+  String get elhamStory =>
+      'من یک توسعه‌دهنده موبایل متخصص در فلاتر هستم و بر طراحی معماری‌های تمیز، قابل‌اعتماد و مقیاس‌پذیر تمرکز دارم. در حوزه‌های مختلفی مانند اپلیکیشن‌های هوشمند، سامانه‌های بانکی و پلتفرم‌های اجتماعی فعالیت کرده‌ام و همواره به دنبال یادگیری و تجربه فناوری‌های جدید برای ارتقای مهارت‌هایم هستم';
 
   @override
   String get appPurpose =>
