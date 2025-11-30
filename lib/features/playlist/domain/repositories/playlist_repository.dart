@@ -14,4 +14,10 @@ abstract class PlaylistRepository {
     int playlistId,
     List<int> songIds,
   );
+
+  Future<Result<int?>> getPlaylistCoverSongId(int playlistId);
+
+  Future<Result<int?>> getLatestSongIdFromPlaylist(int playlistId);
+  Future<Result<void>> setPlaylistCoverSongId(int playlistId, int songId);
+  Future<Result<void>> updatePlaylistCoverFromLatestSong(int playlistId);
 }

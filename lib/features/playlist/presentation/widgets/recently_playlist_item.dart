@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/constants/image_assets.dart';
+import 'package:music_player/core/result.dart';
 import 'package:music_player/features/playlist/domain/entities/playlist.dart';
+import 'package:music_player/features/playlist/domain/repositories/playlist_repository.dart';
+import 'package:music_player/injection/service_locator.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class PinnedPlaylistItem extends StatelessWidget {
@@ -33,29 +36,41 @@ class PinnedPlaylistItem extends StatelessWidget {
 
     return Column(
       children: [
-        GestureDetector(
-          onTap: onTap,
-          child: QueryArtworkWidget(
-            id: 0,
-            quality: quality,
-            type: ArtworkType.AUDIO,
-            size: qualitySize,
-            artworkWidth: size,
-            artworkHeight: size,
-            artworkQuality: artworkQuality,
-            artworkFit: artworkFit,
-            artworkBorder: BorderRadius.circular(borderRadius),
-            nullArtworkWidget: ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadius),
-              child: Image.asset(
-                ImageAssets.playlistCover,
-                fit: BoxFit.cover,
-                width: size,
-                height: size,
-              ),
-            ),
+        FutureBuilder<Result<int?>>(
+          future: getIt<PlaylistRepository>().getPlaylistCoverSongId(
+            playlist.id,
           ),
+          builder: (context, snapshot) {
+            // use latest song id
+            final coverSongId = snapshot.data?.value;
+            final artworkId = coverSongId ?? playlist.id;
+
+            return GestureDetector(
+              onTap: onTap,
+              child: QueryArtworkWidget(
+                id: artworkId,
+                quality: quality,
+                type: ArtworkType.AUDIO,
+                size: qualitySize,
+                artworkWidth: size,
+                artworkHeight: size,
+                artworkQuality: artworkQuality,
+                artworkFit: artworkFit,
+                artworkBorder: BorderRadius.circular(borderRadius),
+                nullArtworkWidget: ClipRRect(
+                  borderRadius: BorderRadius.circular(borderRadius),
+                  child: Image.asset(
+                    ImageAssets.playlistCover,
+                    fit: BoxFit.cover,
+                    width: size,
+                    height: size,
+                  ),
+                ),
+              ),
+            );
+          },
         ),
+
         const SizedBox(
           height: 6,
         ),

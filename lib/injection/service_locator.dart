@@ -48,7 +48,7 @@ void _setupPlaylistFeature() {
   /// Repositories
   getIt
     ..registerLazySingleton<PlaylistDatasource>(
-      () => PlaylistDatasourceImpl(getIt.get()),
+      () => PlaylistDatasourceImpl(getIt.get(), getIt.get()),
     )
     ..registerLazySingleton<PlaylistRepository>(
       () => PlaylistRepositoryImpl(getIt.get()),
