@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:music_player/app.dart';
 import 'package:music_player/core/services/logger/logger.dart';
 import 'package:music_player/injection/service_locator.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
   await runZonedGuarded(
@@ -13,9 +15,25 @@ Future<void> main() async {
       FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
       setup();
       await getIt.allReady();
-      runApp(const MusicPlayerApp());
+      await dotenv.load();
+      final sentryDSN = dotenv.get('SENTRY_DSN');
+      await SentryFlutter.init(
+        (options) {
+          options
+            ..dsn = sentryDSN
+            ..tracesSampleRate = 1.0
+            ..sendDefaultPii = true
+            ..debug = true
+            ..profilesSampleRate = 1.0;
+        },
+        appRunner: () => runApp(SentryWidget(child: const MusicPlayerApp())),
+      );
     },
     (Object error, StackTrace stack) {
+      Sentry.captureException(
+        error,
+        stackTrace: stack,
+      );
       Logger.error('Uncaught error: $error', error, stack);
     },
   );

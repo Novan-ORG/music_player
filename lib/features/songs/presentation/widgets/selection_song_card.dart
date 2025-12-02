@@ -21,25 +21,26 @@ class SelectionSongCard extends StatelessWidget {
         horizontal: 6,
       ),
       child: Row(
-        spacing: 8,
         children: [
           SongImageWidget(songId: song.id, size: 54),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 4,
-            children: [
-              Text(
-                song.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 4,
+              children: [
+                Text(
+                  song.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              ArtistWidget(artist: song.artist),
-            ],
+                ArtistWidget(artist: song.artist),
+              ],
+            ),
           ),
-          const Spacer(),
           Checkbox(
             value: isSelected,
             activeColor: Theme.of(context).colorScheme.primary,
