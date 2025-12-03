@@ -50,7 +50,7 @@ class PlaylistItem extends StatelessWidget {
       // GlassCard already provides padding, tap and highlight behaviour.
       return GlassCard(
         margin: margin,
-        borderRadius: borderRadius,
+        borderRadius: BorderRadius.circular(borderRadius),
         padding: padding,
         onTap: onTap,
         child: Card(
