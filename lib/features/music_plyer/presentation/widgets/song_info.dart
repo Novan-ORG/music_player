@@ -56,7 +56,7 @@ class SongInfo extends StatelessWidget {
                 onPressed: onLikePressed,
                 icon: Icon(
                   isLiked ? Icons.favorite : Icons.favorite_border_rounded,
-                  color: isLiked ? Colors.red : null,
+                  color: context.theme.primaryColor,
                 ),
               );
             },

@@ -150,7 +150,7 @@ class SongItem extends StatelessWidget {
             child: IconButton(
               icon: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: isFavorite ? Colors.red : Colors.grey,
+                color: context.theme.primaryColor,
               ),
               onPressed: onFavoriteToggle,
             ),
