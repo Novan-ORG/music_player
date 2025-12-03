@@ -25,7 +25,7 @@ class SongInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      title: SongTitle(song: song),
+      title: SongTitle(songTitle: song?.title),
       subtitle: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 4,
