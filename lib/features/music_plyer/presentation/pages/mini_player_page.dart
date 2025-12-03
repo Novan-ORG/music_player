@@ -2,6 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marquee/marquee.dart';
+import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
@@ -97,35 +99,32 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                 scale: _sizeAnimation.value,
                 child: Opacity(
                   opacity: _fadeAnimation.value,
-                  child: GestureDetector(
+                  child: GlassCard(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
                     onLongPress: _toggleMinimize,
-                    child: Card(
-                      elevation: 6,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: InkWell(
-                        onTap: () async {
-                          await Navigator.of(
-                            context,
-                          ).push(
-                            MaterialPageRoute<void>(
-                              builder: (_) => const MusicPlayerPage(),
-                            ),
-                          );
-                        },
-                        child: ListTile(
+                    onTap: () async {
+                      await Navigator.of(
+                        context,
+                      ).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const MusicPlayerPage(),
+                        ),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        ListTile(
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 12,
-                            vertical: 6,
                           ),
                           leading: Hero(
                             tag: 'song_cover_${state.currentSong?.id ?? 0}',
-                            child: MiniCoverAndProgress(
-                              positionStream: musicPlayerBloc.positionStream,
-                              durationStream: musicPlayerBloc.durationStream,
+                            child: SongImageWidget(
                               songId: state.currentSong?.id ?? 0,
+                              size: 54,
                             ),
                           ),
                           title: _buildTitle(
@@ -159,7 +158,16 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                                 },
                               ),
                         ),
-                      ),
+                        MiniHorizontalProgress(
+                          positionStream: musicPlayerBloc.positionStream,
+                          durationStream: musicPlayerBloc.durationStream,
+                          onSeek: (position) {
+                            musicPlayerBloc.add(
+                              SeekMusicEvent(position: position),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -177,30 +185,33 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
     int currentSongId,
     bool isPlaying,
   ) {
-    return GestureDetector(
-      onLongPress: _toggleMinimize,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Hero(
-            tag: 'mini_cover_$currentSongId',
-            child: MiniCoverAndProgress(
-              positionStream: musicPlayerBloc.positionStream,
-              durationStream: musicPlayerBloc.durationStream,
-              songId: currentSongId,
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: GestureDetector(
+        onLongPress: _toggleMinimize,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Hero(
+              tag: 'mini_cover_$currentSongId',
+              child: MiniCoverAndProgress(
+                positionStream: musicPlayerBloc.positionStream,
+                durationStream: musicPlayerBloc.durationStream,
+                songId: currentSongId,
+              ),
             ),
-          ),
-          IconButton(
-            onPressed: () {
-              musicPlayerBloc.add(const TogglePlayPauseEvent());
-            },
-            icon: Icon(
-              isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Theme.of(context).colorScheme.primary,
-              size: 24,
+            IconButton(
+              onPressed: () {
+                musicPlayerBloc.add(const TogglePlayPauseEvent());
+              },
+              icon: Icon(
+                isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Theme.of(context).colorScheme.primary,
+                size: 24,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -212,7 +223,7 @@ Widget _buildTitle(BuildContext context, String title) {
   final style = baseStyle.copyWith(fontWeight: FontWeight.bold);
   return AutoSizeText(
     title,
-    style: style,
+    style: style.copyWith(color: context.theme.primaryColor),
     maxLines: 1,
     overflowReplacement: SizedBox(
       height: 18,
@@ -232,7 +243,9 @@ Widget _buildSubtitle(BuildContext context, String? artist) {
   final style = baseStyle.copyWith(color: Colors.grey[700]);
   return AutoSizeText(
     displayArtist,
-    style: style,
+    style: style.copyWith(
+      color: context.theme.colorScheme.primary,
+    ),
     maxLines: 1,
     overflowReplacement: SizedBox(
       height: 20,
@@ -266,7 +279,7 @@ class _MiniPlayerControls extends StatelessWidget {
         IconButton(
           icon: Icon(
             isLiked ? Icons.favorite : Icons.favorite_border,
-            color: Colors.red,
+            color: context.theme.colorScheme.primary,
           ),
           tooltip: isLiked ? 'Unlike' : 'Like',
           onPressed: () {
@@ -276,7 +289,10 @@ class _MiniPlayerControls extends StatelessWidget {
           },
         ),
         IconButton(
-          icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+          icon: Icon(
+            isPlaying ? Icons.pause : Icons.play_arrow,
+            color: context.theme.primaryColor,
+          ),
           tooltip: isPlaying ? 'Pause' : 'Play',
           onPressed: () {
             musicPlayerBloc.add(const TogglePlayPauseEvent());

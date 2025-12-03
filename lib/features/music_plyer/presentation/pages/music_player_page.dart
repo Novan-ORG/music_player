@@ -104,10 +104,12 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
                 children: [
                   Hero(
                     tag: 'song_cover_${state.currentSong?.id ?? 0}',
-                    child: SongImageWidget(
-                      qualitySize: 400,
-                      songId: state.currentSong?.id ?? 0,
-                      size: MediaQuery.of(context).size.height * 0.35,
+                    child: Center(
+                      child: SongImageWidget(
+                        qualitySize: 400,
+                        songId: state.currentSong?.id ?? 0,
+                        size: MediaQuery.of(context).size.height * 0.35,
+                      ),
                     ),
                   ),
                   SongInfo(

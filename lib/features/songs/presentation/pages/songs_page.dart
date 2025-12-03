@@ -111,58 +111,83 @@ class _SongsPageState extends State<SongsPage>
 
     final songs = songsState.allSongs;
 
-    return Column(
-      children: [
-        SortTypeRuler(
-          currentSortType: songsState.sortType,
-          onSortTypeChanged: _onSortSongs,
-        ),
+    return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+      bloc: context.read<MusicPlayerBloc>(),
+      buildWhen: (previous, next) =>
+          previous.currentSongIndex != next.currentSongIndex ||
+          previous.playList != next.playList ||
+          previous.status != next.status,
+      builder: (context, musicPlayerState) {
+        return Column(
+          children: [
+            SortTypeRuler(
+              currentSortType: songsState.sortType,
+              onSortTypeChanged: _onSortSongs,
+            ),
 
-        Expanded(
-          child: RefreshIndicator(
-            onRefresh: () async => _songsBloc.add(const LoadSongsEvent()),
-            child:
-                BlocSelector<FavoriteSongsBloc, FavoriteSongsState, Set<int>>(
-                  selector: (state) {
-                    return state.favoriteSongIds;
-                  },
-                  builder: (context, favoriteSongIds) {
-                    return ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: SongsPageConstants.listVerticalPadding,
-                        horizontal: SongsPageConstants.listHorizontalPadding,
-                      ),
-                      itemCount: songs.length,
-                      itemBuilder: (context, index) {
-                        final song = songs[index];
-                        return SongItem(
-                          track: song,
-                          isFavorite: favoriteSongIds.contains(song.id),
-                          onSetAsRingtone: () => setAsRingtone(song.data),
-                          onDelete: () => showDeleteSongDialog(song),
-                          onFavoriteToggle: () => onToggleLike(song.id),
-                          onAddToPlaylist: () async {
-                            await PlaylistsPage.showSheet(
-                              context: context,
-                              songIds: {song.id},
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async => _songsBloc.add(const LoadSongsEvent()),
+                child:
+                    BlocSelector<
+                      FavoriteSongsBloc,
+                      FavoriteSongsState,
+                      Set<int>
+                    >(
+                      selector: (state) {
+                        return state.favoriteSongIds;
+                      },
+                      builder: (context, favoriteSongIds) {
+                        return ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: SongsPageConstants.listVerticalPadding,
+                            horizontal:
+                                SongsPageConstants.listHorizontalPadding,
+                          ),
+                          itemCount: songs.length,
+                          itemBuilder: (context, index) {
+                            final isCurrent =
+                                musicPlayerState.currentSongIndex == index;
+                            final song = songs[index];
+                            return SongItem(
+                              track: song,
+                              isCurrentTrack: isCurrent,
+                              isPlayingNow:
+                                  musicPlayerState.status ==
+                                      MusicPlayerStatus.playing &&
+                                  isCurrent,
+                              isFavorite: favoriteSongIds.contains(song.id),
+                              onSetAsRingtone: () => setAsRingtone(song.data),
+                              onDelete: () => showDeleteSongDialog(song),
+                              onFavoriteToggle: () => onToggleLike(song.id),
+                              onAddToPlaylist: () async {
+                                await PlaylistsPage.showSheet(
+                                  context: context,
+                                  songIds: {song.id},
+                                );
+                              },
+                              onShare: () => shareSong(song),
+                              onLongPress: () => onLongPress(song, songs),
+                              onTap: () => _handleSongTap(index, songs),
+                              onPlayPause: () {
+                                context.read<MusicPlayerBloc>().add(
+                                  const TogglePlayPauseEvent(),
+                                );
+                              },
                             );
                           },
-                          onShare: () => shareSong(song),
-                          onLongPress: () => onLongPress(song, songs),
-                          onTap: () => _handleSongTap(index, songs),
                         );
                       },
-                    );
-                  },
-                ),
-          ),
-        ),
-
-        // Bottom spacing for mini player
-        if (_musicPlayerBloc.state.playList.isNotEmpty)
-          const SizedBox(height: SongsPageConstants.minPlayerHeight),
-      ],
+                    ),
+              ),
+            ),
+            // Bottom spacing for mini player
+            if (_musicPlayerBloc.state.playList.isNotEmpty)
+              const SizedBox(height: SongsPageConstants.minPlayerHeight),
+          ],
+        );
+      },
     );
   }
 

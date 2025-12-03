@@ -43,202 +43,183 @@ class _SettingsPageState extends State<SettingsPage> {
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 6,
                 children: [
                   const SizedBox(height: 24),
                   SectionTitle(title: context.localization.appearance),
-                  SettingsCard(
-                    child: SettingsTile(
-                      icon: Icons.language,
-                      title: context.localization.language,
-                      trailing: CustomDropdown(
-                        value: state.currentLocale.languageCode,
-                        items: const [
-                          DropdownMenuItem(
-                            value: 'en',
-                            child: Text('English (en)'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'fa',
-                            child: Text('فارسی (fa)'),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          context.read<SettingsBloc>().add(
-                            ChangeLanguageEvent(value!),
-                          );
-                        },
-                      ),
+                  SettingsTile(
+                    icon: Icons.language,
+                    title: context.localization.language,
+                    trailing: CustomDropdown(
+                      value: state.currentLocale.languageCode,
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'en',
+                          child: Text('English (en)'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'fa',
+                          child: Text('فارسی (fa)'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        context.read<SettingsBloc>().add(
+                          ChangeLanguageEvent(value!),
+                        );
+                      },
                     ),
                   ),
-                  SettingsCard(
-                    child: SettingsTile(
-                      icon: Icons.palette_rounded,
-                      title: context.localization.theme,
-                      trailing: CustomDropdown(
-                        value: state.themeMode,
-                        items: [
-                          DropdownMenuItem(
-                            value: 'system',
-                            child: Text(context.localization.system),
-                          ),
-                          DropdownMenuItem(
-                            value: 'dark',
-                            child: Text(context.localization.dark),
-                          ),
-                          DropdownMenuItem(
-                            value: 'light',
-                            child: Text(context.localization.light),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          context.read<SettingsBloc>().add(
-                            ChangeThemeEvent(value!),
-                          );
-                        },
-                      ),
+                  SettingsTile(
+                    icon: Icons.palette_rounded,
+                    title: context.localization.theme,
+                    trailing: CustomDropdown(
+                      value: state.themeMode,
+                      items: [
+                        DropdownMenuItem(
+                          value: 'system',
+                          child: Text(context.localization.system),
+                        ),
+                        DropdownMenuItem(
+                          value: 'dark',
+                          child: Text(context.localization.dark),
+                        ),
+                        DropdownMenuItem(
+                          value: 'light',
+                          child: Text(context.localization.light),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        context.read<SettingsBloc>().add(
+                          ChangeThemeEvent(value!),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 24),
                   SectionTitle(title: context.localization.playback),
-                  SettingsCard(
-                    child: SettingsTile(
-                      icon: Icons.timer_rounded,
-                      title: context.localization.sleepTimer,
-                      trailing: mDuration <= Duration.zero
-                          ? CustomDropdown(
-                              value: '0',
-                              items: [
-                                DropdownMenuItem(
-                                  value: '0',
-                                  child: Text(context.localization.off),
-                                ),
-                                DropdownMenuItem(
-                                  value: '15',
-                                  child: Text(context.localization.min15),
-                                ),
-                                DropdownMenuItem(
-                                  value: '30',
-                                  child: Text(context.localization.min30),
-                                ),
-                                DropdownMenuItem(
-                                  value: '60',
-                                  child: Text(context.localization.hour1),
-                                ),
-                                DropdownMenuItem(
-                                  value: 'custom',
-                                  child: Text(context.localization.custom),
-                                ),
-                              ],
-                              onChanged: (value) async {
-                                if (value == 'custom') {
-                                  final duration =
-                                      await showModalBottomSheet<Duration>(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        builder: (context) =>
-                                            const DurationPickerSheet(),
-                                      );
-                                  if (!mounted) return;
-                                  if (duration != null &&
-                                      duration > Duration.zero) {
-                                    final now = DateTime.now();
-                                    final sleepEndTime = now.add(duration);
-                                    settingsBloc.add(
-                                      ChangeSleepTimerEvent(sleepEndTime),
+                  SettingsTile(
+                    icon: Icons.timer_rounded,
+                    title: context.localization.sleepTimer,
+                    trailing: mDuration <= Duration.zero
+                        ? CustomDropdown(
+                            value: '0',
+                            items: [
+                              DropdownMenuItem(
+                                value: '0',
+                                child: Text(context.localization.off),
+                              ),
+                              DropdownMenuItem(
+                                value: '15',
+                                child: Text(context.localization.min15),
+                              ),
+                              DropdownMenuItem(
+                                value: '30',
+                                child: Text(context.localization.min30),
+                              ),
+                              DropdownMenuItem(
+                                value: '60',
+                                child: Text(context.localization.hour1),
+                              ),
+                              DropdownMenuItem(
+                                value: 'custom',
+                                child: Text(context.localization.custom),
+                              ),
+                            ],
+                            onChanged: (value) async {
+                              if (value == 'custom') {
+                                final duration =
+                                    await showModalBottomSheet<Duration>(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      builder: (context) =>
+                                          const DurationPickerSheet(),
                                     );
-                                  }
-                                  return;
-                                } else {
+                                if (!mounted) return;
+                                if (duration != null &&
+                                    duration > Duration.zero) {
                                   final now = DateTime.now();
-                                  final duration = Duration(
-                                    minutes: int.tryParse(value!) ?? 0,
-                                  );
                                   final sleepEndTime = now.add(duration);
-                                  context.read<SettingsBloc>().add(
+                                  settingsBloc.add(
                                     ChangeSleepTimerEvent(sleepEndTime),
                                   );
                                 }
-                              },
-                            )
-                          : InkWell(
-                              onTap: () async {
-                                final remainedDuration =
-                                    state.sleepEndTime?.difference(
-                                      DateTime.now(),
-                                    ) ??
-                                    Duration.zero;
-                                if (remainedDuration <= Duration.zero) {
-                                  return;
-                                }
-                                await CountDownSheet.show(
-                                  context: context,
-                                  initialDuration: remainedDuration,
-                                  onCancel: () {
-                                    settingsBloc.add(
-                                      const ChangeSleepTimerEvent(null),
-                                    );
-                                  },
+                                return;
+                              } else {
+                                final now = DateTime.now();
+                                final duration = Duration(
+                                  minutes: int.tryParse(value!) ?? 0,
                                 );
-                              },
-                              child: CountDownTimer(
-                                duration:
-                                    state.sleepEndTime?.difference(
-                                      DateTime.now(),
-                                    ) ??
-                                    Duration.zero,
-                                onEnd: () {
-                                  settingsBloc.add(ClearSleepTimerEvent());
+                                final sleepEndTime = now.add(duration);
+                                context.read<SettingsBloc>().add(
+                                  ChangeSleepTimerEvent(sleepEndTime),
+                                );
+                              }
+                            },
+                          )
+                        : InkWell(
+                            onTap: () async {
+                              final remainedDuration =
+                                  state.sleepEndTime?.difference(
+                                    DateTime.now(),
+                                  ) ??
+                                  Duration.zero;
+                              if (remainedDuration <= Duration.zero) {
+                                return;
+                              }
+                              await CountDownSheet.show(
+                                context: context,
+                                initialDuration: remainedDuration,
+                                onCancel: () {
+                                  settingsBloc.add(
+                                    const ChangeSleepTimerEvent(null),
+                                  );
                                 },
-                              ),
+                              );
+                            },
+                            child: CountDownTimer(
+                              duration:
+                                  state.sleepEndTime?.difference(
+                                    DateTime.now(),
+                                  ) ??
+                                  Duration.zero,
+                              onEnd: () {
+                                settingsBloc.add(ClearSleepTimerEvent());
+                              },
                             ),
-                    ),
+                          ),
                   ),
                   const SizedBox(height: 24),
                   SectionTitle(title: context.localization.support),
-                  SettingsCard(
-                    child: Column(
-                      children: [
-                        SettingsTile(
-                          icon: Icons.feedback_rounded,
-                          title: context.localization.sendFeedbackOrSuggestion,
-                          trailing: const Icon(
-                            Icons.email_rounded,
-                            color: Colors.blueAccent,
+
+                  SettingsTile(
+                    icon: Icons.feedback_rounded,
+                    title: context.localization.sendFeedbackOrSuggestion,
+                    onTap: () async {
+                      final success = await LauncherUtils.openEmailApp(
+                        toEmail: StringsConstants.supportEmail,
+                        subject: StringsConstants.supportEmailSubject,
+                      );
+                      if (!success && context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              context.localization.errorOpenEmail,
+                            ),
                           ),
-                          onTap: () async {
-                            final success = await LauncherUtils.openEmailApp(
-                              toEmail: StringsConstants.supportEmail,
-                              subject: StringsConstants.supportEmailSubject,
-                            );
-                            if (!success && context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    context.localization.errorOpenEmail,
-                                  ),
-                                ),
-                              );
-                            }
-                          },
+                        );
+                      }
+                    },
+                  ),
+                  SettingsTile(
+                    icon: Icons.info_rounded,
+                    title: context.localization.aboutUs,
+                    onTap: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const AboutUsPage(),
                         ),
-                        const Divider(height: 1),
-                        SettingsTile(
-                          icon: Icons.info_rounded,
-                          title: context.localization.aboutUs,
-                          trailing: const Icon(
-                            Icons.telegram_rounded,
-                            color: Colors.blueAccent,
-                          ),
-                          onTap: () async {
-                            await Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                builder: (_) => const AboutUsPage(),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ],
               ),
