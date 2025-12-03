@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marquee/marquee.dart';
 import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
@@ -222,7 +223,7 @@ Widget _buildTitle(BuildContext context, String title) {
   final style = baseStyle.copyWith(fontWeight: FontWeight.bold);
   return AutoSizeText(
     title,
-    style: style,
+    style: style.copyWith(color: context.theme.primaryColor),
     maxLines: 1,
     overflowReplacement: SizedBox(
       height: 18,
@@ -242,7 +243,9 @@ Widget _buildSubtitle(BuildContext context, String? artist) {
   final style = baseStyle.copyWith(color: Colors.grey[700]);
   return AutoSizeText(
     displayArtist,
-    style: style,
+    style: style.copyWith(
+      color: context.theme.colorScheme.primary,
+    ),
     maxLines: 1,
     overflowReplacement: SizedBox(
       height: 20,
@@ -276,7 +279,7 @@ class _MiniPlayerControls extends StatelessWidget {
         IconButton(
           icon: Icon(
             isLiked ? Icons.favorite : Icons.favorite_border,
-            color: Colors.red,
+            color: context.theme.colorScheme.primary,
           ),
           tooltip: isLiked ? 'Unlike' : 'Like',
           onPressed: () {
@@ -286,7 +289,10 @@ class _MiniPlayerControls extends StatelessWidget {
           },
         ),
         IconButton(
-          icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+          icon: Icon(
+            isPlaying ? Icons.pause : Icons.play_arrow,
+            color: context.theme.primaryColor,
+          ),
           tooltip: isPlaying ? 'Pause' : 'Play',
           onPressed: () {
             musicPlayerBloc.add(const TogglePlayPauseEvent());
