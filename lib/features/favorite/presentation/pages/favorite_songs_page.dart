@@ -136,35 +136,54 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
   }
 
   Widget _buildFavoritesList(List<Song> favoriteSongs) {
-    return RefreshIndicator(
-      onRefresh: onRefresh,
+    return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+      bloc: context.read<MusicPlayerBloc>(),
+      buildWhen: (previous, next) =>
+          previous.currentSongIndex != next.currentSongIndex ||
+          previous.playList != next.playList ||
+          previous.status != next.status,
+      builder: (context, musicPlayerState) {
+        return RefreshIndicator(
+          onRefresh: onRefresh,
 
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        itemCount: favoriteSongs.length,
-        physics: const AlwaysScrollableScrollPhysics(
-          parent: BouncingScrollPhysics(),
-        ),
-        itemBuilder: (context, index) {
-          final song = favoriteSongs[index];
-          return SongItem(
-            track: song,
-            isFavorite: true,
-            onTap: () => _handleSongTap(index, favoriteSongs),
-            onLongPress: () => onLongPress(song),
-            onFavoriteToggle: () => _handleToggleLike(song.id),
-            onShare: () => shareSong(song),
-            onSetAsRingtone: () => setAsRingtone(song.data),
-            onDelete: () => showDeleteSongDialog(song),
-            onAddToPlaylist: () async {
-              await PlaylistsPage.showSheet(
-                context: context,
-                songIds: {song.id},
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+            itemCount: favoriteSongs.length,
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            itemBuilder: (context, index) {
+              final song = favoriteSongs[index];
+              final isCurrent = musicPlayerState.currentSongIndex == index;
+              return SongItem(
+                track: song,
+                isCurrentTrack: isCurrent,
+                isPlayingNow:
+                    musicPlayerState.status == MusicPlayerStatus.playing &&
+                    isCurrent,
+                isFavorite: true,
+                onTap: () => _handleSongTap(index, favoriteSongs),
+                onLongPress: () => onLongPress(song),
+                onFavoriteToggle: () => _handleToggleLike(song.id),
+                onShare: () => shareSong(song),
+                onSetAsRingtone: () => setAsRingtone(song.data),
+                onDelete: () => showDeleteSongDialog(song),
+                onAddToPlaylist: () async {
+                  await PlaylistsPage.showSheet(
+                    context: context,
+                    songIds: {song.id},
+                  );
+                },
+                onPlayPause: () {
+                  context.read<MusicPlayerBloc>().add(
+                    const TogglePlayPauseEvent(),
+                  );
+                },
               );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 

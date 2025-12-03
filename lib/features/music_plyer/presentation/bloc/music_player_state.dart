@@ -8,7 +8,7 @@ final class MusicPlayerState extends Equatable {
     this.hasNext = false,
     this.hasPrevious = false,
     this.playList = const [],
-    this.currentSongIndex = 0,
+    this.currentSongIndex = -1,
     this.errorMessage,
   });
 
