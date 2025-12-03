@@ -47,11 +47,14 @@ class PlaylistImageWidget extends StatelessWidget {
             artworkBorder: BorderRadius.circular(borderRadius),
             nullArtworkWidget: ClipRRect(
               borderRadius: BorderRadius.circular(borderRadius),
-              child: Image.asset(
-                ImageAssets.playlistCover,
-                fit: BoxFit.cover,
-                width: size,
-                height: size,
+              child: ColoredBox(
+                color: Colors.white,
+                child: Image.asset(
+                  ImageAssets.playlistCover,
+                  fit: BoxFit.cover,
+                  width: size,
+                  height: size,
+                ),
               ),
             ),
           ),

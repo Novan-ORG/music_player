@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/core/widgets/playlist_image_widget.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
+import 'package:music_player/features/playlist/presentation/widgets/playlist_image_widget.dart';
 import 'package:music_player/features/playlist/presentation/widgets/playlist_item_more_action.dart';
 
 class PlaylistItem extends StatelessWidget {
@@ -89,7 +89,7 @@ class PlaylistItem extends StatelessWidget {
       children: [
         Text(
           playlist.name,
-          maxLines: 1,
+          maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,

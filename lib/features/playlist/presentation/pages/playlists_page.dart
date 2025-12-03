@@ -84,6 +84,7 @@ class _PlaylistsPageState extends State<PlaylistsPage>
   }
 
   void _handlePinPlaylist(Playlist playlist) {
+    playlist.pinnedAt = DateTime.now();
     context.read<PlayListBloc>().add(
       PinnedPlaylistEvent(playlist.id),
     );
@@ -100,6 +101,8 @@ class _PlaylistsPageState extends State<PlaylistsPage>
           value: selectedPlaylistIds.contains(playlist.id),
           title: Text(
             playlist.name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontWeight: FontWeight.w500),
           ),
           subtitle: Text(subtitle),
@@ -237,6 +240,7 @@ class _PlaylistsPageState extends State<PlaylistsPage>
                   _isPinned(playlist.id, state.pinnedPlaylistIds),
             )
             .toList();
+
         final allPlaylists = state.playLists;
 
         return Column(
@@ -271,6 +275,13 @@ class _PlaylistsPageState extends State<PlaylistsPage>
   Widget _buildPinnedPlaylists(
     List<Playlist> pinnedPlaylists,
   ) {
+    pinnedPlaylists.sort((a, b) {
+      if (a.pinnedAt == null || b.pinnedAt == null) {
+        return 0;
+      }
+      return b.pinnedAt!.compareTo(a.pinnedAt!);
+    });
+
     return SizedBox(
       height: 120,
       child: ListView.builder(
@@ -283,6 +294,7 @@ class _PlaylistsPageState extends State<PlaylistsPage>
             numOfSongs: 0,
             createdAt: DateTime.now(),
             updatedAt: DateTime.now(),
+            pinnedAt: DateTime.now(),
           );
 
           if (index == 0) {

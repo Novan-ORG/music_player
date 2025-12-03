@@ -149,4 +149,26 @@ class PlaylistRepositoryImpl implements PlaylistRepository {
       return Result.failure('Failed to update playlist cover: $e');
     }
   }
+
+  @override
+  Future<Result<List<String>>> getPinnedPlaylists() async {
+    try {
+      final result = await datasource.getPinnedPlaylists();
+      return Result.success(result);
+    } on Exception catch (e) {
+      return Result.failure('Failed to get pinned playlist: $e');
+    }
+  }
+
+  @override
+  Future<Result<void>> savePinnedPlaylists(
+    List<String> pinnedPlaylistIds,
+  ) async {
+    try {
+      await datasource.savePinnedPlaylists(pinnedPlaylistIds);
+      return Result.success(null);
+    } on Exception catch (e) {
+      return Result.failure('Failed to save as pinned playlist: $e');
+    }
+  }
 }

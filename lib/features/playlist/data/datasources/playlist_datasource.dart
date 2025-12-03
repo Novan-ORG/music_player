@@ -19,6 +19,9 @@ abstract class PlaylistDatasource {
   Future<int?> getPlaylistCoverSongId(int playlistId);
   Future<void> setPlaylistCoverSongId(int playlistId, int songId);
   Future<void> updatePlaylistCoverFromLatestSong(int playlistId);
+
+  Future<void> savePinnedPlaylists(List<String> pinnedPlaylistIds);
+  Future<List<String>> getPinnedPlaylists();
 }
 
 class PlaylistDatasourceImpl implements PlaylistDatasource {
@@ -139,5 +142,24 @@ class PlaylistDatasourceImpl implements PlaylistDatasource {
     if (latestSongId != null) {
       await setPlaylistCoverSongId(playlistId, latestSongId);
     }
+  }
+
+  @override
+  Future<List<String>> getPinnedPlaylists() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final list = prefs.getStringList(PreferencesKeys.pinnedPlaylists) ?? [];
+
+    return list;
+  }
+
+  @override
+  Future<void> savePinnedPlaylists(List<String> pinnedPlaylistIds) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setStringList(
+      PreferencesKeys.pinnedPlaylists,
+      pinnedPlaylistIds,
+    );
   }
 }

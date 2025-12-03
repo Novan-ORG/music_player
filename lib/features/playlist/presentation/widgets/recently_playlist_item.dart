@@ -59,11 +59,14 @@ class PinnedPlaylistItem extends StatelessWidget {
                 artworkBorder: BorderRadius.circular(borderRadius),
                 nullArtworkWidget: ClipRRect(
                   borderRadius: BorderRadius.circular(borderRadius),
-                  child: Image.asset(
-                    ImageAssets.playlistCover,
-                    fit: BoxFit.cover,
-                    width: size,
-                    height: size,
+                  child: ColoredBox(
+                    color: Colors.white,
+                    child: Image.asset(
+                      ImageAssets.playlistCover,
+                      fit: BoxFit.cover,
+                      width: size,
+                      height: size,
+                    ),
                   ),
                 ),
               ),
@@ -75,7 +78,9 @@ class PinnedPlaylistItem extends StatelessWidget {
           height: 6,
         ),
         Text(
-          playlist.name,
+          playlist.name.length > 8
+              ? '${playlist.name.substring(0, 6)}...'
+              : playlist.name,
           style: theme.textTheme.labelLarge?.copyWith(
             fontSize: 12,
           ),
