@@ -71,7 +71,7 @@ class SongItem extends StatelessWidget {
       // GlassCard already provides padding, tap and highlight behaviour.
       return GlassCard(
         margin: margin,
-        borderRadius: borderRadius,
+        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
         padding: padding,
         onTap: onTap,
         onLongPress: onLongPress,

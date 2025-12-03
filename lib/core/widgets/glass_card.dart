@@ -6,7 +6,7 @@ import 'package:music_player/extensions/extensions.dart';
 class GlassCard extends StatelessWidget {
   const GlassCard({
     required this.child,
-    this.borderRadius = 4,
+    this.borderRadius = const BorderRadius.all(Radius.circular(4)),
     this.margin = EdgeInsets.zero,
     this.padding = EdgeInsets.zero,
     this.sigmaX = 10,
@@ -17,7 +17,7 @@ class GlassCard extends StatelessWidget {
   });
 
   final Widget child;
-  final double borderRadius;
+  final BorderRadius borderRadius;
   final EdgeInsets margin;
   final double sigmaX;
   final double sigmaY;
@@ -31,13 +31,13 @@ class GlassCard extends StatelessWidget {
     return Padding(
       padding: margin,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: borderRadius,
         child: BackdropFilter(
           // use provided sigmaX/sigmaY for the blur amount
           filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(borderRadius),
+              borderRadius: borderRadius,
               border: Border.all(
                 color: isDark
                     ? Colors.white.withValues(alpha: 0.2)
@@ -70,7 +70,7 @@ class GlassCard extends StatelessWidget {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                borderRadius: BorderRadius.circular(borderRadius),
+                borderRadius: borderRadius,
                 onTap: onTap,
                 onLongPress: onLongPress,
                 splashColor: isDark

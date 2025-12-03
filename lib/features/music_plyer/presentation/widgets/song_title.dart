@@ -12,6 +12,7 @@ class SongTitle extends StatelessWidget {
     final title = song?.title ?? 'Unknown Song';
     return AutoSizeText(
       title,
+      minFontSize: Theme.of(context).textTheme.titleLarge?.fontSize ?? 14,
       style: Theme.of(context).textTheme.titleLarge,
       maxLines: 1,
       overflowReplacement: SizedBox(

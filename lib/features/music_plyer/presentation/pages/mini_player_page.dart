@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marquee/marquee.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
@@ -97,35 +98,32 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                 scale: _sizeAnimation.value,
                 child: Opacity(
                   opacity: _fadeAnimation.value,
-                  child: GestureDetector(
+                  child: GlassCard(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
                     onLongPress: _toggleMinimize,
-                    child: Card(
-                      elevation: 6,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: InkWell(
-                        onTap: () async {
-                          await Navigator.of(
-                            context,
-                          ).push(
-                            MaterialPageRoute<void>(
-                              builder: (_) => const MusicPlayerPage(),
-                            ),
-                          );
-                        },
-                        child: ListTile(
+                    onTap: () async {
+                      await Navigator.of(
+                        context,
+                      ).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const MusicPlayerPage(),
+                        ),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        ListTile(
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 12,
-                            vertical: 6,
                           ),
                           leading: Hero(
                             tag: 'song_cover_${state.currentSong?.id ?? 0}',
-                            child: MiniCoverAndProgress(
-                              positionStream: musicPlayerBloc.positionStream,
-                              durationStream: musicPlayerBloc.durationStream,
+                            child: SongImageWidget(
                               songId: state.currentSong?.id ?? 0,
+                              size: 54,
                             ),
                           ),
                           title: _buildTitle(
@@ -159,7 +157,16 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                                 },
                               ),
                         ),
-                      ),
+                        MiniHorizontalProgress(
+                          positionStream: musicPlayerBloc.positionStream,
+                          durationStream: musicPlayerBloc.durationStream,
+                          onSeek: (position) {
+                            musicPlayerBloc.add(
+                              SeekMusicEvent(position: position),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -177,30 +184,33 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
     int currentSongId,
     bool isPlaying,
   ) {
-    return GestureDetector(
-      onLongPress: _toggleMinimize,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Hero(
-            tag: 'mini_cover_$currentSongId',
-            child: MiniCoverAndProgress(
-              positionStream: musicPlayerBloc.positionStream,
-              durationStream: musicPlayerBloc.durationStream,
-              songId: currentSongId,
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: GestureDetector(
+        onLongPress: _toggleMinimize,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Hero(
+              tag: 'mini_cover_$currentSongId',
+              child: MiniCoverAndProgress(
+                positionStream: musicPlayerBloc.positionStream,
+                durationStream: musicPlayerBloc.durationStream,
+                songId: currentSongId,
+              ),
             ),
-          ),
-          IconButton(
-            onPressed: () {
-              musicPlayerBloc.add(const TogglePlayPauseEvent());
-            },
-            icon: Icon(
-              isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Theme.of(context).colorScheme.primary,
-              size: 24,
+            IconButton(
+              onPressed: () {
+                musicPlayerBloc.add(const TogglePlayPauseEvent());
+              },
+              icon: Icon(
+                isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Theme.of(context).colorScheme.primary,
+                size: 24,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

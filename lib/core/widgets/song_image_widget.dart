@@ -24,26 +24,24 @@ class SongImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: QueryArtworkWidget(
-        id: songId,
-        quality: quality,
-        type: ArtworkType.AUDIO,
-        size: qualitySize,
-        artworkWidth: size,
-        artworkHeight: size,
-        artworkQuality: artworkQuality,
-        artworkFit: artworkFit,
-        // I used the size for radius to make it circular by default
-        artworkBorder: BorderRadius.circular(borderRadius ?? (size / 2)),
-        nullArtworkWidget: ClipRRect(
-          borderRadius: BorderRadius.circular(borderRadius ?? (size / 2)),
-          child: Image.asset(
-            ImageAssets.songCover,
-            fit: BoxFit.cover,
-            width: size,
-            height: size,
-          ),
+    return QueryArtworkWidget(
+      id: songId,
+      quality: quality,
+      type: ArtworkType.AUDIO,
+      size: qualitySize,
+      artworkWidth: size,
+      artworkHeight: size,
+      artworkQuality: artworkQuality,
+      artworkFit: artworkFit,
+      // I used the size for radius to make it circular by default
+      artworkBorder: BorderRadius.circular(borderRadius ?? (size / 2)),
+      nullArtworkWidget: ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius ?? (size / 2)),
+        child: Image.asset(
+          ImageAssets.songCover,
+          fit: BoxFit.cover,
+          width: size,
+          height: size,
         ),
       ),
     );
