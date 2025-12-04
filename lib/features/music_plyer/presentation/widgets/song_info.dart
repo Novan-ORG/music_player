@@ -25,7 +25,7 @@ class SongInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      title: SongTitle(song: song),
+      title: SongTitle(songTitle: song?.title),
       subtitle: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 4,
@@ -56,7 +56,7 @@ class SongInfo extends StatelessWidget {
                 onPressed: onLikePressed,
                 icon: Icon(
                   isLiked ? Icons.favorite : Icons.favorite_border_rounded,
-                  color: isLiked ? Colors.red : null,
+                  color: context.theme.primaryColor,
                 ),
               );
             },

@@ -104,10 +104,12 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
                 children: [
                   Hero(
                     tag: 'song_cover_${state.currentSong?.id ?? 0}',
-                    child: SongImageWidget(
-                      qualitySize: 400,
-                      songId: state.currentSong?.id ?? 0,
-                      size: MediaQuery.of(context).size.height * 0.35,
+                    child: Center(
+                      child: SongImageWidget(
+                        qualitySize: 400,
+                        songId: state.currentSong?.id ?? 0,
+                        size: MediaQuery.of(context).size.height * 0.35,
+                      ),
                     ),
                   ),
                   SongInfo(
@@ -153,10 +155,18 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
               },
               backgroundColor: Colors.transparent,
               elevation: 0,
-              child: ImageIcon(
-                const AssetImage(ImageAssets.arrowUp),
-                size: 28,
-                color: context.theme.colorScheme.secondary,
+              child: GestureDetector(
+                onVerticalDragEnd: (details) {
+                  if (details.primaryVelocity != null &&
+                      details.primaryVelocity! < 0) {
+                    UpnextMusicsSheet.show(context);
+                  }
+                },
+                child: ImageIcon(
+                  const AssetImage(ImageAssets.arrowUp),
+                  size: 28,
+                  color: context.theme.colorScheme.secondary,
+                ),
               ),
             ),
           ),

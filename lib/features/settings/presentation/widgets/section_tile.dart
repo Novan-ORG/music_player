@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/extensions/extensions.dart';
 
 class SectionTitle extends StatelessWidget {
   const SectionTitle({required this.title, super.key});
@@ -11,8 +12,7 @@ class SectionTitle extends StatelessWidget {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.primary,
+          color: context.theme.colorScheme.onSecondary,
         ),
       ),
     );

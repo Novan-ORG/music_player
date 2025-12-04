@@ -285,6 +285,9 @@ class _Header extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        const SizedBox(
+          width: 34,
+        ),
         Text(
           context.localization.upNext,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -313,19 +316,21 @@ class _ExpandedHeader extends StatelessWidget {
     final title = currentSong.title;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 10,
       children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            const PlayerActionButtons(playIconSize: 30),
-          ],
+        const SizedBox(width: 10),
+        Flexible(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SongTitle(
+                songTitle: title,
+              ),
+              const SizedBox(height: 8),
+              const UpnextSheetActionButtons(playIconSize: 30),
+            ],
+          ),
         ),
-        const SizedBox(width: 12),
         Hero(
           tag: 'song_cover_${currentSong.id}',
           child: SongImageWidget(
@@ -333,6 +338,7 @@ class _ExpandedHeader extends StatelessWidget {
             size: MediaQuery.of(context).size.width * 0.2,
           ),
         ),
+        const SizedBox(width: 10),
       ],
     ).paddingOnly(top: 48, bottom: 16);
   }

@@ -5,5 +5,6 @@ export 'loading.dart';
 export 'no_songs_widget.dart';
 export 'song_image_widget.dart';
 export 'song_item.dart';
+export 'song_item_more_option_menu.dart';
 export 'songs_count.dart';
 export 'songs_error_loading.dart';

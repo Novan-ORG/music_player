@@ -4,6 +4,5 @@ export 'count_down_timer.dart';
 export 'custom_drop_down.dart';
 export 'duration_picker_sheet.dart';
 export 'section_tile.dart';
-export 'settings_card.dart';
 export 'setttings_tile.dart';
 export 'version_info.dart';

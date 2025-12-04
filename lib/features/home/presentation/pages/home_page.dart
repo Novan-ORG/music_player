@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = context.theme;
     final navBarItems = [
       BottomNavigationBarItem(
         icon: const Icon(Icons.music_note_rounded),
@@ -50,20 +50,28 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: _pages[_currentIndex],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
-        bloc: _musicPlayerBloc,
-        builder: (_, state) {
-          if (state.playList.isEmpty) {
-            return const SizedBox.shrink();
-          } else {
-            return const MiniPlayerPage();
-          }
-        },
+      body: Stack(
+        children: [
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: _pages[_currentIndex],
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+              bloc: _musicPlayerBloc,
+              builder: (_, state) {
+                if (state.playList.isEmpty) {
+                  return const SizedBox.shrink();
+                } else {
+                  return const MiniPlayerPage();
+                }
+              },
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
