@@ -127,9 +127,8 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                               size: 54,
                             ),
                           ),
-                          title: _buildTitle(
-                            context,
-                            state.currentSong?.title ?? 'No song',
+                          title: SongTitle(
+                            songTitle: state.currentSong?.title,
                           ),
                           subtitle: _buildSubtitle(
                             context,
@@ -215,25 +214,6 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
       ),
     );
   }
-}
-
-Widget _buildTitle(BuildContext context, String title) {
-  final baseStyle =
-      Theme.of(context).textTheme.bodyLarge ?? const TextStyle(fontSize: 14);
-  final style = baseStyle.copyWith(fontWeight: FontWeight.bold);
-  return AutoSizeText(
-    title,
-    style: style.copyWith(color: context.theme.primaryColor),
-    maxLines: 1,
-    overflowReplacement: SizedBox(
-      height: 18,
-      child: Marquee(
-        text: title,
-        blankSpace: 60,
-        style: style,
-      ),
-    ),
-  );
 }
 
 Widget _buildSubtitle(BuildContext context, String? artist) {
