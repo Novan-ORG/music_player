@@ -14,6 +14,7 @@ jobs:
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
       ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -38,6 +39,9 @@ jobs:
           echo "storePassword=$ANDROID_KEYSTORE_PASSWORD" >> $GITHUB_WORKSPACE/android/keystore.properties
           echo "keyAlias=$ANDROID_KEY_ALIAS" >> $GITHUB_WORKSPACE/android/keystore.properties
           echo "keyPassword=$ANDROID_KEY_PASSWORD" >> $GITHUB_WORKSPACE/android/keystore.properties
+      - name: Create .env file
+        run: |
+          echo "SENTRY_DSN=$SENTRY_DSN" >> .env
 
       - name: Build APKs (release, split per ABI)
         run: flutter build apk --release --split-per-abi
