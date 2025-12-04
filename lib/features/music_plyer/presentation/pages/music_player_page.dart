@@ -155,10 +155,18 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
               },
               backgroundColor: Colors.transparent,
               elevation: 0,
-              child: ImageIcon(
-                const AssetImage(ImageAssets.arrowUp),
-                size: 28,
-                color: context.theme.colorScheme.secondary,
+              child: GestureDetector(
+                onVerticalDragEnd: (details) {
+                  if (details.primaryVelocity != null &&
+                      details.primaryVelocity! < 0) {
+                    UpnextMusicsSheet.show(context);
+                  }
+                },
+                child: ImageIcon(
+                  const AssetImage(ImageAssets.arrowUp),
+                  size: 28,
+                  color: context.theme.colorScheme.secondary,
+                ),
               ),
             ),
           ),
