@@ -327,7 +327,7 @@ class _ExpandedHeader extends StatelessWidget {
                 songTitle: title,
               ),
               const SizedBox(height: 8),
-              const PlayerActionButtons(playIconSize: 30),
+              const UpnextSheetActionButtons(playIconSize: 30),
             ],
           ),
         ),
