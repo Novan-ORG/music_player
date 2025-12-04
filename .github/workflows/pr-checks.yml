@@ -29,6 +29,9 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ matrix.flutter-version }}
+      - name: Create .env file
+        run: |
+          echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
 
       - name: Flutter -- Version
         run: flutter --version
