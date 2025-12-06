@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/constants/constants.dart';
-import 'package:music_player/core/result.dart';
-import 'package:music_player/features/playlist/domain/domain.dart';
-import 'package:music_player/injection/service_locator.dart';
+import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class PlaylistImageWidget extends StatelessWidget {
@@ -27,11 +26,10 @@ class PlaylistImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Result<int?>>(
-      future: getIt<PlaylistRepository>().getPlaylistCoverSongId(playlistId),
-      builder: (context, snapshot) {
-        // use latest song id
-        final coverSongId = snapshot.data?.value;
+    return BlocBuilder<PlayListBloc, PlayListState>(
+      builder: (context, state) {
+        // Get cover song ID from bloc state
+        final coverSongId = state.playlistCoverSongIds[playlistId];
         final artworkId = coverSongId ?? playlistId;
 
         return Center(

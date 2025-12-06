@@ -16,10 +16,7 @@ abstract class PlaylistRepository {
   );
 
   Future<Result<int?>> getPlaylistCoverSongId(int playlistId);
-
-  Future<Result<int?>> getLatestSongIdFromPlaylist(int playlistId);
-  Future<Result<void>> setPlaylistCoverSongId(int playlistId, int songId);
-  Future<Result<void>> updatePlaylistCoverFromLatestSong(int playlistId);
+  Future<Result<void>> initializePlaylistCoversForExistingPlaylists();
 
   Future<Result<void>> savePinnedPlaylists(List<String> pinnedPlaylistIds);
   Future<Result<List<String>>> getPinnedPlaylists();

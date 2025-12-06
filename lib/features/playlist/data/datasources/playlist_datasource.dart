@@ -18,7 +18,7 @@ abstract class PlaylistDatasource {
   Future<int?> getLatestSongIdFromPlaylist(int playlistId);
   Future<int?> getPlaylistCoverSongId(int playlistId);
   Future<void> setPlaylistCoverSongId(int playlistId, int songId);
-  Future<void> updatePlaylistCoverFromLatestSong(int playlistId);
+  Future<void> initializePlaylistCoversForExistingPlaylists();
 
   Future<void> savePinnedPlaylists(List<String> pinnedPlaylistIds);
   Future<List<String>> getPinnedPlaylists();
@@ -137,10 +137,23 @@ class PlaylistDatasourceImpl implements PlaylistDatasource {
   }
 
   @override
-  Future<void> updatePlaylistCoverFromLatestSong(int playlistId) async {
-    final latestSongId = await getLatestSongIdFromPlaylist(playlistId);
-    if (latestSongId != null) {
-      await setPlaylistCoverSongId(playlistId, latestSongId);
+  Future<void> initializePlaylistCoversForExistingPlaylists() async {
+    final playlists = await getAllPlaylists();
+
+    for (final playlist in playlists) {
+      // Check if playlist already has a cover set
+      final existingCoverSongId = await getPlaylistCoverSongId(playlist.id);
+
+      // If no cover is set, try to set it from the latest song
+      if (existingCoverSongId == null) {
+        final latestSongId = await getLatestSongIdFromPlaylist(playlist.id);
+        if (latestSongId != null) {
+          await setPlaylistCoverSongId(playlist.id, latestSongId);
+          Logger.info(
+            'Initialized cover for playlist ${playlist.id} with song $latestSongId',
+          );
+        }
+      }
     }
   }
 

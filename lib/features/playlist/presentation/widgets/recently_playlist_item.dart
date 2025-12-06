@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/constants/image_assets.dart';
-import 'package:music_player/core/result.dart';
 import 'package:music_player/features/playlist/domain/entities/playlist.dart';
-import 'package:music_player/features/playlist/domain/repositories/playlist_repository.dart';
-import 'package:music_player/injection/service_locator.dart';
+import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class PinnedPlaylistItem extends StatelessWidget {
@@ -36,13 +35,10 @@ class PinnedPlaylistItem extends StatelessWidget {
 
     return Column(
       children: [
-        FutureBuilder<Result<int?>>(
-          future: getIt<PlaylistRepository>().getPlaylistCoverSongId(
-            playlist.id,
-          ),
-          builder: (context, snapshot) {
-            // use latest song id
-            final coverSongId = snapshot.data?.value;
+        BlocBuilder<PlayListBloc, PlayListState>(
+          builder: (context, state) {
+            // Get cover song ID from bloc state
+            final coverSongId = state.playlistCoverSongIds[playlist.id];
             final artworkId = coverSongId ?? playlist.id;
 
             return GestureDetector(

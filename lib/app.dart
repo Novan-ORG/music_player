@@ -84,18 +84,23 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
           ),
         ),
         BlocProvider(
-          create: (_) => PlayListBloc(
-            getIt.get<RenamePlaylist>(),
-            getIt.get<GetAllPlaylists>(),
-            getIt.get<CreatePlaylist>(),
-            getIt.get<DeletePlaylistWithUndo>(),
-            getIt.get<AddSongsToPlaylist>(),
-            getIt.get<RemoveSongsFromPlaylist>(),
-            getIt.get<GetPlaylistById>(),
-            getIt.get<CommandManager>(),
-            getIt.get<PinPlaylistById>(),
-            getIt.get<GetPinnedPlaylists>(),
-          ),
+          create: (_) =>
+              PlayListBloc(
+                  getIt.get<RenamePlaylist>(),
+                  getIt.get<GetAllPlaylists>(),
+                  getIt.get<CreatePlaylist>(),
+                  getIt.get<DeletePlaylistWithUndo>(),
+                  getIt.get<AddSongsToPlaylist>(),
+                  getIt.get<RemoveSongsFromPlaylist>(),
+                  getIt.get<GetPlaylistById>(),
+                  getIt.get<CommandManager>(),
+                  getIt.get<PinPlaylistById>(),
+                  getIt.get<GetPinnedPlaylists>(),
+                  getIt.get<InitializePlaylistCovers>(),
+                  getIt.get<GetPlaylistCoverSongId>(),
+                )
+                ..add(const InitializePlaylistCoversEvent())
+                ..add(LoadPlayListsEvent()),
         ),
         BlocProvider(
           create: (_) => FavoriteSongsBloc(

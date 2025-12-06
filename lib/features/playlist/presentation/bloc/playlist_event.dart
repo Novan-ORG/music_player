@@ -80,3 +80,16 @@ final class PinnedPlaylistEvent extends PlayListEvent {
   @override
   List<Object> get props => [playlistId];
 }
+
+final class InitializePlaylistCoversEvent extends PlayListEvent {
+  const InitializePlaylistCoversEvent();
+}
+
+final class LoadPlaylistCoverSongIdsEvent extends PlayListEvent {
+  const LoadPlaylistCoverSongIdsEvent(this.playlistIds);
+
+  final List<int> playlistIds;
+
+  @override
+  List<Object> get props => [playlistIds];
+}

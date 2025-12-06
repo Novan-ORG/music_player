@@ -21,6 +21,8 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     this._commandManager,
     this._pinPlaylistById,
     this._getPinnedPlaylist,
+    this._initializePlaylistCovers,
+    this._getPlaylistCoverSongId,
   ) : super(const PlayListState()) {
     on<LoadPlayListsEvent>(_loadPlayLists);
     on<CreatePlayListEvent>(_addPlayList);
@@ -32,6 +34,8 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     on<CanUndoChangedEvent>(_canUndoChanged);
     on<LoadPinnedPlaylistsEvent>(_loadPinnedPlaylists);
     on<PinnedPlaylistEvent>(_pinnedPlaylist);
+    on<InitializePlaylistCoversEvent>(_initializePlaylistCoversHandler);
+    on<LoadPlaylistCoverSongIdsEvent>(_loadPlaylistCoverSongIds);
     _commandManager.canUndoNotifier.addListener(_onCanUndoChanged);
     add(const LoadPinnedPlaylistsEvent());
   }
@@ -46,6 +50,8 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
   final CommandManager _commandManager;
   final PinPlaylistById _pinPlaylistById;
   final GetPinnedPlaylists _getPinnedPlaylist;
+  final InitializePlaylistCovers _initializePlaylistCovers;
+  final GetPlaylistCoverSongId _getPlaylistCoverSongId;
 
   void _onCanUndoChanged() {
     add(CanUndoChangedEvent(canUndo: _commandManager.canUndo));
@@ -192,10 +198,18 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
 
     final playListsResult = await _getAllPlaylists();
     if (playListsResult.isSuccess) {
+      final playlists = playListsResult.value ?? [];
       emit(
         state.copyWith(
-          playLists: playListsResult.value ?? [],
+          playLists: playlists,
           status: PlayListStatus.loaded,
+        ),
+      );
+
+      // Reload covers after adding songs
+      add(
+        LoadPlaylistCoverSongIdsEvent(
+          playlists.map((p) => p.id).toList(),
         ),
       );
     } else {
@@ -285,10 +299,18 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
 
     final result = await _getAllPlaylists();
     if (result.isSuccess) {
+      final playlists = result.value ?? [];
       emit(
         state.copyWith(
-          playLists: result.value ?? [],
+          playLists: playlists,
           status: PlayListStatus.loaded,
+        ),
+      );
+
+      // Load cover song IDs for all playlists
+      add(
+        LoadPlaylistCoverSongIdsEvent(
+          playlists.map((p) => p.id).toList(),
         ),
       );
     } else {
@@ -348,6 +370,46 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
         ),
       );
     }
+  }
+
+  // use this just once when app starts to initialize playlist covers
+  Future<void> _initializePlaylistCoversHandler(
+    InitializePlaylistCoversEvent event,
+    Emitter<PlayListState> emit,
+  ) async {
+    final result = await _initializePlaylistCovers();
+
+    if (result.isFailure) {
+      Logger.error(
+        'Failed to initialize playlist covers: ${result.error}',
+        null,
+        StackTrace.current,
+      );
+    } else {
+      if (state.playLists.isNotEmpty) {
+        add(
+          LoadPlaylistCoverSongIdsEvent(
+            state.playLists.map((p) => p.id).toList(),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _loadPlaylistCoverSongIds(
+    LoadPlaylistCoverSongIdsEvent event,
+    Emitter<PlayListState> emit,
+  ) async {
+    final coverMap = <int, int?>{...state.playlistCoverSongIds};
+
+    for (final playlistId in event.playlistIds) {
+      final result = await _getPlaylistCoverSongId(playlistId);
+      if (result.isSuccess) {
+        coverMap[playlistId] = result.value;
+      }
+    }
+
+    emit(state.copyWith(playlistCoverSongIds: coverMap));
   }
 
   @override

@@ -67,6 +67,8 @@ void _setupPlaylistFeature() {
     ..registerLazySingleton(() => AddSongsToPlaylist(getIt.get()))
     ..registerLazySingleton(() => RemoveSongsFromPlaylist(getIt.get()))
     ..registerLazySingleton(() => GetPlaylistSongs(getIt.get()))
+    ..registerLazySingleton(() => GetPlaylistCoverSongId(getIt.get()))
+    ..registerLazySingleton(() => InitializePlaylistCovers(getIt.get()))
     ..registerLazySingleton(() => PinPlaylistById(getIt.get()))
     ..registerLazySingleton(() => GetPinnedPlaylists(getIt.get()));
 }

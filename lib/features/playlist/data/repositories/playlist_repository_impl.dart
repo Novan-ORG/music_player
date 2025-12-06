@@ -76,7 +76,10 @@ class PlaylistRepositoryImpl implements PlaylistRepository {
       await datasource.addSongsToPlaylist(playlistId, songIds);
 
       // auto-update playlist cover with the latest song
-      await updatePlaylistCoverFromLatestSong(playlistId);
+      if (songIds.isNotEmpty) {
+        final latestSongId = songIds.last;
+        await datasource.setPlaylistCoverSongId(playlistId, latestSongId);
+      }
 
       return Result.success(null);
     } on Exception catch (e) {
@@ -118,35 +121,12 @@ class PlaylistRepositoryImpl implements PlaylistRepository {
   }
 
   @override
-  Future<Result<int?>> getLatestSongIdFromPlaylist(int playlistId) async {
+  Future<Result<void>> initializePlaylistCoversForExistingPlaylists() async {
     try {
-      final songId = await datasource.getLatestSongIdFromPlaylist(playlistId);
-      return Result.success(songId);
-    } on Exception catch (e) {
-      return Result.failure('Failed to get latest song ID: $e');
-    }
-  }
-
-  @override
-  Future<Result<void>> setPlaylistCoverSongId(
-    int playlistId,
-    int songId,
-  ) async {
-    try {
-      await datasource.setPlaylistCoverSongId(playlistId, songId);
+      await datasource.initializePlaylistCoversForExistingPlaylists();
       return Result.success(null);
     } on Exception catch (e) {
-      return Result.failure('Failed to set playlist cover song ID: $e');
-    }
-  }
-
-  @override
-  Future<Result<void>> updatePlaylistCoverFromLatestSong(int playlistId) async {
-    try {
-      await datasource.updatePlaylistCoverFromLatestSong(playlistId);
-      return Result.success(null);
-    } on Exception catch (e) {
-      return Result.failure('Failed to update playlist cover: $e');
+      return Result.failure('Failed to initialize playlist covers: $e');
     }
   }
 
