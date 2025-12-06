@@ -150,7 +150,8 @@ class PlaylistDatasourceImpl implements PlaylistDatasource {
         if (latestSongId != null) {
           await setPlaylistCoverSongId(playlist.id, latestSongId);
           Logger.info(
-            'Initialized cover for playlist ${playlist.id} with song $latestSongId',
+            'Initialized cover for playlist '
+            '${playlist.id} with song $latestSongId',
           );
         }
       }

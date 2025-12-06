@@ -10,4 +10,3 @@ class InitializePlaylistCovers {
     return _repository.initializePlaylistCoversForExistingPlaylists();
   }
 }
-

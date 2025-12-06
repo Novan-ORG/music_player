@@ -10,4 +10,3 @@ class GetPlaylistCoverSongId {
     return _repository.getPlaylistCoverSongId(playlistId);
   }
 }
-
