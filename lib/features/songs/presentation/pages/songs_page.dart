@@ -147,9 +147,9 @@ class _SongsPageState extends State<SongsPage>
                           ),
                           itemCount: songs.length,
                           itemBuilder: (context, index) {
-                            final isCurrent =
-                                musicPlayerState.currentSongIndex == index;
                             final song = songs[index];
+                            final isCurrent =
+                                musicPlayerState.currentSong?.id == song.id;
                             return SongItem(
                               track: song,
                               isCurrentTrack: isCurrent,

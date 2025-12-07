@@ -154,7 +154,7 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
             ),
             itemBuilder: (context, index) {
               final song = favoriteSongs[index];
-              final isCurrent = musicPlayerState.currentSongIndex == index;
+              final isCurrent = musicPlayerState.currentSong?.id == song.id;
               return SongItem(
                 track: song,
                 isCurrentTrack: isCurrent,
