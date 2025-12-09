@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/views/views.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
@@ -7,7 +8,6 @@ import 'package:music_player/features/search/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/domain/enums/enums.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/constants/constants.dart';
-import 'package:music_player/features/songs/presentation/views/songs_view.dart';
 import 'package:music_player/features/songs/presentation/widgets/songs_appbar.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
@@ -84,14 +84,16 @@ class _SongsPageState extends State<SongsPage> {
           onSortTypeChanged: _onSortSongs,
         ),
 
-        SongsView(
-          songs: songs,
-          onRefresh: () async {
-            _songsBloc.add(const LoadSongsEvent());
-            await Future<void>.delayed(
-              const Duration(milliseconds: 300),
-            );
-          },
+        Expanded(
+          child: SongsView(
+            songs: songs,
+            onRefresh: () async {
+              _songsBloc.add(const LoadSongsEvent());
+              await Future<void>.delayed(
+                const Duration(milliseconds: 300),
+              );
+            },
+          ),
         ),
         // Bottom spacing for mini player
         if (_musicPlayerBloc.state.playList.isNotEmpty)
