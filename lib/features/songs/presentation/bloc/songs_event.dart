@@ -6,13 +6,18 @@ sealed class SongsEvent {
 }
 
 final class LoadSongsEvent extends SongsEvent {
-  const LoadSongsEvent();
+  const LoadSongsEvent({this.sortType = SongsSortType.dateAdded});
+  final SongsSortType sortType;
 }
 
-final class SortSongsEvent extends SongsEvent {
-  const SortSongsEvent(this.sortType);
+final class LoadAlbumsEvent extends SongsEvent {
+  const LoadAlbumsEvent({this.sortType = AlbumsSortType.album});
+  final AlbumsSortType sortType;
+}
 
-  final SongsSortType sortType;
+final class LoadArtistsEvent extends SongsEvent {
+  const LoadArtistsEvent({this.sortType = ArtistsSortType.artist});
+  final ArtistsSortType sortType;
 }
 
 final class DeleteSongEvent extends SongsEvent {

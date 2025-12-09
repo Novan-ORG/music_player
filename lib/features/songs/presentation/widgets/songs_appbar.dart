@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/core/domain/enums/enums.dart';
 import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/songs/domain/enums/enums.dart';
 import 'package:music_player/features/songs/presentation/constants/constants.dart';
 
 typedef OnSortSongsCallback = void Function(SongsSortType);
 
 class SongsAppbar extends StatelessWidget implements PreferredSizeWidget {
   const SongsAppbar({
-    required this.numOfSongs,
     this.onSearchButtonPressed,
     super.key,
   });
 
-  final int numOfSongs;
   final VoidCallback? onSearchButtonPressed;
 
   @override
@@ -23,7 +21,7 @@ class SongsAppbar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       elevation: 0,
       title: Text(
-        context.localization.allSongs(numOfSongs),
+        context.localization.appTitle,
       ),
       centerTitle: true,
       actions: [

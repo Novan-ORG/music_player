@@ -392,6 +392,24 @@ abstract class AppLocalizations {
   /// **'Size'**
   String get size;
 
+  /// No description provided for @title.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get title;
+
+  /// No description provided for @album.
+  ///
+  /// In en, this message translates to:
+  /// **'Album'**
+  String get album;
+
+  /// No description provided for @artist.
+  ///
+  /// In en, this message translates to:
+  /// **'Artist'**
+  String get artist;
+
   /// No description provided for @ascending.
   ///
   /// In en, this message translates to:

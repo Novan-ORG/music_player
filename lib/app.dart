@@ -65,6 +65,8 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
             getIt(),
             getIt(),
             getIt(),
+            getIt(),
+            getIt(),
           )..add(const LoadSongsEvent()),
         ),
         BlocProvider(

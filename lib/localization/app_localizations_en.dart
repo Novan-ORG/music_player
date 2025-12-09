@@ -161,6 +161,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get size => 'Size';
 
   @override
+  String get title => 'Title';
+
+  @override
+  String get album => 'Album';
+
+  @override
+  String get artist => 'Artist';
+
+  @override
   String get ascending => 'Ascending';
 
   @override

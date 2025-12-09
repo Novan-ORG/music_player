@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/core/domain/enums/enums.dart';
 import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/songs/domain/enums/enums.dart';
 
 class SortTypeRuler extends StatelessWidget {
   const SortTypeRuler({
@@ -16,16 +16,20 @@ class SortTypeRuler extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final sortTypes = [
-      SongsSortType.recentlyAdded,
       SongsSortType.dateAdded,
       SongsSortType.duration,
       SongsSortType.size,
+      SongsSortType.title,
+      SongsSortType.album,
+      SongsSortType.artist,
     ];
     final labels = [
-      context.localization.recent,
       context.localization.dateAdded,
       context.localization.duration,
       context.localization.size,
+      context.localization.title,
+      context.localization.album,
+      context.localization.artist,
     ];
 
     return DefaultTabController(

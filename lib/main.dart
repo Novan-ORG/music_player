@@ -8,8 +8,8 @@ import 'package:music_player/core/services/logger/logger.dart';
 import 'package:music_player/injection/service_locator.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-Future<void> main() async {
-  await runZonedGuarded(
+void main() {
+  runZonedGuarded(
     () async {
       final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
       FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);

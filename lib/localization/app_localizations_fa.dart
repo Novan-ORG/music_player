@@ -161,6 +161,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get size => 'اندازه';
 
   @override
+  String get title => 'عنوان';
+
+  @override
+  String get album => 'آلبوم';
+
+  @override
+  String get artist => 'هنرمند';
+
+  @override
   String get ascending => 'افزایشی';
 
   @override

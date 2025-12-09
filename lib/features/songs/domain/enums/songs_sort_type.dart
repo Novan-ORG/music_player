@@ -1,6 +1,8 @@
 enum SongsSortType {
-  recentlyAdded,
   dateAdded,
+  title,
+  artist,
+  album,
   duration,
   size,
 }

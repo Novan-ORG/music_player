@@ -3,7 +3,15 @@ import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 abstract interface class SongsDatasource {
-  Future<List<SongModel>> querySongs();
+  Future<List<SongModel>> querySongs({
+    SongSortType sortType = SongSortType.DATE_ADDED,
+  });
+  Future<List<AlbumModel>> queryAlbums({
+    AlbumSortType sortType = AlbumSortType.ALBUM,
+  });
+  Future<List<ArtistModel>> queryArtists({
+    ArtistSortType sortType = ArtistSortType.ARTIST,
+  });
   Future<bool> deleteSong(String songUri);
 }
 
@@ -37,5 +45,17 @@ class SongsDatasourceImpl implements SongsDatasource {
   }
 
   @override
-  Future<List<SongModel>> querySongs() => _onAudioQuery.querySongs();
+  Future<List<SongModel>> querySongs({
+    SongSortType sortType = SongSortType.DATE_ADDED,
+  }) => _onAudioQuery.querySongs(sortType: sortType);
+
+  @override
+  Future<List<AlbumModel>> queryAlbums({
+    AlbumSortType sortType = AlbumSortType.ALBUM,
+  }) => _onAudioQuery.queryAlbums();
+
+  @override
+  Future<List<ArtistModel>> queryArtists({
+    ArtistSortType sortType = ArtistSortType.ARTIST,
+  }) => _onAudioQuery.queryArtists(sortType: sortType);
 }
