@@ -7,14 +7,16 @@ class SongsCount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Row(
+      spacing: 4,
       children: [
-        Icon(Icons.library_music, size: 18, color: theme.primaryColor),
-        const SizedBox(width: 8),
+        const Icon(
+          Icons.music_note_rounded,
+          size: 18,
+        ),
         Text(
           '${context.localization.songs}: $songCount',
-          style: theme.textTheme.labelSmall?.copyWith(
+          style: context.theme.textTheme.labelSmall?.copyWith(
             fontWeight: FontWeight.bold,
           ),
         ),

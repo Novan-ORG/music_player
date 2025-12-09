@@ -21,6 +21,7 @@ class SongsPage extends StatefulWidget {
 }
 
 class _SongsPageState extends State<SongsPage> {
+  SongsSortType _currentSortType = SongsSortType.dateAdded;
   // Getters for BLoCs
   SongsBloc get _songsBloc => context.read<SongsBloc>();
   MusicPlayerBloc get _musicPlayerBloc => context.read<MusicPlayerBloc>();
@@ -53,6 +54,17 @@ class _SongsPageState extends State<SongsPage> {
     );
   }
 
+  Future<void> _onFilterTap() async {
+    final selectedSortType = await SongsFilterBottomSheet.show(
+      context: context,
+      selectedSortType: _currentSortType,
+    );
+    if (selectedSortType != null) {
+      _currentSortType = selectedSortType;
+      _songsBloc.add(LoadSongsEvent(sortType: selectedSortType));
+    }
+  }
+
   Widget _buildSongsContent(SongsState songsState) {
     // Handle loading state
     if (songsState.status == SongsStatus.loading) {
@@ -79,10 +91,15 @@ class _SongsPageState extends State<SongsPage> {
 
     return Column(
       children: [
-        SortTypeRuler(
-          currentSortType: songsState.sortType,
-          onSortTypeChanged: _onSortSongs,
-        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FilterButton(
+              onTap: _onFilterTap,
+            ),
+            SongsCount(songCount: songs.length),
+          ],
+        ).padding(value: 12),
 
         Expanded(
           child: SongsView(
@@ -100,9 +117,5 @@ class _SongsPageState extends State<SongsPage> {
           const SizedBox(height: SongsPageConstants.minPlayerHeight),
       ],
     );
-  }
-
-  void _onSortSongs(SongsSortType sortType) {
-    _songsBloc.add(LoadSongsEvent(sortType: sortType));
   }
 }
