@@ -10,11 +10,6 @@ final class LoadSongsEvent extends SongsEvent {
   final SongsSortType sortType;
 }
 
-final class LoadArtistsEvent extends SongsEvent {
-  const LoadArtistsEvent({this.sortType = ArtistsSortType.artist});
-  final ArtistsSortType sortType;
-}
-
 final class DeleteSongEvent extends SongsEvent {
   const DeleteSongEvent(this.song);
 

@@ -66,8 +66,15 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
             ),
         ),
         BlocProvider(
+          create: (_) =>
+              ArtistsBloc(
+                getIt(),
+              )..add(
+                const LoadArtistsEvent(),
+              ),
+        ),
+        BlocProvider(
           create: (_) => SongsBloc(
-            getIt(),
             getIt(),
             getIt(),
             getIt(),
