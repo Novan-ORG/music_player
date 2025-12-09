@@ -16,12 +16,10 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     this.ensureMediaPermission,
     this.deleteSong,
     this.querySongs,
-    this.queryAlbums,
     this.queryArtists,
     this.commandManager,
   ) : super(const SongsState()) {
     on<LoadSongsEvent>(onLoadSongs);
-    on<LoadAlbumsEvent>(onLoadAlbums);
     on<LoadArtistsEvent>(onLoadArtists);
     on<DeleteSongEvent>(onDeleteSong);
     on<UndoDeleteSongEvent>(onUndoDeleteSong);
@@ -33,7 +31,6 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
   final CommandManager commandManager;
   final DeleteSongWithUndo deleteSong;
   final QuerySongs querySongs;
-  final QueryAlbums queryAlbums;
   final QueryArtists queryArtists;
   final EnsureMediaPermission ensureMediaPermission;
 
@@ -122,26 +119,6 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     if (queryResult.isSuccess) {
       emit(
         SongsState(allSongs: queryResult.value!, status: SongsStatus.loaded),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          errorMessage: queryResult.error,
-          status: SongsStatus.error,
-        ),
-      );
-    }
-  }
-
-  Future<void> onLoadAlbums(
-    LoadAlbumsEvent event,
-    Emitter<SongsState> emit,
-  ) async {
-    emit(const SongsState(status: SongsStatus.loading));
-    final queryResult = await queryAlbums(sortType: event.sortType);
-    if (queryResult.isSuccess) {
-      emit(
-        SongsState(allAlbums: queryResult.value!, status: SongsStatus.loaded),
       );
     } else {
       emit(
