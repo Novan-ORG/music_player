@@ -8,7 +8,7 @@ final class PlayListState extends Equatable {
     this.canUndo = false,
     this.lastDeletedPlaylist,
     this.currentPlaylistId,
-    this.pinnedPlaylistIds = const {},
+    this.pinnedPlaylists = const [],
     this.playlistCoverSongIds = const {},
   });
 
@@ -18,7 +18,7 @@ final class PlayListState extends Equatable {
   final bool canUndo;
   final Playlist? lastDeletedPlaylist;
   final int? currentPlaylistId;
-  final Set<int> pinnedPlaylistIds;
+  final List<PinPlaylist> pinnedPlaylists;
   final Map<int, int?> playlistCoverSongIds;
 
   PlayListState copyWith({
@@ -28,7 +28,7 @@ final class PlayListState extends Equatable {
     bool? canUndo,
     Playlist? lastDeletedPlaylist,
     int? currentPlaylistId,
-    Set<int>? pinnedPlaylistIds,
+    List<PinPlaylist>? pinnedPlaylists,
     Map<int, int?>? playlistCoverSongIds,
   }) {
     return PlayListState(
@@ -38,7 +38,7 @@ final class PlayListState extends Equatable {
       canUndo: canUndo ?? this.canUndo,
       lastDeletedPlaylist: lastDeletedPlaylist ?? this.lastDeletedPlaylist,
       currentPlaylistId: currentPlaylistId ?? this.currentPlaylistId,
-      pinnedPlaylistIds: pinnedPlaylistIds ?? this.pinnedPlaylistIds,
+      pinnedPlaylists: pinnedPlaylists ?? this.pinnedPlaylists,
       playlistCoverSongIds: playlistCoverSongIds ?? this.playlistCoverSongIds,
     );
   }
@@ -51,7 +51,7 @@ final class PlayListState extends Equatable {
     canUndo,
     lastDeletedPlaylist,
     currentPlaylistId,
-    pinnedPlaylistIds,
+    pinnedPlaylists,
     playlistCoverSongIds,
   ];
 }

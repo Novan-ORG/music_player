@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:music_player/core/constants/preferences_keys.dart';
 import 'package:music_player/core/services/logger/logger.dart';
+import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,8 +21,8 @@ abstract class PlaylistDatasource {
   Future<void> setPlaylistCoverSongId(int playlistId, int songId);
   Future<void> initializePlaylistCoversForExistingPlaylists();
 
-  Future<void> savePinnedPlaylists(List<String> pinnedPlaylistIds);
-  Future<List<String>> getPinnedPlaylists();
+  Future<void> savePinnedPlaylists(List<PinPlaylist> pinnedPlaylistIds);
+  Future<List<PinPlaylist>> getPinnedPlaylists();
 }
 
 class PlaylistDatasourceImpl implements PlaylistDatasource {
@@ -159,21 +160,34 @@ class PlaylistDatasourceImpl implements PlaylistDatasource {
   }
 
   @override
-  Future<List<String>> getPinnedPlaylists() async {
+  Future<List<PinPlaylist>> getPinnedPlaylists() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final list = prefs.getStringList(PreferencesKeys.pinnedPlaylists) ?? [];
+    final rawList =
+        prefs.getStringList(PreferencesKeys.pinnedPlaylists) ?? <String>[];
 
-    return list;
+    return rawList
+        .map(
+          (jsonString) => PinPlaylist.fromJson(
+            jsonDecode(jsonString) as Map<String, dynamic>,
+          ),
+        )
+        .toList();
   }
 
   @override
-  Future<void> savePinnedPlaylists(List<String> pinnedPlaylistIds) async {
+  Future<void> savePinnedPlaylists(
+    List<PinPlaylist> pinnedPlaylists,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
+
+    final rawList = pinnedPlaylists
+        .map((model) => jsonEncode(model.toJson()))
+        .toList(growable: false);
 
     await prefs.setStringList(
       PreferencesKeys.pinnedPlaylists,
-      pinnedPlaylistIds,
+      rawList,
     );
   }
 }

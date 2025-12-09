@@ -1,4 +1,5 @@
 import 'package:music_player/core/result.dart';
+import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
 import 'package:music_player/features/playlist/domain/repositories/playlist_repository.dart';
 
 class PinPlaylistById {
@@ -6,21 +7,42 @@ class PinPlaylistById {
 
   final PlaylistRepository repository;
 
-  Future<Result<Set<int>>> call(Set<int> currentPinned, int playlistId) async {
-    if (currentPinned.contains(playlistId)) {
-      currentPinned.remove(playlistId);
+  Future<Result<List<PinPlaylist>>> call(
+    List<PinPlaylist> currentPinned,
+    int playlistId,
+  ) async {
+    final pinned = [...currentPinned];
+
+    final existingIndex = pinned.indexWhere((p) => p.playlistId == playlistId);
+
+    if (existingIndex >= 0) {
+      // unpin
+      pinned.removeAt(existingIndex);
     } else {
-      currentPinned.add(playlistId);
+      final nextOrder = pinned.isEmpty
+          ? 0
+          : pinned.map((e) => e.order).reduce((a, b) => a > b ? a : b) + 1;
+
+      pinned.add(
+        PinPlaylist(
+          playlistId: playlistId,
+          order: nextOrder,
+        ),
+      );
     }
 
-    final result = await repository.savePinnedPlaylists(
-      currentPinned.map((id) => id.toString()).toList(),
-    );
+    final saveResult = await repository.savePinnedPlaylists(pinned);
 
-    if (result.isSuccess) {
-      return Result.success(currentPinned);
+    if (!saveResult.isSuccess) {
+      return Result.failure(saveResult.error);
+    }
+
+    final reloadResult = await repository.getPinnedPlaylists();
+
+    if (reloadResult.isSuccess) {
+      return Result.success(reloadResult.value);
     } else {
-      return Result.failure(result.error);
+      return Result.failure(reloadResult.error);
     }
   }
 }

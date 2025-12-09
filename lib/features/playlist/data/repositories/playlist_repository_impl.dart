@@ -2,7 +2,9 @@ import 'package:music_player/core/data/mappers/mappers.dart';
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/result.dart';
 import 'package:music_player/features/playlist/data/data.dart';
+import 'package:music_player/features/playlist/data/mappers/pin_playlist_mapper.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
+import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
 
 class PlaylistRepositoryImpl implements PlaylistRepository {
   const PlaylistRepositoryImpl(this.datasource);
@@ -131,10 +133,13 @@ class PlaylistRepositoryImpl implements PlaylistRepository {
   }
 
   @override
-  Future<Result<List<String>>> getPinnedPlaylists() async {
+  Future<Result<List<PinPlaylist>>> getPinnedPlaylists() async {
     try {
-      final result = await datasource.getPinnedPlaylists();
-      return Result.success(result);
+      final models = await datasource.getPinnedPlaylists();
+      final entities = models.map(PinPlaylistMapper.fromModel).toList()
+        ..sort((a, b) => b.order.compareTo(a.order));
+
+      return Result.success(entities);
     } on Exception catch (e) {
       return Result.failure('Failed to get pinned playlist: $e');
     }
@@ -142,10 +147,17 @@ class PlaylistRepositoryImpl implements PlaylistRepository {
 
   @override
   Future<Result<void>> savePinnedPlaylists(
-    List<String> pinnedPlaylistIds,
+    List<PinPlaylist> pinnedPlaylists,
   ) async {
     try {
-      await datasource.savePinnedPlaylists(pinnedPlaylistIds);
+      final ordered = [...pinnedPlaylists];
+      // ..sort((a, b) => b.order.compareTo(a.order));
+
+      final models = ordered
+          .map(PinPlaylistMapper.toModel)
+          .toList(growable: false);
+
+      await datasource.savePinnedPlaylists(models);
       return Result.success(null);
     } on Exception catch (e) {
       return Result.failure('Failed to save as pinned playlist: $e');

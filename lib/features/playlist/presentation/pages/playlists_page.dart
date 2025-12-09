@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/mixins/playlist_management_mixin.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
+import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
 import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
 import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/features/playlist/presentation/widgets/playlist_appbar.dart';
@@ -51,10 +52,6 @@ class _PlaylistsPageState extends State<PlaylistsPage>
     context.read<PlayListBloc>().add(LoadPlayListsEvent());
   }
 
-  bool _isPinned(int playlistId, Set<int> pinnedIds) {
-    return pinnedIds.contains(playlistId);
-  }
-
   Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
 
   Future<void> _handleAddMusicToPlaylist(Playlist playlist) async {
@@ -84,13 +81,15 @@ class _PlaylistsPageState extends State<PlaylistsPage>
   }
 
   void _handlePinPlaylist(Playlist playlist) {
-    playlist.pinnedAt = DateTime.now();
     context.read<PlayListBloc>().add(
       PinnedPlaylistEvent(playlist.id),
     );
   }
 
-  Widget _buildPlaylistTile(Playlist playlist, Set<int> pinnedIds) {
+  Widget _buildPlaylistTile(
+    Playlist playlist,
+    List<PinPlaylist> pinnedMeta,
+  ) {
     final subtitle =
         '${playlist.numOfSongs} ${context.localization.song}'
         '${playlist.numOfSongs <= 1 ? '' : context.localization.s}';
@@ -120,9 +119,10 @@ class _PlaylistsPageState extends State<PlaylistsPage>
         ),
       );
     } else {
+      final isPinned = pinnedMeta.any((p) => p.playlistId == playlist.id);
       return PlaylistItem(
         playlist: playlist,
-        isPinned: _isPinned(playlist.id, pinnedIds),
+        isPinned: isPinned,
         onAddMusicToPlaylist: () => _handleAddMusicToPlaylist(playlist),
         onTap: () => _navigateToPlaylistDetails(playlist),
         onPinned: () => _handlePinPlaylist(playlist),
@@ -130,7 +130,10 @@ class _PlaylistsPageState extends State<PlaylistsPage>
     }
   }
 
-  Widget _buildAllPlaylists(List<Playlist> playlists, Set<int> pinnedIds) {
+  Widget _buildAllPlaylists(
+    List<Playlist> playlists,
+    List<PinPlaylist> pinnedMeta,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -150,7 +153,7 @@ class _PlaylistsPageState extends State<PlaylistsPage>
           child: ListView.builder(
             itemCount: playlists.length,
             itemBuilder: (context, index) {
-              return _buildPlaylistTile(playlists[index], pinnedIds);
+              return _buildPlaylistTile(playlists[index], pinnedMeta);
             },
           ),
         ),
@@ -218,6 +221,26 @@ class _PlaylistsPageState extends State<PlaylistsPage>
     );
   }
 
+  List<Playlist> _extractPinnedPlaylists(
+    List<Playlist> allPlaylists,
+    List<PinPlaylist> pinnedMeta,
+  ) {
+    final playlistById = <int, Playlist>{
+      for (final p in allPlaylists) p.id: p,
+    };
+
+    final result = <Playlist>[];
+
+    for (final meta in pinnedMeta) {
+      final playlist = playlistById[meta.playlistId];
+      if (playlist != null && playlist.id != 0) {
+        result.add(playlist);
+      }
+    }
+
+    return result;
+  }
+
   Widget _buildBody(PlayListState state, ThemeData theme) {
     if (state.status == PlayListStatus.loading) {
       return const Center(child: CircularProgressIndicator());
@@ -233,15 +256,14 @@ class _PlaylistsPageState extends State<PlaylistsPage>
       if (state.playLists.isEmpty) {
         return const EmptyPlaylist();
       } else {
-        final pinnedPlaylists = state.playLists
-            .where(
-              (playlist) =>
-                  playlist.id != 0 &&
-                  _isPinned(playlist.id, state.pinnedPlaylistIds),
-            )
-            .toList();
+        final pinnedMeta = state.pinnedPlaylists;
 
         final allPlaylists = state.playLists;
+
+        final pinnedPlaylists = _extractPinnedPlaylists(
+          allPlaylists,
+          pinnedMeta,
+        );
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,7 +286,10 @@ class _PlaylistsPageState extends State<PlaylistsPage>
               height: 6,
             ),
             Expanded(
-              child: _buildAllPlaylists(allPlaylists, state.pinnedPlaylistIds),
+              child: _buildAllPlaylists(
+                allPlaylists,
+                pinnedMeta,
+              ),
             ),
           ],
         );
@@ -275,13 +300,6 @@ class _PlaylistsPageState extends State<PlaylistsPage>
   Widget _buildPinnedPlaylists(
     List<Playlist> pinnedPlaylists,
   ) {
-    pinnedPlaylists.sort((a, b) {
-      if (a.pinnedAt == null || b.pinnedAt == null) {
-        return 0;
-      }
-      return b.pinnedAt!.compareTo(a.pinnedAt!);
-    });
-
     return SizedBox(
       height: 120,
       child: ListView.builder(
@@ -294,7 +312,7 @@ class _PlaylistsPageState extends State<PlaylistsPage>
             numOfSongs: 0,
             createdAt: DateTime.now(),
             updatedAt: DateTime.now(),
-            pinnedAt: DateTime.now(),
+            // pinnedAt: DateTime.now(),
           );
 
           if (index == 0) {

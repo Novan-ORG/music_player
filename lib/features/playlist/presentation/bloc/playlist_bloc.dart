@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:music_player/core/commands/commands.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
+import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
 import 'package:music_player/features/playlist/domain/usecases/get_pinned_playlist.dart';
 import 'package:music_player/features/playlist/domain/usecases/pin_playlist_by_id.dart';
 
@@ -33,7 +34,7 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     on<UndoDeletePlayListEvent>(_undoDeletePlayList);
     on<CanUndoChangedEvent>(_canUndoChanged);
     on<LoadPinnedPlaylistsEvent>(_loadPinnedPlaylists);
-    on<PinnedPlaylistEvent>(_pinnedPlaylist);
+    on<PinnedPlaylistEvent>(_togglePinPlaylist);
     on<InitializePlaylistCoversEvent>(_initializePlaylistCoversHandler);
     on<LoadPlaylistCoverSongIdsEvent>(_loadPlaylistCoverSongIds);
     _commandManager.canUndoNotifier.addListener(_onCanUndoChanged);
@@ -332,7 +333,7 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     if (result.isSuccess) {
       emit(
         state.copyWith(
-          pinnedPlaylistIds: result.value,
+          pinnedPlaylists: result.value,
           status: PlayListStatus.loaded,
         ),
       );
@@ -346,19 +347,19 @@ class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
     }
   }
 
-  Future<void> _pinnedPlaylist(
+  Future<void> _togglePinPlaylist(
     PinnedPlaylistEvent event,
     Emitter<PlayListState> emit,
   ) async {
     final result = await _pinPlaylistById(
-      Set<int>.from(state.pinnedPlaylistIds),
+      List<PinPlaylist>.from(state.pinnedPlaylists),
       event.playlistId,
     );
 
     if (result.isSuccess) {
       emit(
         state.copyWith(
-          pinnedPlaylistIds: result.value,
+          pinnedPlaylists: result.value,
           status: PlayListStatus.loaded,
         ),
       );
