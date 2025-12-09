@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_player/core/views/views.dart';
-import 'package:music_player/core/widgets/widgets.dart';
-import 'package:music_player/extensions/extensions.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/search/presentation/pages/pages.dart';
-import 'package:music_player/features/songs/domain/enums/enums.dart';
-import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
-import 'package:music_player/features/songs/presentation/constants/constants.dart';
+import 'package:music_player/features/songs/presentation/views/views.dart';
 import 'package:music_player/features/songs/presentation/widgets/songs_appbar.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
@@ -20,29 +13,59 @@ class SongsPage extends StatefulWidget {
   State<SongsPage> createState() => _SongsPageState();
 }
 
-class _SongsPageState extends State<SongsPage> {
-  SongsSortType _currentSortType = SongsSortType.dateAdded;
-  // Getters for BLoCs
-  SongsBloc get _songsBloc => context.read<SongsBloc>();
-  MusicPlayerBloc get _musicPlayerBloc => context.read<MusicPlayerBloc>();
-
+class _SongsPageState extends State<SongsPage>
+    with SingleTickerProviderStateMixin {
+  late final TabController tabController;
+  late final PageController pageController;
   @override
   void initState() {
+    tabController = TabController(length: 3, vsync: this);
+    pageController = PageController();
     super.initState();
+  }
+
+  void animateToNewPage(int index) {
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    pageController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SongsBloc, SongsState>(
-      bloc: _songsBloc,
-      builder: (context, songsState) {
-        return Scaffold(
-          appBar: SongsAppbar(
-            onSearchButtonPressed: _onSearchButtonPressed,
+    return Scaffold(
+      appBar: SongsAppbar(
+        onSearchButtonPressed: _onSearchButtonPressed,
+      ),
+      body: Column(
+        children: [
+          CategoryTabbar(
+            tabController: tabController,
+            onTabChanged: animateToNewPage,
           ),
-          body: _buildSongsContent(songsState),
-        );
-      },
+          Expanded(
+            child: PageView(
+              controller: pageController,
+              onPageChanged: (newPageIndex) {
+                tabController.animateTo(newPageIndex);
+              },
+              children: const [
+                AlbumsView(),
+                ArtistsView(),
+                AllSongsView(),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -51,71 +74,6 @@ class _SongsPageState extends State<SongsPage> {
       MaterialPageRoute<void>(
         builder: (_) => const SearchSongsPage(),
       ),
-    );
-  }
-
-  Future<void> _onFilterTap() async {
-    final selectedSortType = await SongsFilterBottomSheet.show(
-      context: context,
-      selectedSortType: _currentSortType,
-    );
-    if (selectedSortType != null) {
-      _currentSortType = selectedSortType;
-      _songsBloc.add(LoadSongsEvent(sortType: selectedSortType));
-    }
-  }
-
-  Widget _buildSongsContent(SongsState songsState) {
-    // Handle loading state
-    if (songsState.status == SongsStatus.loading) {
-      return const Loading();
-    }
-
-    // Handle error state
-    if (songsState.status == SongsStatus.error) {
-      return SongsErrorLoading(
-        message: context.localization.errorLoadingSongs,
-        onRetry: () => _songsBloc.add(const LoadSongsEvent()),
-      );
-    }
-
-    // Handle empty songs
-    if (songsState.allSongs.isEmpty) {
-      return NoSongsWidget(
-        message: context.localization.noSongTryAgain,
-        onRefresh: () => _songsBloc.add(const LoadSongsEvent()),
-      );
-    }
-
-    final songs = songsState.allSongs;
-
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            FilterButton(
-              onTap: _onFilterTap,
-            ),
-            SongsCount(songCount: songs.length),
-          ],
-        ).padding(value: 12),
-
-        Expanded(
-          child: SongsView(
-            songs: songs,
-            onRefresh: () async {
-              _songsBloc.add(const LoadSongsEvent());
-              await Future<void>.delayed(
-                const Duration(milliseconds: 300),
-              );
-            },
-          ),
-        ),
-        // Bottom spacing for mini player
-        if (_musicPlayerBloc.state.playList.isNotEmpty)
-          const SizedBox(height: SongsPageConstants.minPlayerHeight),
-      ],
     );
   }
 }

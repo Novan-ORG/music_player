@@ -49,15 +49,7 @@
     "cancel": "انصراف",
     "deleteFromDevice": "حذف از دستگاه",
     "favoriteSongs": "موزیک های محبوب",
-    "allSongs": "همه موزیک ها({count})",
-    "@allSongs": {
-        "description": "",
-        "placeholders": {
-            "count": {
-                "type": "int"
-            }
-        }
-    },
+    "allSongs": "همه موزیک ها",
     "searchSongs": "جستجوی موزیک ها",
     "refresh": "تازه سازی",
     "errorLoadingSongs": "در هنگام باگزاری موزیک ها خطایی رخ داده است",
@@ -72,7 +64,9 @@
     "size": "اندازه",
     "title": "عنوان",
     "album": "آلبوم",
+    "albums": "آلبوم ها",
     "artist": "هنرمند",
+    "artists": "هنرمندان",
     "ascending": "افزایشی",
     "descending": "کاهشی",
     "dismiss": "رد کردن",

@@ -119,9 +119,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get favoriteSongs => 'موزیک های محبوب';
 
   @override
-  String allSongs(int count) {
-    return 'همه موزیک ها($count)';
-  }
+  String get allSongs => 'همه موزیک ها';
 
   @override
   String get searchSongs => 'جستجوی موزیک ها';
@@ -167,7 +165,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get album => 'آلبوم';
 
   @override
+  String get albums => 'آلبوم ها';
+
+  @override
   String get artist => 'هنرمند';
+
+  @override
+  String get artists => 'هنرمندان';
 
   @override
   String get ascending => 'افزایشی';

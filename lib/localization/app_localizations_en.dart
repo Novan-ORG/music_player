@@ -119,9 +119,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favoriteSongs => 'Favorite Songs';
 
   @override
-  String allSongs(int count) {
-    return 'All Songs($count)';
-  }
+  String get allSongs => 'All Songs';
 
   @override
   String get searchSongs => 'Search Songs';
@@ -167,7 +165,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get album => 'Album';
 
   @override
+  String get albums => 'Albums';
+
+  @override
   String get artist => 'Artist';
+
+  @override
+  String get artists => 'Artists';
 
   @override
   String get ascending => 'Ascending';
