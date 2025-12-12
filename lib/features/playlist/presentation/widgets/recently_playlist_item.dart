@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/constants/image_assets.dart';
+import 'package:music_player/core/widgets/song_image_widget.dart';
 import 'package:music_player/features/playlist/domain/entities/playlist.dart';
 import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class PinnedPlaylistItem extends StatelessWidget {
   const PinnedPlaylistItem({
@@ -11,11 +11,7 @@ class PinnedPlaylistItem extends StatelessWidget {
     super.key,
     this.size = 74,
     this.borderRadius = 16,
-    this.artworkFit = BoxFit.cover,
     this.margin = 6,
-    this.quality = 70,
-    this.qualitySize = 200,
-    this.artworkQuality = FilterQuality.medium,
     this.onTap,
   });
 
@@ -23,10 +19,6 @@ class PinnedPlaylistItem extends StatelessWidget {
   final double size;
   final double borderRadius;
   final double margin;
-  final BoxFit artworkFit;
-  final int quality;
-  final int qualitySize;
-  final FilterQuality artworkQuality;
   final VoidCallback? onTap;
 
   @override
@@ -43,28 +35,11 @@ class PinnedPlaylistItem extends StatelessWidget {
 
             return GestureDetector(
               onTap: onTap,
-              child: QueryArtworkWidget(
-                id: artworkId,
-                quality: quality,
-                type: ArtworkType.AUDIO,
-                size: qualitySize,
-                artworkWidth: size,
-                artworkHeight: size,
-                artworkQuality: artworkQuality,
-                artworkFit: artworkFit,
-                artworkBorder: BorderRadius.circular(borderRadius),
-                nullArtworkWidget: ClipRRect(
-                  borderRadius: BorderRadius.circular(borderRadius),
-                  child: ColoredBox(
-                    color: Colors.white,
-                    child: Image.asset(
-                      ImageAssets.playlistCover,
-                      fit: BoxFit.cover,
-                      width: size,
-                      height: size,
-                    ),
-                  ),
-                ),
+              child: SongImageWidget(
+                songId: artworkId,
+                size: size,
+                borderRadius: borderRadius,
+                defaultCover: ImageAssets.playlistCover,
               ),
             );
           },

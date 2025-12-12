@@ -10,7 +10,6 @@ class PlaylistItem extends StatelessWidget {
     this.margin = const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
     this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
     this.borderRadius = 16,
-    this.songImageSize = 50,
     this.onTap,
     this.blurBackground = true,
     this.isPinned = false,
@@ -23,7 +22,6 @@ class PlaylistItem extends StatelessWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
   final double borderRadius;
-  final double songImageSize;
   final bool blurBackground;
   final VoidCallback? onTap;
 
@@ -38,7 +36,7 @@ class PlaylistItem extends StatelessWidget {
     // Common row content used by both blurred and plain variants
     final content = Row(
       children: [
-        PlaylistImageWidget(playlistId: playlist.id, size: songImageSize),
+        PlaylistImageWidget(playlistId: playlist.id),
         const SizedBox(width: 12),
         Expanded(child: _buildTitle(context)),
         const SizedBox(width: 8),
