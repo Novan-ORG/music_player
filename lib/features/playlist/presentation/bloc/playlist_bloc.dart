@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:music_player/core/commands/commands.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
-import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
 import 'package:music_player/features/playlist/domain/usecases/get_pinned_playlist.dart';
 import 'package:music_player/features/playlist/domain/usecases/pin_playlist_by_id.dart';
 
