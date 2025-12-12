@@ -1,7 +1,6 @@
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/result.dart';
 import 'package:music_player/features/playlist/domain/entities/entities.dart';
-import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
 
 abstract class PlaylistRepository {
   Future<Result<List<Playlist>>> getAllPlaylists();

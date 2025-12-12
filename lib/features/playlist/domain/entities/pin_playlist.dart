@@ -1,18 +1,16 @@
-class PinPlaylist {
-  PinPlaylist({
+import 'package:equatable/equatable.dart';
+
+class PinPlaylist extends Equatable {
+  const PinPlaylist({
     required this.playlistId,
     required this.order,
   });
 
-  factory PinPlaylist.fromJson(Map<String, dynamic> json) {
-    return PinPlaylist(
-      playlistId: json['playlistId'] as int,
-      order: json['order'] as int,
-    );
-  }
-
   final int playlistId;
   final int order;
+
+  @override
+  List<Object?> get props => [playlistId, order];
 
   PinPlaylist copyWith({
     int? playlistId,
@@ -23,9 +21,4 @@ class PinPlaylist {
       order: order ?? this.order,
     );
   }
-
-  Map<String, dynamic> toJson() => {
-    'playlistId': playlistId,
-    'order': order,
-  };
 }

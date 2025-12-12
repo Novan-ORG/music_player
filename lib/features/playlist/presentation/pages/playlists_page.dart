@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/mixins/playlist_management_mixin.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
-import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
 import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
 import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/features/playlist/presentation/widgets/playlist_appbar.dart';
@@ -312,7 +311,6 @@ class _PlaylistsPageState extends State<PlaylistsPage>
             numOfSongs: 0,
             createdAt: DateTime.now(),
             updatedAt: DateTime.now(),
-            // pinnedAt: DateTime.now(),
           );
 
           if (index == 0) {

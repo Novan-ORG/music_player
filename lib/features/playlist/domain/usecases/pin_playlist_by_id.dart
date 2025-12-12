@@ -1,4 +1,5 @@
 import 'package:music_player/core/result.dart';
+import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
 import 'package:music_player/features/playlist/domain/repositories/playlist_repository.dart';
 
@@ -11,38 +12,35 @@ class PinPlaylistById {
     List<PinPlaylist> currentPinned,
     int playlistId,
   ) async {
-    final pinned = [...currentPinned];
+    final index = currentPinned.indexWhere(
+      (p) => p.playlistId == playlistId,
+    );
 
-    final existingIndex = pinned.indexWhere((p) => p.playlistId == playlistId);
-
-    if (existingIndex >= 0) {
+    if (index >= 0) {
       // unpin
-      pinned.removeAt(existingIndex);
+      currentPinned.removeAt(index);
     } else {
-      final nextOrder = pinned.isEmpty
+      // pin
+      final nextOrder = currentPinned.isEmpty
           ? 0
-          : pinned.map((e) => e.order).reduce((a, b) => a > b ? a : b) + 1;
+          : currentPinned.map((e) => e.order).reduce((a, b) => a > b ? a : b) +
+                1; // max order + 1
 
-      pinned.add(
+      currentPinned.add(
         PinPlaylist(
           playlistId: playlistId,
           order: nextOrder,
         ),
       );
     }
+    final updated = currentPinned.ordered();
 
-    final saveResult = await repository.savePinnedPlaylists(pinned);
+    final saveResult = await repository.savePinnedPlaylists(updated);
 
-    if (!saveResult.isSuccess) {
+    if (saveResult.isFailure) {
       return Result.failure(saveResult.error);
-    }
-
-    final reloadResult = await repository.getPinnedPlaylists();
-
-    if (reloadResult.isSuccess) {
-      return Result.success(reloadResult.value);
     } else {
-      return Result.failure(reloadResult.error);
+      return Result.success(updated);
     }
   }
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:music_player/core/constants/preferences_keys.dart';
 import 'package:music_player/core/services/logger/logger.dart';
-import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
+import 'package:music_player/features/playlist/data/models/pin_playlist_model.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,8 +21,8 @@ abstract class PlaylistDatasource {
   Future<void> setPlaylistCoverSongId(int playlistId, int songId);
   Future<void> initializePlaylistCoversForExistingPlaylists();
 
-  Future<void> savePinnedPlaylists(List<PinPlaylist> pinnedPlaylistIds);
-  Future<List<PinPlaylist>> getPinnedPlaylists();
+  Future<void> savePinnedPlaylists(List<PinPlaylistModel> pinnedPlaylistIds);
+  Future<List<PinPlaylistModel>> getPinnedPlaylists();
 }
 
 class PlaylistDatasourceImpl implements PlaylistDatasource {
@@ -160,15 +160,14 @@ class PlaylistDatasourceImpl implements PlaylistDatasource {
   }
 
   @override
-  Future<List<PinPlaylist>> getPinnedPlaylists() async {
-    final prefs = await SharedPreferences.getInstance();
-
+  Future<List<PinPlaylistModel>> getPinnedPlaylists() async {
     final rawList =
-        prefs.getStringList(PreferencesKeys.pinnedPlaylists) ?? <String>[];
+        preferences.getStringList(PreferencesKeys.pinnedPlaylists) ??
+        <String>[];
 
     return rawList
         .map(
-          (jsonString) => PinPlaylist.fromJson(
+          (jsonString) => PinPlaylistModel.fromJson(
             jsonDecode(jsonString) as Map<String, dynamic>,
           ),
         )
@@ -177,15 +176,13 @@ class PlaylistDatasourceImpl implements PlaylistDatasource {
 
   @override
   Future<void> savePinnedPlaylists(
-    List<PinPlaylist> pinnedPlaylists,
+    List<PinPlaylistModel> pinnedPlaylists,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
-
     final rawList = pinnedPlaylists
         .map((model) => jsonEncode(model.toJson()))
         .toList(growable: false);
 
-    await prefs.setStringList(
+    await preferences.setStringList(
       PreferencesKeys.pinnedPlaylists,
       rawList,
     );
