@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/constants/image_assets.dart';
 import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/songs/domain/entities/entities.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
@@ -10,11 +12,31 @@ class AlbumItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final songLocalized = album.numOfSongs > 1
+        ? context.localization.songs
+        : context.localization.song;
     return GlassCard(
+      margin: const EdgeInsets.all(12),
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
       child: ListTile(
-        leading: QueryArtworkWidget(id: album.id, type: ArtworkType.ALBUM),
-        title: Text(album.album),
-        subtitle: Text(album.numOfSongs.toString()),
+        leading: ArtImageWidget(
+          id: album.id,
+          type: ArtworkType.ALBUM,
+          defaultCover: ImageAssets.albumCover,
+        ),
+        title: Text(
+          album.album,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        subtitle: Text(
+          '${album.numOfSongs} $songLocalized',
+          style: context.theme.textTheme.labelMedium,
+        ),
+        trailing: const Icon(Icons.arrow_right),
       ),
     );
   }

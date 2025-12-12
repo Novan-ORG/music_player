@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/constants/image_assets.dart';
-import 'package:music_player/core/domain/enums/enums.dart';
 import 'package:music_player/extensions/extensions.dart';
-import 'package:music_player/features/songs/presentation/constants/constants.dart';
+import 'package:music_player/features/songs/domain/enums/enums.dart';
 
 typedef OnSortSongsCallback = void Function(SongsSortType);
 
@@ -35,8 +34,8 @@ class PlaylistAppbar extends StatelessWidget implements PreferredSizeWidget {
             child: Image.asset(
               ImageAssets.search,
               color: isDark ? Colors.white : Colors.black,
-              height: SongsPageConstants.searchIconSize,
-              width: SongsPageConstants.searchIconSize,
+              height: 18,
+              width: 18,
             ),
           ),
         ),
