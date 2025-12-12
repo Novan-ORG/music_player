@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/mixins/playlist_management_mixin.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
 import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
 import 'package:music_player/features/playlist/presentation/pages/pages.dart';
+import 'package:music_player/features/playlist/presentation/widgets/playlist_appbar.dart';
+import 'package:music_player/features/playlist/presentation/widgets/playlist_item.dart';
+import 'package:music_player/features/playlist/presentation/widgets/recently_playlist_item.dart';
 import 'package:music_player/features/playlist/presentation/widgets/widgets.dart';
+import 'package:music_player/features/search/presentation/pages/search_songs_page.dart';
+import 'package:music_player/injection/service_locator.dart';
 
 class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({
@@ -35,7 +41,8 @@ class PlaylistsPage extends StatefulWidget {
   State<PlaylistsPage> createState() => _PlaylistsPageState();
 }
 
-class _PlaylistsPageState extends State<PlaylistsPage> {
+class _PlaylistsPageState extends State<PlaylistsPage>
+    with PlaylistManagementMixin {
   final Set<int> selectedPlaylistIds = {};
 
   @override
@@ -46,7 +53,42 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
 
   Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
 
-  Widget _buildPlaylistTile(Playlist playlist) {
+  Future<void> _handleAddMusicToPlaylist(Playlist playlist) async {
+    final detailsBloc = PlaylistDetailsBloc(
+      playlist: playlist,
+      getPlaylistSongs: getIt.get(),
+    )..add(const GetPlaylistSongsEvent());
+
+    try {
+      await detailsBloc.stream.firstWhere(
+        (state) => state.status != PlaylistDetailsStatus.loading,
+      );
+
+      Set<int>? currentSongIds;
+      final state = detailsBloc.state;
+      if (state.status == PlaylistDetailsStatus.success) {
+        currentSongIds = state.songs.map((song) => song.id).toSet();
+      }
+
+      await addSongsToPlaylist(
+        playlist,
+        currentSongIds,
+      );
+    } finally {
+      await detailsBloc.close();
+    }
+  }
+
+  void _handlePinPlaylist(Playlist playlist) {
+    context.read<PlayListBloc>().add(
+      PinnedPlaylistEvent(playlist.id),
+    );
+  }
+
+  Widget _buildPlaylistTile(
+    Playlist playlist,
+    List<PinPlaylist> pinnedMeta,
+  ) {
     final subtitle =
         '${playlist.numOfSongs} ${context.localization.song}'
         '${playlist.numOfSongs <= 1 ? '' : context.localization.s}';
@@ -57,6 +99,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           value: selectedPlaylistIds.contains(playlist.id),
           title: Text(
             playlist.name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontWeight: FontWeight.w500),
           ),
           subtitle: Text(subtitle),
@@ -74,77 +118,46 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
         ),
       );
     } else {
-      return Card(
-        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Theme.of(
-              context,
-            ).colorScheme.primary.withAlpha(10),
-            child: const Icon(Icons.queue_music, color: Colors.black54),
-          ),
-          title: Text(
-            playlist.name,
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
-          subtitle: Text(subtitle),
-          trailing: PlaylistItemMoreAction(playlist: playlist),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => PlaylistDetailsPage(playlistModel: playlist),
-              ),
-            );
-          },
+      final isPinned = pinnedMeta.any((p) => p.playlistId == playlist.id);
+      return PlaylistItem(
+        playlist: playlist,
+        isPinned: isPinned,
+        onAddMusicToPlaylist: () => _handleAddMusicToPlaylist(playlist),
+        onTap: () => _navigateToPlaylistDetails(playlist),
+        onPinned: () => _handlePinPlaylist(playlist),
+      );
+    }
+  }
+
+  Widget _buildAllPlaylists(
+    List<Playlist> playlists,
+    List<PinPlaylist> pinnedMeta,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 16,
         ),
-      );
-    }
-  }
-
-  Widget _buildPlaylistsList(List<Playlist> playlists) {
-    return ListView.separated(
-      padding: const EdgeInsets.only(top: 8, bottom: 80),
-      itemCount: playlists.length + 1,
-      separatorBuilder: (_, _) => const SizedBox(height: 2),
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return Card(
-            color: Theme.of(context).colorScheme.primary.withAlpha(8),
-            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-            child: ListTile(
-              leading: const Icon(Icons.add, color: Colors.blueAccent),
-              title: Text(
-                context.localization.createNewPlaylist,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              onTap: _showCreatePlaylistSheet,
-            ),
-          );
-        }
-        final playlist = playlists[index - 1];
-        return _buildPlaylistTile(playlist);
-      },
+        Text(
+          'All Playlist',
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: playlists.length,
+            itemBuilder: (context, index) {
+              return _buildPlaylistTile(playlists[index], pinnedMeta);
+            },
+          ),
+        ),
+      ],
     );
-  }
-
-  Widget _buildBody(PlayListState state) {
-    if (state.status case PlayListStatus.loading) {
-      return const Center(child: CircularProgressIndicator());
-    } else if (state.status case PlayListStatus.error) {
-      return Center(
-        child: Text('${context.localization.error}: ${state.errorMessage}'),
-      );
-    } else if (state.status case PlayListStatus.initial) {
-      return Center(child: Text(context.localization.playListPage));
-    } else {
-      if (state.playLists.isEmpty) {
-        return EmptyPlaylist(
-          onAddPressed: _showCreatePlaylistSheet,
-        );
-      } else {
-        return _buildPlaylistsList(state.playLists);
-      }
-    }
   }
 
   Widget? _buildBottomBar() {
@@ -189,33 +202,165 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
     return null;
   }
 
+  Future<void> _onSearchButtonPressed() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const SearchSongsPage(),
+      ),
+    );
+  }
+
+  void _navigateToPlaylistDetails(Playlist playlist) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => PlaylistDetailsPage(
+          playlistModel: playlist,
+        ),
+      ),
+    );
+  }
+
+  List<Playlist> _extractPinnedPlaylists(
+    List<Playlist> allPlaylists,
+    List<PinPlaylist> pinnedMeta,
+  ) {
+    final playlistById = <int, Playlist>{
+      for (final p in allPlaylists) p.id: p,
+    };
+
+    final result = <Playlist>[];
+
+    for (final meta in pinnedMeta) {
+      final playlist = playlistById[meta.playlistId];
+      if (playlist != null && playlist.id != 0) {
+        result.add(playlist);
+      }
+    }
+
+    return result;
+  }
+
+  Widget _buildBody(PlayListState state, ThemeData theme) {
+    if (state.status == PlayListStatus.loading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (state.status == PlayListStatus.error) {
+      return Center(
+        child: Text(
+          '${context.localization.error}: ${state.errorMessage}',
+        ),
+      );
+    } else if (state.status == PlayListStatus.initial) {
+      return Center(child: Text(context.localization.playListPage));
+    } else {
+      if (state.playLists.isEmpty) {
+        return const EmptyPlaylist();
+      } else {
+        final pinnedMeta = state.pinnedPlaylists;
+
+        final allPlaylists = state.playLists;
+
+        final pinnedPlaylists = _extractPinnedPlaylists(
+          allPlaylists,
+          pinnedMeta,
+        );
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Favorite Playlist',
+              style: theme.textTheme.labelLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            _buildPinnedPlaylists(pinnedPlaylists),
+            const Divider(
+              color: Colors.grey,
+              thickness: 0.3,
+              indent: 6,
+              endIndent: 6,
+              height: 6,
+            ),
+            Expanded(
+              child: _buildAllPlaylists(
+                allPlaylists,
+                pinnedMeta,
+              ),
+            ),
+          ],
+        );
+      }
+    }
+  }
+
+  Widget _buildPinnedPlaylists(
+    List<Playlist> pinnedPlaylists,
+  ) {
+    return SizedBox(
+      height: 120,
+      child: ListView.builder(
+        itemCount: pinnedPlaylists.length + 1,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          final recently = Playlist(
+            id: 0,
+            name: 'Recently',
+            numOfSongs: 0,
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+          );
+
+          if (index == 0) {
+            return PinnedPlaylistItem(
+              playlist: recently,
+              onTap: () => _navigateToPlaylistDetails(recently),
+            );
+          }
+          final playlist = pinnedPlaylists[index - 1];
+          return Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: PinnedPlaylistItem(
+              playlist: playlist,
+              onTap: () => _navigateToPlaylistDetails(playlist),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.isSelectionMode
-              ? context.localization.selectPlaylist
-              : context.localization.playlists,
-        ),
-        centerTitle: true,
-        elevation: 1,
-        actions: [
-          if (!widget.isSelectionMode)
-            IconButton(
-              icon: const Icon(Icons.add),
-              tooltip: context.localization.createPlaylist,
-              onPressed: _showCreatePlaylistSheet,
-            ),
-        ],
+      appBar: PlaylistAppbar(
+        onSearchButtonPressed: _onSearchButtonPressed,
       ),
       body: BlocBuilder<PlayListBloc, PlayListState>(
         builder: (context, state) => Padding(
           padding: const EdgeInsets.all(16),
-          child: _buildBody(state),
+          child: _buildBody(state, theme),
         ),
       ),
       bottomNavigationBar: _buildBottomBar(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: theme.colorScheme.surface,
+
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        onPressed: _showCreatePlaylistSheet,
+        tooltip: context.localization.createPlaylist,
+        child: Icon(
+          Icons.add,
+          color: theme.colorScheme.primary,
+          size: 38,
+        ),
+      ),
     );
   }
 }

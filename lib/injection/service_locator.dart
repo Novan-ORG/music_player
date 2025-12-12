@@ -9,6 +9,8 @@ import 'package:music_player/features/music_plyer/data/data.dart';
 import 'package:music_player/features/music_plyer/domain/domain.dart';
 import 'package:music_player/features/playlist/data/data.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
+import 'package:music_player/features/playlist/domain/usecases/get_pinned_playlist.dart';
+import 'package:music_player/features/playlist/domain/usecases/pin_playlist_by_id.dart';
 import 'package:music_player/features/songs/data/data.dart';
 import 'package:music_player/features/songs/domain/domain.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
@@ -48,7 +50,7 @@ void _setupPlaylistFeature() {
   /// Repositories
   getIt
     ..registerLazySingleton<PlaylistDatasource>(
-      () => PlaylistDatasourceImpl(getIt.get()),
+      () => PlaylistDatasourceImpl(getIt.get(), getIt.get()),
     )
     ..registerLazySingleton<PlaylistRepository>(
       () => PlaylistRepositoryImpl(getIt.get()),
@@ -64,7 +66,11 @@ void _setupPlaylistFeature() {
     ..registerLazySingleton(() => CreatePlaylist(getIt.get()))
     ..registerLazySingleton(() => AddSongsToPlaylist(getIt.get()))
     ..registerLazySingleton(() => RemoveSongsFromPlaylist(getIt.get()))
-    ..registerLazySingleton(() => GetPlaylistSongs(getIt.get()));
+    ..registerLazySingleton(() => GetPlaylistSongs(getIt.get()))
+    ..registerLazySingleton(() => GetPlaylistCoverSongId(getIt.get()))
+    ..registerLazySingleton(() => InitializePlaylistCovers(getIt.get()))
+    ..registerLazySingleton(() => PinPlaylistById(getIt.get()))
+    ..registerLazySingleton(() => GetPinnedPlaylists(getIt.get()));
 }
 
 void _setupSongsFeature() {

@@ -11,6 +11,7 @@ class SongImageWidget extends StatelessWidget {
     this.artworkQuality = FilterQuality.medium,
     this.borderRadius,
     this.artworkFit = BoxFit.cover,
+    this.defaultCover = ImageAssets.songCover,
     super.key,
   });
 
@@ -21,6 +22,7 @@ class SongImageWidget extends StatelessWidget {
   final int qualitySize;
   final FilterQuality artworkQuality;
   final BoxFit artworkFit;
+  final String defaultCover;
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +39,14 @@ class SongImageWidget extends StatelessWidget {
       artworkBorder: BorderRadius.circular(borderRadius ?? (size / 2)),
       nullArtworkWidget: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius ?? (size / 2)),
-        child: Image.asset(
-          ImageAssets.songCover,
-          fit: BoxFit.cover,
-          width: size,
-          height: size,
+        child: ColoredBox(
+          color: Colors.white,
+          child: Image.asset(
+            defaultCover,
+            fit: BoxFit.cover,
+            width: size,
+            height: size,
+          ),
         ),
       ),
     );

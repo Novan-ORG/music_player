@@ -67,3 +67,29 @@ final class RemoveSongsFromPlaylistEvent extends PlayListEvent {
   @override
   List<Object> get props => [songIds, playlistId];
 }
+
+final class LoadPinnedPlaylistsEvent extends PlayListEvent {
+  const LoadPinnedPlaylistsEvent();
+}
+
+final class PinnedPlaylistEvent extends PlayListEvent {
+  const PinnedPlaylistEvent(this.playlistId);
+
+  final int playlistId;
+
+  @override
+  List<Object> get props => [playlistId];
+}
+
+final class InitializePlaylistCoversEvent extends PlayListEvent {
+  const InitializePlaylistCoversEvent();
+}
+
+final class LoadPlaylistCoverSongIdsEvent extends PlayListEvent {
+  const LoadPlaylistCoverSongIdsEvent(this.playlistIds);
+
+  final List<int> playlistIds;
+
+  @override
+  List<Object> get props => [playlistIds];
+}
