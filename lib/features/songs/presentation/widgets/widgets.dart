@@ -1,4 +1,5 @@
 export 'album_item.dart';
+export 'artist_item.dart';
 export 'category_tabbar.dart';
 export 'selection_action_bar.dart';
 export 'selection_more_button.dart';

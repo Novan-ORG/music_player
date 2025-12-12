@@ -48,7 +48,7 @@ class ArtImageWidget extends StatelessWidget {
           color: defaultCoverBg ?? context.theme.scaffoldBackgroundColor,
           child: Image.asset(
             defaultCover,
-            fit: BoxFit.cover,
+            fit: artworkFit,
             width: size,
             height: size,
           ),

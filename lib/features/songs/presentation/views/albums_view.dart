@@ -15,7 +15,14 @@ class AlbumsView extends StatelessWidget {
           return const Loading();
         }
 
+        if (albumState.status == AlbumsStatus.error) {
+          return const SongsErrorLoading();
+        }
+
         final albums = albumState.allAlbums;
+        if (albums.isEmpty) {
+          return const NoSongsWidget();
+        }
         return ListView.builder(
           itemCount: albumState.allAlbums.length,
           itemBuilder: (context, index) {

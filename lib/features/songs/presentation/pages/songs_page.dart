@@ -58,9 +58,9 @@ class _SongsPageState extends State<SongsPage>
                 tabController.animateTo(newPageIndex);
               },
               children: const [
+                AllSongsView(),
                 AlbumsView(),
                 ArtistsView(),
-                AllSongsView(),
               ],
             ),
           ),

@@ -15,9 +15,9 @@ class CategoryTabbar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.theme;
     final labels = [
+      context.localization.allSongs,
       context.localization.albums,
       context.localization.artists,
-      context.localization.allSongs,
     ];
 
     return TabBar(

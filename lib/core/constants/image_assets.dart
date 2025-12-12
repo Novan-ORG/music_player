@@ -3,6 +3,7 @@ sealed class ImageAssets {
   static const String logoBranding = 'assets/logo/logo_branding.png';
   static const String songCover = 'assets/images/song_cover.png';
   static const String albumCover = 'assets/images/album_cover.png';
+  static const String artistCover = 'assets/images/artist_cover.png';
   static const String emptySongs = 'assets/images/empty_songs.png';
   static const String errorLoadSongs = 'assets/images/error_load_songs.png';
   static const String emptyPlaylists = 'assets/images/empty_playlist.png';
