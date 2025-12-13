@@ -6,8 +6,8 @@ sealed class SongsEvent {
 }
 
 final class LoadSongsEvent extends SongsEvent {
-  const LoadSongsEvent({this.sortType = SongsSortType.dateAdded});
-  final SongsSortType sortType;
+  const LoadSongsEvent({this.sortType});
+  final SongsSortType? sortType;
 }
 
 final class DeleteSongEvent extends SongsEvent {

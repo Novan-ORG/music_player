@@ -78,8 +78,11 @@ void _setupSongsFeature() {
   getIt
     ..registerLazySingleton(CommandManager.new)
     ..registerLazySingleton(() => QuerySongs(getIt.get()))
+    ..registerLazySingleton(() => QuerySongsFrom(getIt.get()))
     ..registerLazySingleton(() => QueryAlbums(getIt.get()))
     ..registerLazySingleton(() => QueryArtists(getIt.get()))
+    ..registerLazySingleton(() => GetSongsSortType(getIt.get()))
+    ..registerLazySingleton(() => SaveSongsSortType(getIt.get()))
     ..registerLazySingleton(() => DeleteSongWithUndo(getIt.get(), getIt.get()))
     // Repositories
     ..registerLazySingleton<SongsRepository>(
@@ -89,6 +92,7 @@ void _setupSongsFeature() {
     ..registerLazySingleton<SongsDatasource>(
       () => SongsDatasourceImpl(
         onAudioQuery: getIt.get(),
+        preferences: getIt.get(),
       ),
     );
 }
