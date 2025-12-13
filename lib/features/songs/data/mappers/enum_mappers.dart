@@ -45,3 +45,24 @@ extension SortArtistMapper on ArtistsSortType {
     }
   }
 }
+
+extension SongsFromTypeMapper on SongsFromType {
+  AudiosFromType toAudioFromType() {
+    switch (this) {
+      case SongsFromType.album:
+        return AudiosFromType.ALBUM;
+      case SongsFromType.albumId:
+        return AudiosFromType.ALBUM_ID;
+      case SongsFromType.artist:
+        return AudiosFromType.ARTIST;
+      case SongsFromType.artistId:
+        return AudiosFromType.ARTIST_ID;
+      case SongsFromType.gener:
+        return AudiosFromType.GENRE;
+      case SongsFromType.generId:
+        return AudiosFromType.GENRE_ID;
+      case SongsFromType.playlist:
+        return AudiosFromType.PLAYLIST;
+    }
+  }
+}

@@ -71,4 +71,22 @@ class SongsRepoImpl implements SongsRepository {
       return Result.failure('Error in loading artists, $e');
     }
   }
+
+  @override
+  Future<Result<List<Song>>> querySongsFrom({
+    required SongsFromType fromType,
+    required Object where,
+    SongsSortType sortType = SongsSortType.dateAdded,
+  }) async {
+    try {
+      final queredSongs = await _songsDatasource.querySongsFrom(
+        audiosFromTye: fromType.toAudioFromType(),
+        where: where,
+        sortType: sortType.toSongSortType(),
+      );
+      return Result.success(queredSongs.map(SongModelMapper.toDomain).toList());
+    } on Exception catch (e) {
+      return Result.failure('Error in loading songs, $e');
+    }
+  }
 }

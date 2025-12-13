@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/features/songs/domain/enums/enums.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
+import 'package:music_player/features/songs/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
 class AlbumsView extends StatelessWidget {
@@ -26,7 +28,21 @@ class AlbumsView extends StatelessWidget {
         return ListView.builder(
           itemCount: albumState.allAlbums.length,
           itemBuilder: (context, index) {
-            return AlbumItem(album: albums[index]);
+            final album = albums[index];
+            return AlbumItem(
+              album: album,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => QuerySongsPage(
+                      fromType: SongsFromType.albumId,
+                      where: album.id,
+                      title: album.album,
+                    ),
+                  ),
+                );
+              },
+            );
           },
         );
       },

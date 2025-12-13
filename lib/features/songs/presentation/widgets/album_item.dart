@@ -6,9 +6,10 @@ import 'package:music_player/features/songs/domain/entities/entities.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
 class AlbumItem extends StatelessWidget {
-  const AlbumItem({required this.album, super.key});
+  const AlbumItem({required this.album, this.onTap, super.key});
 
   final Album album;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +19,7 @@ class AlbumItem extends StatelessWidget {
     return GlassCard(
       margin: const EdgeInsets.all(12),
       borderRadius: const BorderRadius.all(Radius.circular(12)),
+      onTap: onTap,
       child: ListTile(
         leading: ArtImageWidget(
           id: album.id,

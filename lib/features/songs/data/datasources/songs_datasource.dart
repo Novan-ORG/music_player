@@ -12,6 +12,11 @@ abstract interface class SongsDatasource {
   Future<List<ArtistModel>> queryArtists({
     ArtistSortType sortType = ArtistSortType.ARTIST,
   });
+  Future<List<SongModel>> querySongsFrom({
+    required AudiosFromType audiosFromTye,
+    required Object where,
+    SongSortType sortType = SongSortType.DATE_ADDED,
+  });
   Future<bool> deleteSong(String songUri);
 }
 
@@ -58,4 +63,17 @@ class SongsDatasourceImpl implements SongsDatasource {
   Future<List<ArtistModel>> queryArtists({
     ArtistSortType sortType = ArtistSortType.ARTIST,
   }) => _onAudioQuery.queryArtists(sortType: sortType);
+
+  @override
+  Future<List<SongModel>> querySongsFrom({
+    required AudiosFromType audiosFromTye,
+    required Object where,
+    SongSortType sortType = SongSortType.DATE_ADDED,
+  }) {
+    return _onAudioQuery.queryAudiosFrom(
+      audiosFromTye,
+      where,
+      sortType: sortType,
+    );
+  }
 }
