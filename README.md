@@ -24,7 +24,7 @@ A feature-rich, offline music player built with Flutter that provides a seamless
 ## 🛠️ Technologies Used
 
 ### Core Framework
-- **Flutter** (SDK 3.8.1+) - Cross-platform mobile development framework
+- **Flutter** (SDK 3.32.8+) - Cross-platform mobile development framework
 - **Dart** - Programming language
 
 ### State Management & Architecture
