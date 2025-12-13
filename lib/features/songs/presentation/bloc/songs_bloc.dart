@@ -16,8 +16,14 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     this.ensureMediaPermission,
     this.deleteSong,
     this.querySongs,
+    this.getSongsSortType,
+    this.saveSongsSortType,
     this.commandManager,
-  ) : super(const SongsState()) {
+  ) : super(
+        SongsState(
+          sortType: getSongsSortType().value ?? SongsSortType.dateAdded,
+        ),
+      ) {
     on<LoadSongsEvent>(onLoadSongs);
     on<DeleteSongEvent>(onDeleteSong);
     on<UndoDeleteSongEvent>(onUndoDeleteSong);
@@ -29,6 +35,8 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
   final CommandManager commandManager;
   final DeleteSongWithUndo deleteSong;
   final QuerySongs querySongs;
+  final SaveSongsSortType saveSongsSortType;
+  final GetSongsSortType getSongsSortType;
   final EnsureMediaPermission ensureMediaPermission;
 
   void _onCanUndoChanged() {
@@ -111,16 +119,26 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     LoadSongsEvent event,
     Emitter<SongsState> emit,
   ) async {
-    emit(const SongsState(status: SongsStatus.loading));
-    final queryResult = await querySongs(sortType: event.sortType);
+    emit(state.copyWith(status: SongsStatus.loading));
+    if (event.sortType != state.sortType && event.sortType != null) {
+      await saveSongsSortType(sortType: event.sortType!);
+    }
+    final queryResult = await querySongs(
+      sortType: event.sortType ?? state.sortType,
+    );
     if (queryResult.isSuccess) {
       emit(
-        SongsState(allSongs: queryResult.value!, status: SongsStatus.loaded),
+        SongsState(
+          allSongs: queryResult.value!,
+          status: SongsStatus.loaded,
+          sortType: event.sortType ?? state.sortType,
+        ),
       );
     } else {
       emit(
         state.copyWith(
           errorMessage: queryResult.error,
+          sortType: event.sortType,
           status: SongsStatus.error,
         ),
       );

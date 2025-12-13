@@ -3,9 +3,9 @@ part of 'query_songs_bloc.dart';
 @immutable
 final class QuerySongsState extends Equatable {
   const QuerySongsState({
+    required this.sortType,
     this.songs = const [],
     this.status = QuerySongsStatus.initial,
-    this.sortType = SongsSortType.dateAdded,
     this.errorMessage,
   });
 

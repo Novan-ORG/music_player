@@ -11,33 +11,46 @@ part 'query_songs_state.dart';
 class QuerySongsBloc extends Bloc<QuerySongsEvent, QuerySongsState> {
   QuerySongsBloc(
     this.querySongsFrom,
-  ) : super(const QuerySongsState()) {
+    this.saveSongsSortType,
+    this.getSongsSortType,
+  ) : super(
+        QuerySongsState(
+          sortType: getSongsSortType().value ?? SongsSortType.dateAdded,
+        ),
+      ) {
     on<LoadQuerySongsEvent>(onQuerySongs);
   }
 
   final QuerySongsFrom querySongsFrom;
+  final SaveSongsSortType saveSongsSortType;
+  final GetSongsSortType getSongsSortType;
 
   Future<void> onQuerySongs(
     LoadQuerySongsEvent event,
     Emitter<QuerySongsState> emit,
   ) async {
-    emit(const QuerySongsState(status: QuerySongsStatus.loading));
+    emit(state.copyWith(status: QuerySongsStatus.loading));
+    if (event.sortType != state.sortType && event.sortType != null) {
+      await saveSongsSortType(sortType: event.sortType!);
+    }
     final queryResult = await querySongsFrom(
       fromType: event.songsFromType,
       where: event.where,
-      sortType: event.sortType,
+      sortType: event.sortType ?? state.sortType,
     );
     if (queryResult.isSuccess) {
       emit(
         QuerySongsState(
           songs: queryResult.value!,
           status: QuerySongsStatus.loaded,
+          sortType: event.sortType ?? state.sortType,
         ),
       );
     } else {
       emit(
         state.copyWith(
           errorMessage: queryResult.error,
+          sortType: event.sortType,
           status: QuerySongsStatus.error,
         ),
       );

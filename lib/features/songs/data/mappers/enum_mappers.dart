@@ -1,7 +1,7 @@
 import 'package:music_player/features/songs/domain/enums/enums.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
-extension SortSongMapper on SongsSortType {
+extension SongsSortTypeMapper on SongsSortType {
   SongSortType toSongSortType() {
     switch (this) {
       case SongsSortType.dateAdded:

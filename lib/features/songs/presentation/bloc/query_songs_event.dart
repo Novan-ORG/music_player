@@ -9,9 +9,9 @@ final class LoadQuerySongsEvent extends QuerySongsEvent {
   const LoadQuerySongsEvent({
     required this.songsFromType,
     required this.where,
-    this.sortType = SongsSortType.dateAdded,
+    this.sortType,
   });
-  final SongsSortType sortType;
+  final SongsSortType? sortType;
   final Object where;
   final SongsFromType songsFromType;
 }

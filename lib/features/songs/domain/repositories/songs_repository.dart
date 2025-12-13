@@ -19,4 +19,6 @@ abstract interface class SongsRepository {
     ArtistsSortType sortType = ArtistsSortType.artist,
   });
   Future<Result<bool>> deleteSong({required String songUri});
+  Future<Result<bool>> saveSongsSortType({required SongsSortType sortType});
+  Result<SongsSortType> getSongsSortType();
 }

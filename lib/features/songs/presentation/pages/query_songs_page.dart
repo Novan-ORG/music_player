@@ -30,7 +30,7 @@ class _QuerySongsPageState extends State<QuerySongsPage> {
 
   @override
   void initState() {
-    querySongsBloc = QuerySongsBloc(getIt());
+    querySongsBloc = QuerySongsBloc(getIt(), getIt(), getIt());
     querySongsBloc.add(
       LoadQuerySongsEvent(songsFromType: widget.fromType, where: widget.where),
     );

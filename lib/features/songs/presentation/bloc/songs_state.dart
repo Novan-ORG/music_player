@@ -3,11 +3,11 @@ part of 'songs_bloc.dart';
 @immutable
 final class SongsState extends Equatable {
   const SongsState({
+    required this.sortType,
     this.allSongs = const [],
     this.allAlbums = const [],
     this.allArtists = const [],
     this.status = SongsStatus.initial,
-    this.sortType = SongsSortType.dateAdded,
     this.canUndo = false,
     this.lastDeletedSong,
     this.errorMessage,
