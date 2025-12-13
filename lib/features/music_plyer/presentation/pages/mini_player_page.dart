@@ -153,8 +153,8 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                 ),
                 leading: Hero(
                   tag: 'song_cover_${state.currentSong?.id ?? 0}',
-                  child: SongImageWidget(
-                    songId: state.currentSong?.id ?? 0,
+                  child: ArtImageWidget(
+                    id: state.currentSong?.id ?? 0,
                     size: 54,
                   ),
                 ),

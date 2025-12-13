@@ -36,7 +36,7 @@ class DeleteSongCommand implements BaseCommand<bool> {
       await originalFile.copy(_backupFile!.path);
 
       // Proceed with deletion
-      final result = await repository.deleteSong(song.data);
+      final result = await repository.deleteSong(songUri: song.data);
       if (result.isSuccess && (result.value ?? false)) {
         _wasDeleted = true;
         return Result.success(true);

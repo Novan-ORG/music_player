@@ -35,10 +35,11 @@ class PinnedPlaylistItem extends StatelessWidget {
 
             return GestureDetector(
               onTap: onTap,
-              child: SongImageWidget(
-                songId: artworkId,
+              child: ArtImageWidget(
+                id: artworkId,
                 size: size,
                 borderRadius: borderRadius,
+                defaultCoverBg: Colors.white,
                 defaultCover: ImageAssets.playlistCover,
               ),
             );

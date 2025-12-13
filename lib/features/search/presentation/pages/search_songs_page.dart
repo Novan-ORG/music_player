@@ -3,16 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
-import 'package:music_player/core/mixins/mixins.dart';
+import 'package:music_player/core/views/views.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
-import 'package:music_player/features/favorite/favorite.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
-import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
-import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/features/search/presentation/widgets/search_songs_appbar.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
-import 'package:music_player/features/songs/presentation/pages/pages.dart';
 
 class SearchSongsPage extends StatefulWidget {
   const SearchSongsPage({super.key});
@@ -21,45 +16,13 @@ class SearchSongsPage extends StatefulWidget {
   State<SearchSongsPage> createState() => _SearchSongsPageState();
 }
 
-class _SearchSongsPageState extends State<SearchSongsPage>
-    with
-        SongSharingMixin,
-        RingtoneMixin,
-        PlaylistManagementMixin,
-        SongDeletionMixin {
-  MusicPlayerBloc get _musicPlayerBloc => context.read<MusicPlayerBloc>();
+class _SearchSongsPageState extends State<SearchSongsPage> {
   final searchStream = StreamController<String>();
 
   @override
   void dispose() {
     unawaited(searchStream.close());
     super.dispose();
-  }
-
-  void onLongPress(Song song, List<Song> allSongs) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => SongsSelectionPage(
-          title: context.localization.searchSongs,
-          availableSongs: allSongs,
-          selectedSongIds: {song.id},
-        ),
-      ),
-    );
-  }
-
-  // Event handlers for song actions
-  Future<void> _handleSongTap(int songIndex, List<Song> songs) async {
-    _musicPlayerBloc.add(PlayMusicEvent(songIndex, songs));
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const MusicPlayerPage(),
-      ),
-    );
-  }
-
-  void onToggleLike(int songId) {
-    context.read<FavoriteSongsBloc>().add(ToggleFavoriteSongEvent(songId));
   }
 
   @override
@@ -103,43 +66,8 @@ class _SearchSongsPageState extends State<SearchSongsPage>
               } else {
                 filteredSongs = state.allSongs;
               }
-              return BlocSelector<
-                FavoriteSongsBloc,
-                FavoriteSongsState,
-                Set<int>
-              >(
-                selector: (state) {
-                  return state.favoriteSongIds;
-                },
-                builder: (context, favoriteSongIds) {
-                  if (filteredSongs.isEmpty) {
-                    return const NoSongsWidget2();
-                  }
-                  return ListView.builder(
-                    padding: const EdgeInsets.only(top: 24),
-                    itemCount: filteredSongs.length,
-
-                    itemBuilder: (context, index) {
-                      final song = filteredSongs[index];
-                      return SongItem(
-                        track: song,
-                        isFavorite: favoriteSongIds.contains(song.id),
-                        onSetAsRingtone: () => setAsRingtone(song.data),
-                        onDelete: () => showDeleteSongDialog(song),
-                        onFavoriteToggle: () => onToggleLike(song.id),
-                        onAddToPlaylist: () async {
-                          await PlaylistsPage.showSheet(
-                            context: context,
-                            songIds: {song.id},
-                          );
-                        },
-                        onShare: () => shareSong(song),
-                        onLongPress: () => onLongPress(song, filteredSongs),
-                        onTap: () => _handleSongTap(index, filteredSongs),
-                      );
-                    },
-                  );
-                },
+              return SongsView(
+                songs: filteredSongs,
               );
             },
           );

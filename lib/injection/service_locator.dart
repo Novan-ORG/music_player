@@ -78,6 +78,8 @@ void _setupSongsFeature() {
   getIt
     ..registerLazySingleton(CommandManager.new)
     ..registerLazySingleton(() => QuerySongs(getIt.get()))
+    ..registerLazySingleton(() => QueryAlbums(getIt.get()))
+    ..registerLazySingleton(() => QueryArtists(getIt.get()))
     ..registerLazySingleton(() => DeleteSongWithUndo(getIt.get(), getIt.get()))
     // Repositories
     ..registerLazySingleton<SongsRepository>(

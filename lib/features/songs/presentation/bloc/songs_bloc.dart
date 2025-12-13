@@ -3,8 +3,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart' show immutable;
 import 'package:music_player/core/commands/commands.dart';
 import 'package:music_player/core/domain/entities/song.dart';
-import 'package:music_player/core/domain/enums/enums.dart';
 import 'package:music_player/core/domain/usecases/usecases.dart';
+import 'package:music_player/features/songs/domain/entities/entities.dart';
+import 'package:music_player/features/songs/domain/enums/enums.dart';
 import 'package:music_player/features/songs/domain/usecases/usecases.dart';
 
 part 'songs_event.dart';
@@ -18,7 +19,6 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     this.commandManager,
   ) : super(const SongsState()) {
     on<LoadSongsEvent>(onLoadSongs);
-    on<SortSongsEvent>(onSortSongs);
     on<DeleteSongEvent>(onDeleteSong);
     on<UndoDeleteSongEvent>(onUndoDeleteSong);
     on<CanUndoChangedEvent>(onCanUndoChanged);
@@ -107,17 +107,13 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     emit(state.copyWith(canUndo: event.canUndo));
   }
 
-  void onSortSongs(SortSongsEvent event, Emitter<SongsState> emit) {
-    final sortedSongs = List<Song>.from(state.allSongs);
-    _sortSongs(sortedSongs, event.sortType);
-    emit(state.copyWith(allSongs: sortedSongs, sortType: event.sortType));
-  }
-
-  Future<void> onLoadSongs(SongsEvent event, Emitter<SongsState> emit) async {
+  Future<void> onLoadSongs(
+    LoadSongsEvent event,
+    Emitter<SongsState> emit,
+  ) async {
     emit(const SongsState(status: SongsStatus.loading));
-    final queryResult = await querySongs();
+    final queryResult = await querySongs(sortType: event.sortType);
     if (queryResult.isSuccess) {
-      _sortSongs(queryResult.value!, state.sortType);
       emit(
         SongsState(allSongs: queryResult.value!, status: SongsStatus.loaded),
       );
@@ -128,19 +124,6 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
           status: SongsStatus.error,
         ),
       );
-    }
-  }
-
-  void _sortSongs(List<Song> songs, SongsSortType sortType) {
-    switch (sortType) {
-      case SongsSortType.recentlyAdded:
-        songs.sort((a, b) => b.dateAdded.compareTo(a.dateAdded));
-      case SongsSortType.dateAdded:
-        songs.sort((a, b) => a.dateAdded.compareTo(b.dateAdded));
-      case SongsSortType.duration:
-        songs.sort((a, b) => a.duration.compareTo(b.duration));
-      case SongsSortType.size:
-        songs.sort((a, b) => a.size.compareTo(b.size));
     }
   }
 

@@ -22,9 +22,10 @@ class PlaylistImageWidget extends StatelessWidget {
         final coverSongId = state.playlistCoverSongIds[playlistId];
         final artworkId = coverSongId ?? playlistId;
 
-        return SongImageWidget(
-          songId: artworkId,
+        return ArtImageWidget(
+          id: artworkId,
           defaultCover: ImageAssets.playlistCover,
+          defaultCoverBg: Colors.white,
           borderRadius: borderRadius,
         );
       },

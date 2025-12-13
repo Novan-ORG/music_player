@@ -60,6 +60,20 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (_) => AlbumsBloc(getIt())
+            ..add(
+              const LoadAlbumsEvent(),
+            ),
+        ),
+        BlocProvider(
+          create: (_) =>
+              ArtistsBloc(
+                getIt(),
+              )..add(
+                const LoadArtistsEvent(),
+              ),
+        ),
+        BlocProvider(
           create: (_) => SongsBloc(
             getIt(),
             getIt(),
