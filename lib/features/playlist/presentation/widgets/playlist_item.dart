@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/widgets/check_box_widget.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
 import 'package:music_player/features/playlist/presentation/widgets/playlist_image_widget.dart';
@@ -13,6 +14,8 @@ class PlaylistItem extends StatelessWidget {
     this.onTap,
     this.blurBackground = true,
     this.isPinned = false,
+    this.isSelectionMode = false,
+    this.isSelected = false,
     this.onPinned,
     this.onAddMusicToPlaylist,
     super.key,
@@ -26,6 +29,8 @@ class PlaylistItem extends StatelessWidget {
   final VoidCallback? onTap;
 
   final bool isPinned;
+  final bool isSelectionMode;
+  final bool isSelected;
 
   // Callbacks
   final VoidCallback? onPinned;
@@ -40,7 +45,12 @@ class PlaylistItem extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(child: _buildTitle(context)),
         const SizedBox(width: 8),
-        _buildActionButtons(context),
+        if (isSelectionMode)
+          CheckBoxWidget(
+            isSelected: isSelected,
+          )
+        else
+          _buildActionButtons(context),
       ],
     );
 
