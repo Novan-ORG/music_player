@@ -17,8 +17,8 @@ sealed class ArtistModelMapper {
     return Artist(
       id: artistModel.id,
       artist: artistModel.artist,
-      numberOfAlbums: artistModel.numberOfAlbums,
-      numberOfTracks: artistModel.numberOfTracks,
+      numberOfAlbums: artistModel.numberOfAlbums ?? 0,
+      numberOfTracks: artistModel.numberOfTracks ?? 0,
     );
   }
 }

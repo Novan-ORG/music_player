@@ -22,7 +22,12 @@ import 'package:music_player/injection/service_locator.dart';
 import 'package:music_player/localization/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Root widget of the Music Player application.
+///
+/// Sets up the app's theme, localization, BLoC providers, and handles
+/// initial permission requests for accessing audio files.
 class MusicPlayerApp extends StatefulWidget {
+  /// Creates the [MusicPlayerApp] widget.
   const MusicPlayerApp({super.key});
 
   @override

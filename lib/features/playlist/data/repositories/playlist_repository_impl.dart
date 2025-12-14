@@ -5,7 +5,12 @@ import 'package:music_player/features/playlist/data/data.dart';
 import 'package:music_player/features/playlist/data/models/pin_playlist_model.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
 
+/// Implementation of [PlaylistRepository] using local datasource.
+///
+/// Handles playlist CRUD operations, song management within playlists,
+/// cover image management, and playlist pinning functionality.
 class PlaylistRepositoryImpl implements PlaylistRepository {
+  /// Creates a [PlaylistRepositoryImpl] with the given datasource.
   const PlaylistRepositoryImpl(this.datasource);
 
   final PlaylistDatasource datasource;

@@ -13,7 +13,7 @@ class ArtistItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final songLocalized = (artist.numberOfTracks ?? 0) > 1
+    final songLocalized = artist.numberOfTracks > 1
         ? context.localization.songs
         : context.localization.song;
     return GlassCard(
@@ -35,7 +35,7 @@ class ArtistItem extends StatelessWidget {
           ),
         ),
         subtitle: Text(
-          '${artist.numberOfTracks ?? 0} $songLocalized',
+          '${artist.numberOfTracks} $songLocalized',
           style: context.theme.textTheme.labelMedium,
         ),
         trailing: const Icon(Icons.arrow_right),
