@@ -38,6 +38,12 @@ class _QuerySongsPageState extends State<QuerySongsPage> {
   }
 
   @override
+  void dispose() {
+    querySongsBloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider<QuerySongsBloc>(
       create: (context) => querySongsBloc,

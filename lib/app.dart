@@ -35,15 +35,17 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
 
   @override
   void initState() {
-    requestPermission();
     super.initState();
+    requestPermission();
   }
 
   Future<void> requestPermission() async {
+    if (!mounted) return;
     setState(() {
       isLoading = true;
     });
     final result = await getIt<EnsureMediaPermission>().call();
+    if (!mounted) return;
     setState(() {
       isLoading = false;
       if (result.isSuccess) {
