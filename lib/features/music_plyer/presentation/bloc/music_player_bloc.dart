@@ -9,7 +9,13 @@ import 'package:music_player/features/music_plyer/domain/usecases/usecases.dart'
 part 'music_player_event.dart';
 part 'music_player_state.dart';
 
+/// BLoC for managing music player state and playback operations.
+///
+/// Handles all music playback events including play, pause, seek, shuffle,
+/// and loop mode. Listens to the current song index and updates state
+/// accordingly.
 class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
+  /// Creates a [MusicPlayerBloc] with all required use cases.
   MusicPlayerBloc(
     this.playSong,
     this.pauseSong,
@@ -24,12 +30,13 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     this.watchSongPosition,
     this.setLoopMode,
   ) : super(const MusicPlayerState()) {
+    // Listen to player index changes
     _playerIndexSubscription = watchPlayerIndex().distinct().listen(
       _watchPlayerIndex,
     );
-    on<UpdateStateEvent>(
-      (event, emit) => emit(event.state),
-    );
+
+    // Register event handlers
+    on<UpdateStateEvent>((event, emit) => emit(event.state));
     on<PlayMusicEvent>(_handlePlayMusic);
     on<StopMusicEvent>(_handleStopMusic);
     on<TogglePlayPauseEvent>(_handleTogglePlayPause);
@@ -39,6 +46,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<SetPlayerLoopModeEvent>(_handleSetPlayerLoopMode);
   }
 
+  // Use cases
   final PlaySong playSong;
   final PauseSong pauseSong;
   final SeekSong seekSong;
@@ -51,10 +59,13 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   final WatchPlayerIndex watchPlayerIndex;
   final WatchSongDuration watchSongDuration;
   final WatchSongPosition watchSongPosition;
+
   late final StreamSubscription<int?> _playerIndexSubscription;
 
+  /// Stream of the current song's duration.
   Stream<Duration?> get durationStream => watchSongDuration();
 
+  /// Stream of the current playback position.
   Stream<Duration> get positionStream => watchSongPosition();
 
   @override
@@ -63,6 +74,9 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     return super.close();
   }
 
+  // ==================== Private Helper Methods ====================
+
+  /// Handles player index changes from the audio handler.
   void _watchPlayerIndex(int? index) {
     if (index == null || index < 0 || index >= state.playList.length) {
       return;
@@ -80,24 +94,25 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     );
   }
 
+  /// Calculates the next loop mode in the cycle: off → all → one → off.
   PlayerLoopMode _getNextLoopMode(PlayerLoopMode loopMode) {
-    var newMode = PlayerLoopMode.off;
-    if (loopMode == PlayerLoopMode.off) {
-      newMode = PlayerLoopMode.all;
-    } else if (loopMode == PlayerLoopMode.all) {
-      newMode = PlayerLoopMode.one;
-    } else {
-      newMode = PlayerLoopMode.off;
-    }
-    return newMode;
+    return switch (loopMode) {
+      PlayerLoopMode.off => PlayerLoopMode.all,
+      PlayerLoopMode.all => PlayerLoopMode.one,
+      PlayerLoopMode.one => PlayerLoopMode.off,
+    };
   }
 
+  // ==================== Event Handlers ====================
+
+  /// Handles setting the loop mode.
   Future<void> _handleSetPlayerLoopMode(
     SetPlayerLoopModeEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
     final newLoopMode = _getNextLoopMode(event.loopMode);
     final result = setLoopMode(loopMode: newLoopMode);
+
     if (result.isFailure) {
       emit(
         state.copyWith(
@@ -110,10 +125,12 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     }
   }
 
+  /// Handles seeking to a position or different song.
   Future<void> _handleSeekMusic(
     SeekMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
+    // Perform seek operation
     final seekResult = await seekSong(event.position, index: event.index);
     if (seekResult.isFailure) {
       emit(
@@ -122,8 +139,14 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           errorMessage: seekResult.error,
         ),
       );
+      return;
     }
+
+    // Update navigation availability
     final hasNext = hasNextSong();
+    final hasPrevious = hasPreviousSong();
+
+    // Check for errors in navigation queries
     if (hasNext.isFailure) {
       emit(
         state.copyWith(
@@ -131,9 +154,9 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           errorMessage: hasNext.error,
         ),
       );
+      return;
     }
 
-    final hasPrevious = hasPreviousSong();
     if (hasPrevious.isFailure) {
       emit(
         state.copyWith(
@@ -141,7 +164,10 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           errorMessage: hasPrevious.error,
         ),
       );
+      return;
     }
+
+    // Update state with new navigation info
     emit(
       state.copyWith(
         hasNext: hasNext.value ?? state.hasNext,
@@ -150,11 +176,13 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     );
   }
 
+  /// Handles enabling/disabling shuffle mode.
   Future<void> _handleSetShuffleEnabled(
     SetShuffleEnabledEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
     final result = await setShuffleEnabled(isEnabled: event.isEnabled);
+
     if (result.isFailure) {
       emit(
         state.copyWith(
@@ -163,17 +191,19 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         ),
       );
       return;
-    } else {
-      emit(state.copyWith(shuffleEnabled: event.isEnabled));
     }
+
+    emit(state.copyWith(shuffleEnabled: event.isEnabled));
   }
 
+  /// Handles shuffling and playing a list of songs.
   Future<void> _handleShuffleMusics(
     ShuffleMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
     await setShuffleEnabled(isEnabled: true);
     await playSong(event.songs, 0);
+
     emit(
       state.copyWith(
         shuffleEnabled: true,
@@ -184,10 +214,12 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     );
   }
 
+  /// Handles playing music from a playlist.
   Future<void> _handlePlayMusic(
     PlayMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
+    // Update state immediately for UI responsiveness
     emit(
       state.copyWith(
         currentSongIndex: event.index,
@@ -195,7 +227,10 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         playList: event.playList,
       ),
     );
+
+    // Start playback
     final result = await playSong(event.playList, event.index);
+
     if (result.isFailure) {
       emit(
         state.copyWith(
@@ -206,6 +241,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     }
   }
 
+  /// Handles stopping music playback.
   Future<void> _handleStopMusic(
     StopMusicEvent event,
     Emitter<MusicPlayerState> emit,
@@ -214,14 +250,17 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     emit(state.copyWith(status: MusicPlayerStatus.stopped));
   }
 
+  /// Handles toggling between play and pause.
   Future<void> _handleTogglePlayPause(
     TogglePlayPauseEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
     if (state.status == MusicPlayerStatus.playing) {
+      // Pause playback
       emit(state.copyWith(status: MusicPlayerStatus.paused));
       await pauseSong();
     } else {
+      // Resume playback
       emit(state.copyWith(status: MusicPlayerStatus.playing));
       await resumeSong();
     }
