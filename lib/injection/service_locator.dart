@@ -17,32 +17,32 @@ import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volume_controller/volume_controller.dart';
 
+/// Global service locator instance for dependency injection.
+///
+/// Uses GetIt for dependency injection throughout the application.
+/// All dependencies are registered in the [setup] function.
 final GetIt getIt = GetIt.instance;
 
+/// Initializes all dependencies for the application.
+///
+/// This function registers all repositories, use cases, services, and
+/// other dependencies with the service locator. It should be called
+/// once at app startup before any dependencies are accessed.
+///
+/// Dependencies are organized by feature:
+/// - Core services (audio, permissions, storage)
+/// - Music player feature
+/// - Songs feature
+/// - Playlist feature
+/// - Favorites feature
 void setup() {
-  ///
-  /// Core
-  ///
+  // Core services and utilities
   _setupCore();
 
-  ///
-  /// MusicPlayer feature
-  ///
+  // Feature-specific dependencies
   _setupMusicPlayerFeature();
-
-  ///
-  /// Songs page feature
-  ///
   _setupSongsFeature();
-
-  ///
-  /// Playlist feature
-  ///
   _setupPlaylistFeature();
-
-  ///
-  ///
-  /// Favorites feature
   _setupFavoriteSongsFeature();
 }
 

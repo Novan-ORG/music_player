@@ -8,6 +8,12 @@ import 'package:music_player/features/songs/domain/entities/artist.dart';
 import 'package:music_player/features/songs/domain/enums/enums.dart';
 import 'package:music_player/features/songs/domain/repositories/repositories.dart';
 
+/// Implementation of [SongsRepository] that handles song, album,
+/// and artist queries.
+///
+/// This repository acts as a bridge between the domain layer and the
+/// data layer, converting data models to domain entities and handling
+/// errors gracefully.
 class SongsRepoImpl implements SongsRepository {
   SongsRepoImpl({required SongsDatasource songsDatasource})
     : _songsDatasource = songsDatasource;
@@ -20,7 +26,7 @@ class SongsRepoImpl implements SongsRepository {
       final deleteResult = await _songsDatasource.deleteSong(songUri);
       return Result.success(deleteResult);
     } on Exception catch (e) {
-      return Result.failure('Error in deleting the song, $e');
+      return Result.failure('Failed to delete song: $e');
     }
   }
 
@@ -29,14 +35,14 @@ class SongsRepoImpl implements SongsRepository {
     SongsSortType sortType = SongsSortType.dateAdded,
   }) async {
     try {
-      final quriedSongs = await _songsDatasource.querySongs(
+      final queriedSongs = await _songsDatasource.querySongs(
         sortType: sortType.toSongSortType(),
       );
       return Result.success(
-        quriedSongs.map(SongModelMapper.toDomain).toList(),
+        queriedSongs.map(SongModelMapper.toDomain).toList(),
       );
     } on Exception catch (e) {
-      return Result.failure('Error in loading songs, $e');
+      return Result.failure('Failed to load songs: $e');
     }
   }
 
@@ -52,7 +58,7 @@ class SongsRepoImpl implements SongsRepository {
         queriedAlbums.map(AlbumModelMapper.toDomain).toList(),
       );
     } on Exception catch (e) {
-      return Result.failure('Error in loading albums, $e');
+      return Result.failure('Failed to load albums: $e');
     }
   }
 
@@ -68,7 +74,7 @@ class SongsRepoImpl implements SongsRepository {
         queriedArtists.map(ArtistModelMapper.toDomain).toList(),
       );
     } on Exception catch (e) {
-      return Result.failure('Error in loading artists, $e');
+      return Result.failure('Failed to load artists: $e');
     }
   }
 
@@ -79,14 +85,16 @@ class SongsRepoImpl implements SongsRepository {
     SongsSortType sortType = SongsSortType.dateAdded,
   }) async {
     try {
-      final queredSongs = await _songsDatasource.querySongsFrom(
+      final queriedSongs = await _songsDatasource.querySongsFrom(
         audiosFromTye: fromType.toAudioFromType(),
         where: where,
         sortType: sortType.toSongSortType(),
       );
-      return Result.success(queredSongs.map(SongModelMapper.toDomain).toList());
+      return Result.success(
+        queriedSongs.map(SongModelMapper.toDomain).toList(),
+      );
     } on Exception catch (e) {
-      return Result.failure('Error in loading songs, $e');
+      return Result.failure('Failed to load songs from $fromType: $e');
     }
   }
 
@@ -94,9 +102,11 @@ class SongsRepoImpl implements SongsRepository {
   Result<SongsSortType> getSongsSortType() {
     try {
       final result = _songsDatasource.getSongSortType();
-      return Result.success(SongSortTypeMapper.toSongsSortType(result));
+      return Result.success(
+        SongSortTypeMapper.toSongsSortType(result),
+      );
     } on Exception catch (e) {
-      return Result.failure('Error in getting the SongsSortType: $e');
+      return Result.failure('Failed to get songs sort type: $e');
     }
   }
 
@@ -110,7 +120,7 @@ class SongsRepoImpl implements SongsRepository {
       );
       return Result.success(isSuccess);
     } on Exception catch (e) {
-      return Result.failure('error in saving the SongsSortType : $e');
+      return Result.failure('Failed to save songs sort type: $e');
     }
   }
 }

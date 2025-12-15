@@ -1,10 +1,17 @@
-import 'package:music_player/core/data/mappers/mappers.dart';
-import 'package:music_player/core/domain/entities/entities.dart';
+import 'package:music_player/core/data/mappers/song_model_mapper.dart';
+import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/result.dart';
-import 'package:music_player/features/music_plyer/data/data.dart';
-import 'package:music_player/features/music_plyer/domain/domain.dart';
+import 'package:music_player/features/music_plyer/data/datasources/datasources.dart';
+import 'package:music_player/features/music_plyer/domain/entities/entities.dart';
+import 'package:music_player/features/music_plyer/domain/repositories/repositories.dart';
 
+/// Implementation of [MusicPlayerRepository] using audio handler datasource.
+///
+/// Manages music playback operations including play, pause, seek, shuffle,
+/// and loop functionality. Delegates actual audio operations to the
+/// audio handler datasource.
 class MusicPlayerRepoImpl implements MusicPlayerRepository {
+  /// Creates a [MusicPlayerRepoImpl] with the given audio handler datasource.
   MusicPlayerRepoImpl({required AudioHandlerDatasource audioHandlerDatasource})
     : _audioHandlerDatasource = audioHandlerDatasource;
 
