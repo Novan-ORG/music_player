@@ -24,6 +24,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_native_splash: ^2.4.6
+  flutter_spinkit: ^5.2.2
   font_awesome_flutter: ^10.9.1
   get_it: ^8.2.0
   intl: ^0.20.2
