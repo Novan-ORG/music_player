@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/core/constants/image_assets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/songs/domain/enums/enums.dart';
 
@@ -7,18 +6,18 @@ typedef OnSortSongsCallback = void Function(SongsSortType);
 
 class PlaylistAppbar extends StatelessWidget implements PreferredSizeWidget {
   const PlaylistAppbar({
-    this.onSearchButtonPressed,
+    this.onActionPressed,
     super.key,
   });
 
-  final VoidCallback? onSearchButtonPressed;
+  final VoidCallback? onActionPressed;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
 
     return AppBar(
       elevation: 0,
@@ -30,12 +29,17 @@ class PlaylistAppbar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 24, top: 2),
           child: GestureDetector(
-            onTap: onSearchButtonPressed,
-            child: Image.asset(
-              ImageAssets.search,
-              color: isDark ? Colors.white : Colors.black,
-              height: 18,
-              width: 18,
+            onTap: onActionPressed,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surface,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Icon(
+                Icons.add,
+                color: theme.colorScheme.primary,
+                size: 28,
+              ),
             ),
           ),
         ),

@@ -10,7 +10,6 @@ import 'package:music_player/features/playlist/presentation/widgets/create_playl
 import 'package:music_player/features/playlist/presentation/widgets/empty_playlist.dart';
 import 'package:music_player/features/playlist/presentation/widgets/pinned_playlist_view.dart';
 import 'package:music_player/features/playlist/presentation/widgets/playlist_appbar.dart';
-import 'package:music_player/features/search/presentation/pages/search_songs_page.dart';
 
 class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({
@@ -50,21 +49,13 @@ class PlaylistsPage extends StatefulWidget {
 class _PlaylistsPageState extends State<PlaylistsPage> {
   Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
 
-  Future<void> _onSearchButtonPressed() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const SearchSongsPage(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: PlaylistAppbar(
-        onSearchButtonPressed: _onSearchButtonPressed,
+        onActionPressed: _showCreatePlaylistSheet,
       ),
       body: const PlaylistContentView(
         isSelectionMode: false,
