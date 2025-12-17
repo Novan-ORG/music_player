@@ -16,11 +16,11 @@ class QueryArtists {
   /// Queries all artists from the device.
   ///
   /// Parameters:
-  /// - [sortType]: How to sort the results (defaults to artist name)
+  /// - [sortType]: How to sort the results (defaults to number of tracks)
   ///
   /// Returns a [Result] containing the list of artists or an error message.
   Future<Result<List<Artist>>> call({
-    ArtistsSortType sortType = ArtistsSortType.artist,
+    ArtistsSortType sortType = ArtistsSortType.numOfTracks,
   }) {
     return _repository.queryArtists(sortType: sortType);
   }

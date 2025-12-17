@@ -39,21 +39,21 @@ abstract interface class SongsRepository {
   /// Queries all albums from the device.
   ///
   /// Parameters:
-  /// - [sortType]: How to sort the results (defaults to album name)
+  /// - [sortType]: How to sort the results (defaults to number of songs)
   ///
   /// Returns a [Result] containing the list of albums or an error message.
   Future<Result<List<Album>>> queryAlbums({
-    AlbumsSortType sortType = AlbumsSortType.album,
+    AlbumsSortType sortType = AlbumsSortType.numOfSongs,
   });
 
   /// Queries all artists from the device.
   ///
   /// Parameters:
-  /// - [sortType]: How to sort the results (defaults to artist name)
+  /// - [sortType]: How to sort the results (defaults to number of tracks)
   ///
   /// Returns a [Result] containing the list of artists or an error message.
   Future<Result<List<Artist>>> queryArtists({
-    ArtistsSortType sortType = ArtistsSortType.artist,
+    ArtistsSortType sortType = ArtistsSortType.numOfTracks,
   });
 
   /// Deletes a song from the device storage.

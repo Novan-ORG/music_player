@@ -6,6 +6,6 @@ sealed class AlbumsEvent {
 }
 
 final class LoadAlbumsEvent extends AlbumsEvent {
-  const LoadAlbumsEvent({this.sortType = AlbumsSortType.album});
+  const LoadAlbumsEvent({this.sortType = AlbumsSortType.numOfSongs});
   final AlbumsSortType sortType;
 }

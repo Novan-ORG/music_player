@@ -29,7 +29,7 @@ dependencies:
   intl: ^0.20.2
   just_audio: ^0.10.5
   marquee: ^2.3.0
-  on_audio_query_pluse: ^3.0.5
+  on_audio_query_pluse: ^3.0.6
   package_info_plus: ^9.0.0
   path: ^1.9.1
   path_provider: ^2.1.5

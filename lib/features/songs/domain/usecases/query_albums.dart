@@ -16,11 +16,11 @@ class QueryAlbums {
   /// Queries all albums from the device.
   ///
   /// Parameters:
-  /// - [sortType]: How to sort the results (defaults to album name)
+  /// - [sortType]: How to sort the results (defaults to number of songs)
   ///
   /// Returns a [Result] containing the list of albums or an error message.
   Future<Result<List<Album>>> call({
-    AlbumsSortType sortType = AlbumsSortType.album,
+    AlbumsSortType sortType = AlbumsSortType.numOfSongs,
   }) {
     return _repository.queryAlbums(sortType: sortType);
   }

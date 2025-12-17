@@ -6,6 +6,6 @@ sealed class ArtistsEvent {
 }
 
 final class LoadArtistsEvent extends ArtistsEvent {
-  const LoadArtistsEvent({this.sortType = ArtistsSortType.artist});
+  const LoadArtistsEvent({this.sortType = ArtistsSortType.numOfTracks});
   final ArtistsSortType sortType;
 }
