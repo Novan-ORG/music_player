@@ -59,7 +59,7 @@ class SongItem extends StatelessWidget {
     // Common row content used by both blurred and plain variants
     final content = Row(
       children: [
-        SongImageWidget(songId: track.id, size: songImageSize),
+        ArtImageWidget(id: track.id, size: songImageSize),
         const SizedBox(width: 12),
         Expanded(child: _buildTitleAndArtist(context)),
         const SizedBox(width: 8),

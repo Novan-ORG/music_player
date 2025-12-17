@@ -52,15 +52,7 @@
     "cancel": "Cancel",
     "deleteFromDevice": "Delete from device",
     "favoriteSongs": "Favorite Songs",
-    "allSongs": "All Songs({count})",
-    "@allSongs": {
-        "description": "",
-        "placeholders": {
-            "count": {
-                "type": "int"
-            }
-        }
-    },
+    "allSongs": "All Songs",
     "searchSongs": "Search Songs",
     "refresh": "Refresh",
     "errorLoadingSongs": "Some error happend while loading songs",
@@ -73,6 +65,11 @@
     "dateAdded": "Date Added",
     "duration": "Duration",
     "size": "Size",
+    "title": "Title",
+    "album": "Album",
+    "albums": "Albums",
+    "artist": "Artist",
+    "artists": "Artists",
     "ascending": "Ascending",
     "descending": "Descending",
     "dismiss": "DISMISS",

@@ -4,7 +4,12 @@ import 'package:music_player/core/result.dart';
 import 'package:music_player/features/favorite/data/datasources/datasources.dart';
 import 'package:music_player/features/favorite/domain/domain.dart';
 
+/// Implementation of [FavoriteSongsRepository] using local datasource.
+///
+/// Manages favorite songs storage and retrieval using shared preferences
+/// and the audio query service.
 class FavoriteSongsRepoImpl implements FavoriteSongsRepository {
+  /// Creates a [FavoriteSongsRepoImpl] with the given datasource.
   FavoriteSongsRepoImpl({required this.datasource});
 
   final FavoriteSongsDatasource datasource;

@@ -82,8 +82,8 @@ class _AddSongsPageState extends State<AddSongsPage> {
                     secondary: SizedBox(
                       width: 54,
                       height: 54,
-                      child: SongImageWidget(
-                        songId: song.id,
+                      child: ArtImageWidget(
+                        id: song.id,
                         size: 54,
                         borderRadius: 8,
                       ),

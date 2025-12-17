@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/theme/app_themes.dart';
 import 'package:music_player/extensions/extensions.dart';
-import 'package:music_player/features/playlist/domain/domain.dart';
-import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
-import 'package:music_player/features/playlist/presentation/pages/pages.dart';
-import 'package:music_player/features/playlist/presentation/widgets/widgets.dart';
+import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
+import 'package:music_player/features/playlist/domain/entities/playlist.dart';
+import 'package:music_player/features/playlist/presentation/bloc/playlist_bloc.dart';
+import 'package:music_player/features/playlist/presentation/widgets/all_playlist_view.dart';
+import 'package:music_player/features/playlist/presentation/widgets/create_playlist_sheet.dart';
+import 'package:music_player/features/playlist/presentation/widgets/empty_playlist.dart';
+import 'package:music_player/features/playlist/presentation/widgets/pinned_playlist_view.dart';
+import 'package:music_player/features/playlist/presentation/widgets/playlist_appbar.dart';
 
 class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({
@@ -16,18 +21,24 @@ class PlaylistsPage extends StatefulWidget {
   final bool isSelectionMode;
   final Set<int>? songIds;
 
-  static Future<void> showSheet({
+  static Future<List<int>?> showSheet({
     required BuildContext context,
     Set<int>? songIds,
   }) {
-    return showModalBottomSheet(
+    return showModalBottomSheet<List<int>>(
       context: context,
       useSafeArea: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => PlaylistsPage(isSelectionMode: true, songIds: songIds),
+      builder: (context) {
+        return PlaylistContentView(
+          isSelectionMode: true,
+          songIds: songIds,
+          onCloseBottomSheet: () => Navigator.of(context).pop(),
+        );
+      },
     );
   }
 
@@ -36,186 +47,169 @@ class PlaylistsPage extends StatefulWidget {
 }
 
 class _PlaylistsPageState extends State<PlaylistsPage> {
-  final Set<int> selectedPlaylistIds = {};
+  Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
 
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      appBar: PlaylistAppbar(
+        onActionPressed: _showCreatePlaylistSheet,
+      ),
+      body: const PlaylistContentView(
+        isSelectionMode: false,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        onPressed: _showCreatePlaylistSheet,
+        tooltip: context.localization.createPlaylist,
+        child: Icon(
+          Icons.add,
+          color: theme.colorScheme.primary,
+          size: 38,
+        ),
+      ),
+    );
+  }
+}
+
+class PlaylistContentView extends StatefulWidget {
+  const PlaylistContentView({
+    required this.isSelectionMode,
+    super.key,
+    this.songIds,
+    this.onCloseBottomSheet,
+    this.padding = const EdgeInsets.all(16),
+  });
+
+  final bool isSelectionMode;
+  final Set<int>? songIds;
+  final VoidCallback? onCloseBottomSheet;
+  final EdgeInsets padding;
+
+  @override
+  State<PlaylistContentView> createState() => _PlaylistContentViewState();
+}
+
+class _PlaylistContentViewState extends State<PlaylistContentView> {
   @override
   void initState() {
     super.initState();
     context.read<PlayListBloc>().add(LoadPlayListsEvent());
   }
 
-  Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
+  List<Playlist> _extractPinnedPlaylists(
+    List<Playlist> allPlaylists,
+    List<PinPlaylist> pinnedMeta,
+  ) {
+    final playlistById = <int, Playlist>{
+      for (final p in allPlaylists) p.id: p,
+    };
 
-  Widget _buildPlaylistTile(Playlist playlist) {
-    final subtitle =
-        '${playlist.numOfSongs} ${context.localization.song}'
-        '${playlist.numOfSongs <= 1 ? '' : context.localization.s}';
-    if (widget.isSelectionMode) {
-      return Card(
-        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-        child: CheckboxListTile(
-          value: selectedPlaylistIds.contains(playlist.id),
-          title: Text(
-            playlist.name,
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
-          subtitle: Text(subtitle),
-          secondary: const Icon(Icons.queue_music),
-          activeColor: Theme.of(context).colorScheme.primary,
-          onChanged: (value) {
-            setState(() {
-              if (value ?? false) {
-                selectedPlaylistIds.add(playlist.id);
-              } else {
-                selectedPlaylistIds.remove(playlist.id);
-              }
-            });
-          },
-        ),
-      );
-    } else {
-      return Card(
-        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Theme.of(
-              context,
-            ).colorScheme.primary.withAlpha(10),
-            child: const Icon(Icons.queue_music, color: Colors.black54),
-          ),
-          title: Text(
-            playlist.name,
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
-          subtitle: Text(subtitle),
-          trailing: PlaylistItemMoreAction(playlist: playlist),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => PlaylistDetailsPage(playlistModel: playlist),
-              ),
-            );
-          },
-        ),
-      );
+    final result = <Playlist>[];
+
+    for (final meta in pinnedMeta) {
+      final playlist = playlistById[meta.playlistId];
+      if (playlist != null && playlist.id != 0) {
+        result.add(playlist);
+      }
     }
+
+    return result;
   }
 
-  Widget _buildPlaylistsList(List<Playlist> playlists) {
-    return ListView.separated(
-      padding: const EdgeInsets.only(top: 8, bottom: 80),
-      itemCount: playlists.length + 1,
-      separatorBuilder: (_, _) => const SizedBox(height: 2),
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return Card(
-            color: Theme.of(context).colorScheme.primary.withAlpha(8),
-            margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-            child: ListTile(
-              leading: const Icon(Icons.add, color: Colors.blueAccent),
-              title: Text(
-                context.localization.createNewPlaylist,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              onTap: _showCreatePlaylistSheet,
+  Widget _buildSheetHeader(ThemeData theme) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4, bottom: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox.shrink(),
+          Text(
+            'Add Song to Playlist',
+            style: theme.textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.w600,
             ),
-          );
-        }
-        final playlist = playlists[index - 1];
-        return _buildPlaylistTile(playlist);
-      },
+          ),
+          GestureDetector(
+            onTap: () => Navigator.of(context).pop(),
+            child: Container(
+              padding: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: const Icon(
+                Icons.close,
+                color: AppLightColors.surface,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildBody(PlayListState state) {
-    if (state.status case PlayListStatus.loading) {
+  Widget _buildBody(PlayListState state, ThemeData theme) {
+    if (state.status == PlayListStatus.loading) {
       return const Center(child: CircularProgressIndicator());
-    } else if (state.status case PlayListStatus.error) {
+    } else if (state.status == PlayListStatus.error) {
       return Center(
-        child: Text('${context.localization.error}: ${state.errorMessage}'),
+        child: Text(
+          '${context.localization.error}: ${state.errorMessage}',
+        ),
       );
-    } else if (state.status case PlayListStatus.initial) {
+    } else if (state.status == PlayListStatus.initial) {
       return Center(child: Text(context.localization.playListPage));
     } else {
       if (state.playLists.isEmpty) {
-        return EmptyPlaylist(
-          onAddPressed: _showCreatePlaylistSheet,
-        );
+        return const EmptyPlaylist();
       } else {
-        return _buildPlaylistsList(state.playLists);
+        final pinnedMeta = state.pinnedPlaylists;
+
+        final allPlaylists = state.playLists;
+
+        final pinnedPlaylists = _extractPinnedPlaylists(
+          allPlaylists,
+          pinnedMeta,
+        );
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.isSelectionMode) _buildSheetHeader(theme),
+
+            if (!widget.isSelectionMode)
+              PinnedPlaylistsView(
+                pinnedPlaylists: pinnedPlaylists,
+              ),
+            Expanded(
+              child: AllPlaylistView(
+                playlists: allPlaylists,
+                pinnedMeta: pinnedMeta,
+                isSelectionMode: widget.isSelectionMode,
+                songIds: widget.songIds,
+              ),
+            ),
+          ],
+        );
       }
     }
   }
 
-  Widget? _buildBottomBar() {
-    if (widget.isSelectionMode && widget.songIds != null) {
-      return SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(0, -2),
-              ),
-            ],
-          ),
-          child: ElevatedButton.icon(
-            icon: const Icon(Icons.playlist_add_check),
-            label: Text(context.localization.addToSelectedPlaylist),
-            onPressed: selectedPlaylistIds.isEmpty
-                ? null
-                : () {
-                    context.read<PlayListBloc>().add(
-                      AddSongsToPlaylistsEvent(
-                        widget.songIds!,
-                        selectedPlaylistIds.toList(),
-                      ),
-                    );
-                    Navigator.of(context).pop(selectedPlaylistIds.toList());
-                  },
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(48),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.isSelectionMode
-              ? context.localization.selectPlaylist
-              : context.localization.playlists,
-        ),
-        centerTitle: true,
-        elevation: 1,
-        actions: [
-          if (!widget.isSelectionMode)
-            IconButton(
-              icon: const Icon(Icons.add),
-              tooltip: context.localization.createPlaylist,
-              onPressed: _showCreatePlaylistSheet,
-            ),
-        ],
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: widget.padding,
+      child: BlocBuilder<PlayListBloc, PlayListState>(
+        builder: (context, state) => _buildBody(state, theme),
       ),
-      body: BlocBuilder<PlayListBloc, PlayListState>(
-        builder: (context, state) => Padding(
-          padding: const EdgeInsets.all(16),
-          child: _buildBody(state),
-        ),
-      ),
-      bottomNavigationBar: _buildBottomBar(),
     );
   }
 }

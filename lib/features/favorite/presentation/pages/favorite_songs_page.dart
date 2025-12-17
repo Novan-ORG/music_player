@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
-import 'package:music_player/core/mixins/mixins.dart';
-import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/core/views/views.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/favorite/presentation/widgets/widgets.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
-import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
-import 'package:music_player/features/playlist/playlist.dart';
 import 'package:music_player/features/songs/presentation/pages/songs_selection_page.dart';
 
 class FavoriteSongsPage extends StatefulWidget {
@@ -18,33 +14,12 @@ class FavoriteSongsPage extends StatefulWidget {
   State<FavoriteSongsPage> createState() => _FavoriteSongsPageState();
 }
 
-class _FavoriteSongsPageState extends State<FavoriteSongsPage>
-    with
-        SongSharingMixin,
-        RingtoneMixin,
-        PlaylistManagementMixin,
-        SongDeletionMixin {
+class _FavoriteSongsPageState extends State<FavoriteSongsPage> {
   late final FavoriteSongsBloc favSongsBloc = context.read<FavoriteSongsBloc>();
   @override
   void initState() {
     super.initState();
     favSongsBloc.add(const LoadFavoriteSongsEvent());
-  }
-
-  Future<void> _handleSongTap(int songIndex, List<Song> favoriteSongs) async {
-    context.read<MusicPlayerBloc>().add(
-      PlayMusicEvent(songIndex, favoriteSongs),
-    );
-
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const MusicPlayerPage(),
-      ),
-    );
-  }
-
-  void _handleToggleLike(int songId) {
-    favSongsBloc.add(ToggleFavoriteSongEvent(songId));
   }
 
   void onLongPress(Song song) {
@@ -132,58 +107,9 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage>
       );
     }
 
-    return _buildFavoritesList(favoriteState.favoriteSongs);
-  }
-
-  Widget _buildFavoritesList(List<Song> favoriteSongs) {
-    return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
-      bloc: context.read<MusicPlayerBloc>(),
-      buildWhen: (previous, next) =>
-          previous.currentSongIndex != next.currentSongIndex ||
-          previous.playList != next.playList ||
-          previous.status != next.status,
-      builder: (context, musicPlayerState) {
-        return RefreshIndicator(
-          onRefresh: onRefresh,
-
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-            itemCount: favoriteSongs.length,
-            physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics(),
-            ),
-            itemBuilder: (context, index) {
-              final song = favoriteSongs[index];
-              final isCurrent = musicPlayerState.currentSongIndex == index;
-              return SongItem(
-                track: song,
-                isCurrentTrack: isCurrent,
-                isPlayingNow:
-                    musicPlayerState.status == MusicPlayerStatus.playing &&
-                    isCurrent,
-                isFavorite: true,
-                onTap: () => _handleSongTap(index, favoriteSongs),
-                onLongPress: () => onLongPress(song),
-                onFavoriteToggle: () => _handleToggleLike(song.id),
-                onShare: () => shareSong(song),
-                onSetAsRingtone: () => setAsRingtone(song.data),
-                onDelete: () => showDeleteSongDialog(song),
-                onAddToPlaylist: () async {
-                  await PlaylistsPage.showSheet(
-                    context: context,
-                    songIds: {song.id},
-                  );
-                },
-                onPlayPause: () {
-                  context.read<MusicPlayerBloc>().add(
-                    const TogglePlayPauseEvent(),
-                  );
-                },
-              );
-            },
-          ),
-        );
-      },
+    return SongsView(
+      songs: favoriteState.favoriteSongs,
+      onRefresh: onRefresh,
     );
   }
 

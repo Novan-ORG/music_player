@@ -333,8 +333,8 @@ class _ExpandedHeader extends StatelessWidget {
         ),
         Hero(
           tag: 'song_cover_${currentSong.id}',
-          child: SongImageWidget(
-            songId: currentSong.id,
+          child: ArtImageWidget(
+            id: currentSong.id,
             size: MediaQuery.of(context).size.width * 0.2,
           ),
         ),

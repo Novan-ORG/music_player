@@ -81,12 +81,12 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     final title = _isEditing
         ? context.localization.renamePlaylist
         : context.localization.createNewPlaylist;
-    final actionLabel = _isEditing
-        ? context.localization.rename
-        : context.localization.createPlaylist;
+    final actionIcon = _isEditing ? Icons.edit : Icons.add;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -101,15 +101,17 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
           expand: false,
           builder: (context, scrollController) => Container(
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(24),
               ),
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 16,
-                  offset: Offset(0, -4),
+                  color: isDark ? Colors.white30 : Colors.white60,
+                ),
+                BoxShadow(
+                  color: theme.colorScheme.surface,
+                  spreadRadius: -3,
+                  blurRadius: 8,
                 ),
               ],
             ),
@@ -117,67 +119,90 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
               horizontal: 24,
               vertical: 20,
             ),
-            child: ListView(
-              controller: scrollController,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    margin: const EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                      color: theme.dividerColor,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                TextField(
-                  controller: _controller,
-                  onChanged: _onChanged,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    labelText: context.localization.playlistName,
-                    prefixIcon: const Icon(Icons.playlist_add),
-                    suffixIcon: _controller.text.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              _controller.clear();
-                              _onChanged('');
-                            },
-                          )
-                        : null,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    filled: true,
-                    fillColor: theme.colorScheme.surfaceContainerHighest,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                AnimatedOpacity(
-                  opacity: _isValid ? 1 : 0.5,
-                  duration: const Duration(milliseconds: 200),
-                  child: ElevatedButton.icon(
-                    onPressed: _isValid ? _createOrUpdatePlaylist : null,
-                    icon: const Icon(Icons.check_circle_outline),
-                    label: Text(actionLabel),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(48),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        color: isDark ? Colors.white : Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        color: isDark ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.1)
+                              : Colors.black.withValues(alpha: 0.1),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            bottomLeft: Radius.circular(12),
+                          ),
+                        ),
+                        child: TextField(
+                          controller: _controller,
+                          style: TextStyle(
+                            color: isDark ? Colors.white : Colors.black,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: context.localization.playlistName,
+                            hintStyle: TextStyle(
+                              color: isDark ? Colors.white54 : Colors.black54,
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 16,
+                            ),
+                          ),
+                          onChanged: _onChanged,
+                          autofocus: true,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    InkWell(
+                      onTap: () {
+                        if (_isValid) {
+                          _createOrUpdatePlaylist();
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        height: 56,
+                        width: 56,
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(12),
+                            bottomRight: Radius.circular(12),
+                          ),
+                        ),
+                        child: Icon(actionIcon, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

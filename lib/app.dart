@@ -13,6 +13,8 @@ import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/features/favorite/favorite.dart';
 import 'package:music_player/features/home/presentation/pages/pages.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
+import 'package:music_player/features/playlist/domain/usecases/get_pinned_playlist.dart';
+import 'package:music_player/features/playlist/domain/usecases/pin_playlist_by_id.dart';
 import 'package:music_player/features/playlist/playlist.dart';
 import 'package:music_player/features/settings/presentation/presentation.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
@@ -20,7 +22,12 @@ import 'package:music_player/injection/service_locator.dart';
 import 'package:music_player/localization/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Root widget of the Music Player application.
+///
+/// Sets up the app's theme, localization, BLoC providers, and handles
+/// initial permission requests for accessing audio files.
 class MusicPlayerApp extends StatefulWidget {
+  /// Creates the [MusicPlayerApp] widget.
   const MusicPlayerApp({super.key});
 
   @override
@@ -33,15 +40,17 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
 
   @override
   void initState() {
-    requestPermission();
     super.initState();
+    requestPermission();
   }
 
   Future<void> requestPermission() async {
+    if (!mounted) return;
     setState(() {
       isLoading = true;
     });
     final result = await getIt<EnsureMediaPermission>().call();
+    if (!mounted) return;
     setState(() {
       isLoading = false;
       if (result.isSuccess) {
@@ -58,7 +67,23 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (_) => AlbumsBloc(getIt())
+            ..add(
+              const LoadAlbumsEvent(),
+            ),
+        ),
+        BlocProvider(
+          create: (_) =>
+              ArtistsBloc(
+                getIt(),
+              )..add(
+                const LoadArtistsEvent(),
+              ),
+        ),
+        BlocProvider(
           create: (_) => SongsBloc(
+            getIt(),
+            getIt(),
             getIt(),
             getIt(),
             getIt(),
@@ -82,16 +107,23 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
           ),
         ),
         BlocProvider(
-          create: (_) => PlayListBloc(
-            getIt.get<RenamePlaylist>(),
-            getIt.get<GetAllPlaylists>(),
-            getIt.get<CreatePlaylist>(),
-            getIt.get<DeletePlaylistWithUndo>(),
-            getIt.get<AddSongsToPlaylist>(),
-            getIt.get<RemoveSongsFromPlaylist>(),
-            getIt.get<GetPlaylistById>(),
-            getIt.get<CommandManager>(),
-          ),
+          create: (_) =>
+              PlayListBloc(
+                  getIt.get<RenamePlaylist>(),
+                  getIt.get<GetAllPlaylists>(),
+                  getIt.get<CreatePlaylist>(),
+                  getIt.get<DeletePlaylistWithUndo>(),
+                  getIt.get<AddSongsToPlaylist>(),
+                  getIt.get<RemoveSongsFromPlaylist>(),
+                  getIt.get<GetPlaylistById>(),
+                  getIt.get<CommandManager>(),
+                  getIt.get<PinPlaylistById>(),
+                  getIt.get<GetPinnedPlaylists>(),
+                  getIt.get<InitializePlaylistCovers>(),
+                  getIt.get<GetPlaylistCoverSongId>(),
+                )
+                ..add(const InitializePlaylistCoversEvent())
+                ..add(LoadPlayListsEvent()),
         ),
         BlocProvider(
           create: (_) => FavoriteSongsBloc(

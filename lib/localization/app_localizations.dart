@@ -314,11 +314,11 @@ abstract class AppLocalizations {
   /// **'Favorite Songs'**
   String get favoriteSongs;
 
-  ///
+  /// No description provided for @allSongs.
   ///
   /// In en, this message translates to:
-  /// **'All Songs({count})'**
-  String allSongs(int count);
+  /// **'All Songs'**
+  String get allSongs;
 
   /// No description provided for @searchSongs.
   ///
@@ -391,6 +391,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Size'**
   String get size;
+
+  /// No description provided for @title.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get title;
+
+  /// No description provided for @album.
+  ///
+  /// In en, this message translates to:
+  /// **'Album'**
+  String get album;
+
+  /// No description provided for @albums.
+  ///
+  /// In en, this message translates to:
+  /// **'Albums'**
+  String get albums;
+
+  /// No description provided for @artist.
+  ///
+  /// In en, this message translates to:
+  /// **'Artist'**
+  String get artist;
+
+  /// No description provided for @artists.
+  ///
+  /// In en, this message translates to:
+  /// **'Artists'**
+  String get artists;
 
   /// No description provided for @ascending.
   ///

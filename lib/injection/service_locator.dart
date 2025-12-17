@@ -9,38 +9,40 @@ import 'package:music_player/features/music_plyer/data/data.dart';
 import 'package:music_player/features/music_plyer/domain/domain.dart';
 import 'package:music_player/features/playlist/data/data.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
+import 'package:music_player/features/playlist/domain/usecases/get_pinned_playlist.dart';
+import 'package:music_player/features/playlist/domain/usecases/pin_playlist_by_id.dart';
 import 'package:music_player/features/songs/data/data.dart';
 import 'package:music_player/features/songs/domain/domain.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:volume_controller/volume_controller.dart';
 
+/// Global service locator instance for dependency injection.
+///
+/// Uses GetIt for dependency injection throughout the application.
+/// All dependencies are registered in the [setup] function.
 final GetIt getIt = GetIt.instance;
 
+/// Initializes all dependencies for the application.
+///
+/// This function registers all repositories, use cases, services, and
+/// other dependencies with the service locator. It should be called
+/// once at app startup before any dependencies are accessed.
+///
+/// Dependencies are organized by feature:
+/// - Core services (audio, permissions, storage)
+/// - Music player feature
+/// - Songs feature
+/// - Playlist feature
+/// - Favorites feature
 void setup() {
-  ///
-  /// Core
-  ///
+  // Core services and utilities
   _setupCore();
 
-  ///
-  /// MusicPlayer feature
-  ///
+  // Feature-specific dependencies
   _setupMusicPlayerFeature();
-
-  ///
-  /// Songs page feature
-  ///
   _setupSongsFeature();
-
-  ///
-  /// Playlist feature
-  ///
   _setupPlaylistFeature();
-
-  ///
-  ///
-  /// Favorites feature
   _setupFavoriteSongsFeature();
 }
 
@@ -48,7 +50,7 @@ void _setupPlaylistFeature() {
   /// Repositories
   getIt
     ..registerLazySingleton<PlaylistDatasource>(
-      () => PlaylistDatasourceImpl(getIt.get()),
+      () => PlaylistDatasourceImpl(getIt.get(), getIt.get()),
     )
     ..registerLazySingleton<PlaylistRepository>(
       () => PlaylistRepositoryImpl(getIt.get()),
@@ -64,7 +66,11 @@ void _setupPlaylistFeature() {
     ..registerLazySingleton(() => CreatePlaylist(getIt.get()))
     ..registerLazySingleton(() => AddSongsToPlaylist(getIt.get()))
     ..registerLazySingleton(() => RemoveSongsFromPlaylist(getIt.get()))
-    ..registerLazySingleton(() => GetPlaylistSongs(getIt.get()));
+    ..registerLazySingleton(() => GetPlaylistSongs(getIt.get()))
+    ..registerLazySingleton(() => GetPlaylistCoverSongId(getIt.get()))
+    ..registerLazySingleton(() => InitializePlaylistCovers(getIt.get()))
+    ..registerLazySingleton(() => PinPlaylistById(getIt.get()))
+    ..registerLazySingleton(() => GetPinnedPlaylists(getIt.get()));
 }
 
 void _setupSongsFeature() {
@@ -72,6 +78,11 @@ void _setupSongsFeature() {
   getIt
     ..registerLazySingleton(CommandManager.new)
     ..registerLazySingleton(() => QuerySongs(getIt.get()))
+    ..registerLazySingleton(() => QuerySongsFrom(getIt.get()))
+    ..registerLazySingleton(() => QueryAlbums(getIt.get()))
+    ..registerLazySingleton(() => QueryArtists(getIt.get()))
+    ..registerLazySingleton(() => GetSongsSortType(getIt.get()))
+    ..registerLazySingleton(() => SaveSongsSortType(getIt.get()))
     ..registerLazySingleton(() => DeleteSongWithUndo(getIt.get(), getIt.get()))
     // Repositories
     ..registerLazySingleton<SongsRepository>(
@@ -81,6 +92,7 @@ void _setupSongsFeature() {
     ..registerLazySingleton<SongsDatasource>(
       () => SongsDatasourceImpl(
         onAudioQuery: getIt.get(),
+        preferences: getIt.get(),
       ),
     );
 }
