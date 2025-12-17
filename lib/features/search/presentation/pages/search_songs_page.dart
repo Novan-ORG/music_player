@@ -66,8 +66,13 @@ class _SearchSongsPageState extends State<SearchSongsPage> {
               } else {
                 filteredSongs = state.allSongs;
               }
-              return SongsView(
-                songs: filteredSongs,
+              return SafeArea(
+                top: false,
+                left: false,
+                right: false,
+                child: SongsView(
+                  songs: filteredSongs,
+                ),
               );
             },
           );
