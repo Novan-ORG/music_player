@@ -4,11 +4,9 @@ import 'package:music_player/core/mixins/playlist_management_mixin.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
 import 'package:music_player/features/playlist/domain/entities/playlist.dart';
-import 'package:music_player/features/playlist/presentation/bloc/playlist_bloc.dart';
-import 'package:music_player/features/playlist/presentation/bloc/playlist_details_bloc.dart';
-import 'package:music_player/features/playlist/presentation/pages/playlist_details_page.dart';
-import 'package:music_player/features/playlist/presentation/widgets/create_playlist_sheet.dart';
-import 'package:music_player/features/playlist/presentation/widgets/playlist_item.dart';
+import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
+import 'package:music_player/features/playlist/presentation/pages/pages.dart';
+import 'package:music_player/features/playlist/presentation/widgets/widgets.dart';
 import 'package:music_player/injection/service_locator.dart';
 
 class AllPlaylistView extends StatefulWidget {

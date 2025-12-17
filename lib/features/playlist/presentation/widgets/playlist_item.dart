@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/widgets/check_box_widget.dart';
 import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
 import 'package:music_player/features/playlist/presentation/widgets/playlist_image_widget.dart';
 import 'package:music_player/features/playlist/presentation/widgets/playlist_item_more_action.dart';
@@ -101,6 +102,14 @@ class PlaylistItem extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
+          ),
+        ),
+        Text(
+          '${playlist.numOfSongs} ${context.localization.songs}',
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(
+              context,
+            ).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
           ),
         ),
       ],

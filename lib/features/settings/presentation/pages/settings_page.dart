@@ -23,6 +23,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.localization.settings),
+        centerTitle: true,
         elevation: 0,
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(

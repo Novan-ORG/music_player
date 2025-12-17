@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/theme/app_themes.dart';
 import 'package:music_player/extensions/extensions.dart';
-import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
-import 'package:music_player/features/playlist/domain/entities/playlist.dart';
-import 'package:music_player/features/playlist/presentation/bloc/playlist_bloc.dart';
-import 'package:music_player/features/playlist/presentation/widgets/all_playlist_view.dart';
-import 'package:music_player/features/playlist/presentation/widgets/create_playlist_sheet.dart';
-import 'package:music_player/features/playlist/presentation/widgets/empty_playlist.dart';
-import 'package:music_player/features/playlist/presentation/widgets/pinned_playlist_view.dart';
-import 'package:music_player/features/playlist/presentation/widgets/playlist_appbar.dart';
+import 'package:music_player/features/playlist/domain/entities/entities.dart';
+import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
+import 'package:music_player/features/playlist/presentation/widgets/widgets.dart';
 
 class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({
