@@ -22,35 +22,41 @@ class PlaylistDetailsAppbar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: SongsCount(songCount: songCount).paddingOnly(left: 12),
-      leadingWidth: 200,
-      flexibleSpace: Center(
-        child: Text(
-          playlist.name,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+      centerTitle: true,
+      title: Text(
+        playlist.name,
+        style: Theme.of(context).textTheme.titleLarge,
       ),
-      actions: [
-        PlaylistItemMoreAction(
-          playlist: playlist,
-          onDeleted: () {
-            Navigator.of(context).pop();
-          },
-          onRenamed: onPlaylistRenamed,
-        ),
-      ],
+      // more actions not shown for recently played pseudo-playlist
+      actions: playlist.id == -1
+          ? null
+          : [
+              PlaylistItemMoreAction(
+                playlist: playlist,
+                onDeleted: () => Navigator.of(context).pop(),
+                onRenamed: onPlaylistRenamed,
+              ),
+            ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(
-            6,
-          ),
-          child: ElevatedButton.icon(
-            onPressed: onAddSongs,
-            icon: const Icon(Icons.add),
-            label: Text(context.localization.addSongs),
-          ),
+        child: Row(
+          spacing: 8,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            if (playlist.id != -1)
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  child: ElevatedButton.icon(
+                    onPressed: onAddSongs,
+                    icon: const Icon(Icons.add),
+                    label: Text(context.localization.addSongs),
+                  ),
+                ),
+              ),
+            SongsCount(songCount: songCount).padding(value: 12),
+            const SizedBox(width: 12),
+          ],
         ),
       ),
     );

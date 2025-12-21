@@ -109,6 +109,7 @@ class SongItem extends StatelessWidget {
   Widget _buildTitleAndArtist(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 4,
       children: [
         Text(
           track.title,
@@ -119,7 +120,6 @@ class SongItem extends StatelessWidget {
             color: isCurrentTrack ? context.theme.colorScheme.primary : null,
           ),
         ),
-        const SizedBox(height: 4),
         ArtistWidget(
           artist: track.artist,
           isCurrentTrack: isCurrentTrack,

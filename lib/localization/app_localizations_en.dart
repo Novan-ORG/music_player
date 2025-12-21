@@ -276,6 +276,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'No song in the playlist. Add songs to see them here.';
 
   @override
+  String get addSongsToPlaylist => 'Add Songs to Playlist';
+
+  @override
+  String get recentlyPlayed => 'Recently Played';
+
+  @override
+  String get allPlaylists => 'All Playlists';
+
+  @override
+  String get favoritePlaylists => 'Favorite Playlists';
+
+  @override
   String get musicPlayerPage => '';
 
   @override

@@ -29,6 +29,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     this.watchSongDuration,
     this.watchSongPosition,
     this.setLoopMode,
+    this.addToRecentlyPlayed,
   ) : super(const MusicPlayerState()) {
     // Listen to player index changes
     _playerIndexSubscription = watchPlayerIndex().distinct().listen(
@@ -59,6 +60,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   final WatchPlayerIndex watchPlayerIndex;
   final WatchSongDuration watchSongDuration;
   final WatchSongPosition watchSongPosition;
+  final AddToRecentlyPlayed addToRecentlyPlayed;
 
   late final StreamSubscription<int?> _playerIndexSubscription;
 
@@ -230,6 +232,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
     // Start playback
     final result = await playSong(event.playList, event.index);
+    await addToRecentlyPlayed(event.playList[event.index].id);
 
     if (result.isFailure) {
       emit(

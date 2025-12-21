@@ -5,6 +5,7 @@ export 'get_all_playlists.dart';
 export 'get_playlist_by_id.dart';
 export 'get_playlist_cover_song_id.dart';
 export 'get_playlist_songs.dart';
+export 'get_recently_played_songs.dart';
 export 'initialize_playlist_covers.dart';
 export 'remove_songs_from_playlist.dart';
 export 'rename_playlist.dart';

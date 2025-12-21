@@ -614,6 +614,30 @@ abstract class AppLocalizations {
   /// **'No song in the playlist. Add songs to see them here.'**
   String get noSongInThePlaylist;
 
+  /// No description provided for @addSongsToPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Songs to Playlist'**
+  String get addSongsToPlaylist;
+
+  /// No description provided for @recentlyPlayed.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently Played'**
+  String get recentlyPlayed;
+
+  /// No description provided for @allPlaylists.
+  ///
+  /// In en, this message translates to:
+  /// **'All Playlists'**
+  String get allPlaylists;
+
+  /// No description provided for @favoritePlaylists.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Playlists'**
+  String get favoritePlaylists;
+
   /// Music Player page localization
   ///
   /// In en, this message translates to:

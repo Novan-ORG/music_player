@@ -1,7 +1,9 @@
+import 'package:music_player/core/constants/preferences_keys.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/features/music_plyer/data/mapppers/mappers.dart';
 import 'package:music_player/features/music_plyer/domain/entities/entities.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Datasource interface for audio playback operations.
 ///
@@ -43,6 +45,12 @@ abstract interface class AudioHandlerDatasource {
 
   /// Sets the loop/repeat mode.
   PlayerLoopMode setPlayerLoopMode(PlayerLoopMode loopMode);
+
+  /// Adds a song to the recently played list.
+  /// Parameters:
+  /// - [songId]: ID of the song to add
+  /// Returns a [bool] indicating success or failure.
+  Future<bool> addToRecentlyPlayed(int songId);
 }
 
 /// Implementation of [AudioHandlerDatasource] using MAudioHandler.
@@ -53,9 +61,12 @@ class AudioHandlerDatasourceImpl implements AudioHandlerDatasource {
   /// Creates an [AudioHandlerDatasourceImpl].
   AudioHandlerDatasourceImpl({
     required MAudioHandler audioHandler,
-  }) : _audioHandler = audioHandler;
+    required SharedPreferences preferences,
+  }) : _audioHandler = audioHandler,
+       _preferences = preferences;
 
   final MAudioHandler _audioHandler;
+  final SharedPreferences _preferences;
 
   @override
   Future<void> pause() {
@@ -121,5 +132,29 @@ class AudioHandlerDatasourceImpl implements AudioHandlerDatasource {
   PlayerLoopMode setPlayerLoopMode(PlayerLoopMode loopMode) {
     _audioHandler.setLoopMode(PlayerLoopModeMapper.mapToLoopMode(loopMode));
     return loopMode;
+  }
+
+  @override
+  Future<bool> addToRecentlyPlayed(int songId) {
+    final recentList =
+        _preferences.getStringList(PreferencesKeys.recentlyPlayedSongIds) ?? [];
+
+    final songIdStr = songId.toString();
+
+    // Remove if already exists to avoid duplicates
+    recentList
+      ..remove(songIdStr)
+      // Add to the start of the list
+      ..insert(0, songIdStr);
+
+    // Keep only the latest 50 entries
+    if (recentList.length > 50) {
+      recentList.removeRange(50, recentList.length);
+    }
+
+    return _preferences.setStringList(
+      PreferencesKeys.recentlyPlayedSongIds,
+      recentList,
+    );
   }
 }

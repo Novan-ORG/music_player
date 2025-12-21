@@ -11,34 +11,57 @@ class PlaylistDetailsBloc
   PlaylistDetailsBloc({
     required Playlist playlist,
     required this.getPlaylistSongs,
+    required this.getRecentlyPlayedSongs,
   }) : super(PlaylistDetailsState(playlist: playlist)) {
     on<GetPlaylistSongsEvent>(_onGetPlaylistSongs);
   }
 
   final GetPlaylistSongs getPlaylistSongs;
+  final GetRecentlyPlayedSongs getRecentlyPlayedSongs;
 
   Future<void> _onGetPlaylistSongs(
     GetPlaylistSongsEvent event,
     Emitter<PlaylistDetailsState> emit,
   ) async {
     emit(state.copyWith(status: PlaylistDetailsStatus.loading));
-
-    final result = await getPlaylistSongs(state.playlist.id);
-
-    if (result.isFailure) {
-      emit(
-        state.copyWith(
-          status: PlaylistDetailsStatus.failure,
-          errorMessage: result.error,
-        ),
-      );
+    if (state.playlist.id == -1) {
+      // return recently played songs
+      final result = await getRecentlyPlayedSongs();
+      if (result.isFailure) {
+        emit(
+          state.copyWith(
+            status: PlaylistDetailsStatus.failure,
+            errorMessage: result.error,
+          ),
+        );
+        return;
+      } else {
+        emit(
+          state.copyWith(
+            status: PlaylistDetailsStatus.success,
+            songs: result.value,
+          ),
+        );
+        return;
+      }
     } else {
-      emit(
-        state.copyWith(
-          status: PlaylistDetailsStatus.success,
-          songs: result.value,
-        ),
-      );
+      final result = await getPlaylistSongs(state.playlist.id);
+
+      if (result.isFailure) {
+        emit(
+          state.copyWith(
+            status: PlaylistDetailsStatus.failure,
+            errorMessage: result.error,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            status: PlaylistDetailsStatus.success,
+            songs: result.value,
+          ),
+        );
+      }
     }
   }
 }

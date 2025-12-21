@@ -276,6 +276,18 @@ class AppLocalizationsFa extends AppLocalizations {
       'هیچ موزیکی در این لیست پخش وجود ندارد. برای دیدن موزیک ها، موزیک اضافه کنید.';
 
   @override
+  String get addSongsToPlaylist => 'اضافه کردن موزیک ها به لیست پخش';
+
+  @override
+  String get recentlyPlayed => 'اخیراً پخش شده';
+
+  @override
+  String get allPlaylists => 'همه لیست های پخش';
+
+  @override
+  String get favoritePlaylists => 'لیست های پخش محبوب';
+
+  @override
   String get musicPlayerPage => '';
 
   @override

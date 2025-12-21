@@ -81,4 +81,11 @@ abstract class MusicPlayerRepository {
   ///
   /// Returns a [Result] containing the set loop mode or an error.
   Result<PlayerLoopMode> setLoopMode(PlayerLoopMode loopMode);
+
+  /// Adds a song to the recently played list.
+  ///
+  /// Parameters:
+  /// - [songId]: ID of the song to add
+  /// Returns a [Result] indicating success or failure.
+  Future<Result<bool>> addToRecentlyPlayed(int songId);
 }
