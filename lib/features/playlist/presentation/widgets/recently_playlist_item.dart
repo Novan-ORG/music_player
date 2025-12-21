@@ -49,12 +49,16 @@ class PinnedPlaylistItem extends StatelessWidget {
         const SizedBox(
           height: 6,
         ),
-        Text(
-          playlist.name.length > 8
-              ? '${playlist.name.substring(0, 6)}...'
-              : playlist.name,
-          style: theme.textTheme.labelLarge?.copyWith(
-            fontSize: 12,
+        SizedBox(
+          width: 74,
+          child: Text(
+            playlist.name,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.labelLarge?.copyWith(
+              fontSize: 12,
+            ),
           ),
         ),
       ],

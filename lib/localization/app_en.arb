@@ -125,6 +125,8 @@
     "renamePlaylist": "Rename Playlist",
     "addSongs": "Add Songs",
     "noSongInThePlaylist": "No song in the playlist. Add songs to see them here.",
+    "addSongsToPlaylist": "Add Songs to Playlist",
+    "recentlyPlayed": "Recently Played",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {

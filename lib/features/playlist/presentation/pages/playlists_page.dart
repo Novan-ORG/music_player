@@ -125,7 +125,7 @@ class _PlaylistContentViewState extends State<PlaylistContentView> {
         children: [
           const SizedBox.shrink(),
           Text(
-            'Add Song to Playlist',
+            context.localization.addSongsToPlaylist,
             style: theme.textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w600,
             ),

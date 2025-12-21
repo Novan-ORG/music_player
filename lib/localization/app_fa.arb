@@ -124,6 +124,8 @@
     "renamePlaylist": "تغییر نام لیست پخش",
     "addSongs": "اضافه کردن موزیک ها",
     "noSongInThePlaylist": "هیچ موزیکی در این لیست پخش وجود ندارد. برای دیدن موزیک ها، موزیک اضافه کنید.",
+    "addSongsToPlaylist": "اضافه کردن موزیک ها به لیست پخش",
+    "recentlyPlayed": "اخیراً پخش شده",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {
