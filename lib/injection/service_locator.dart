@@ -141,6 +141,7 @@ void _setupMusicPlayerFeature() {
     ..registerLazySingleton(() => WatchPlayerIndex(getIt.get()))
     ..registerLazySingleton(() => WatchSongDuration(getIt.get()))
     ..registerLazySingleton(() => WatchSongPosition(getIt.get()))
+    ..registerLazySingleton(() => AddToRecentlyPlayed(getIt.get()))
     // Repositories
     ..registerLazySingleton<MusicPlayerRepository>(
       () => MusicPlayerRepoImpl(audioHandlerDatasource: getIt.get()),
@@ -149,6 +150,7 @@ void _setupMusicPlayerFeature() {
     ..registerLazySingleton<AudioHandlerDatasource>(
       () => AudioHandlerDatasourceImpl(
         audioHandler: getIt.get(),
+        preferences: getIt.get(),
       ),
     );
 }

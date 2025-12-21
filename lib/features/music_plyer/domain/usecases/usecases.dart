@@ -1,3 +1,4 @@
+export 'add_to_recently_played.dart';
 export 'has_next_song.dart';
 export 'has_previous_song.dart';
 export 'pause_song.dart';

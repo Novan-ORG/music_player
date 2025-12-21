@@ -130,4 +130,14 @@ class MusicPlayerRepoImpl implements MusicPlayerRepository {
       return Result.failure('failed to set loop mode: $e');
     }
   }
+
+  @override
+  Future<Result<bool>> addToRecentlyPlayed(int songId) async {
+    try {
+      final result = await _audioHandlerDatasource.addToRecentlyPlayed(songId);
+      return Result.success(result);
+    } on Exception catch (e) {
+      return Result.failure('failed to add to recently played: $e');
+    }
+  }
 }
