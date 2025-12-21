@@ -17,7 +17,7 @@ class ArtistItem extends StatelessWidget {
         ? context.localization.songs
         : context.localization.song;
     return GlassCard(
-      margin: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(left: 12, right: 12, top: 8),
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       onTap: onTap,
       child: ListTile(

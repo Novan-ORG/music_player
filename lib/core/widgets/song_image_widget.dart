@@ -7,7 +7,7 @@ class ArtImageWidget extends StatelessWidget {
   const ArtImageWidget({
     required this.id,
     this.type = ArtworkType.AUDIO,
-    this.size = 50,
+    this.size = 54,
     this.quality = 70,
     this.qualitySize = 200,
     this.defaultCoverBg,

@@ -9,8 +9,8 @@ import 'package:music_player/features/playlist/presentation/widgets/playlist_ite
 class PlaylistItem extends StatelessWidget {
   const PlaylistItem({
     required this.playlist,
-    this.margin = const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-    this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    this.margin = const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+    this.padding = const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
     this.borderRadius = 16,
     this.onTap,
     this.blurBackground = true,
@@ -95,6 +95,7 @@ class PlaylistItem extends StatelessWidget {
   Widget _buildTitle(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 4,
       children: [
         Text(
           playlist.name,
