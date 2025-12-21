@@ -285,6 +285,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get allPlaylists => 'همه لیست های پخش';
 
   @override
+  String get favoritePlaylists => 'لیست های پخش محبوب';
+
+  @override
   String get musicPlayerPage => '';
 
   @override

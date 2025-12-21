@@ -22,7 +22,7 @@ class SelectionSongCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          ArtImageWidget(id: song.id, size: 54),
+          ArtImageWidget(id: song.id),
           const SizedBox(width: 8),
           Expanded(
             child: Column(

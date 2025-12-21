@@ -27,7 +27,7 @@ class PlaylistAppbar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       actions: [
         Padding(
-          padding: const EdgeInsets.only(right: 24, top: 2),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: GestureDetector(
             onTap: onActionPressed,
             child: DecoratedBox(

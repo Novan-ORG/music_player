@@ -285,6 +285,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get allPlaylists => 'All Playlists';
 
   @override
+  String get favoritePlaylists => 'Favorite Playlists';
+
+  @override
   String get musicPlayerPage => '';
 
   @override

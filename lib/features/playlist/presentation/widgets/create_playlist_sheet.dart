@@ -153,9 +153,9 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                           color: isDark
                               ? Colors.white.withValues(alpha: 0.1)
                               : Colors.black.withValues(alpha: 0.1),
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            bottomLeft: Radius.circular(12),
+                          borderRadius: const BorderRadiusDirectional.only(
+                            topStart: Radius.circular(12),
+                            bottomStart: Radius.circular(12),
                           ),
                         ),
                         child: TextField(
@@ -192,9 +192,9 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
                         width: 56,
                         decoration: const BoxDecoration(
                           color: Colors.black,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(12),
-                            bottomRight: Radius.circular(12),
+                          borderRadius: BorderRadiusDirectional.only(
+                            topEnd: Radius.circular(12),
+                            bottomEnd: Radius.circular(12),
                           ),
                         ),
                         child: Icon(actionIcon, color: Colors.white),

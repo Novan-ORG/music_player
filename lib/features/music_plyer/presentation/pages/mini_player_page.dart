@@ -155,7 +155,6 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                   tag: 'song_cover_${state.currentSong?.id ?? 0}',
                   child: ArtImageWidget(
                     id: state.currentSong?.id ?? 0,
-                    size: 54,
                   ),
                 ),
                 title: SongTitle(

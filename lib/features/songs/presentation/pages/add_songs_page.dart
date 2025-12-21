@@ -84,7 +84,6 @@ class _AddSongsPageState extends State<AddSongsPage> {
                       height: 54,
                       child: ArtImageWidget(
                         id: song.id,
-                        size: 54,
                         borderRadius: 8,
                       ),
                     ),

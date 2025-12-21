@@ -632,6 +632,12 @@ abstract class AppLocalizations {
   /// **'All Playlists'**
   String get allPlaylists;
 
+  /// No description provided for @favoritePlaylists.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Playlists'**
+  String get favoritePlaylists;
+
   /// Music Player page localization
   ///
   /// In en, this message translates to:

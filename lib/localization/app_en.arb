@@ -128,6 +128,7 @@
     "addSongsToPlaylist": "Add Songs to Playlist",
     "recentlyPlayed": "Recently Played",
     "allPlaylists": "All Playlists",
+    "favoritePlaylists": "Favorite Playlists",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {

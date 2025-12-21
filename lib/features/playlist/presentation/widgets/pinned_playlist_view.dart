@@ -20,7 +20,7 @@ class PinnedPlaylistsView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Favorite Playlist',
+          context.localization.favoritePlaylists,
           style: theme.textTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -57,7 +57,7 @@ class PinnedPlaylistsView extends StatelessWidget {
               final playlist = pinnedPlaylists[index - 1];
 
               return Padding(
-                padding: const EdgeInsets.only(left: 16),
+                padding: const EdgeInsetsDirectional.only(start: 16),
                 child: PinnedPlaylistItem(
                   playlist: playlist,
                   onTap: () => Navigator.of(context).push(

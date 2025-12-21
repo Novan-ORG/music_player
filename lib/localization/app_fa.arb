@@ -127,6 +127,7 @@
     "addSongsToPlaylist": "اضافه کردن موزیک ها به لیست پخش",
     "recentlyPlayed": "اخیراً پخش شده",
     "allPlaylists": "همه لیست های پخش",
+    "favoritePlaylists": "لیست های پخش محبوب",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {
