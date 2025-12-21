@@ -127,6 +127,7 @@
     "noSongInThePlaylist": "No song in the playlist. Add songs to see them here.",
     "addSongsToPlaylist": "Add Songs to Playlist",
     "recentlyPlayed": "Recently Played",
+    "allPlaylists": "All Playlists",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {

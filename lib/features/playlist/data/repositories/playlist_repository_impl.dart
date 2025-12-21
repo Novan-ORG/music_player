@@ -160,4 +160,15 @@ class PlaylistRepositoryImpl implements PlaylistRepository {
       return Result.failure('Failed to save as pinned playlist: $e');
     }
   }
+
+  @override
+  Future<Result<List<Song>>> getRecentlyPlayedSongs() async {
+    try {
+      final songModels = await datasource.getRecentPlayedSongs();
+      final songs = songModels.map(SongModelMapper.toDomain).toList();
+      return Result.success(songs);
+    } on Exception catch (e) {
+      return Result.failure('Failed to get recently played songs: $e');
+    }
+  }
 }

@@ -626,6 +626,12 @@ abstract class AppLocalizations {
   /// **'Recently Played'**
   String get recentlyPlayed;
 
+  /// No description provided for @allPlaylists.
+  ///
+  /// In en, this message translates to:
+  /// **'All Playlists'**
+  String get allPlaylists;
+
   /// Music Player page localization
   ///
   /// In en, this message translates to:

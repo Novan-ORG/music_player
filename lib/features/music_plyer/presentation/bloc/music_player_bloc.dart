@@ -232,7 +232,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
     // Start playback
     final result = await playSong(event.playList, event.index);
-    unawaited(addToRecentlyPlayed(event.playList[event.index].id));
+    await addToRecentlyPlayed(event.playList[event.index].id);
 
     if (result.isFailure) {
       emit(

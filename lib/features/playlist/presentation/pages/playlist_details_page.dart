@@ -23,6 +23,7 @@ class PlaylistDetailsPage extends StatelessWidget {
       create: (_) => PlaylistDetailsBloc(
         playlist: playlistModel,
         getPlaylistSongs: getIt.get(),
+        getRecentlyPlayedSongs: getIt.get(),
       ),
       child: const _PlaylistDetailsView(),
     );

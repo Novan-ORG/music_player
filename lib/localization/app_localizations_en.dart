@@ -282,6 +282,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recentlyPlayed => 'Recently Played';
 
   @override
+  String get allPlaylists => 'All Playlists';
+
+  @override
   String get musicPlayerPage => '';
 
   @override

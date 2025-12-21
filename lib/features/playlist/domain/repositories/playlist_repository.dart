@@ -55,6 +55,11 @@ abstract class PlaylistRepository {
   /// Returns a [Result] containing the list of songs or an error.
   Future<Result<List<Song>>> getPlaylistSongs(int playlistId);
 
+  /// Retrieves the list of recently played songs.
+  ////
+  /// Returns a [Result] containing the list of songs or an error.
+  Future<Result<List<Song>>> getRecentlyPlayedSongs();
+
   /// Adds songs to a playlist.
   ///
   /// Parameters:

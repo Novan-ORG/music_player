@@ -282,6 +282,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get recentlyPlayed => 'اخیراً پخش شده';
 
   @override
+  String get allPlaylists => 'همه لیست های پخش';
+
+  @override
   String get musicPlayerPage => '';
 
   @override

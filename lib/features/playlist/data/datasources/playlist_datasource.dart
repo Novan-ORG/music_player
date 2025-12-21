@@ -12,6 +12,7 @@ abstract class PlaylistDatasource {
   Future<bool> createPlaylist(String name);
   Future<bool> deletePlaylist(int id);
   Future<List<SongModel>> getPlaylistSongs(int playlistId);
+  Future<List<SongModel>> getRecentPlayedSongs();
   Future<void> addSongsToPlaylist(int playlistId, List<int> songIds);
   Future<void> removeSongsFromPlaylist(int playlistId, List<int> songIds);
   Future<bool> renamePlaylist(int id, String newName);
@@ -186,5 +187,35 @@ class PlaylistDatasourceImpl implements PlaylistDatasource {
       PreferencesKeys.pinnedPlaylists,
       rawList,
     );
+  }
+
+  @override
+  Future<List<SongModel>> getRecentPlayedSongs() async {
+    final recentSongIds =
+        preferences.getStringList(
+          PreferencesKeys.recentlyPlayedSongIds,
+        ) ??
+        <String>[];
+    if (recentSongIds.isEmpty) {
+      return [];
+    } else {
+      final songIdInts = recentSongIds.map(int.parse).toList();
+      final result = await audioQuery.querySongs();
+      final filteredSongs =
+          result
+              .where(
+                (song) => songIdInts.contains(song.id),
+              )
+              .toList()
+            // Sort songs to match the order in recentSongIds
+            ..sort(
+              (a, b) => songIdInts
+                  .indexOf(a.id)
+                  .compareTo(
+                    songIdInts.indexOf(b.id),
+                  ),
+            );
+      return filteredSongs;
+    }
   }
 }

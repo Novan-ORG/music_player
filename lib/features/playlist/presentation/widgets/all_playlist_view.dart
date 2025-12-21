@@ -51,9 +51,11 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
   }
 
   Future<void> _handleAddMusicToPlaylist(Playlist playlist) async {
+    // TODO(Taleb): Optimize this by reusing the existing bloc if possible.
     final detailsBloc = PlaylistDetailsBloc(
       playlist: playlist,
       getPlaylistSongs: getIt.get(),
+      getRecentlyPlayedSongs: getIt.get(),
     )..add(const GetPlaylistSongsEvent());
 
     try {
@@ -165,7 +167,7 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'All Playlist',
+              context.localization.allPlaylists,
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -174,7 +176,7 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
               GestureDetector(
                 onTap: _showCreatePlaylistSheet,
                 child: Text(
-                  'Create Playlist',
+                  context.localization.createPlaylist,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Theme.of(

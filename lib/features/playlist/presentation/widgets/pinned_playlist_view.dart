@@ -35,7 +35,7 @@ class PinnedPlaylistsView extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               final recently = Playlist(
-                id: 0,
+                id: -1,
                 name: context.localization.recentlyPlayed,
                 numOfSongs: 0,
                 createdAt: DateTime.now(),
