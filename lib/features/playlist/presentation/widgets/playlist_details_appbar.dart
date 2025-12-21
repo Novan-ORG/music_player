@@ -27,13 +27,16 @@ class PlaylistDetailsAppbar extends StatelessWidget
         playlist.name,
         style: Theme.of(context).textTheme.titleLarge,
       ),
-      actions: [
-        PlaylistItemMoreAction(
-          playlist: playlist,
-          onDeleted: () => Navigator.of(context).pop(),
-          onRenamed: onPlaylistRenamed,
-        ),
-      ],
+      // more actions not shown for recently played pseudo-playlist
+      actions: playlist.id == -1
+          ? null
+          : [
+              PlaylistItemMoreAction(
+                playlist: playlist,
+                onDeleted: () => Navigator.of(context).pop(),
+                onRenamed: onPlaylistRenamed,
+              ),
+            ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Row(
