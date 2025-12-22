@@ -39,6 +39,7 @@ jobs:
           echo "storePassword=$ANDROID_KEYSTORE_PASSWORD" >> $GITHUB_WORKSPACE/android/keystore.properties
           echo "keyAlias=$ANDROID_KEY_ALIAS" >> $GITHUB_WORKSPACE/android/keystore.properties
           echo "keyPassword=$ANDROID_KEY_PASSWORD" >> $GITHUB_WORKSPACE/android/keystore.properties
+
       - name: Create .env file
         run: |
           echo "SENTRY_DSN=$SENTRY_DSN" >> .env
@@ -56,3 +57,11 @@ jobs:
           path: |
             build/app/outputs/flutter-apk/*.apk
             build/app/outputs/bundle/release/*.aab
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build/app/outputs/flutter-apk/*.apk
+            build/app/outputs/bundle/release/*.aab
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
