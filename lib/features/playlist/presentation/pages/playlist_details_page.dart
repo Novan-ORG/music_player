@@ -10,6 +10,7 @@ import 'package:music_player/features/music_plyer/presentation/pages/pages.dart'
 import 'package:music_player/features/playlist/domain/domain.dart';
 import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
 import 'package:music_player/features/playlist/presentation/widgets/widgets.dart';
+import 'package:music_player/features/search/presentation/pages/search_songs_page.dart';
 import 'package:music_player/features/songs/presentation/pages/pages.dart';
 import 'package:music_player/injection/service_locator.dart';
 
@@ -84,6 +85,14 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
     );
   }
 
+  Future<void> _onSearchButtonPressed() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const SearchSongsPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PlaylistDetailsBloc, PlaylistDetailsState>(
@@ -106,30 +115,13 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
           appBar: PlaylistDetailsAppbar(
             playlist: state.playlist,
             songCount: songCount,
-            onAddSongs: () async {
-              final result = await addSongsToPlaylist(
-                state.playlist,
-                songs.map((e) => e.id).toSet(),
-              );
-              if (result != null) {
-                await Future<void>.delayed(
-                  const Duration(milliseconds: 200),
-                );
-                _loadPlaylistSongs();
-              }
-            },
-            onPlaylistRenamed: () {
-              Navigator.pop(context);
-            },
+            onSearchButtonPressed: _onSearchButtonPressed,
           ),
           body: state.status == PlaylistDetailsStatus.loading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
+              ? const Loading()
               : songs.isEmpty
               ? NoSongsWidget(
                   message: context.localization.noSongInPlaylist,
-                  onRefresh: onRefresh,
                 )
               : RefreshIndicator(
                   onRefresh: onRefresh,
@@ -143,46 +135,54 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
                           return state.favoriteSongIds;
                         },
                         builder: (context, favoriteSongs) {
-                          return ListView.builder(
-                            itemCount: songs.length,
-                            physics: const AlwaysScrollableScrollPhysics(
-                              parent: BouncingScrollPhysics(),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 12,
-                            ),
-                            itemBuilder: (context, index) {
-                              final song = songs[index];
-                              return SongItem(
-                                track: song,
-                                isInPlaylist: true,
-                                isFavorite: favoriteSongs.contains(song.id),
-                                onSetAsRingtone: () => setAsRingtone(song.data),
-                                onDelete: () => showDeleteSongDialog(song),
-                                onFavoriteToggle: () => context
-                                    .read<FavoriteSongsBloc>()
-                                    .add(ToggleFavoriteSongEvent(song.id)),
-                                onShare: () => shareSong(song),
-                                onRemoveFromPlaylist: () async {
-                                  removeSongsFromPlaylist({
-                                    song.id,
-                                  }, state.playlist);
-                                  await Future<void>.delayed(
-                                    const Duration(milliseconds: 200),
-                                  );
-                                  _loadPlaylistSongs();
-                                },
-                                onLongPress: () => _handleSongLongPress(song),
-                                onTap: () async {
-                                  await _handleSongTap(index, songs);
-                                },
-                              );
-                            },
-                          );
+                          return _getSongsList(songs, favoriteSongs, state);
                         },
                       ),
                 ),
+        );
+      },
+    );
+  }
+
+  ListView _getSongsList(
+    List<Song> songs,
+    Set<int> favoriteSongs,
+    PlaylistDetailsState state,
+  ) {
+    return ListView.builder(
+      itemCount: songs.length,
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 12,
+      ),
+      itemBuilder: (context, index) {
+        final song = songs[index];
+        return SongItem(
+          track: song,
+          isInPlaylist: true,
+          isFavorite: favoriteSongs.contains(song.id),
+          onSetAsRingtone: () => setAsRingtone(song.data),
+          onDelete: () => showDeleteSongDialog(song),
+          onFavoriteToggle: () => context.read<FavoriteSongsBloc>().add(
+            ToggleFavoriteSongEvent(song.id),
+          ),
+          onShare: () => shareSong(song),
+          onRemoveFromPlaylist: () async {
+            removeSongsFromPlaylist({
+              song.id,
+            }, state.playlist);
+            await Future<void>.delayed(
+              const Duration(milliseconds: 200),
+            );
+            _loadPlaylistSongs();
+          },
+          onLongPress: () => _handleSongLongPress(song),
+          onTap: () async {
+            await _handleSongTap(index, songs);
+          },
         );
       },
     );

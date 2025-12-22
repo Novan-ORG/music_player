@@ -7,12 +7,14 @@ import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
 class PlaylistImageWidget extends StatelessWidget {
   const PlaylistImageWidget({
     required this.playlistId,
+    this.size = 50,
     this.borderRadius = 12,
     super.key,
   });
 
   final int playlistId;
   final double borderRadius;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class PlaylistImageWidget extends StatelessWidget {
           defaultCover: ImageAssets.playlistCover,
           defaultCoverBg: Colors.white,
           borderRadius: borderRadius,
+          size: size,
         );
       },
     );
