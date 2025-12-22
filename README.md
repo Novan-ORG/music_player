@@ -143,9 +143,12 @@ flutter build apk --release
 # Android App Bundle
 flutter build appbundle --release
 
-# iOS
-flutter build ios --release
+# iOS (Coming Soon)
+# flutter build ios --release
 ```
+
+> **Note:** Currently optimized for **Android**. iOS support coming soon.
+
 
 ### Permissions
 - **Storage** - Read audio files
