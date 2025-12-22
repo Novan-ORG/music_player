@@ -1,5 +1,7 @@
 name: music_player
-description: "A new Flutter project."
+license: MIT
+homepage: https://github.com/TalebRafiepour/music_player
+description: "A feature-rich, open-source music player application built with Flutter."
 
 publish_to: "none"
 
