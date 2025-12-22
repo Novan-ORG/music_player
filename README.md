@@ -156,6 +156,20 @@ flutter build appbundle --release
 
 ---
 
+## 📥 Downloads
+
+| Architecture | Download |
+|--------------|----------|
+| **ARM64 (arm64-v8a)** | [![ARM64](https://img.shields.io/badge/Download-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **ARMv7 (armeabi-v7a)** | [![ARMv7](https://img.shields.io/badge/Download-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **x86** | [![x86](https://img.shields.io/badge/Download-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **x86_64** | [![x86_64](https://img.shields.io/badge/Download-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **Universal (All ABIs)** | [![Universal](https://img.shields.io/badge/Download-APK-green?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+
+> All APKs are available in the [Releases](https://github.com/TalebRafiepour/music_player/releases) page.
+
+---
+
 ## 📊 Code Quality
 
 ```bash
