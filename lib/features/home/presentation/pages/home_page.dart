@@ -8,6 +8,14 @@ import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/features/settings/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/pages/pages.dart';
 
+/// Main home page with bottom navigation and mini player.
+///
+/// Navigation tabs:
+/// - Songs library (songs, albums, artists)
+/// - Playlists
+/// - Favorite songs
+/// - Settings
+/// - Mini player at bottom
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 

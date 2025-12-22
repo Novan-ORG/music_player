@@ -3,6 +3,12 @@ import 'package:music_player/core/utils/launcher_utils.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:see_more_text/see_more_text.dart';
 
+/// Contributor card showing info and contact options.
+///
+/// Displays:
+/// - Contributor avatar
+/// - Bio/about text with expand/collapse
+/// - Email and social media links
 class ContributerItem extends StatelessWidget {
   const ContributerItem({
     required this.imagePath,

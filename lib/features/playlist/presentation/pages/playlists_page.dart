@@ -6,6 +6,14 @@ import 'package:music_player/features/playlist/domain/entities/entities.dart';
 import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
 import 'package:music_player/features/playlist/presentation/widgets/widgets.dart';
 
+/// Main playlists management page.
+///
+/// Features:
+/// - List all playlists
+/// - Create new playlist
+/// - Delete/rename playlist
+/// - Pin/unpin playlists
+/// - Selection mode for adding songs
 class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({
     super.key,

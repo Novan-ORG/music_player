@@ -3,6 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:music_player/extensions/extensions.dart';
 
+/// Frosted glass effect card widget using glassmorphism design.
+///
+/// Features:
+/// - Configurable blur effect (sigmaX, sigmaY)
+/// - Customizable border radius and padding
+/// - Tap and long-press callbacks
+/// - Transparent frosted glass appearance
 class GlassCard extends StatelessWidget {
   const GlassCard({
     required this.child,

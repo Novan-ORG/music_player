@@ -6,6 +6,12 @@ import 'package:music_player/features/playlist/data/models/pin_playlist_model.da
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Abstract datasource for playlist database operations.
+///
+/// Handles:
+/// - Create, read, update, delete playlists
+/// - Manage songs within playlists
+/// - Handle playlist covers and pinning
 abstract class PlaylistDatasource {
   Future<List<PlaylistModel>> getAllPlaylists();
   Future<PlaylistModel?> getPlaylistById(int id);

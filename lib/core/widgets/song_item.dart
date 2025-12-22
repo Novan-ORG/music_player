@@ -3,6 +3,15 @@ import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 
+/// Reusable song list tile widget.
+///
+/// Displays a song with:
+/// - Album thumbnail/cover art
+/// - Song title and artist
+/// - Duration
+/// - Favorite toggle button
+/// - Optional actions menu
+/// - Visual indication of current playing song
 class SongItem extends StatelessWidget {
   const SongItem({
     required this.track,

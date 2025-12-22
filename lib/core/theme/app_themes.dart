@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Define custom colors for dark theme
+/// Dark theme color palette for the Music Player app.
 class AppDarkColors {
   static const Color primary = Color(0xFF9C27B0); // Purple
   static const Color background = Color(0xFF181818);
@@ -10,7 +10,7 @@ class AppDarkColors {
   static const Color textSecondary = Color(0xFFB3B3B3);
 }
 
-// Define custom colors for light theme
+/// Light theme color palette for the Music Player app.
 class AppLightColors {
   static const Color primary = Color(0xFF9C27B0); // Purple
   static const Color background = Color(0xFFFDFCF2);
@@ -20,7 +20,10 @@ class AppLightColors {
   static const Color textSecondary = Color(0xFF535353);
 }
 
-// Define custom text styles
+/// Custom text theme for the Music Player app.
+///
+/// Defines text styles for headlines, titles, bodies, and labels
+/// with specified primary and secondary text colors.
 TextTheme appTextTheme(Color textPrimary, Color textSecondary) => TextTheme(
   headlineLarge: TextStyle(
     fontSize: 32,

@@ -11,6 +11,15 @@ import 'package:music_player/features/songs/domain/usecases/usecases.dart';
 part 'songs_event.dart';
 part 'songs_state.dart';
 
+/// BLoC managing all songs library state and playback events.
+///
+/// Handles:
+/// - Fetching and displaying songs
+/// - Searching songs
+/// - Deleting songs with undo capability
+/// - Toggling favorite status
+/// - Sorting songs
+/// - Managing undo/redo state
 class SongsBloc extends Bloc<SongsEvent, SongsState> {
   SongsBloc(
     this.ensureMediaPermission,

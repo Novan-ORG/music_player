@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/theme/app_themes.dart';
 
+/// Custom checkbox widget with configurable styling.
+///
+/// Features:
+/// - Customizable color (defaults to theme primary color)
+/// - Scaled appearance for better visibility
+/// - Used in selection lists
 class CheckBoxWidget extends StatelessWidget {
   const CheckBoxWidget({
     required this.isSelected,

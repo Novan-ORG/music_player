@@ -1,3 +1,13 @@
+/// SharedPreferences keys for all persistent local storage in the app.
+///
+/// Stores preferences for:
+/// - Favorite songs IDs
+/// - Theme mode (light/dark)
+/// - Sleep timer duration
+/// - Current language code
+/// - Pinned playlists
+/// - Song sort preferences
+/// - Recently played songs
 sealed class PreferencesKeys {
   static const String favoriteSongs = 'favorited_songs';
   static const String themeMode = 'theme_mode';

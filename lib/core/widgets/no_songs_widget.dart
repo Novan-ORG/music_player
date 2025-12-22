@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:music_player/core/constants/constants.dart';
 import 'package:music_player/extensions/extensions.dart';
 
+/// Empty state widget shown when no songs are available.
+///
+/// Displays:
+/// - Empty state image
+/// - Customizable message text
+/// - Optional refresh button
 class NoSongsWidget extends StatelessWidget {
   const NoSongsWidget({
     super.key,

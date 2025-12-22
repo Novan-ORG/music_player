@@ -1,6 +1,11 @@
 import 'package:music_player/core/services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// Utility class for launching URLs and opening email apps.
+///
+/// Methods:
+/// - `launchUrlExternally(url)` - Open URL in external browser
+/// - `openEmailApp(toEmail, subject, body)` - Compose and send email
 class LauncherUtils {
   static Future<void> launchUrlExternally(String url) async {
     final uri = Uri.parse(url);

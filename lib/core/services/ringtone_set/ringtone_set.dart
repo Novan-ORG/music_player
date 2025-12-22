@@ -1,6 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+/// Service to set a song/audio file as the device ringtone.
+///
+/// Uses platform channel to invoke native Android code for setting
+/// the ringtone. Returns true if successful, false otherwise.
 class RingtoneSet {
   RingtoneSet._();
 

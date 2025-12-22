@@ -5,6 +5,13 @@ import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Abstract datasource for song queries from the device media store.
+///
+/// Implements:
+/// - Device audio file queries
+/// - File deletion
+/// - Permission handling
+/// - Sort preference persistence
 abstract interface class SongsDatasource {
   Future<List<SongModel>> querySongs({
     SongSortType sortType = SongSortType.DATE_ADDED,

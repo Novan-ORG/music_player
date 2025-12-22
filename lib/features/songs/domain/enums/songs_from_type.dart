@@ -1,3 +1,4 @@
+/// Enum for query source types (album, artist, genre, playlist).
 enum SongsFromType {
   album,
   albumId,

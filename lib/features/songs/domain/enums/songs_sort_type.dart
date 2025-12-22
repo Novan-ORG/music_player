@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' show BuildContext, IconData, Icons;
 import 'package:music_player/extensions/extensions.dart';
 
+/// Enum for song sorting options (date added, title, artist, album, duration, size).
 enum SongsSortType {
   dateAdded,
   title,

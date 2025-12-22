@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/extensions/extensions.dart';
 
+/// Widget displaying artist information with optional indicator.
+///
+/// Shows artist name with icon and indicates if it's the current track.
 class ArtistWidget extends StatelessWidget {
   const ArtistWidget({
     required this.artist,

@@ -9,6 +9,15 @@ enum _MenuAction {
   setAsRingtone,
 }
 
+/// Context menu widget for song actions.
+///
+/// Provides options to:
+/// - Add/remove from playlists
+/// - Share song
+/// - Delete song
+/// - Set as ringtone
+/// - Toggle favorite
+/// - Play/pause current track
 class SongItemMoreOptionMenu extends StatelessWidget {
   const SongItemMoreOptionMenu({
     required this.isInPlaylist,

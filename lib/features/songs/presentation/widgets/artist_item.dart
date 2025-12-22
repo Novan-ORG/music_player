@@ -5,6 +5,9 @@ import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/songs/domain/entities/entities.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
+/// Artist card widget for displaying artist information.
+///
+/// Shows artist name, number of songs and albums.
 class ArtistItem extends StatelessWidget {
   const ArtistItem({required this.artist, this.onTap, super.key});
 

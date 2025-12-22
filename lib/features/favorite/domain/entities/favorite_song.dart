@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+/// Represents a song that has been added to favorites.
+///
+/// Contains the song ID and the date it was added to favorites.
 class FavoriteSong extends Equatable {
   const FavoriteSong({
     required this.id,

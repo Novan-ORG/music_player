@@ -7,6 +7,14 @@ import 'package:music_player/features/favorite/domain/domain.dart';
 part 'favorite_songs_event.dart';
 part 'favorite_songs_state.dart';
 
+/// BLoC managing favorite songs list state.
+///
+/// Handles:
+/// - Loading and displaying favorite songs
+/// - Adding songs to favorites
+/// - Removing songs from favorites
+/// - Toggling favorite status
+/// - Clearing all favorites
 class FavoriteSongsBloc extends Bloc<FavoriteSongsEvent, FavoriteSongsState> {
   FavoriteSongsBloc({
     required this.getFavoriteSongs,

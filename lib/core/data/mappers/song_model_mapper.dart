@@ -1,6 +1,7 @@
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
+/// Maps between SongModel (data layer) and Song (domain layer) entities.
 sealed class SongModelMapper {
   static SongModel fromDomain(Song song) {
     final result = SongModel({

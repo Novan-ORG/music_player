@@ -9,6 +9,14 @@ import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/widgets.dart';
 
+/// Minimizable mini player widget at the bottom of the screen.
+///
+/// Features:
+/// - Compact player display
+/// - Swipe to dismiss gesture
+/// - Swipe left/right for next/previous song
+/// - Expandable to full player view
+/// - Album art with progress bar
 class MiniPlayerPage extends StatefulWidget {
   const MiniPlayerPage({super.key});
 
