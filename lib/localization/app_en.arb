@@ -39,6 +39,7 @@
     },
     "songs": "Songs",
     "playlists": "Playlists",
+    "playlist": "Playlist",
     "favorites": "Favorites",
 
     "songsPage":"",

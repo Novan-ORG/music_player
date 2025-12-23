@@ -266,6 +266,12 @@ abstract class AppLocalizations {
   /// **'Playlists'**
   String get playlists;
 
+  /// No description provided for @playlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlist'**
+  String get playlist;
+
   /// No description provided for @favorites.
   ///
   /// In en, this message translates to:

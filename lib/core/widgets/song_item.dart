@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/theme/app_themes.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 
@@ -159,7 +160,9 @@ class SongItem extends StatelessWidget {
             child: IconButton(
               icon: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: context.theme.primaryColor,
+                color: isFavorite
+                    ? context.theme.primaryColor
+                    : AppDarkColors.accent,
               ),
               onPressed: onFavoriteToggle,
             ),
