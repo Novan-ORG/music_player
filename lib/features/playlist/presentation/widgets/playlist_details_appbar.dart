@@ -24,6 +24,7 @@ class PlaylistDetailsAppbar extends StatelessWidget
     return AppBar(
       title: Text(
         context.localization.playlist,
+        style: context.theme.textTheme.titleLarge,
       ),
       centerTitle: true,
       actions: [

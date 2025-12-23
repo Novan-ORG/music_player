@@ -23,6 +23,7 @@ class PlaylistAppbar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       title: Text(
         context.localization.playlists,
+        style: context.theme.textTheme.titleLarge,
       ),
       centerTitle: true,
       actions: [

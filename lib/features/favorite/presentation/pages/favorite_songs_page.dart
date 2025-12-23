@@ -51,7 +51,10 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(context.localization.favoriteSongs),
+        title: Text(
+          context.localization.favoriteSongs,
+          style: context.theme.textTheme.titleLarge,
+        ),
         elevation: 0,
         actions: [
           BlocBuilder<FavoriteSongsBloc, FavoriteSongsState>(

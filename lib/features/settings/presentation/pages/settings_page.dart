@@ -29,7 +29,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.localization.settings),
+        title: Text(
+          context.localization.settings,
+          style: context.theme.textTheme.titleLarge,
+        ),
         centerTitle: true,
         elevation: 0,
       ),

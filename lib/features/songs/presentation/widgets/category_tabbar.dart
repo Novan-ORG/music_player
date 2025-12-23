@@ -29,14 +29,8 @@ class CategoryTabbar extends StatelessWidget {
       unselectedLabelColor: theme.textTheme.bodyMedium?.color?.withValues(
         alpha: 0.7,
       ),
-      labelStyle: const TextStyle(
-        fontWeight: FontWeight.w600,
-        fontSize: 14,
-      ),
-      unselectedLabelStyle: const TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 14,
-      ),
+      labelStyle: context.theme.textTheme.titleSmall,
+      unselectedLabelStyle: context.theme.textTheme.titleSmall,
       tabs: labels.map((label) => Tab(text: label)).toList(),
     );
   }
