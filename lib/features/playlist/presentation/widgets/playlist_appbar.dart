@@ -37,7 +37,7 @@ class PlaylistAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
               child: Icon(
                 Icons.add,
-                color: theme.colorScheme.primary,
+                color: theme.colorScheme.onSurface,
                 size: 28,
               ),
             ),

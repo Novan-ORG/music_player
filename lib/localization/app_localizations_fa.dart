@@ -93,6 +93,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get playlists => 'لیست های پخش';
 
   @override
+  String get playlist => 'لیست پخش';
+
+  @override
   String get favorites => 'محبوب ها';
 
   @override

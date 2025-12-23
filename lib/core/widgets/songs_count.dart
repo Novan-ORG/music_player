@@ -17,16 +17,12 @@ class SongsCount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final songText = songCount == 1
-        ? context.localization.songs.substring(0, 4)
-        : context.localization.songs;
-
     final color = Theme.of(context).brightness == Brightness.dark
         ? AppDarkColors.textSecondary
         : AppLightColors.textSecondary;
 
     return Text(
-      '$songCount $songText',
+      '$songCount ${context.localization.songs}',
       style: isPlaylistItem
           ? context.theme.textTheme.bodySmall?.copyWith(color: color)
           : context.theme.textTheme.labelLarge?.copyWith(

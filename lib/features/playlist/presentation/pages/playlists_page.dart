@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/theme/app_themes.dart';
+import 'package:music_player/core/widgets/floating_circle_buttton.dart';
 import 'package:music_player/core/widgets/loading.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/entities/entities.dart';
@@ -55,8 +56,6 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: PlaylistAppbar(
         onActionPressed: _showCreatePlaylistSheet,
@@ -64,18 +63,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
       body: const PlaylistContentView(
         isSelectionMode: false,
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: theme.colorScheme.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+      floatingActionButton: FloatingCircleButton(
         onPressed: _showCreatePlaylistSheet,
-        tooltip: context.localization.createPlaylist,
-        child: Icon(
-          Icons.add,
-          color: theme.colorScheme.primary,
-          size: 38,
-        ),
       ),
     );
   }
