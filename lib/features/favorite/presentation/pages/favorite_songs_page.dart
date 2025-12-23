@@ -141,7 +141,10 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage> {
                 const ClearAllFavoritesEvent(),
               );
             },
-            child: const Text('Clear All', style: TextStyle(color: Colors.red)),
+            child: Text(
+              context.localization.clearAll,
+              style: const TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),

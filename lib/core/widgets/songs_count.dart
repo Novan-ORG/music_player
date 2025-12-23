@@ -21,8 +21,13 @@ class SongsCount extends StatelessWidget {
         ? AppDarkColors.textSecondary
         : AppLightColors.textSecondary;
 
+    final title =
+        songCount == 1 || Localizations.localeOf(context).languageCode == 'fa'
+        ? context.localization.song
+        : context.localization.songs;
+
     return Text(
-      '$songCount ${context.localization.songs}',
+      '$songCount $title',
       style: isPlaylistItem
           ? context.theme.textTheme.bodySmall?.copyWith(color: color)
           : context.theme.textTheme.labelLarge?.copyWith(

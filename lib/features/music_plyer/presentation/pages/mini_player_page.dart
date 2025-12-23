@@ -82,16 +82,15 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
-      buildWhen: (previous, current) =>
-          previous.currentSong?.id != current.currentSong?.id ||
-          previous.status != current.status,
-      builder: (context, state) {
-        final isPlaying = state.status == MusicPlayerStatus.playing;
+    return Center(
+      child: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+        buildWhen: (previous, current) =>
+            previous.currentSong?.id != current.currentSong?.id ||
+            previous.status != current.status,
+        builder: (context, state) {
+          final isPlaying = state.status == MusicPlayerStatus.playing;
 
-        return Material(
-          color: Colors.transparent,
-          child: AnimatedBuilder(
+          return AnimatedBuilder(
             animation: _animationController,
             builder: (context, child) {
               if (_isMinimized) {
@@ -103,17 +102,20 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                 );
               }
 
-              return Transform.scale(
-                scale: _sizeAnimation.value,
-                child: Opacity(
-                  opacity: _fadeAnimation.value,
-                  child: _buildDefaultMiniPlayer(isPlaying, state),
+              return Material(
+                color: Colors.transparent,
+                child: Transform.scale(
+                  scale: _sizeAnimation.value,
+                  child: Opacity(
+                    opacity: _fadeAnimation.value,
+                    child: _buildDefaultMiniPlayer(isPlaying, state),
+                  ),
                 ),
               );
             },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
