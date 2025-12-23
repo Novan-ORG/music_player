@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/extensions/context_ex.dart';
 
-class FloatingCircleButton extends StatelessWidget {
-  const FloatingCircleButton({
+class FloatingAddButton extends StatelessWidget {
+  const FloatingAddButton({
     required this.onPressed,
     this.icon = Icons.add,
     super.key,

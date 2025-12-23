@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/mixins/mixins.dart';
 import 'package:music_player/core/views/views.dart';
-import 'package:music_player/core/widgets/floating_circle_buttton.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
@@ -23,13 +22,14 @@ class PlaylistDetailsPage extends StatelessWidget {
         getPlaylistSongs: getIt.get(),
         getRecentlyPlayedSongs: getIt.get(),
       ),
-      child: const _PlaylistDetailsView(),
+      child: _PlaylistDetailsView(playlistModel),
     );
   }
 }
 
 class _PlaylistDetailsView extends StatefulWidget {
-  const _PlaylistDetailsView();
+  const _PlaylistDetailsView(this.playlist);
+  final Playlist playlist;
 
   @override
   State<_PlaylistDetailsView> createState() => _PlaylistDetailsViewState();
@@ -101,20 +101,23 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
                   onRefresh: onRefresh,
                 ),
 
-          floatingActionButton: FloatingCircleButton(
-            onPressed: () async {
-              final result = await addSongsToPlaylist(
-                state.playlist,
-                songs.map((e) => e.id).toSet(),
-              );
-              if (result != null) {
-                await Future<void>.delayed(
-                  const Duration(milliseconds: 200),
-                );
-                _loadPlaylistSongs();
-              }
-            },
-          ),
+          // playlist id of -1 is for 'Recently Played' pseudo-playlist
+          floatingActionButton: widget.playlist.id == -1
+              ? null
+              : FloatingAddButton(
+                  onPressed: () async {
+                    final result = await addSongsToPlaylist(
+                      state.playlist,
+                      songs.map((e) => e.id).toSet(),
+                    );
+                    if (result != null) {
+                      await Future<void>.delayed(
+                        const Duration(milliseconds: 200),
+                      );
+                      _loadPlaylistSongs();
+                    }
+                  },
+                ),
         );
       },
     );

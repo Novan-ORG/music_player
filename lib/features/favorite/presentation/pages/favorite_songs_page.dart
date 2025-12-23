@@ -50,6 +50,7 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(context.localization.favoriteSongs),
         elevation: 0,
         actions: [

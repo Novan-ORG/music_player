@@ -63,7 +63,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
       body: const PlaylistContentView(
         isSelectionMode: false,
       ),
-      floatingActionButton: FloatingCircleButton(
+      floatingActionButton: FloatingAddButton(
         onPressed: _showCreatePlaylistSheet,
       ),
     );
