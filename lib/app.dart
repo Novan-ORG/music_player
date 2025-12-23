@@ -105,6 +105,8 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
             getIt(),
             getIt(),
             getIt(),
+            getIt(),
+            getIt(),
           ),
         ),
         BlocProvider(

@@ -123,12 +123,12 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
         if (details.primaryVelocity! > 0) {
           // Swiped Right
           musicPlayerBloc.add(
-            SeekMusicEvent(index: state.currentSongIndex - 1),
+            const SkipToPreviousEvent(),
           );
         } else if (details.primaryVelocity! < 0) {
           // Swiped Left
           musicPlayerBloc.add(
-            SeekMusicEvent(index: state.currentSongIndex + 1),
+            const SkipToNextEvent(),
           );
         }
       },

@@ -25,6 +25,12 @@ abstract interface class AudioHandlerDatasource {
   /// Seeks to a specific position in the current or different song.
   Future<void> seek(Duration position, {int? index});
 
+  /// Skips to the next song in the playlist.
+  Future<void> skipToNext();
+
+  /// Skips to the previous song in the playlist.
+  Future<void> skipToPrevious();
+
   /// Enables or disables shuffle mode.
   Future<void> setShuffleMode({required bool isEnabled});
 
@@ -156,5 +162,15 @@ class AudioHandlerDatasourceImpl implements AudioHandlerDatasource {
       PreferencesKeys.recentlyPlayedSongIds,
       recentList,
     );
+  }
+
+  @override
+  Future<void> skipToNext() {
+    return _audioHandler.skipToNext();
+  }
+
+  @override
+  Future<void> skipToPrevious() {
+    return _audioHandler.skipToPrevious();
   }
 }

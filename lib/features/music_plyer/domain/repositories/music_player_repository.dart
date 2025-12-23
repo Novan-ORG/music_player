@@ -41,6 +41,16 @@ abstract class MusicPlayerRepository {
   /// Returns a [Result] indicating success or failure.
   Future<Result<void>> seek(Duration position, {int? index});
 
+  /// Skips to the next song in the playlist.
+  ///
+  /// Returns a [Result] indicating success or failure.
+  Future<Result<void>> skipToNext();
+
+  /// Skips to the previous song in the playlist.
+  ///
+  /// Returns a [Result] indicating success or failure.
+  Future<Result<void>> skipToPrevious();
+
   /// Enables or disables shuffle mode.
   ///
   /// Parameters:

@@ -61,6 +61,26 @@ class MusicPlayerRepoImpl implements MusicPlayerRepository {
   }
 
   @override
+  Future<Result<void>> skipToNext() async {
+    try {
+      await _audioHandlerDatasource.skipToNext();
+      return Result.success(null);
+    } on Exception catch (e) {
+      return Result.failure('failed to skipToNext: $e');
+    }
+  }
+
+  @override
+  Future<Result<void>> skipToPrevious() async {
+    try {
+      await _audioHandlerDatasource.skipToPrevious();
+      return Result.success(null);
+    } on Exception catch (e) {
+      return Result.failure('failed to skipToPrevious: $e');
+    }
+  }
+
+  @override
   Future<Result<void>> stop() async {
     try {
       await _audioHandlerDatasource.stop();

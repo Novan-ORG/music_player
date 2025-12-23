@@ -136,6 +136,8 @@ void _setupMusicPlayerFeature() {
     ..registerLazySingleton(() => PlaySong(getIt.get()))
     ..registerLazySingleton(() => ResumeSong(getIt.get()))
     ..registerLazySingleton(() => SeekSong(getIt.get()))
+    ..registerLazySingleton(() => SkipToNext(getIt.get()))
+    ..registerLazySingleton(() => SkipToPrevious(getIt.get()))
     ..registerLazySingleton(() => SetLoopMode(getIt.get()))
     ..registerLazySingleton(() => SetShuffleEnabled(getIt.get()))
     ..registerLazySingleton(() => StopSong(getIt.get()))

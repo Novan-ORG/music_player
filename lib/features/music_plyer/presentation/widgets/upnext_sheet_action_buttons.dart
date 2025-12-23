@@ -65,7 +65,7 @@ class _PreviousButton extends StatelessWidget {
         splashRadius: iconSize,
         onPressed: state.hasPrevious
             ? () => musicPlayer.add(
-                SeekMusicEvent(index: state.currentSongIndex - 1),
+                const SkipToPreviousEvent(),
               )
             : null,
       ),
@@ -130,7 +130,7 @@ class _NextButton extends StatelessWidget {
         splashRadius: iconSize,
         onPressed: state.hasNext
             ? () => musicPlayer.add(
-                SeekMusicEvent(index: state.currentSongIndex + 1),
+                const SkipToNextEvent(),
               )
             : null,
       ),

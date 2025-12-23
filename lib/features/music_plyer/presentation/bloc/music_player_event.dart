@@ -103,3 +103,21 @@ final class UpdateStateEvent extends MusicPlayerEvent {
   @override
   List<Object> get props => [...super.props, state];
 }
+
+/// Event to skip to the next song in the playlist.
+final class SkipToNextEvent extends MusicPlayerEvent {
+  /// Creates a [SkipToNextEvent].
+  const SkipToNextEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+/// Event to skip to the previous song in the playlist.
+final class SkipToPreviousEvent extends MusicPlayerEvent {
+  /// Creates a [SkipToPreviousEvent].
+  const SkipToPreviousEvent();
+
+  @override
+  List<Object> get props => [];
+}
