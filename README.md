@@ -157,14 +157,20 @@ flutter build appbundle --release
 ---
 
 ## 📥 Downloads
+| Platform | Download |
+|----------|----------|
+| **GitHub Releases** | [![GitHub](https://img.shields.io/badge/Download-APK-blue?logo=github)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **CafeBazar** | [![CafeBazar](https://img.shields.io/badge/Download-CafeBazar-green)](https://cafebazaar.ir/app/com.taleb.music_player) |
+| **Myket** | [![Myket](https://img.shields.io/badge/Download-Myket-orange)](https://myket.ir/app/com.taleb.music_player) |
 
+**APK Architectures** (from GitHub Releases):
 | Architecture | Download |
 |--------------|----------|
-| **ARM64 (arm64-v8a)** | [![ARM64](https://img.shields.io/badge/Download-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
-| **ARMv7 (armeabi-v7a)** | [![ARMv7](https://img.shields.io/badge/Download-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
-| **x86** | [![x86](https://img.shields.io/badge/Download-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
-| **x86_64** | [![x86_64](https://img.shields.io/badge/Download-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
-| **Universal (All ABIs)** | [![Universal](https://img.shields.io/badge/Download-APK-green?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **ARM64 (arm64-v8a)** | [![ARM64](https://img.shields.io/badge/ARM64-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **ARMv7 (armeabi-v7a)** | [![ARMv7](https://img.shields.io/badge/ARMv7-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **x86** | [![x86](https://img.shields.io/badge/x86-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **x86_64** | [![x86_64](https://img.shields.io/badge/x86_64-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **Universal** | [![Universal](https://img.shields.io/badge/Universal-APK-green?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
 
 > All APKs are available in the [Releases](https://github.com/TalebRafiepour/music_player/releases) page.
 
