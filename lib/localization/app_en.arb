@@ -175,6 +175,10 @@
                 "type":"int"
             }
         }
-    }
-
+    },
+    
+        "hours": "Hours",
+        "minutes": "Minutes",
+        "seconds": "Seconds"
+    
 }

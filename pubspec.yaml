@@ -46,6 +46,7 @@ dependencies:
   url_launcher: ^6.3.2
   volume_controller: ^3.4.0
   wave_player: ^0.0.4
+  wheel_picker: ^0.2.2
 
 
 dev_dependencies:

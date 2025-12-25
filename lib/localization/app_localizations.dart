@@ -775,6 +775,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add ({count})'**
   String add(int count);
+
+  /// No description provided for @hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get hours;
+
+  /// No description provided for @minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes'**
+  String get minutes;
+
+  /// No description provided for @seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Seconds'**
+  String get seconds;
 }
 
 class _AppLocalizationsDelegate

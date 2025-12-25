@@ -363,4 +363,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String add(int count) {
     return 'Add ($count)';
   }
+
+  @override
+  String get hours => 'Hours';
+
+  @override
+  String get minutes => 'Minutes';
+
+  @override
+  String get seconds => 'Seconds';
 }

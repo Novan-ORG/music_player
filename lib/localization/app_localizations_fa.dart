@@ -363,4 +363,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String add(int count) {
     return 'اضافه کردن ($count)';
   }
+
+  @override
+  String get hours => 'ساعت';
+
+  @override
+  String get minutes => 'دقیقه';
+
+  @override
+  String get seconds => 'ثانیه';
 }
