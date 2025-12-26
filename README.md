@@ -2,8 +2,8 @@
 
 A beautifully crafted, offline music player built with **Flutter** that delivers a seamless listening experience. Enjoy your music with playlists, favorites, voice search, and more—all without internet.
 
-![PR Checks](https://github.com/TalebRafiepour/music_player/actions/workflows/pr-checks.yml/badge.svg)
-![Build Artifacts](https://github.com/TalebRafiepour/music_player/actions/workflows/publish-new-version.yml/badge.svg)
+![PR Checks](https://github.com/Novan-ORG/music_player/actions/workflows/pr-checks.yml/badge.svg)
+![Build Artifacts](https://github.com/Novan-ORG/music_player/actions/workflows/publish-new-version.yml/badge.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ---
@@ -114,7 +114,7 @@ This project implements **Clean Architecture** with **BLoC** pattern:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/TalebRafiepour/music_player.git
+   git clone https://github.com/Novan-ORG/music_player.git
    cd music_player
    ```
 
@@ -159,20 +159,20 @@ flutter build appbundle --release
 ## 📥 Downloads
 | Platform | Download |
 |----------|----------|
-| **GitHub Releases** | [![GitHub](https://img.shields.io/badge/Download-APK-blue?logo=github)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **GitHub Releases** | [![GitHub](https://img.shields.io/badge/Download-APK-blue?logo=github)](https://github.com/Novan-ORG/music_player/releases/latest) |
 | **CafeBazar** | [![CafeBazar](https://img.shields.io/badge/Download-CafeBazar-green)](https://cafebazaar.ir/app/com.taleb.music_player) |
 | **Myket** | [![Myket](https://img.shields.io/badge/Download-Myket-orange)](https://myket.ir/app/com.taleb.music_player) |
 
 **APK Architectures** (from GitHub Releases):
 | Architecture | Download |
 |--------------|----------|
-| **ARM64 (arm64-v8a)** | [![ARM64](https://img.shields.io/badge/ARM64-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
-| **ARMv7 (armeabi-v7a)** | [![ARMv7](https://img.shields.io/badge/ARMv7-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
-| **x86** | [![x86](https://img.shields.io/badge/x86-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
-| **x86_64** | [![x86_64](https://img.shields.io/badge/x86_64-APK-blue?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
-| **Universal** | [![Universal](https://img.shields.io/badge/Universal-APK-green?logo=android)](https://github.com/TalebRafiepour/music_player/releases/latest) |
+| **ARM64 (arm64-v8a)** | [![ARM64](https://img.shields.io/badge/ARM64-APK-blue?logo=android)](https://github.com/Novan-ORG/music_player/releases/latest) |
+| **ARMv7 (armeabi-v7a)** | [![ARMv7](https://img.shields.io/badge/ARMv7-APK-blue?logo=android)](https://github.com/Novan-ORG/music_player/releases/latest) |
+| **x86** | [![x86](https://img.shields.io/badge/x86-APK-blue?logo=android)](https://github.com/Novan-ORG/music_player/releases/latest) |
+| **x86_64** | [![x86_64](https://img.shields.io/badge/x86_64-APK-blue?logo=android)](https://github.com/Novan-ORG/music_player/releases/latest) |
+| **Universal** | [![Universal](https://img.shields.io/badge/Universal-APK-green?logo=android)](https://github.com/Novan-ORG/music_player/releases/latest) |
 
-> All APKs are available in the [Releases](https://github.com/TalebRafiepour/music_player/releases) page.
+> All APKs are available in the [Releases](https://github.com/Novan-ORG/music_player/releases) page.
 
 ---
 
@@ -227,7 +227,7 @@ Licensed under the **MIT License** - see [LICENSE](LICENSE) for details.
 
 ## 📞 Support
 
-Found an issue? [Open a GitHub issue](https://github.com/TalebRafiepour/music_player/issues)
+Found an issue? [Open a GitHub issue](https://github.com/Novan-ORG/music_player/issues)
 
 ---
 Made with ❤️ by **NOVAN** team using Flutter

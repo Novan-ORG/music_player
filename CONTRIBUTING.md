@@ -36,7 +36,7 @@ We're committed to a welcoming community. Please be respectful and constructive.
   ```bash
   git clone https://github.com/YOUR_USERNAME/music_player.git
   cd music_player
-  git remote add upstream https://github.com/TalebRafiepour/music_player.git
+  git remote add upstream https://github.com/Novan-ORG/music_player.git
   ```
 
 2. Install dependencies:
@@ -75,7 +75,7 @@ Each feature: `data/` → `domain/` → `presentation/`
 
 ### Finding Work
 
-- Check [Issues](https://github.com/TalebRafiepour/music_player/issues) for `good first issue` or `help wanted`
+- Check [Issues](https://github.com/Novan-ORG/music_player/issues) for `good first issue` or `help wanted`
 - Comment to claim an issue
 
 ### Types of Contributions
