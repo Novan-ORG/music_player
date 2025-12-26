@@ -18,7 +18,7 @@ android {
     namespace = "com.taleb.music_player"
     //compileSdk = flutter.compileSdkVersion
     //ndkVersion = flutter.ndkVersion
-    ndkVersion = "28.2.13676358"
+    ndkVersion = "27.0.12077973"
     compileSdk = 36
 
     compileOptions {
