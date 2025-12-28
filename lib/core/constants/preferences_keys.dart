@@ -16,5 +16,6 @@ sealed class PreferencesKeys {
   static const String pinnedPlaylists = 'pinned_playlists';
   static const String playlistCoverSongsId = 'playlist_cover_songs_id';
   static const String songSortType = 'song_sort_type';
+  static const String songOrderType = 'song_sort_order_type';
   static const String recentlyPlayedSongIds = 'recently_played_song_ids';
 }

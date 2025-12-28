@@ -66,3 +66,14 @@ extension SongsFromTypeMapper on SongsFromType {
     }
   }
 }
+
+extension SortOrderTypeMapper on SortOrderType {
+  OrderType toOrderType() {
+    switch (this) {
+      case SortOrderType.ascOrSmaller:
+        return OrderType.ASC_OR_SMALLER;
+      case SortOrderType.descOrGreater:
+        return OrderType.DESC_OR_GREATER;
+    }
+  }
+}

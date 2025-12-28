@@ -17,23 +17,23 @@ abstract interface class SongsRepository {
   /// Parameters:
   /// - [fromType]: The type of source to query from (album, artist, etc.)
   /// - [where]: The identifier for the source (album ID, artist ID, etc.)
-  /// - [sortType]: How to sort the results (defaults to date added)
+  /// - [sortConfig]: The sort configuration for the results
   ///
   /// Returns a [Result] containing the list of songs or an error message.
   Future<Result<List<Song>>> querySongsFrom({
     required SongsFromType fromType,
     required Object where,
-    SongsSortType sortType = SongsSortType.dateAdded,
+    SortConfig sortConfig = const SortConfig(),
   });
 
   /// Queries all songs from the device.
   ///
   /// Parameters:
-  /// - [sortType]: How to sort the results (defaults to date added)
+  /// - [sortConfig]: The sort configuration for the results
   ///
   /// Returns a [Result] containing the list of all songs or an error message.
   Future<Result<List<Song>>> querySongs({
-    SongsSortType sortType = SongsSortType.dateAdded,
+    SortConfig sortConfig = const SortConfig(),
   });
 
   /// Queries all albums from the device.
@@ -66,17 +66,17 @@ abstract interface class SongsRepository {
   /// **Warning**: This permanently deletes the file from storage.
   Future<Result<bool>> deleteSong({required String songUri});
 
-  /// Saves the user's preferred sort type for songs.
+  /// Saves the user's sort configuration preference.
   ///
   /// Parameters:
-  /// - [sortType]: The sort type to save as preference
+  /// - [sortConfig]: The sort configuration to save
   ///
   /// Returns a [Result] containing true if successful, or an error message.
-  Future<Result<bool>> saveSongsSortType({required SongsSortType sortType});
+  Future<Result<bool>> saveSortConfig({required SortConfig sortConfig});
 
-  /// Retrieves the user's saved sort type preference for songs.
+  /// Retrieves the user's saved sort type for songs.
   ///
   /// Returns a [Result] containing the saved sort type or an error message.
   /// If no preference is saved, returns the default sort type.
-  Result<SongsSortType> getSongsSortType();
+  Result<SortConfig> getSongsSortConfig();
 }

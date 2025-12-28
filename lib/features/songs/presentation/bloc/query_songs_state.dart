@@ -3,7 +3,7 @@ part of 'query_songs_bloc.dart';
 @immutable
 final class QuerySongsState extends Equatable {
   const QuerySongsState({
-    required this.sortType,
+    required this.sortConfig,
     this.songs = const [],
     this.status = QuerySongsStatus.initial,
     this.errorMessage,
@@ -11,19 +11,19 @@ final class QuerySongsState extends Equatable {
 
   final List<Song> songs;
   final QuerySongsStatus status;
-  final SongsSortType sortType;
+  final SortConfig sortConfig;
   final String? errorMessage;
 
   QuerySongsState copyWith({
     List<Song>? songs,
     QuerySongsStatus? status,
-    SongsSortType? sortType,
+    SortConfig? sortConfig,
     String? errorMessage,
   }) {
     return QuerySongsState(
       songs: songs ?? this.songs,
       status: status ?? this.status,
-      sortType: sortType ?? this.sortType,
+      sortConfig: sortConfig ?? this.sortConfig,
       errorMessage: errorMessage,
     );
   }
@@ -32,7 +32,7 @@ final class QuerySongsState extends Equatable {
   List<Object?> get props => [
     songs,
     status,
-    sortType,
+    sortConfig,
     if (errorMessage != null) errorMessage!,
   ];
 }

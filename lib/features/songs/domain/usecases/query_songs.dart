@@ -1,6 +1,6 @@
 import 'package:music_player/core/domain/entities/entities.dart';
 import 'package:music_player/core/result.dart';
-import 'package:music_player/features/songs/domain/enums/enums.dart';
+import 'package:music_player/features/songs/domain/entities/entities.dart';
 import 'package:music_player/features/songs/domain/repositories/repositories.dart';
 
 /// Use case for querying all songs from the device.
@@ -24,12 +24,12 @@ class QuerySongs {
   /// Queries all songs from the device.
   ///
   /// Parameters:
-  /// - [sortType]: How to sort the results (defaults to date added)
+  /// - [sortConfig]: The sort configuration for the results
   ///
   /// Returns a [Result] containing the list of songs or an error message.
   Future<Result<List<Song>>> call({
-    SongsSortType sortType = SongsSortType.dateAdded,
+    SortConfig sortConfig = const SortConfig(),
   }) {
-    return _repository.querySongs(sortType: sortType);
+    return _repository.querySongs(sortConfig: sortConfig);
   }
 }

@@ -15,21 +15,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract interface class SongsDatasource {
   Future<List<SongModel>> querySongs({
     SongSortType sortType = SongSortType.DATE_ADDED,
+    OrderType orderType = OrderType.DESC_OR_GREATER,
   });
   Future<List<AlbumModel>> queryAlbums({
     AlbumSortType sortType = AlbumSortType.NUM_OF_SONGS,
+    OrderType orderType = OrderType.DESC_OR_GREATER,
   });
   Future<List<ArtistModel>> queryArtists({
     ArtistSortType sortType = ArtistSortType.NUM_OF_TRACKS,
+    OrderType orderType = OrderType.DESC_OR_GREATER,
   });
   Future<List<SongModel>> querySongsFrom({
     required AudiosFromType audiosFromTye,
     required Object where,
     SongSortType sortType = SongSortType.DATE_ADDED,
+    OrderType orderType = OrderType.DESC_OR_GREATER,
   });
   Future<bool> deleteSong(String songUri);
   Future<bool> saveSongSortType({required SongSortType sortType});
+  Future<bool> saveSongOrderType({required OrderType orderType});
   SongSortType getSongSortType();
+  OrderType getSongOrderType();
 }
 
 class SongsDatasourceImpl implements SongsDatasource {
@@ -67,25 +73,28 @@ class SongsDatasourceImpl implements SongsDatasource {
   @override
   Future<List<SongModel>> querySongs({
     SongSortType sortType = SongSortType.DATE_ADDED,
+    OrderType orderType = OrderType.DESC_OR_GREATER,
   }) => _onAudioQuery.querySongs(
     sortType: sortType,
-    orderType: OrderType.DESC_OR_GREATER,
+    orderType: orderType,
   );
 
   @override
   Future<List<AlbumModel>> queryAlbums({
     AlbumSortType sortType = AlbumSortType.NUM_OF_SONGS,
+    OrderType orderType = OrderType.DESC_OR_GREATER,
   }) => _onAudioQuery.queryAlbums(
     sortType: sortType,
-    orderType: OrderType.DESC_OR_GREATER,
+    orderType: orderType,
   );
 
   @override
   Future<List<ArtistModel>> queryArtists({
     ArtistSortType sortType = ArtistSortType.NUM_OF_TRACKS,
+    OrderType orderType = OrderType.DESC_OR_GREATER,
   }) => _onAudioQuery.queryArtists(
     sortType: sortType,
-    orderType: OrderType.DESC_OR_GREATER,
+    orderType: orderType,
   );
 
   @override
@@ -93,11 +102,13 @@ class SongsDatasourceImpl implements SongsDatasource {
     required AudiosFromType audiosFromTye,
     required Object where,
     SongSortType sortType = SongSortType.DATE_ADDED,
+    OrderType orderType = OrderType.DESC_OR_GREATER,
   }) {
     return _onAudioQuery.queryAudiosFrom(
       audiosFromTye,
       where,
       sortType: sortType,
+      orderType: orderType,
     );
   }
 
@@ -109,7 +120,19 @@ class SongsDatasourceImpl implements SongsDatasource {
   }
 
   @override
+  OrderType getSongOrderType() {
+    // the index 1 is for the DESC_OR_GREATER
+    final index = _preferences.getInt(PreferencesKeys.songOrderType) ?? 1;
+    return OrderTypeMapper.fromIndex(index);
+  }
+
+  @override
   Future<bool> saveSongSortType({required SongSortType sortType}) {
     return _preferences.setInt(PreferencesKeys.songSortType, sortType.index);
+  }
+
+  @override
+  Future<bool> saveSongOrderType({required OrderType orderType}) {
+    return _preferences.setInt(PreferencesKeys.songOrderType, orderType.index);
   }
 }

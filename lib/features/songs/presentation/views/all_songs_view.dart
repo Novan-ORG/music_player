@@ -51,13 +51,13 @@ class AllSongsView extends StatelessWidget {
               children: [
                 FilterButton(
                   onTap: () async {
-                    final selectedSortType = await SongsFilterBottomSheet.show(
+                    final selectedSortConfig = await SongsSortBottomSheet.show(
                       context: context,
-                      selectedSortType: songsState.sortType,
+                      selectedSortConfig: songsState.sortConfig,
                     );
-                    if (selectedSortType != null) {
+                    if (selectedSortConfig != null) {
                       songsBloc.add(
-                        LoadSongsEvent(sortType: selectedSortType),
+                        LoadSongsEvent(sortConfig: selectedSortConfig),
                       );
                     }
                   },

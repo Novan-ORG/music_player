@@ -1,5 +1,6 @@
 import 'package:music_player/core/domain/entities/entities.dart';
 import 'package:music_player/core/result.dart';
+import 'package:music_player/features/songs/domain/entities/entities.dart';
 import 'package:music_player/features/songs/domain/enums/enums.dart';
 import 'package:music_player/features/songs/domain/repositories/repositories.dart';
 
@@ -11,12 +12,12 @@ class QuerySongsFrom {
   Future<Result<List<Song>>> call({
     required SongsFromType fromType,
     required Object where,
-    SongsSortType sortType = SongsSortType.dateAdded,
+    SortConfig sortConfig = const SortConfig(),
   }) {
     return _repository.querySongsFrom(
       fromType: fromType,
       where: where,
-      sortType: sortType,
+      sortConfig: sortConfig,
     );
   }
 }

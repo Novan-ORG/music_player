@@ -9,8 +9,6 @@ import 'package:music_player/features/music_plyer/data/data.dart';
 import 'package:music_player/features/music_plyer/domain/domain.dart';
 import 'package:music_player/features/playlist/data/data.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
-import 'package:music_player/features/playlist/domain/usecases/get_pinned_playlist.dart';
-import 'package:music_player/features/playlist/domain/usecases/pin_playlist_by_id.dart';
 import 'package:music_player/features/songs/data/data.dart';
 import 'package:music_player/features/songs/domain/domain.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
@@ -82,8 +80,8 @@ void _setupSongsFeature() {
     ..registerLazySingleton(() => QuerySongsFrom(getIt.get()))
     ..registerLazySingleton(() => QueryAlbums(getIt.get()))
     ..registerLazySingleton(() => QueryArtists(getIt.get()))
-    ..registerLazySingleton(() => GetSongsSortType(getIt.get()))
-    ..registerLazySingleton(() => SaveSongsSortType(getIt.get()))
+    ..registerLazySingleton(() => GetSongsSortConfig(getIt.get()))
+    ..registerLazySingleton(() => SaveSongsSortConfig(getIt.get()))
     ..registerLazySingleton(() => DeleteSongWithUndo(getIt.get(), getIt.get()))
     // Repositories
     ..registerLazySingleton<SongsRepository>(
