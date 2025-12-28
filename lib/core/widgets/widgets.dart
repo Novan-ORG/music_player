@@ -1,4 +1,5 @@
 export 'artist_widget.dart';
+export 'bottom_sheet_header.dart';
 export 'floating_circle_buttton.dart';
 export 'glass_card.dart';
 export 'grant_audio_permission.dart';

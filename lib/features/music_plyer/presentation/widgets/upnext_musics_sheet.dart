@@ -190,7 +190,9 @@ class _UpNextListState extends State<_UpNextList>
               )
             : Column(
                 children: [
-                  const _Header(),
+                  BottomSheetHeader(
+                    title: context.localization.upNext,
+                  ),
                   const SizedBox(height: 12),
                   Expanded(
                     child:
@@ -273,36 +275,6 @@ class _UpNextListState extends State<_UpNextList>
                 ],
               ),
       ),
-    );
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const SizedBox(
-          width: 34,
-        ),
-        Text(
-          context.localization.upNext,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1.2,
-          ),
-        ),
-        IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: Colors.grey[600],
-          ),
-        ),
-      ],
     );
   }
 }

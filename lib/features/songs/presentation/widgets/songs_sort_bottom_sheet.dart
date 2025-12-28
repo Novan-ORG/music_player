@@ -31,10 +31,7 @@ class SongsSortBottomSheet extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       child: Column(
         children: [
-          Text(
-            context.localization.sortSongs,
-            style: context.theme.textTheme.titleLarge,
-          ),
+          BottomSheetHeader(title: context.localization.sortSongs),
           const SizedBox(height: 12),
           ...SongsSortType.values.map(
             (sortType) {
