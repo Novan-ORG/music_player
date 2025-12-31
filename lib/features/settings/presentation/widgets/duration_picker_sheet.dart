@@ -1,6 +1,7 @@
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/extensions/extensions.dart';
+import 'package:wheel_picker/wheel_picker.dart';
 
 class DurationPickerSheet extends StatefulWidget {
   const DurationPickerSheet({
