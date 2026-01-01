@@ -93,6 +93,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get seeLess => 'مشاهده کمتر';
 
   @override
+  String get createdBy => 'ساخته شده با ❤️ توسط تیم نووان';
+
+  @override
   String get homePage => '';
 
   @override

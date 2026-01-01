@@ -93,6 +93,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get seeLess => 'See Less';
 
   @override
+  String get createdBy => 'Made with ❤️ by Novan team';
+
+  @override
   String get homePage => '';
 
   @override

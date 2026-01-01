@@ -266,6 +266,12 @@ abstract class AppLocalizations {
   /// **'See Less'**
   String get seeLess;
 
+  /// No description provided for @createdBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Made with ❤️ by Novan team'**
+  String get createdBy;
+
   /// Home page localizations.
   ///
   /// In en, this message translates to:

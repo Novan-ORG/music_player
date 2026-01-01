@@ -238,7 +238,17 @@ class _SettingsPageState extends State<SettingsPage> {
           );
         },
       ),
-      floatingActionButton: const VersionInfo(),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 12,
+        children: [
+          Text(
+            context.localization.createdBy,
+            style: context.theme.textTheme.bodySmall,
+          ),
+          const VersionInfo(),
+        ],
+      ).padding(value: 12),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
