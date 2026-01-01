@@ -25,7 +25,22 @@ A beautifully crafted, offline music player built with **Flutter** that delivers
 
 ---
 
-## 🛠️ Technologies Used
+## � Screenshots
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0;">
+  <img src="screenshots/AllSongs.jpg" alt="All Songs" width="100%" />
+  <img src="screenshots/Language.jpg" alt="Language" width="100%" />
+  <img src="screenshots/MiniPlayer.jpg" alt="Mini Player" width="100%" />
+  <img src="screenshots/MusicPlayer.jpg" alt="Music Player" width="100%" />
+  <img src="screenshots/PlayList.jpg" alt="Playlist" width="100%" />
+  <img src="screenshots/Queue.jpg" alt="Queue" width="100%" />
+  <img src="screenshots/SleepTimer.jpg" alt="Sleep Timer" width="100%" />
+  <img src="screenshots/Themes.jpg" alt="Themes" width="100%" />
+</div>
+
+---
+
+## �🛠️ Technologies Used
 
 ### Framework & Language
 - **Flutter** (3.8.1+) - Cross-platform mobile development
