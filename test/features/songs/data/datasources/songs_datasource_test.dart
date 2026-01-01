@@ -142,7 +142,7 @@ void main() {
 
         // Act
         final result = await datasource.querySongsFrom(
-          audiosFromTye: AudiosFromType.ALBUM_ID,
+          audiosFromType: AudiosFromType.ALBUM_ID,
           where: 1,
         );
 
@@ -153,6 +153,7 @@ void main() {
             AudiosFromType.ALBUM_ID,
             1,
             sortType: SongSortType.DATE_ADDED,
+            orderType: OrderType.DESC_OR_GREATER,
           ),
         ).called(1);
       });

@@ -26,7 +26,7 @@ abstract interface class SongsDatasource {
     OrderType orderType = OrderType.DESC_OR_GREATER,
   });
   Future<List<SongModel>> querySongsFrom({
-    required AudiosFromType audiosFromTye,
+    required AudiosFromType audiosFromType,
     required Object where,
     SongSortType sortType = SongSortType.DATE_ADDED,
     OrderType orderType = OrderType.DESC_OR_GREATER,
@@ -99,13 +99,13 @@ class SongsDatasourceImpl implements SongsDatasource {
 
   @override
   Future<List<SongModel>> querySongsFrom({
-    required AudiosFromType audiosFromTye,
+    required AudiosFromType audiosFromType,
     required Object where,
     SongSortType sortType = SongSortType.DATE_ADDED,
     OrderType orderType = OrderType.DESC_OR_GREATER,
   }) {
     return _onAudioQuery.queryAudiosFrom(
-      audiosFromTye,
+      audiosFromType,
       where,
       sortType: sortType,
       orderType: orderType,

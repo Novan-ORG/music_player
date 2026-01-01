@@ -89,7 +89,7 @@ class SongsRepoImpl implements SongsRepository {
   }) async {
     try {
       final queriedSongs = await _songsDatasource.querySongsFrom(
-        audiosFromTye: fromType.toAudioFromType(),
+        audiosFromType: fromType.toAudioFromType(),
         where: where,
         sortType: sortConfig.sortType.toSongSortType(),
         orderType: sortConfig.orderType.toOrderType(),
