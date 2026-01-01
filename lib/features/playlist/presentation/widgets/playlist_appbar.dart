@@ -23,11 +23,12 @@ class PlaylistAppbar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       title: Text(
         context.localization.playlists,
+        style: context.theme.textTheme.titleLarge,
       ),
       centerTitle: true,
       actions: [
         Padding(
-          padding: const EdgeInsets.only(right: 24, top: 2),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: GestureDetector(
             onTap: onActionPressed,
             child: DecoratedBox(
@@ -37,7 +38,7 @@ class PlaylistAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
               child: Icon(
                 Icons.add,
-                color: theme.colorScheme.primary,
+                color: theme.colorScheme.onSurface,
                 size: 28,
               ),
             ),

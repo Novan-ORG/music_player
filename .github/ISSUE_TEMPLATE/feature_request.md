@@ -6,59 +6,24 @@ labels: enhancement
 assignees: ''
 ---
 
-## Feature Description
+## Description
+A clear and concise description of the feature you'd like to see.
 
-<!-- A clear and concise description of the feature you'd like to see -->
+## Problem
+Is your feature request related to a problem? Describe what frustrates you.
 
-## Problem Statement
+## Solution
+Describe how this feature should work and what it solves.
 
-<!-- Is your feature request related to a problem? Please describe. -->
-<!-- Example: I'm always frustrated when [...] -->
-
-## Proposed Solution
-
-<!-- Describe the solution you'd like -->
-<!-- How should this feature work? -->
-
-## Alternative Solutions
-
-<!-- Describe any alternative solutions or features you've considered -->
+## Alternatives Considered
+List any alternative approaches you've considered.
 
 ## Use Cases
-
-<!-- Describe specific use cases for this feature -->
-
 1. 
 2. 
 3. 
 
-## Benefits
-
-<!-- What benefits will this feature provide? -->
-
-- 
-- 
-- 
-
-## Mockups/Examples
-
-<!-- If applicable, add mockups, wireframes, or examples from other apps -->
-
-<details>
-<summary>Click to view mockups/examples</summary>
-
-<!-- Add your mockups/examples here -->
-
-</details>
-
-## Technical Considerations
-
-<!-- Optional: Any technical details or implementation ideas -->
-
-### Affected Components
-
-<!-- Which parts of the app would this feature affect? -->
-
+## Affected Components
 - [ ] Music Player
 - [ ] Playlist Management
 - [ ] Search
@@ -66,51 +31,31 @@ assignees: ''
 - [ ] Settings
 - [ ] UI/UX
 - [ ] Audio Service
-- [ ] Other: 
-
-### Potential Challenges
-
-<!-- Are there any technical challenges or limitations? -->
+- [ ] Other
 
 ## Priority
+- [ ] Critical
+- [ ] High
+- [ ] Medium
+- [ ] Low
 
-<!-- How important is this feature to you? -->
-
-- [ ] Critical (Essential for using the app)
-- [ ] High (Would significantly improve experience)
-- [ ] Medium (Nice to have)
-- [ ] Low (Minor enhancement)
-
-## Platform
-
-<!-- Which platforms should this feature support? -->
-
+## Platform Support
 - [ ] Android
 - [ ] iOS
 - [ ] Both
 
-## Similar Features in Other Apps
-
-<!-- Have you seen this feature in other music player apps? -->
-<!-- Provide examples if possible -->
-
 ## Additional Context
+Add screenshots, mockups, or examples from other apps if applicable.
 
-<!-- Add any other context, screenshots, or information about the feature request here -->
-
-## Willingness to Contribute
-
-<!-- Are you willing to help implement this feature? -->
-
-- [ ] I'd like to implement this feature myself
+## Contribution
+- [ ] I'd like to implement this
 - [ ] I can help with testing
-- [ ] I can help with design/mockups
-- [ ] I can provide feedback during development
-- [ ] I'm just suggesting the idea
+- [ ] I can help with design
+- [ ] I'm just suggesting
 
-## Checklist
+## Pre-submission Checklist
+- [ ] Searched for similar requests
+- [ ] Clearly described benefits
+- [ ] Considered alternatives
+- [ ] Provided examples
 
-- [ ] I have searched for similar feature requests before creating this one
-- [ ] I have clearly described the feature and its benefits
-- [ ] I have considered alternative solutions
-- [ ] I have provided use cases and examples

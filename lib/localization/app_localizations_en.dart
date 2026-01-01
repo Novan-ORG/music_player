@@ -42,6 +42,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepTimer => 'Sleep Timer';
 
   @override
+  String get minutes => 'Minutes';
+
+  @override
+  String get hours => 'Hours';
+
+  @override
   String get off => 'Off';
 
   @override
@@ -78,6 +84,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get set => 'Set';
 
   @override
+  String get setTimer => 'Set Timer';
+
+  @override
   String get seeMore => 'See more';
 
   @override
@@ -91,6 +100,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get playlists => 'Playlists';
+
+  @override
+  String get playlist => 'Playlist';
 
   @override
   String get favorites => 'Favorites';
@@ -274,6 +286,18 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noSongInThePlaylist =>
       'No song in the playlist. Add songs to see them here.';
+
+  @override
+  String get addSongsToPlaylist => 'Add Songs to Playlist';
+
+  @override
+  String get recentlyPlayed => 'Recently Played';
+
+  @override
+  String get allPlaylists => 'All Playlists';
+
+  @override
+  String get favoritePlaylists => 'Favorite Playlists';
 
   @override
   String get musicPlayerPage => '';

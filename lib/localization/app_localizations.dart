@@ -164,6 +164,18 @@ abstract class AppLocalizations {
   /// **'Sleep Timer'**
   String get sleepTimer;
 
+  /// No description provided for @minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes'**
+  String get minutes;
+
+  /// No description provided for @hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get hours;
+
   /// No description provided for @off.
   ///
   /// In en, this message translates to:
@@ -236,6 +248,12 @@ abstract class AppLocalizations {
   /// **'Set'**
   String get set;
 
+  /// No description provided for @setTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Timer'**
+  String get setTimer;
+
   /// No description provided for @seeMore.
   ///
   /// In en, this message translates to:
@@ -265,6 +283,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Playlists'**
   String get playlists;
+
+  /// No description provided for @playlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlist'**
+  String get playlist;
 
   /// No description provided for @favorites.
   ///
@@ -613,6 +637,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No song in the playlist. Add songs to see them here.'**
   String get noSongInThePlaylist;
+
+  /// No description provided for @addSongsToPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Songs to Playlist'**
+  String get addSongsToPlaylist;
+
+  /// No description provided for @recentlyPlayed.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently Played'**
+  String get recentlyPlayed;
+
+  /// No description provided for @allPlaylists.
+  ///
+  /// In en, this message translates to:
+  /// **'All Playlists'**
+  String get allPlaylists;
+
+  /// No description provided for @favoritePlaylists.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite Playlists'**
+  String get favoritePlaylists;
 
   /// Music Player page localization
   ///

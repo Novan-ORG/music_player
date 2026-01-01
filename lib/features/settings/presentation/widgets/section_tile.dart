@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/extensions/extensions.dart';
 
+/// Section header widget for grouping related settings.
+///
+/// Displays a titled header for organizing setting items visually.
 class SectionTitle extends StatelessWidget {
   const SectionTitle({required this.title, super.key});
   final String title;

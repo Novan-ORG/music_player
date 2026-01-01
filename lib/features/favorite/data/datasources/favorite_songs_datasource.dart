@@ -5,6 +5,10 @@ import 'package:music_player/features/favorite/data/models/models.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Abstract datasource for favorite songs management.
+///
+/// Stores favorite songs data in local storage and provides
+/// methods to manage the favorites list.
 abstract interface class FavoriteSongsDatasource {
   Future<List<SongModel>> getFavoriteSongs();
   Future<void> addFavoriteSong(int songId);

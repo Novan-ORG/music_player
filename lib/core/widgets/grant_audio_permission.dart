@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+/// Widget requesting audio/media permission from the user.
+///
+/// Displays:
+/// - Permission explanation message
+/// - Button to navigate to app settings
+/// - Optional custom message override
+/// - Callback when permission is granted
 class GrantAudioPermission extends StatelessWidget {
   const GrantAudioPermission({
     this.message,

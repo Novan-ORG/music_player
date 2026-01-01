@@ -3,7 +3,7 @@ part of 'songs_bloc.dart';
 @immutable
 final class SongsState extends Equatable {
   const SongsState({
-    required this.sortType,
+    required this.sortConfig,
     this.allSongs = const [],
     this.allAlbums = const [],
     this.allArtists = const [],
@@ -17,7 +17,7 @@ final class SongsState extends Equatable {
   final List<Album> allAlbums;
   final List<Artist> allArtists;
   final SongsStatus status;
-  final SongsSortType sortType;
+  final SortConfig sortConfig;
   final bool canUndo;
   final Song? lastDeletedSong;
   final String? errorMessage;
@@ -27,7 +27,7 @@ final class SongsState extends Equatable {
     List<Album>? allAlbums,
     List<Artist>? allArtists,
     SongsStatus? status,
-    SongsSortType? sortType,
+    SortConfig? sortConfig,
     bool? canUndo,
     Song? lastDeletedSong,
     String? errorMessage,
@@ -37,7 +37,7 @@ final class SongsState extends Equatable {
       allAlbums: allAlbums ?? this.allAlbums,
       allArtists: allArtists ?? this.allArtists,
       status: status ?? this.status,
-      sortType: sortType ?? this.sortType,
+      sortConfig: sortConfig ?? this.sortConfig,
       canUndo: canUndo ?? this.canUndo,
       lastDeletedSong: lastDeletedSong,
       errorMessage: errorMessage,
@@ -50,7 +50,7 @@ final class SongsState extends Equatable {
     allAlbums,
     allArtists,
     status,
-    sortType,
+    sortConfig,
     canUndo,
     lastDeletedSong,
     if (errorMessage != null) errorMessage!,

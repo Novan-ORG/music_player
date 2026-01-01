@@ -3,11 +3,18 @@ import 'package:music_player/core/constants/constants.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
+/// Widget displaying song/album artwork with fallback to placeholder.
+///
+/// Features:
+/// - Queries device media store for artwork
+/// - Falls back to default cover image if unavailable
+/// - Configurable size, quality, and border radius
+/// - Handles both audio and image artwork types
 class ArtImageWidget extends StatelessWidget {
   const ArtImageWidget({
     required this.id,
     this.type = ArtworkType.AUDIO,
-    this.size = 50,
+    this.size = 54,
     this.quality = 70,
     this.qualitySize = 200,
     this.defaultCoverBg,

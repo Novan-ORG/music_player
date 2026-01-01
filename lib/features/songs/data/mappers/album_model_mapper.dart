@@ -1,6 +1,7 @@
 import 'package:music_player/features/songs/domain/entities/entities.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
+/// Maps between AlbumModel (data layer) and Album (domain layer) entities.
 sealed class AlbumModelMapper {
   static AlbumModel fromDomain(Album album) {
     final result = AlbumModel({

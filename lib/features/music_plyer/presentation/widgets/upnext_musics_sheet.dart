@@ -167,142 +167,95 @@ class _UpNextListState extends State<_UpNextList>
         ToggleLikeMixin {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: context.theme.cardColor,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.3),
-            offset: const Offset(0, -3),
-            blurRadius: 10,
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: widget.playList.isEmpty
-            ? Center(
-                child: Text(
-                  context.localization.noSongInQueue,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              )
-            : Column(
-                children: [
-                  const _Header(),
-                  const SizedBox(height: 12),
-                  Expanded(
-                    child:
-                        BlocSelector<
-                          FavoriteSongsBloc,
-                          FavoriteSongsState,
-                          Set<int>
-                        >(
-                          selector: (state) {
-                            return state.favoriteSongIds;
-                          },
-                          builder: (context, favoriteSongIds) {
-                            return ListView.builder(
-                              controller: widget.innerScrollController,
-                              itemCount: widget.playList.length,
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                final song = widget.playList[index];
-                                final isCurrent =
-                                    widget.currentSongIndex == index;
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SongItem(
-                                      track: song,
-                                      blurBackground: false,
-                                      songImageSize: 48,
-                                      onTap: () =>
-                                          widget.onTapSong?.call(index),
-                                      isCurrentTrack: isCurrent,
-                                      borderRadius: 0,
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 6,
-                                        horizontal: 2,
-                                      ),
-                                      isPlayingNow:
-                                          widget.playerStatus ==
-                                              MusicPlayerStatus.playing &&
-                                          isCurrent,
-                                      onPlayPause: () {
-                                        context.read<MusicPlayerBloc>().add(
-                                          const TogglePlayPauseEvent(),
-                                        );
-                                      },
-                                      isFavorite: favoriteSongIds.contains(
-                                        song.id,
-                                      ),
-                                      onSetAsRingtone: () =>
-                                          setAsRingtone(song.data),
-                                      onDelete: () =>
-                                          showDeleteSongDialog(song),
-                                      onFavoriteToggle: () =>
-                                          onToggleLike(song.id),
-                                      onAddToPlaylist: () async {
-                                        await PlaylistsPage.showSheet(
-                                          context: context,
-                                          songIds: {song.id},
-                                        );
-                                      },
-                                      onShare: () => shareSong(song),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                      ),
-                                      child: Divider(
-                                        height: 0.1,
-                                        thickness: 0.1,
-                                        color: context.theme.dividerColor,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
-                  ),
-                ],
+    return BottomSheetBaseWidget(
+      title: context.localization.upNext,
+      body: widget.playList.isEmpty
+          ? Center(
+              child: Text(
+                context.localization.noSongInQueue,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-      ),
-    );
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const SizedBox(
-          width: 34,
-        ),
-        Text(
-          context.localization.upNext,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1.2,
-          ),
-        ),
-        IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: Colors.grey[600],
-          ),
-        ),
-      ],
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child:
+                      BlocSelector<
+                        FavoriteSongsBloc,
+                        FavoriteSongsState,
+                        Set<int>
+                      >(
+                        selector: (state) {
+                          return state.favoriteSongIds;
+                        },
+                        builder: (context, favoriteSongIds) {
+                          return ListView.builder(
+                            controller: widget.innerScrollController,
+                            itemCount: widget.playList.length,
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              final song = widget.playList[index];
+                              final isCurrent =
+                                  widget.currentSongIndex == index;
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SongItem(
+                                    track: song,
+                                    blurBackground: false,
+                                    songImageSize: 48,
+                                    onTap: () => widget.onTapSong?.call(index),
+                                    isCurrentTrack: isCurrent,
+                                    borderRadius: 0,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 6,
+                                      horizontal: 2,
+                                    ),
+                                    isPlayingNow:
+                                        widget.playerStatus ==
+                                            MusicPlayerStatus.playing &&
+                                        isCurrent,
+                                    onPlayPause: () {
+                                      context.read<MusicPlayerBloc>().add(
+                                        const TogglePlayPauseEvent(),
+                                      );
+                                    },
+                                    isFavorite: favoriteSongIds.contains(
+                                      song.id,
+                                    ),
+                                    onSetAsRingtone: () =>
+                                        setAsRingtone(song.data),
+                                    onDelete: () => showDeleteSongDialog(song),
+                                    onFavoriteToggle: () =>
+                                        onToggleLike(song.id),
+                                    onAddToPlaylist: () async {
+                                      await PlaylistsPage.showSheet(
+                                        context: context,
+                                        songIds: {song.id},
+                                      );
+                                    },
+                                    onShare: () => shareSong(song),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    child: Divider(
+                                      height: 0.1,
+                                      thickness: 0.1,
+                                      color: context.theme.dividerColor,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                ),
+              ],
+            ),
     );
   }
 }

@@ -4,6 +4,11 @@ import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/result.dart';
 import 'package:music_player/features/songs/domain/repositories/repositories.dart';
 
+/// Command to delete a song file with undo capability.
+///
+/// Creates a backup of the original song file before deletion,
+/// allowing for restoration if the undo operation is called.
+/// The backup is stored in the system temporary directory.
 class DeleteSongCommand implements BaseCommand<bool> {
   DeleteSongCommand({
     required this.song,

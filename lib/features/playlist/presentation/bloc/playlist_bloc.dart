@@ -3,12 +3,20 @@ import 'package:equatable/equatable.dart';
 import 'package:music_player/core/commands/commands.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
-import 'package:music_player/features/playlist/domain/usecases/get_pinned_playlist.dart';
-import 'package:music_player/features/playlist/domain/usecases/pin_playlist_by_id.dart';
 
 part 'playlist_event.dart';
 part 'playlist_state.dart';
 
+/// BLoC managing playlists list and operations.
+///
+/// Handles:
+/// - Fetching all playlists
+/// - Creating new playlists
+/// - Deleting playlists with undo
+/// - Renaming playlists
+/// - Adding/removing songs from playlists
+/// - Pinning/unpinning playlists
+/// - Managing playlist cover images
 class PlayListBloc extends Bloc<PlayListEvent, PlayListState> {
   PlayListBloc(
     this._renamePlaylist,

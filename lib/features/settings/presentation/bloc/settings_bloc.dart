@@ -8,6 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'settings_event.dart';
 part 'settings_state.dart';
 
+/// BLoC managing app settings state (theme, language, sleep timer).
+///
+/// Handles:
+/// - Theme mode changes (light, dark, system)
+/// - Language/localization changes
+/// - Sleep timer management
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc(this.preferences, this.audioHandler, this.systemLangCode)
     : super(

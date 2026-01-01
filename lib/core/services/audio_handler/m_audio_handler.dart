@@ -5,6 +5,15 @@ import 'package:just_audio/just_audio.dart';
 import 'package:music_player/core/services/logger/logger.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
+/// Audio playback handler managing the just_audio engine.
+///
+/// Handles:
+/// - Play, pause, resume, and stop operations
+/// - Seek position control
+/// - Loop mode management
+/// - Shuffle toggling
+/// - Playlist queue management
+/// - Playback state streaming
 class MAudioHandler extends BaseAudioHandler with SeekHandler {
   MAudioHandler(this._player) {
     unawaited(

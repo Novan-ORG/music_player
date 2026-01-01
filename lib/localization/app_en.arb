@@ -18,6 +18,8 @@
     "light": "Light",
     "playback": "Playback",
     "sleepTimer": "Sleep Timer",
+    "minutes": "Minutes",
+    "hours": "Hours",
     "off": "Off",
     "min15":"15 Min",
     "min30": "30 Min",
@@ -30,6 +32,7 @@
     "selectSleepTimerDuration": "Select Sleep Timer Duration",
     "aboutContributers": "About the Contributers",
     "set": "Set",
+    "setTimer": "Set Timer",
     "seeMore": "See more",
     "seeLess": "See Less",
 
@@ -39,6 +42,7 @@
     },
     "songs": "Songs",
     "playlists": "Playlists",
+    "playlist": "Playlist",
     "favorites": "Favorites",
 
     "songsPage":"",
@@ -125,6 +129,10 @@
     "renamePlaylist": "Rename Playlist",
     "addSongs": "Add Songs",
     "noSongInThePlaylist": "No song in the playlist. Add songs to see them here.",
+    "addSongsToPlaylist": "Add Songs to Playlist",
+    "recentlyPlayed": "Recently Played",
+    "allPlaylists": "All Playlists",
+    "favoritePlaylists": "Favorite Playlists",
 
     "musicPlayerPage": "",
     "@musicPlayerPage": {

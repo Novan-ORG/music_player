@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:music_player/core/constants/constants.dart';
 import 'package:music_player/extensions/extensions.dart';
 
+/// Error state widget displayed when songs fail to load.
+///
+/// Shows:
+/// - Error image placeholder
+/// - Error message text
+/// - Optional retry button
 class SongsErrorLoading extends StatelessWidget {
   const SongsErrorLoading({
     super.key,

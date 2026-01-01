@@ -9,6 +9,14 @@ import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/music_plyer/presentation/widgets/widgets.dart';
 
+/// Minimizable mini player widget at the bottom of the screen.
+///
+/// Features:
+/// - Compact player display
+/// - Swipe to dismiss gesture
+/// - Swipe left/right for next/previous song
+/// - Expandable to full player view
+/// - Album art with progress bar
 class MiniPlayerPage extends StatefulWidget {
   const MiniPlayerPage({super.key});
 
@@ -74,16 +82,15 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
-      buildWhen: (previous, current) =>
-          previous.currentSong?.id != current.currentSong?.id ||
-          previous.status != current.status,
-      builder: (context, state) {
-        final isPlaying = state.status == MusicPlayerStatus.playing;
+    return Center(
+      child: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+        buildWhen: (previous, current) =>
+            previous.currentSong?.id != current.currentSong?.id ||
+            previous.status != current.status,
+        builder: (context, state) {
+          final isPlaying = state.status == MusicPlayerStatus.playing;
 
-        return Material(
-          color: Colors.transparent,
-          child: AnimatedBuilder(
+          return AnimatedBuilder(
             animation: _animationController,
             builder: (context, child) {
               if (_isMinimized) {
@@ -95,17 +102,20 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                 );
               }
 
-              return Transform.scale(
-                scale: _sizeAnimation.value,
-                child: Opacity(
-                  opacity: _fadeAnimation.value,
-                  child: _buildDefaultMiniPlayer(isPlaying, state),
+              return Material(
+                color: Colors.transparent,
+                child: Transform.scale(
+                  scale: _sizeAnimation.value,
+                  child: Opacity(
+                    opacity: _fadeAnimation.value,
+                    child: _buildDefaultMiniPlayer(isPlaying, state),
+                  ),
                 ),
               );
             },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -115,12 +125,12 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
         if (details.primaryVelocity! > 0) {
           // Swiped Right
           musicPlayerBloc.add(
-            SeekMusicEvent(index: state.currentSongIndex - 1),
+            const SkipToPreviousEvent(),
           );
         } else if (details.primaryVelocity! < 0) {
           // Swiped Left
           musicPlayerBloc.add(
-            SeekMusicEvent(index: state.currentSongIndex + 1),
+            const SkipToNextEvent(),
           );
         }
       },
@@ -155,7 +165,6 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                   tag: 'song_cover_${state.currentSong?.id ?? 0}',
                   child: ArtImageWidget(
                     id: state.currentSong?.id ?? 0,
-                    size: 54,
                   ),
                 ),
                 title: SongTitle(

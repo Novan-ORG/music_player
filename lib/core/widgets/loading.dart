@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+/// Animated loading widget displaying an equalizer animation.
+///
+/// Shows a center-aligned loading indicator with 5 animated bars
+/// that simulate an audio equalizer visualization.
 class Loading extends StatelessWidget {
   const Loading({super.key});
 

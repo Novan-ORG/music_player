@@ -9,6 +9,13 @@ import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/search/presentation/widgets/search_songs_appbar.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 
+/// Search page for finding songs by query.
+///
+/// Features:
+/// - Text search input with voice-to-text option
+/// - Real-time search results
+/// - Recent searches display
+/// - Play searched songs
 class SearchSongsPage extends StatefulWidget {
   const SearchSongsPage({super.key});
 

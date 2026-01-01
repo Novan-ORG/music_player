@@ -29,6 +29,9 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     this.watchSongDuration,
     this.watchSongPosition,
     this.setLoopMode,
+    this.addToRecentlyPlayed,
+    this.skipToNext,
+    this.skipToPrevious,
   ) : super(const MusicPlayerState()) {
     // Listen to player index changes
     _playerIndexSubscription = watchPlayerIndex().distinct().listen(
@@ -43,6 +46,8 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<ShuffleMusicEvent>(_handleShuffleMusics);
     on<SetShuffleEnabledEvent>(_handleSetShuffleEnabled);
     on<SeekMusicEvent>(_handleSeekMusic);
+    on<SkipToNextEvent>(_handleNextMusic);
+    on<SkipToPreviousEvent>(_handlePreviousMusic);
     on<SetPlayerLoopModeEvent>(_handleSetPlayerLoopMode);
   }
 
@@ -50,6 +55,8 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   final PlaySong playSong;
   final PauseSong pauseSong;
   final SeekSong seekSong;
+  final SkipToNext skipToNext;
+  final SkipToPrevious skipToPrevious;
   final StopSong stopSong;
   final ResumeSong resumeSong;
   final SetShuffleEnabled setShuffleEnabled;
@@ -59,6 +66,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   final WatchPlayerIndex watchPlayerIndex;
   final WatchSongDuration watchSongDuration;
   final WatchSongPosition watchSongPosition;
+  final AddToRecentlyPlayed addToRecentlyPlayed;
 
   late final StreamSubscription<int?> _playerIndexSubscription;
 
@@ -122,6 +130,38 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       );
     } else {
       emit(state.copyWith(loopMode: newLoopMode));
+    }
+  }
+
+  /// Handles skipping to the next song.
+  Future<void> _handleNextMusic(
+    SkipToNextEvent event,
+    Emitter<MusicPlayerState> emit,
+  ) async {
+    final result = await skipToNext();
+    if (result.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: result.error,
+        ),
+      );
+    }
+  }
+
+  /// Handles skipping to the previous song.
+  Future<void> _handlePreviousMusic(
+    SkipToPreviousEvent event,
+    Emitter<MusicPlayerState> emit,
+  ) async {
+    final result = await skipToPrevious();
+    if (result.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: result.error,
+        ),
+      );
     }
   }
 
@@ -230,6 +270,7 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
     // Start playback
     final result = await playSong(event.playList, event.index);
+    await addToRecentlyPlayed(event.playList[event.index].id);
 
     if (result.isFailure) {
       emit(

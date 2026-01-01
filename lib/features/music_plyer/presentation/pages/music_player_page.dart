@@ -12,6 +12,17 @@ import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/injection/service_locator.dart';
 import 'package:volume_controller/volume_controller.dart';
 
+/// Full-screen music player page.
+///
+/// Features:
+/// - Large album artwork display
+/// - Song information (title, artist)
+/// - Waveform-based progress indicator
+/// - Playback controls (play, pause, next, prev)
+/// - Loop and shuffle modes
+/// - Queue/upcoming songs display
+/// - Share and favorite options
+/// - Volume control
 class MusicPlayerPage extends StatefulWidget {
   const MusicPlayerPage({super.key});
 

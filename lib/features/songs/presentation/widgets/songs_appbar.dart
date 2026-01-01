@@ -21,6 +21,7 @@ class SongsAppbar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       title: Text(
         context.localization.appTitle,
+        style: context.theme.textTheme.titleLarge,
       ),
       centerTitle: true,
       actions: [

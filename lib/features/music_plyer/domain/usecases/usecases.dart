@@ -1,3 +1,4 @@
+export 'add_to_recently_played.dart';
 export 'has_next_song.dart';
 export 'has_previous_song.dart';
 export 'pause_song.dart';
@@ -6,6 +7,8 @@ export 'resume_song.dart';
 export 'seek_song.dart';
 export 'set_loop_mode.dart';
 export 'set_shuffle_enabled.dart';
+export 'skip_to_next.dart';
+export 'skip_to_previous.dart';
 export 'stop_song.dart';
 export 'watch_player_index.dart';
 export 'watch_song_duration.dart';

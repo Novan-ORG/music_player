@@ -2,54 +2,85 @@ import 'package:flutter/material.dart';
 import 'package:music_player/core/widgets/songs_count.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
-import 'package:music_player/features/playlist/presentation/widgets/widgets.dart';
+import 'package:music_player/features/playlist/presentation/widgets/playlist_image_widget.dart';
 
 class PlaylistDetailsAppbar extends StatelessWidget
     implements PreferredSizeWidget {
   const PlaylistDetailsAppbar({
     required this.playlist,
+    required this.onSearchButtonPressed,
     required this.songCount,
-    required this.onAddSongs,
-    this.onPlaylistRenamed,
     super.key,
   });
 
   final Playlist playlist;
   final int songCount;
-  final VoidCallback onAddSongs;
-  final VoidCallback? onPlaylistRenamed;
+  final VoidCallback onSearchButtonPressed;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return AppBar(
-      leading: SongsCount(songCount: songCount).paddingOnly(left: 12),
-      leadingWidth: 200,
-      flexibleSpace: Center(
-        child: Text(
-          playlist.name,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+      title: Text(
+        context.localization.playlist,
+        style: context.theme.textTheme.titleLarge,
       ),
+      centerTitle: true,
       actions: [
-        PlaylistItemMoreAction(
-          playlist: playlist,
-          onDeleted: () {
-            Navigator.of(context).pop();
-          },
-          onRenamed: onPlaylistRenamed,
-        ),
+        IconButton(
+          onPressed: onSearchButtonPressed,
+          tooltip: context.localization.searchSongs,
+          icon: const Icon(
+            Icons.search,
+          ),
+        ).paddingSymmetric(horizontal: 6),
       ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
-          padding: const EdgeInsets.all(
-            6,
-          ),
-          child: ElevatedButton.icon(
-            onPressed: onAddSongs,
-            icon: const Icon(Icons.add),
-            label: Text(context.localization.addSongs),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  spacing: 8,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 8,
+                        children: [
+                          Text(
+                            playlist.name,
+                            style: theme.textTheme.titleLarge,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SongsCount(songCount: songCount),
+                        ],
+                      ),
+                    ),
+                    PlaylistImageWidget(
+                      playlistId: playlist.id,
+                      borderRadius: 8,
+                      size: 118,
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(
+                color: Colors.grey,
+                thickness: 0.3,
+                indent: 18,
+                endIndent: 18,
+                height: 32,
+              ),
+            ],
           ),
         ),
       ),
@@ -57,5 +88,5 @@ class PlaylistDetailsAppbar extends StatelessWidget
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight((kToolbarHeight * 2) + 12);
+  Size get preferredSize => const Size.fromHeight((kToolbarHeight * 3.4) + 27);
 }

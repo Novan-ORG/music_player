@@ -9,8 +9,6 @@ import 'package:music_player/features/music_plyer/data/data.dart';
 import 'package:music_player/features/music_plyer/domain/domain.dart';
 import 'package:music_player/features/playlist/data/data.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
-import 'package:music_player/features/playlist/domain/usecases/get_pinned_playlist.dart';
-import 'package:music_player/features/playlist/domain/usecases/pin_playlist_by_id.dart';
 import 'package:music_player/features/songs/data/data.dart';
 import 'package:music_player/features/songs/domain/domain.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
@@ -67,6 +65,7 @@ void _setupPlaylistFeature() {
     ..registerLazySingleton(() => AddSongsToPlaylist(getIt.get()))
     ..registerLazySingleton(() => RemoveSongsFromPlaylist(getIt.get()))
     ..registerLazySingleton(() => GetPlaylistSongs(getIt.get()))
+    ..registerLazySingleton(() => GetRecentlyPlayedSongs(getIt.get()))
     ..registerLazySingleton(() => GetPlaylistCoverSongId(getIt.get()))
     ..registerLazySingleton(() => InitializePlaylistCovers(getIt.get()))
     ..registerLazySingleton(() => PinPlaylistById(getIt.get()))
@@ -81,8 +80,8 @@ void _setupSongsFeature() {
     ..registerLazySingleton(() => QuerySongsFrom(getIt.get()))
     ..registerLazySingleton(() => QueryAlbums(getIt.get()))
     ..registerLazySingleton(() => QueryArtists(getIt.get()))
-    ..registerLazySingleton(() => GetSongsSortType(getIt.get()))
-    ..registerLazySingleton(() => SaveSongsSortType(getIt.get()))
+    ..registerLazySingleton(() => GetSongsSortConfig(getIt.get()))
+    ..registerLazySingleton(() => SaveSongsSortConfig(getIt.get()))
     ..registerLazySingleton(() => DeleteSongWithUndo(getIt.get(), getIt.get()))
     // Repositories
     ..registerLazySingleton<SongsRepository>(
@@ -135,12 +134,15 @@ void _setupMusicPlayerFeature() {
     ..registerLazySingleton(() => PlaySong(getIt.get()))
     ..registerLazySingleton(() => ResumeSong(getIt.get()))
     ..registerLazySingleton(() => SeekSong(getIt.get()))
+    ..registerLazySingleton(() => SkipToNext(getIt.get()))
+    ..registerLazySingleton(() => SkipToPrevious(getIt.get()))
     ..registerLazySingleton(() => SetLoopMode(getIt.get()))
     ..registerLazySingleton(() => SetShuffleEnabled(getIt.get()))
     ..registerLazySingleton(() => StopSong(getIt.get()))
     ..registerLazySingleton(() => WatchPlayerIndex(getIt.get()))
     ..registerLazySingleton(() => WatchSongDuration(getIt.get()))
     ..registerLazySingleton(() => WatchSongPosition(getIt.get()))
+    ..registerLazySingleton(() => AddToRecentlyPlayed(getIt.get()))
     // Repositories
     ..registerLazySingleton<MusicPlayerRepository>(
       () => MusicPlayerRepoImpl(audioHandlerDatasource: getIt.get()),
@@ -149,6 +151,7 @@ void _setupMusicPlayerFeature() {
     ..registerLazySingleton<AudioHandlerDatasource>(
       () => AudioHandlerDatasourceImpl(
         audioHandler: getIt.get(),
+        preferences: getIt.get(),
       ),
     );
 }

@@ -85,7 +85,7 @@ class _QuerySongsPageState extends State<QuerySongsPage> {
                   LoadQuerySongsEvent(
                     where: widget.where,
                     songsFromType: widget.fromType,
-                    sortType: querySongsState.sortType,
+                    sortConfig: querySongsState.sortConfig,
                   ),
                 ),
               );
@@ -99,7 +99,7 @@ class _QuerySongsPageState extends State<QuerySongsPage> {
                   LoadQuerySongsEvent(
                     where: widget.where,
                     songsFromType: widget.fromType,
-                    sortType: querySongsState.sortType,
+                    sortConfig: querySongsState.sortConfig,
                   ),
                 ),
               );
@@ -114,17 +114,17 @@ class _QuerySongsPageState extends State<QuerySongsPage> {
                   children: [
                     FilterButton(
                       onTap: () async {
-                        final selectedSortType =
-                            await SongsFilterBottomSheet.show(
+                        final selectedSortConfig =
+                            await SongsSortBottomSheet.show(
                               context: context,
-                              selectedSortType: querySongsState.sortType,
+                              selectedSortConfig: querySongsState.sortConfig,
                             );
-                        if (selectedSortType != null) {
+                        if (selectedSortConfig != null) {
                           querySongsBloc.add(
                             LoadQuerySongsEvent(
                               where: widget.where,
                               songsFromType: widget.fromType,
-                              sortType: selectedSortType,
+                              sortConfig: selectedSortConfig,
                             ),
                           );
                         }
@@ -142,7 +142,7 @@ class _QuerySongsPageState extends State<QuerySongsPage> {
                         LoadQuerySongsEvent(
                           where: widget.where,
                           songsFromType: widget.fromType,
-                          sortType: querySongsState.sortType,
+                          sortConfig: querySongsState.sortConfig,
                         ),
                       );
                       await Future<void>.delayed(

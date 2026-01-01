@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/widgets/check_box_widget.dart';
 import 'package:music_player/core/widgets/widgets.dart';
-import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
 import 'package:music_player/features/playlist/presentation/widgets/playlist_image_widget.dart';
 import 'package:music_player/features/playlist/presentation/widgets/playlist_item_more_action.dart';
@@ -9,8 +8,8 @@ import 'package:music_player/features/playlist/presentation/widgets/playlist_ite
 class PlaylistItem extends StatelessWidget {
   const PlaylistItem({
     required this.playlist,
-    this.margin = const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-    this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    this.margin = const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+    this.padding = const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
     this.borderRadius = 16,
     this.onTap,
     this.blurBackground = true,
@@ -95,6 +94,7 @@ class PlaylistItem extends StatelessWidget {
   Widget _buildTitle(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 4,
       children: [
         Text(
           playlist.name,
@@ -104,13 +104,9 @@ class PlaylistItem extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        Text(
-          '${playlist.numOfSongs} ${context.localization.songs}',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(
-              context,
-            ).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
-          ),
+        SongsCount(
+          songCount: playlist.numOfSongs,
+          isPlaylistItem: true,
         ),
       ],
     );

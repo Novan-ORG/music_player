@@ -1,6 +1,7 @@
 import 'package:music_player/features/songs/domain/enums/enums.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
 
+/// Maps enum values between native query types and domain sort types.
 class SongSortTypeMapper {
   static SongSortType fromIndex(int index) {
     switch (index) {

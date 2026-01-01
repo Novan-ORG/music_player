@@ -4,6 +4,13 @@ import 'package:music_player/features/songs/presentation/views/views.dart';
 import 'package:music_player/features/songs/presentation/widgets/songs_appbar.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
+/// Main songs library page with tabs for songs, albums, and artists.
+///
+/// Features:
+/// - Tab navigation (songs, albums, artists)
+/// - Search functionality
+/// - Sort options
+/// - Shuffle all button
 class SongsPage extends StatefulWidget {
   const SongsPage({
     super.key,

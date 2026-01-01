@@ -13,8 +13,6 @@ import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/features/favorite/favorite.dart';
 import 'package:music_player/features/home/presentation/pages/pages.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
-import 'package:music_player/features/playlist/domain/usecases/get_pinned_playlist.dart';
-import 'package:music_player/features/playlist/domain/usecases/pin_playlist_by_id.dart';
 import 'package:music_player/features/playlist/playlist.dart';
 import 'package:music_player/features/settings/presentation/presentation.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
@@ -92,6 +90,9 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
         ),
         BlocProvider(
           create: (_) => MusicPlayerBloc(
+            getIt(),
+            getIt(),
+            getIt(),
             getIt(),
             getIt(),
             getIt(),

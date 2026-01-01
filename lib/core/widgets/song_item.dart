@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/theme/app_themes.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 
+/// Reusable song list tile widget.
+///
+/// Displays a song with:
+/// - Album thumbnail/cover art
+/// - Song title and artist
+/// - Duration
+/// - Favorite toggle button
+/// - Optional actions menu
+/// - Visual indication of current playing song
 class SongItem extends StatelessWidget {
   const SongItem({
     required this.track,
@@ -109,6 +119,7 @@ class SongItem extends StatelessWidget {
   Widget _buildTitleAndArtist(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 4,
       children: [
         Text(
           track.title,
@@ -119,7 +130,6 @@ class SongItem extends StatelessWidget {
             color: isCurrentTrack ? context.theme.colorScheme.primary : null,
           ),
         ),
-        const SizedBox(height: 4),
         ArtistWidget(
           artist: track.artist,
           isCurrentTrack: isCurrentTrack,
@@ -150,7 +160,9 @@ class SongItem extends StatelessWidget {
             child: IconButton(
               icon: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: context.theme.primaryColor,
+                color: isFavorite
+                    ? context.theme.primaryColor
+                    : AppDarkColors.accent,
               ),
               onPressed: onFavoriteToggle,
             ),

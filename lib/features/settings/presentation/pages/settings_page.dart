@@ -8,6 +8,13 @@ import 'package:music_player/features/settings/presentation/bloc/bloc.dart';
 import 'package:music_player/features/settings/presentation/pages/pages.dart';
 import 'package:music_player/features/settings/presentation/widgets/widgets.dart';
 
+/// Settings configuration page.
+///
+/// Sections:
+/// - Appearance (theme mode, language selection)
+/// - Playback (sleep timer, sound quality)
+/// - Storage (cache clearing)
+/// - About (version, contributors, contact)
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -22,7 +29,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.localization.settings),
+        title: Text(
+          context.localization.settings,
+          style: context.theme.textTheme.titleLarge,
+        ),
         centerTitle: true,
         elevation: 0,
       ),

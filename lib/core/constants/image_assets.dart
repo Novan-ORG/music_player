@@ -1,3 +1,11 @@
+/// Asset paths for all images, icons, and avatars used in the app.
+///
+/// Includes:
+/// - App logo and branding images
+/// - Song, album, artist, playlist covers
+/// - Empty state and error state images
+/// - Navigation and action icons
+/// - Developer avatars
 sealed class ImageAssets {
   static const String logo = 'assets/logo/app_logo.png';
   static const String logoBranding = 'assets/logo/logo_branding.png';

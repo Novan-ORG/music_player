@@ -8,6 +8,11 @@ import 'package:music_player/features/songs/domain/usecases/usecases.dart';
 part 'albums_event.dart';
 part 'albums_state.dart';
 
+/// BLoC managing albums library state.
+///
+/// Handles:
+/// - Fetching and displaying all albums
+/// - Sorting albums
 class AlbumsBloc extends Bloc<AlbumsEvent, AlbumsState> {
   AlbumsBloc(
     this.queryAlbums,

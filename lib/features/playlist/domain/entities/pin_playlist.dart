@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+/// Represents a playlist that has been pinned to the top of the list.
+///
+/// Contains the playlist ID and the order in which it should be displayed.
 class PinPlaylist extends Equatable {
   const PinPlaylist({
     required this.playlistId,

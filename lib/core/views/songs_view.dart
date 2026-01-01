@@ -16,10 +16,12 @@ class SongsView extends StatefulWidget {
     required this.songs,
     this.onRefresh,
     super.key,
+    this.playlist,
   });
 
   final List<Song> songs;
   final Future<void> Function()? onRefresh;
+  final Playlist? playlist;
 
   @override
   State<SongsView> createState() => _SongsViewState();
@@ -90,6 +92,7 @@ class _SongsViewState extends State<SongsView>
                         musicPlayerState.status == MusicPlayerStatus.playing &&
                         isCurrent,
                     isFavorite: favoriteSongIds.contains(song.id),
+                    isInPlaylist: widget.playlist != null,
                     onSetAsRingtone: () => setAsRingtone(song.data),
                     onDelete: () => showDeleteSongDialog(song),
                     onFavoriteToggle: () => onToggleLike(song.id),
@@ -106,6 +109,13 @@ class _SongsViewState extends State<SongsView>
                       context.read<MusicPlayerBloc>().add(
                         const TogglePlayPauseEvent(),
                       );
+                    },
+                    onRemoveFromPlaylist: () {
+                      if (widget.playlist != null) {
+                        removeSongsFromPlaylist({
+                          song.id,
+                        }, widget.playlist!);
+                      }
                     },
                   );
                 },

@@ -1,3 +1,9 @@
+/// Global string constants for URLs and contact information.
+///
+/// Contains:
+/// - Support email and subject
+/// - Developer contact info (Taleb, Caro, Elham)
+/// - LinkTree URLs for social media
 sealed class StringsConstants {
   // Support Info
   static const supportEmail = 'development.taleb@gmail.com';

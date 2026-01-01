@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/entities/playlist.dart';
 import 'package:music_player/features/playlist/presentation/pages/playlist_details_page.dart';
 import 'package:music_player/features/playlist/presentation/widgets/recently_playlist_item.dart';
@@ -19,7 +20,7 @@ class PinnedPlaylistsView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Favorite Playlist',
+          context.localization.favoritePlaylists,
           style: theme.textTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -34,8 +35,8 @@ class PinnedPlaylistsView extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               final recently = Playlist(
-                id: 0,
-                name: 'Recently',
+                id: -1,
+                name: context.localization.recentlyPlayed,
                 numOfSongs: 0,
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now(),
@@ -56,7 +57,7 @@ class PinnedPlaylistsView extends StatelessWidget {
               final playlist = pinnedPlaylists[index - 1];
 
               return Padding(
-                padding: const EdgeInsets.only(left: 16),
+                padding: const EdgeInsetsDirectional.only(start: 16),
                 child: PinnedPlaylistItem(
                   playlist: playlist,
                   onTap: () => Navigator.of(context).push(

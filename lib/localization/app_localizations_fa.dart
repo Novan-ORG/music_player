@@ -42,6 +42,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get sleepTimer => 'تایمر خواب';
 
   @override
+  String get minutes => 'دقیقه';
+
+  @override
+  String get hours => 'ساعت';
+
+  @override
   String get off => 'خاموش';
 
   @override
@@ -78,6 +84,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get set => 'تنظیم';
 
   @override
+  String get setTimer => 'تنظیم تایمر';
+
+  @override
   String get seeMore => 'مشاهده بیشتر';
 
   @override
@@ -91,6 +100,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get playlists => 'لیست های پخش';
+
+  @override
+  String get playlist => 'لیست پخش';
 
   @override
   String get favorites => 'محبوب ها';
@@ -274,6 +286,18 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get noSongInThePlaylist =>
       'هیچ موزیکی در این لیست پخش وجود ندارد. برای دیدن موزیک ها، موزیک اضافه کنید.';
+
+  @override
+  String get addSongsToPlaylist => 'اضافه کردن موزیک ها به لیست پخش';
+
+  @override
+  String get recentlyPlayed => 'اخیراً پخش شده';
+
+  @override
+  String get allPlaylists => 'همه لیست های پخش';
+
+  @override
+  String get favoritePlaylists => 'لیست های پخش محبوب';
 
   @override
   String get musicPlayerPage => '';

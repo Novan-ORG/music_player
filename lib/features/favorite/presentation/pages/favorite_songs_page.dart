@@ -7,6 +7,13 @@ import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/favorite/presentation/widgets/widgets.dart';
 import 'package:music_player/features/songs/presentation/pages/songs_selection_page.dart';
 
+/// Page displaying all favorite songs.
+///
+/// Features:
+/// - Favorite songs list
+/// - Play song functionality
+/// - Remove from favorites
+/// - Empty state handling
 class FavoriteSongsPage extends StatefulWidget {
   const FavoriteSongsPage({super.key});
 
@@ -43,7 +50,11 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.localization.favoriteSongs),
+        centerTitle: true,
+        title: Text(
+          context.localization.favoriteSongs,
+          style: context.theme.textTheme.titleLarge,
+        ),
         elevation: 0,
         actions: [
           BlocBuilder<FavoriteSongsBloc, FavoriteSongsState>(
@@ -133,7 +144,10 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage> {
                 const ClearAllFavoritesEvent(),
               );
             },
-            child: const Text('Clear All', style: TextStyle(color: Colors.red)),
+            child: Text(
+              context.localization.clearAll,
+              style: const TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
