@@ -32,7 +32,6 @@ class _AddSongsPageState extends State<AddSongsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF7F53AC),
         title: Text('${context.localization.addTo} ${widget.listName}'),
         actions: [
           TextButton(
