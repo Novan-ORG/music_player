@@ -51,7 +51,6 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
   }
 
   Future<void> _handleAddMusicToPlaylist(Playlist playlist) async {
-    // TODO(Taleb): Optimize this by reusing the existing bloc if possible.
     final detailsBloc = PlaylistDetailsBloc(
       playlist: playlist,
       getPlaylistSongs: getIt.get(),

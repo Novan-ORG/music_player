@@ -23,16 +23,10 @@ class SongsSortBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlassCard(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(16),
-        topRight: Radius.circular(16),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-      child: Column(
+    return BottomSheetBaseWidget(
+      title: context.localization.sortSongs,
+      body: Column(
         children: [
-          BottomSheetHeader(title: context.localization.sortSongs),
-          const SizedBox(height: 12),
           ...SongsSortType.values.map(
             (sortType) {
               final isSelected = sortType == selectedSortConfig.sortType;

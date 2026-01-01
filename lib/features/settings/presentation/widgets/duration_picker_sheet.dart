@@ -1,7 +1,7 @@
-import 'package:duration_picker/duration_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
-import 'package:wheel_picker/wheel_picker.dart';
 
 class DurationPickerSheet extends StatefulWidget {
   const DurationPickerSheet({
@@ -24,87 +24,95 @@ class _DurationPickerSheetState extends State<DurationPickerSheet> {
     _selectedDuration = widget.initialDuration;
   }
 
-  String _formatDuration(Duration d) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final hours = d.inHours;
-    final minutes = d.inMinutes.remainder(60);
-    final seconds = d.inSeconds.remainder(60);
-    if (hours > 0) {
-      return '${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(seconds)}';
-    } else {
-      return '${twoDigits(minutes)}:${twoDigits(seconds)}';
-    }
+  String _formattedDuration(Duration duration) {
+    final hours = duration.inHours;
+    final minutes = duration.inMinutes.remainder(60);
+
+    final hoursStr = '$hours ${context.localization.hours}';
+    final minutesStr = '$minutes ${context.localization.minutes}';
+
+    return hours > 0 ? '$hoursStr, $minutesStr' : minutesStr;
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 16),
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            Text(
-              context.localization.selectSleepTimerDuration,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 16),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withAlpha(10),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                _formatDuration(_selectedDuration),
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
+    return BottomSheetBaseWidget(
+      title: context.localization.sleepTimer,
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 200,
+            margin: const EdgeInsets.symmetric(vertical: 16),
+            child: CupertinoTheme(
+              data: CupertinoThemeData(
+                brightness: context.theme.brightness,
+                primaryColor: context.theme.primaryColor,
+                scaffoldBackgroundColor: context.theme.scaffoldBackgroundColor,
+                textTheme: CupertinoTextThemeData(
+                  dateTimePickerTextStyle: context.theme.textTheme.titleLarge,
                 ),
               ),
+              child: CupertinoDatePicker(
+                onDateTimeChanged: (selectedDateTime) {
+                  final now = DateTime.now();
+                  var selectedDuration = selectedDateTime.difference(now);
+                  if (selectedDuration.isNegative) {
+                    selectedDuration += const Duration(hours: 24);
+                  }
+                  setState(() {
+                    _selectedDuration = selectedDuration;
+                  });
+                },
+                mode: CupertinoDatePickerMode.time,
+                initialDateTime: DateTime.now().add(widget.initialDuration),
+              ),
             ),
-            const SizedBox(height: 24),
-            DurationPicker(
-              duration: _selectedDuration,
-              onChange: (newDuration) {
-                setState(() {
-                  _selectedDuration = newDuration;
-                });
-              },
-              height: 200,
-              width: 200,
-            ),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(context.localization.cancel),
+          ),
+          Text(
+            _formattedDuration(_selectedDuration),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size.fromWidth(150),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  backgroundColor: context.theme.colorScheme.surfaceDim,
+                ),
+                child: Text(
+                  context.localization.cancel,
+                  style: context.theme.textTheme.bodyMedium?.copyWith(
+                    color: context.theme.colorScheme.onSurface,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () =>
-                        Navigator.of(context).pop(_selectedDuration),
-                    child: Text(context.localization.set),
+              ),
+              const SizedBox(width: 16),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(_selectedDuration),
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size.fromWidth(150),
+                  backgroundColor: context.theme.colorScheme.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
+                child: Text(
+                  context.localization.setTimer,
+                  style: context.theme.textTheme.bodyMedium?.copyWith(
+                    color: context.theme.colorScheme.onSurface,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

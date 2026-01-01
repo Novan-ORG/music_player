@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/settings/presentation/widgets/widgets.dart';
 
@@ -33,9 +34,8 @@ class CountDownSheet extends StatefulWidget {
 class _CountDownSheetState extends State<CountDownSheet> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: MediaQuery.of(context).viewInsets,
-      child: widget.initialDuration != null
+    return BottomSheetBaseWidget(
+      body: widget.initialDuration != null
           ? _ActiveTimerView(
               duration: widget.initialDuration!,
               onCancel: () {

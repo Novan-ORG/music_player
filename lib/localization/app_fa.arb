@@ -18,6 +18,8 @@
     "playback": "پخش",
     "sleepTimer": "تایمر خواب",
     "off": "خاموش",
+    "minutes": "دقیقه",
+    "hours": "ساعت",
     "min15": "۱۵ دقیقه",
     "min30": "۳۰ دقیقه",
     "hour1": "۱ ساعت",
@@ -28,6 +30,7 @@
     "aboutUs": "درباره ما",
     "selectSleepTimerDuration": "انتخاب تایمر خواب",
     "set": "تنظیم",
+    "setTimer": "تنظیم تایمر",
     "aboutContributers": "درباره مشارکت کنندگان",
     "homePage": "",
     
