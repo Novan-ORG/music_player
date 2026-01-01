@@ -164,6 +164,18 @@ abstract class AppLocalizations {
   /// **'Sleep Timer'**
   String get sleepTimer;
 
+  /// No description provided for @minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes'**
+  String get minutes;
+
+  /// No description provided for @hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get hours;
+
   /// No description provided for @off.
   ///
   /// In en, this message translates to:
@@ -235,6 +247,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set'**
   String get set;
+
+  /// No description provided for @setTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Timer'**
+  String get setTimer;
 
   /// No description provided for @seeMore.
   ///

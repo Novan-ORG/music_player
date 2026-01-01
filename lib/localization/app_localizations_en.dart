@@ -42,6 +42,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepTimer => 'Sleep Timer';
 
   @override
+  String get minutes => 'Minutes';
+
+  @override
+  String get hours => 'Hours';
+
+  @override
   String get off => 'Off';
 
   @override
@@ -76,6 +82,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get set => 'Set';
+
+  @override
+  String get setTimer => 'Set Timer';
 
   @override
   String get seeMore => 'See more';

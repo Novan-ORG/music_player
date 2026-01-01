@@ -18,6 +18,8 @@
     "light": "Light",
     "playback": "Playback",
     "sleepTimer": "Sleep Timer",
+    "minutes": "Minutes",
+    "hours": "Hours",
     "off": "Off",
     "min15":"15 Min",
     "min30": "30 Min",
@@ -30,6 +32,7 @@
     "selectSleepTimerDuration": "Select Sleep Timer Duration",
     "aboutContributers": "About the Contributers",
     "set": "Set",
+    "setTimer": "Set Timer",
     "seeMore": "See more",
     "seeLess": "See Less",
 
