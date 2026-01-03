@@ -44,6 +44,11 @@ jobs:
         run: |
           echo "SENTRY_DSN=$SENTRY_DSN" >> .env
 
+      - name: Setup NDK Version
+        run: |
+          echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
+          echo "ndkVersion=27.0.12077973" >> local.properties
+
       - name: Build APKs (release, split per ABI)
         run: flutter build apk --release --split-per-abi
 
