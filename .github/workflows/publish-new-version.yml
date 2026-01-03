@@ -9,6 +9,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -43,6 +45,11 @@ jobs:
       - name: Create .env file
         run: |
           echo "SENTRY_DSN=$SENTRY_DSN" >> .env
+
+      - name: Setup NDK Version
+        run: |
+          echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
+          echo "ndkVersion=27.0.12077973" >> local.properties
 
       - name: Build APKs (release, split per ABI)
         run: flutter build apk --release --split-per-abi
