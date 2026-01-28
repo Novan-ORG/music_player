@@ -25,62 +25,69 @@ class SongsSortBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomSheetBaseWidget(
       title: context.localization.sortSongs,
-      body: Column(
-        children: [
-          ...SongsSortType.values.map(
-            (sortType) {
-              final isSelected = sortType == selectedSortConfig.sortType;
-              return ListTile(
-                leading: Icon(
-                  sortType.toIconData(),
-                  color: isSelected ? context.theme.primaryColor : null,
-                ),
-                title: Text(
-                  sortType.toLocalizationString(context),
-                  style: context.theme.textTheme.bodyLarge?.copyWith(
-                    color: isSelected ? context.theme.primaryColor : null,
-                  ),
-                ),
-                trailing: isSelected
-                    ? Icon(Icons.check, color: context.theme.primaryColor)
-                    : null,
-                onTap: () {
-                  Navigator.of(context).pop(
-                    selectedSortConfig.copyWith(
-                      sortType: sortType,
+      body: Expanded(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ...SongsSortType.values.map(
+                (sortType) {
+                  final isSelected = sortType == selectedSortConfig.sortType;
+                  return ListTile(
+                    leading: Icon(
+                      sortType.toIconData(),
+                      color: isSelected ? context.theme.primaryColor : null,
                     ),
+                    title: Text(
+                      sortType.toLocalizationString(context),
+                      style: context.theme.textTheme.bodyLarge?.copyWith(
+                        color: isSelected ? context.theme.primaryColor : null,
+                      ),
+                    ),
+                    trailing: isSelected
+                        ? Icon(Icons.check, color: context.theme.primaryColor)
+                        : null,
+                    onTap: () {
+                      Navigator.of(context).pop(
+                        selectedSortConfig.copyWith(
+                          sortType: sortType,
+                        ),
+                      );
+                    },
                   );
                 },
-              );
-            },
-          ),
-          const Divider(),
-          ...SortOrderType.values.map(
-            (sortOrderType) {
-              final isSelected = sortOrderType == selectedSortConfig.orderType;
-              return ListTile(
-                leading: Icon(
-                  sortOrderType.toIconData(),
-                  color: isSelected ? context.theme.primaryColor : null,
-                ),
-                title: Text(
-                  sortOrderType.toLocalizationString(context),
-                  style: context.theme.textTheme.bodyLarge?.copyWith(
-                    color: isSelected ? context.theme.primaryColor : null,
-                  ),
-                ),
-                trailing: isSelected
-                    ? Icon(Icons.check, color: context.theme.primaryColor)
-                    : null,
-                onTap: () {
-                  Navigator.of(
-                    context,
-                  ).pop(selectedSortConfig.copyWith(orderType: sortOrderType));
+              ),
+              const Divider(),
+              ...SortOrderType.values.map(
+                (sortOrderType) {
+                  final isSelected =
+                      sortOrderType == selectedSortConfig.orderType;
+                  return ListTile(
+                    leading: Icon(
+                      sortOrderType.toIconData(),
+                      color: isSelected ? context.theme.primaryColor : null,
+                    ),
+                    title: Text(
+                      sortOrderType.toLocalizationString(context),
+                      style: context.theme.textTheme.bodyLarge?.copyWith(
+                        color: isSelected ? context.theme.primaryColor : null,
+                      ),
+                    ),
+                    trailing: isSelected
+                        ? Icon(Icons.check, color: context.theme.primaryColor)
+                        : null,
+                    onTap: () {
+                      Navigator.of(
+                        context,
+                      ).pop(
+                        selectedSortConfig.copyWith(orderType: sortOrderType),
+                      );
+                    },
+                  );
                 },
-              );
-            },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

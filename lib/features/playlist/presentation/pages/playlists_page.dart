@@ -159,38 +159,34 @@ class _PlaylistContentViewState extends State<PlaylistContentView> {
     } else if (state.status == PlayListStatus.initial) {
       return Center(child: Text(context.localization.playListPage));
     } else {
-      if (state.playLists.isEmpty) {
-        return const EmptyPlaylist();
-      } else {
-        final pinnedMeta = state.pinnedPlaylists;
+      final pinnedMeta = state.pinnedPlaylists;
 
-        final allPlaylists = state.playLists;
+      final allPlaylists = state.playLists;
 
-        final pinnedPlaylists = _extractPinnedPlaylists(
-          allPlaylists,
-          pinnedMeta,
-        );
+      final pinnedPlaylists = _extractPinnedPlaylists(
+        allPlaylists,
+        pinnedMeta,
+      );
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (widget.isSelectionMode) _buildSheetHeader(theme),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (widget.isSelectionMode) _buildSheetHeader(theme),
 
-            if (!widget.isSelectionMode)
-              PinnedPlaylistsView(
-                pinnedPlaylists: pinnedPlaylists,
-              ),
-            Expanded(
-              child: AllPlaylistView(
-                playlists: allPlaylists,
-                pinnedMeta: pinnedMeta,
-                isSelectionMode: widget.isSelectionMode,
-                songIds: widget.songIds,
-              ),
+          if (!widget.isSelectionMode)
+            PinnedPlaylistsView(
+              pinnedPlaylists: pinnedPlaylists,
             ),
-          ],
-        );
-      }
+          Expanded(
+            child: AllPlaylistView(
+              playlists: allPlaylists,
+              pinnedMeta: pinnedMeta,
+              isSelectionMode: widget.isSelectionMode,
+              songIds: widget.songIds,
+            ),
+          ),
+        ],
+      );
     }
   }
 
