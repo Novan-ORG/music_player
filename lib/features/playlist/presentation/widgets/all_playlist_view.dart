@@ -190,17 +190,20 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
         const SizedBox(
           height: 16,
         ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: widget.playlists.length,
-            itemBuilder: (context, index) {
-              return _buildPlaylistTile(
-                widget.playlists[index],
-                widget.pinnedMeta,
-              );
-            },
+        if (widget.playlists.isEmpty)
+          const Expanded(child: EmptyPlaylist())
+        else
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget.playlists.length,
+              itemBuilder: (context, index) {
+                return _buildPlaylistTile(
+                  widget.playlists[index],
+                  widget.pinnedMeta,
+                );
+              },
+            ),
           ),
-        ),
 
         if (widget.isSelectionMode) _buildBottomBar()!,
       ],
