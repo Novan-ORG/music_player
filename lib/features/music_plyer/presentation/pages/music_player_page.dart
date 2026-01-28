@@ -155,6 +155,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
                   VolumeSlider(
                     volumeController: getIt.get<VolumeController>(),
                   ).paddingSymmetric(horizontal: 32),
+                  const SizedBox(height: 48),
                 ],
               ).paddingSymmetric(horizontal: 16, vertical: 8),
             ),
