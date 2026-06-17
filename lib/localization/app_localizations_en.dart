@@ -234,6 +234,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get share => 'Share';
 
   @override
+  String get moreOptions => 'More options';
+
+  @override
+  String get play => 'Play';
+
+  @override
+  String get pause => 'Pause';
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get like => 'Like';
+
+  @override
+  String get unlike => 'Unlike';
+
+  @override
+  String get enableShuffle => 'Enable Shuffle';
+
+  @override
+  String get disableShuffle => 'Disable Shuffle';
+
+  @override
+  String get repeatOne => 'Repeat One';
+
+  @override
+  String get repeatAll => 'Repeat All';
+
+  @override
+  String get noRepeat => 'No Repeat';
+
+  @override
+  String get volume => 'Volume';
+
+  @override
+  String get muted => 'Muted';
+
+  @override
+  String get unknownSong => 'Unknown Song';
+
+  @override
+  String get unknownArtist => 'Unknown Artist';
+
+  @override
+  String get unknownAlbum => 'Unknown Album';
+
+  @override
   String get selected => 'selected';
 
   @override

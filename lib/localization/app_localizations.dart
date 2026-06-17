@@ -536,6 +536,108 @@ abstract class AppLocalizations {
   /// **'Share'**
   String get share;
 
+  /// No description provided for @moreOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get moreOptions;
+
+  /// No description provided for @play.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get play;
+
+  /// No description provided for @pause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pause;
+
+  /// No description provided for @previous.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previous;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @like.
+  ///
+  /// In en, this message translates to:
+  /// **'Like'**
+  String get like;
+
+  /// No description provided for @unlike.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlike'**
+  String get unlike;
+
+  /// No description provided for @enableShuffle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Shuffle'**
+  String get enableShuffle;
+
+  /// No description provided for @disableShuffle.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Shuffle'**
+  String get disableShuffle;
+
+  /// No description provided for @repeatOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat One'**
+  String get repeatOne;
+
+  /// No description provided for @repeatAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat All'**
+  String get repeatAll;
+
+  /// No description provided for @noRepeat.
+  ///
+  /// In en, this message translates to:
+  /// **'No Repeat'**
+  String get noRepeat;
+
+  /// No description provided for @volume.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume'**
+  String get volume;
+
+  /// No description provided for @muted.
+  ///
+  /// In en, this message translates to:
+  /// **'Muted'**
+  String get muted;
+
+  /// No description provided for @unknownSong.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Song'**
+  String get unknownSong;
+
+  /// No description provided for @unknownArtist.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Artist'**
+  String get unknownArtist;
+
+  /// No description provided for @unknownAlbum.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Album'**
+  String get unknownAlbum;
+
   /// No description provided for @selected.
   ///
   /// In en, this message translates to:

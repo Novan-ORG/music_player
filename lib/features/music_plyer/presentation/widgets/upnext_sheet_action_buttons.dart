@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 
 class UpnextSheetActionButtons extends StatelessWidget {
@@ -20,25 +21,28 @@ class UpnextSheetActionButtons extends StatelessWidget {
       builder: (context, state) {
         final musicPlayer = context.read<MusicPlayerBloc>();
 
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _PreviousButton(
-              state: state,
-              musicPlayer: musicPlayer,
-              iconSize: playIconSize,
-            ),
-            _PlayPauseButton(
-              state: state,
-              musicPlayer: musicPlayer,
-              iconSize: playIconSize,
-            ),
-            _NextButton(
-              state: state,
-              musicPlayer: musicPlayer,
-              iconSize: playIconSize,
-            ),
-          ],
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _PreviousButton(
+                state: state,
+                musicPlayer: musicPlayer,
+                iconSize: playIconSize,
+              ),
+              _PlayPauseButton(
+                state: state,
+                musicPlayer: musicPlayer,
+                iconSize: playIconSize,
+              ),
+              _NextButton(
+                state: state,
+                musicPlayer: musicPlayer,
+                iconSize: playIconSize,
+              ),
+            ],
+          ),
         );
       },
     );
@@ -59,7 +63,7 @@ class _PreviousButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: 'Previous',
+      message: context.localization.previous,
       child: IconButton(
         icon: Icon(Icons.skip_previous, size: iconSize),
         splashRadius: iconSize,
@@ -89,7 +93,9 @@ class _PlayPauseButton extends StatelessWidget {
     final isPlaying = state.status == MusicPlayerStatus.playing;
 
     return Tooltip(
-      message: isPlaying ? 'Pause' : 'Play',
+      message: isPlaying
+          ? context.localization.pause
+          : context.localization.play,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         transitionBuilder: (child, anim) => ScaleTransition(
@@ -124,7 +130,7 @@ class _NextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: 'Next',
+      message: context.localization.next,
       child: IconButton(
         icon: Icon(Icons.skip_next, size: iconSize),
         splashRadius: iconSize,

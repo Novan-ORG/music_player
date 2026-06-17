@@ -234,6 +234,57 @@ class AppLocalizationsFa extends AppLocalizations {
   String get share => 'اشتراک گذاری';
 
   @override
+  String get moreOptions => 'گزینه‌های بیشتر';
+
+  @override
+  String get play => 'پخش';
+
+  @override
+  String get pause => 'مکث';
+
+  @override
+  String get previous => 'قبلی';
+
+  @override
+  String get next => 'بعدی';
+
+  @override
+  String get like => 'پسندیدن';
+
+  @override
+  String get unlike => 'لغو پسند';
+
+  @override
+  String get enableShuffle => 'فعال کردن پخش تصادفی';
+
+  @override
+  String get disableShuffle => 'غیرفعال کردن پخش تصادفی';
+
+  @override
+  String get repeatOne => 'تکرار یک آهنگ';
+
+  @override
+  String get repeatAll => 'تکرار همه آهنگ‌ها';
+
+  @override
+  String get noRepeat => 'بدون تکرار';
+
+  @override
+  String get volume => 'صدا';
+
+  @override
+  String get muted => 'بی‌صدا';
+
+  @override
+  String get unknownSong => 'آهنگ نامشخص';
+
+  @override
+  String get unknownArtist => 'هنرمند نامشخص';
+
+  @override
+  String get unknownAlbum => 'آلبوم نامشخص';
+
+  @override
   String get selected => 'انتخاب شده';
 
   @override

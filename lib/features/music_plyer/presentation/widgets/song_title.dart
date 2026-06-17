@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import 'package:music_player/extensions/extensions.dart';
 
 class SongTitle extends StatelessWidget {
   const SongTitle({super.key, this.songTitle});
@@ -8,7 +9,7 @@ class SongTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = songTitle ?? 'Unknown Song';
+    final title = songTitle ?? context.localization.unknownSong;
     return AutoSizeText(
       title,
       minFontSize: Theme.of(context).textTheme.titleLarge?.fontSize ?? 14,

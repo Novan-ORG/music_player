@@ -252,7 +252,9 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
 }
 
 Widget _buildSubtitle(BuildContext context, String? artist) {
-  final displayArtist = (artist?.isNotEmpty ?? false) ? artist! : 'unknown';
+  final displayArtist = (artist?.isNotEmpty ?? false)
+      ? artist!
+      : context.localization.unknownArtist;
   final baseStyle =
       Theme.of(context).textTheme.bodySmall ?? const TextStyle(fontSize: 12);
   final style = baseStyle.copyWith(color: Colors.grey[700]);
@@ -296,7 +298,9 @@ class _MiniPlayerControls extends StatelessWidget {
             isLiked ? Icons.favorite : Icons.favorite_border,
             color: context.theme.colorScheme.primary,
           ),
-          tooltip: isLiked ? 'Unlike' : 'Like',
+          tooltip: isLiked
+              ? context.localization.unlike
+              : context.localization.like,
           onPressed: () {
             context.read<FavoriteSongsBloc>().add(
               ToggleFavoriteSongEvent(currentSongId),
@@ -308,7 +312,9 @@ class _MiniPlayerControls extends StatelessWidget {
             isPlaying ? Icons.pause : Icons.play_arrow,
             color: context.theme.primaryColor,
           ),
-          tooltip: isPlaying ? 'Pause' : 'Play',
+          tooltip: isPlaying
+              ? context.localization.pause
+              : context.localization.play,
           onPressed: () {
             musicPlayerBloc.add(const TogglePlayPauseEvent());
           },
