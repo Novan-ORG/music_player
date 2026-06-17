@@ -18,4 +18,7 @@ sealed class PreferencesKeys {
   static const String songSortType = 'song_sort_type';
   static const String songOrderType = 'song_sort_order_type';
   static const String recentlyPlayedSongIds = 'recently_played_song_ids';
+  static const String playbackQueueSongIds = 'playback_queue_song_ids';
+  static const String playbackCurrentIndex = 'playback_current_index';
+  static const String playbackWasPlaying = 'playback_was_playing';
 }

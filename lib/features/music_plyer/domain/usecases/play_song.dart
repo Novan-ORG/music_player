@@ -16,9 +16,14 @@ class PlaySong {
   /// Parameters:
   /// - [playlist]: List of songs to play
   /// - [index]: Index of the song to start playing
+  /// - [autoPlay]: Whether playback should start immediately
   ///
   /// Returns a [Result] indicating success or failure.
-  Future<Result<void>> call(List<Song> playlist, int index) {
-    return _repository.play(playlist, index);
+  Future<Result<void>> call(
+    List<Song> playlist,
+    int index, {
+    bool autoPlay = true,
+  }) {
+    return _repository.play(playlist, index, autoPlay: autoPlay);
   }
 }

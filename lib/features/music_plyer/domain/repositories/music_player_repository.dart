@@ -15,7 +15,11 @@ abstract class MusicPlayerRepository {
   /// - [index]: Index of the song to start playing
   ///
   /// Returns a [Result] indicating success or failure.
-  Future<Result<void>> play(List<Song> playlist, int index);
+  Future<Result<void>> play(
+    List<Song> playlist,
+    int index, {
+    bool autoPlay = true,
+  });
 
   /// Pauses the currently playing song.
   ///
@@ -98,4 +102,17 @@ abstract class MusicPlayerRepository {
   /// - [songId]: ID of the song to add
   /// Returns a [Result] indicating success or failure.
   Future<Result<bool>> addToRecentlyPlayed(int songId);
+
+  /// Persists the current playback queue and selected song index.
+  Future<Result<bool>> savePlaybackSession(
+    List<Song> playlist,
+    int currentIndex, {
+    required bool wasPlaying,
+  });
+
+  /// Retrieves the previously saved playback session, if any.
+  Future<Result<PlaybackSession?>> getSavedPlaybackSession();
+
+  /// Clears the saved playback session.
+  Future<Result<bool>> clearSavedPlaybackSession();
 }

@@ -76,10 +76,10 @@ final class SeekMusicEvent extends MusicPlayerEvent {
 
   @override
   List<Object> get props => [
-    ...super.props,
-    position,
-    if (index != null) index!,
-  ];
+        ...super.props,
+        position,
+        if (index != null) index!,
+      ];
 }
 
 /// Event to change the loop/repeat mode.
@@ -120,4 +120,14 @@ final class SkipToPreviousEvent extends MusicPlayerEvent {
 
   @override
   List<Object> get props => [];
+}
+
+/// Restores the previously saved playback session.
+final class RestoreSavedPlaybackEvent extends MusicPlayerEvent {
+  const RestoreSavedPlaybackEvent(this.availableSongs);
+
+  final List<Song> availableSongs;
+
+  @override
+  List<Object> get props => [...super.props, availableSongs];
 }

@@ -14,7 +14,7 @@ class CategoryTabbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
-    final labels = [
+    final labels = <String>[
       context.localization.allSongs,
       context.localization.albums,
       context.localization.artists,

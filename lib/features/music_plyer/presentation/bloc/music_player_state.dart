@@ -66,7 +66,9 @@ final class MusicPlayerState extends Equatable {
 
   /// Gets the currently playing song, or null if playlist is empty.
   Song? get currentSong {
-    if (playList.isEmpty) {
+    if (playList.isEmpty ||
+        currentSongIndex < 0 ||
+        currentSongIndex >= playList.length) {
       return null;
     }
     return playList[currentSongIndex];
@@ -74,15 +76,15 @@ final class MusicPlayerState extends Equatable {
 
   @override
   List<Object> get props => [
-    status,
-    playList,
-    loopMode,
-    hasNext,
-    hasPrevious,
-    shuffleEnabled,
-    currentSongIndex,
-    errorMessage ?? '',
-  ];
+        status,
+        playList,
+        loopMode,
+        hasNext,
+        hasPrevious,
+        shuffleEnabled,
+        currentSongIndex,
+        errorMessage ?? '',
+      ];
 }
 
 /// Enum representing the different playback states.

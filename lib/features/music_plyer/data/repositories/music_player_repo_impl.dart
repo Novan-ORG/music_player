@@ -13,7 +13,7 @@ import 'package:music_player/features/music_plyer/domain/repositories/repositori
 class MusicPlayerRepoImpl implements MusicPlayerRepository {
   /// Creates a [MusicPlayerRepoImpl] with the given audio handler datasource.
   MusicPlayerRepoImpl({required AudioHandlerDatasource audioHandlerDatasource})
-    : _audioHandlerDatasource = audioHandlerDatasource;
+      : _audioHandlerDatasource = audioHandlerDatasource;
 
   final AudioHandlerDatasource _audioHandlerDatasource;
 
@@ -28,11 +28,16 @@ class MusicPlayerRepoImpl implements MusicPlayerRepository {
   }
 
   @override
-  Future<Result<void>> play(List<Song> playlist, int index) async {
+  Future<Result<void>> play(
+    List<Song> playlist,
+    int index, {
+    bool autoPlay = true,
+  }) async {
     try {
       await _audioHandlerDatasource.play(
         playlist.map(SongModelMapper.fromDomain).toList(),
         index,
+        autoPlay: autoPlay,
       );
       return Result.success(null);
     } on Exception catch (e) {
@@ -158,6 +163,44 @@ class MusicPlayerRepoImpl implements MusicPlayerRepository {
       return Result.success(result);
     } on Exception catch (e) {
       return Result.failure('failed to add to recently played: $e');
+    }
+  }
+
+  @override
+  Future<Result<bool>> savePlaybackSession(
+    List<Song> playlist,
+    int currentIndex, {
+    required bool wasPlaying,
+  }) async {
+    try {
+      final result = await _audioHandlerDatasource.savePlaybackSession(
+        playlist.map(SongModelMapper.fromDomain).toList(),
+        currentIndex,
+        wasPlaying: wasPlaying,
+      );
+      return Result.success(result);
+    } on Exception catch (e) {
+      return Result.failure('failed to save playback session: $e');
+    }
+  }
+
+  @override
+  Future<Result<PlaybackSession?>> getSavedPlaybackSession() async {
+    try {
+      final result = _audioHandlerDatasource.getSavedPlaybackSession();
+      return Result.success(result);
+    } on Exception catch (e) {
+      return Result.failure('failed to get playback session: $e');
+    }
+  }
+
+  @override
+  Future<Result<bool>> clearSavedPlaybackSession() async {
+    try {
+      final result = await _audioHandlerDatasource.clearSavedPlaybackSession();
+      return Result.success(result);
+    } on Exception catch (e) {
+      return Result.failure('failed to clear playback session: $e');
     }
   }
 }

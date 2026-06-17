@@ -18,6 +18,9 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   /// Creates a [MusicPlayerBloc] with all required use cases.
   MusicPlayerBloc(
     this.playSong,
+    this.savePlaybackSession,
+    this.getSavedPlaybackSession,
+    this.clearSavedPlaybackSession,
     this.pauseSong,
     this.seekSong,
     this.stopSong,
@@ -35,8 +38,8 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) : super(const MusicPlayerState()) {
     // Listen to player index changes
     _playerIndexSubscription = watchPlayerIndex().distinct().listen(
-      _watchPlayerIndex,
-    );
+          _watchPlayerIndex,
+        );
 
     // Register event handlers
     on<UpdateStateEvent>((event, emit) => emit(event.state));
@@ -49,10 +52,14 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<SkipToNextEvent>(_handleNextMusic);
     on<SkipToPreviousEvent>(_handlePreviousMusic);
     on<SetPlayerLoopModeEvent>(_handleSetPlayerLoopMode);
+    on<RestoreSavedPlaybackEvent>(_handleRestoreSavedPlayback);
   }
 
   // Use cases
   final PlaySong playSong;
+  final SavePlaybackSession savePlaybackSession;
+  final GetSavedPlaybackSession getSavedPlaybackSession;
+  final ClearSavedPlaybackSession clearSavedPlaybackSession;
   final PauseSong pauseSong;
   final SeekSong seekSong;
   final SkipToNext skipToNext;
@@ -89,6 +96,10 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     if (index == null || index < 0 || index >= state.playList.length) {
       return;
     }
+
+    unawaited(_persistPlaybackSession(currentSongIndex: index));
+    unawaited(addToRecentlyPlayed(state.playList[index].id));
+
     final hasNext = hasNextSong();
     final hasPrevious = hasPreviousSong();
     add(
@@ -109,6 +120,24 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       PlayerLoopMode.all => PlayerLoopMode.one,
       PlayerLoopMode.one => PlayerLoopMode.off,
     };
+  }
+
+  Future<void> _persistPlaybackSession({
+    int? currentSongIndex,
+    bool? wasPlaying,
+  }) async {
+    final playlist = state.playList;
+    final index = currentSongIndex ?? state.currentSongIndex;
+
+    if (playlist.isEmpty || index < 0 || index >= playlist.length) {
+      return;
+    }
+
+    await savePlaybackSession(
+      playlist,
+      index,
+      wasPlaying: wasPlaying ?? state.status == MusicPlayerStatus.playing,
+    );
   }
 
   // ==================== Event Handlers ====================
@@ -252,6 +281,8 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         currentSongIndex: 0,
       ),
     );
+
+    await _persistPlaybackSession(currentSongIndex: 0, wasPlaying: true);
   }
 
   /// Handles playing music from a playlist.
@@ -270,7 +301,6 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
     // Start playback
     final result = await playSong(event.playList, event.index);
-    await addToRecentlyPlayed(event.playList[event.index].id);
 
     if (result.isFailure) {
       emit(
@@ -279,7 +309,13 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           errorMessage: result.error,
         ),
       );
+      return;
     }
+
+    await _persistPlaybackSession(
+      currentSongIndex: event.index,
+      wasPlaying: true,
+    );
   }
 
   /// Handles stopping music playback.
@@ -288,7 +324,16 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     Emitter<MusicPlayerState> emit,
   ) async {
     await stopSong();
-    emit(state.copyWith(status: MusicPlayerStatus.stopped));
+    await clearSavedPlaybackSession();
+    emit(
+      state.copyWith(
+        status: MusicPlayerStatus.stopped,
+        playList: const [],
+        currentSongIndex: -1,
+        hasNext: false,
+        hasPrevious: false,
+      ),
+    );
   }
 
   /// Handles toggling between play and pause.
@@ -300,10 +345,84 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       // Pause playback
       emit(state.copyWith(status: MusicPlayerStatus.paused));
       await pauseSong();
+      await _persistPlaybackSession(wasPlaying: false);
     } else {
       // Resume playback
       emit(state.copyWith(status: MusicPlayerStatus.playing));
       await resumeSong();
+      await _persistPlaybackSession(wasPlaying: true);
+    }
+  }
+
+  Future<void> _handleRestoreSavedPlayback(
+    RestoreSavedPlaybackEvent event,
+    Emitter<MusicPlayerState> emit,
+  ) async {
+    if (state.playList.isNotEmpty || event.availableSongs.isEmpty) {
+      return;
+    }
+
+    final savedSessionResult = await getSavedPlaybackSession();
+    if (savedSessionResult.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: savedSessionResult.error,
+        ),
+      );
+      return;
+    }
+
+    final savedSession = savedSessionResult.value;
+    if (savedSession == null) {
+      return;
+    }
+
+    final songsById = <int, Song>{
+      for (final song in event.availableSongs) song.id: song,
+    };
+    final restoredPlaylist = savedSession.playlistSongIds
+        .map((songId) => songsById[songId])
+        .whereType<Song>()
+        .toList(growable: false);
+
+    if (restoredPlaylist.isEmpty) {
+      await clearSavedPlaybackSession();
+      return;
+    }
+
+    final restoredIndex = restoredPlaylist.indexWhere(
+      (song) => song.id == savedSession.currentSongId,
+    );
+    if (restoredIndex == -1) {
+      await clearSavedPlaybackSession();
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        playList: restoredPlaylist,
+        currentSongIndex: restoredIndex,
+        status: savedSession.wasPlaying
+            ? MusicPlayerStatus.playing
+            : MusicPlayerStatus.paused,
+        hasNext: restoredIndex < restoredPlaylist.length - 1,
+        hasPrevious: restoredIndex > 0,
+      ),
+    );
+
+    final result = await playSong(
+      restoredPlaylist,
+      restoredIndex,
+      autoPlay: savedSession.wasPlaying,
+    );
+    if (result.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: result.error,
+        ),
+      );
     }
   }
 }

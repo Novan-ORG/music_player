@@ -53,6 +53,7 @@ void _setupPlaylistFeature() {
     ..registerLazySingleton<PlaylistRepository>(
       () => PlaylistRepositoryImpl(getIt.get()),
     )
+
     ///
     // Usecases
     ..registerLazySingleton(() => RenamePlaylist(getIt.get()))
@@ -100,9 +101,10 @@ void _setupCore() {
   getIt
     ..registerLazySingleton(
       () {
-        return OnAudioQuery()..setLogConfig(
-          LogConfig(logType: LogType.ERROR, showDetailedLog: true),
-        );
+        return OnAudioQuery()
+          ..setLogConfig(
+            LogConfig(logType: LogType.ERROR, showDetailedLog: true),
+          );
       },
     )
     ..registerLazySingleton(() => EnsureMediaPermission(getIt.get()))
@@ -132,6 +134,9 @@ void _setupMusicPlayerFeature() {
     ..registerLazySingleton(() => HasPreviousSong(getIt.get()))
     ..registerLazySingleton(() => PauseSong(getIt.get()))
     ..registerLazySingleton(() => PlaySong(getIt.get()))
+    ..registerLazySingleton(() => SavePlaybackSession(getIt.get()))
+    ..registerLazySingleton(() => GetSavedPlaybackSession(getIt.get()))
+    ..registerLazySingleton(() => ClearSavedPlaybackSession(getIt.get()))
     ..registerLazySingleton(() => ResumeSong(getIt.get()))
     ..registerLazySingleton(() => SeekSong(getIt.get()))
     ..registerLazySingleton(() => SkipToNext(getIt.get()))
@@ -158,16 +163,19 @@ void _setupMusicPlayerFeature() {
 
 void _setupFavoriteSongsFeature() {
   getIt
+
     /// Use cases
     ..registerLazySingleton(() => GetFavoriteSongs(getIt.get()))
     ..registerLazySingleton(() => AddFavoriteSong(getIt.get()))
     ..registerLazySingleton(() => RemoveFavoriteSong(getIt.get()))
     ..registerLazySingleton(() => ToggleFavoriteSong(getIt.get()))
     ..registerLazySingleton(() => ClearAllFavorites(getIt.get()))
+
     /// Repository
     ..registerLazySingleton<FavoriteSongsRepository>(
       () => FavoriteSongsRepoImpl(datasource: getIt.get()),
     )
+
     /// Data source
     ..registerLazySingleton<FavoriteSongsDatasource>(
       () => FavoriteSongsDatasourceImpl(

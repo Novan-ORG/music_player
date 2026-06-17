@@ -35,6 +35,7 @@ class MusicPlayerApp extends StatefulWidget {
 class _MusicPlayerAppState extends State<MusicPlayerApp> {
   bool hasAudioPermission = false;
   bool isLoading = false;
+  bool _hasRestoredPlaybackSession = false;
 
   @override
   void initState() {
@@ -105,6 +106,9 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
             getIt(),
             getIt(),
             getIt(),
+            getIt(),
+            getIt(),
+            getIt(),
           ),
         ),
         BlocProvider(
@@ -145,27 +149,43 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
       ],
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
-          return MaterialApp(
-            title: 'Music Player',
-            darkTheme: darkTheme,
-            theme: lightTheme,
-            themeMode: state.currentTheme,
-            debugShowCheckedModeBanner: false,
-            locale: state.currentLocale,
-            supportedLocales: AppLocalizations.supportedLocales,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
+          return MultiBlocListener(
+            listeners: [
+              BlocListener<SongsBloc, SongsState>(
+                listenWhen: (previous, current) =>
+                    !_hasRestoredPlaybackSession &&
+                    previous.status != current.status &&
+                    current.status == SongsStatus.loaded,
+                listener: (context, songsState) {
+                  _hasRestoredPlaybackSession = true;
+                  context.read<MusicPlayerBloc>().add(
+                    RestoreSavedPlaybackEvent(songsState.allSongs),
+                  );
+                },
+              ),
             ],
-            home: isLoading
-                ? const Material(child: Loading())
-                : hasAudioPermission
-                ? const HomePage()
-                : GrantAudioPermission(
-                    onGrantPermission: requestPermission,
-                  ),
+            child: MaterialApp(
+              title: 'Music Player',
+              darkTheme: darkTheme,
+              theme: lightTheme,
+              themeMode: state.currentTheme,
+              debugShowCheckedModeBanner: false,
+              locale: state.currentLocale,
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              home: isLoading
+                  ? const Material(child: Loading())
+                  : hasAudioPermission
+                  ? const HomePage()
+                  : GrantAudioPermission(
+                      onGrantPermission: requestPermission,
+                    ),
+            ),
           );
         },
       ),
