@@ -186,7 +186,6 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
               ),
           ],
         ),
-
         const SizedBox(
           height: 16,
         ),
@@ -204,7 +203,6 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
               },
             ),
           ),
-
         if (widget.isSelectionMode) _buildBottomBar()!,
       ],
     );

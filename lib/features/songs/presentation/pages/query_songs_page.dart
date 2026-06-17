@@ -133,7 +133,6 @@ class _QuerySongsPageState extends State<QuerySongsPage> {
                     SongsCount(songCount: songs.length),
                   ],
                 ).padding(value: 12),
-
                 Expanded(
                   child: SongsView(
                     songs: songs,

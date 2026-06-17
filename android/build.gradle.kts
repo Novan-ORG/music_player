@@ -2,6 +2,8 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven(url = uri("$rootDir/.gradle/local-flutter-m2"))
+        maven(url = uri("$rootDir/.gradle/local-google-m2"))
     }
 }
 

@@ -172,7 +172,6 @@ class _PlaylistContentViewState extends State<PlaylistContentView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (widget.isSelectionMode) _buildSheetHeader(theme),
-
           if (!widget.isSelectionMode)
             PinnedPlaylistsView(
               pinnedPlaylists: pinnedPlaylists,

@@ -50,3 +50,6 @@ app.*.map.json
 sentry.properties
 
 sentry.properties
+
+# FVM Version Cache
+.fvm/

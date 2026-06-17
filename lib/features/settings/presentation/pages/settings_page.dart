@@ -201,7 +201,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   const SizedBox(height: 24),
                   SectionTitle(title: context.localization.support),
-
                   SettingsTile(
                     icon: Icons.feedback_rounded,
                     title: context.localization.sendFeedbackOrSuggestion,
