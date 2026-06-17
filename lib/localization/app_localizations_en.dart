@@ -96,6 +96,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createdBy => 'Made with ❤️ by Novan team';
 
   @override
+  String get brandName => 'Free Music Player';
+
+  @override
+  String get brandTagline => 'Bold sound, effortless control.';
+
+  @override
+  String get brandSplashMessage =>
+      'Loading your library with a cleaner, sharper listening experience.';
+
+  @override
+  String get brandSettingsMessage =>
+      'Shape the player around your language, theme, and listening flow.';
+
+  @override
+  String get brandAboutMessage =>
+      'Designed by the Novan team to make everyday listening feel polished, playful, and completely free.';
+
+  @override
+  String get feedbackEmailSubject => 'Free Music Player Feedback';
+
+  @override
   String get homePage => '';
 
   @override

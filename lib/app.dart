@@ -72,12 +72,11 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
             ),
         ),
         BlocProvider(
-          create: (_) =>
-              ArtistsBloc(
-                getIt(),
-              )..add(
-                const LoadArtistsEvent(),
-              ),
+          create: (_) => ArtistsBloc(
+            getIt(),
+          )..add(
+              const LoadArtistsEvent(),
+            ),
         ),
         BlocProvider(
           create: (_) => SongsBloc(
@@ -112,23 +111,22 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
           ),
         ),
         BlocProvider(
-          create: (_) =>
-              PlayListBloc(
-                  getIt.get<RenamePlaylist>(),
-                  getIt.get<GetAllPlaylists>(),
-                  getIt.get<CreatePlaylist>(),
-                  getIt.get<DeletePlaylistWithUndo>(),
-                  getIt.get<AddSongsToPlaylist>(),
-                  getIt.get<RemoveSongsFromPlaylist>(),
-                  getIt.get<GetPlaylistById>(),
-                  getIt.get<CommandManager>(),
-                  getIt.get<PinPlaylistById>(),
-                  getIt.get<GetPinnedPlaylists>(),
-                  getIt.get<InitializePlaylistCovers>(),
-                  getIt.get<GetPlaylistCoverSongId>(),
-                )
-                ..add(const InitializePlaylistCoversEvent())
-                ..add(LoadPlayListsEvent()),
+          create: (_) => PlayListBloc(
+            getIt.get<RenamePlaylist>(),
+            getIt.get<GetAllPlaylists>(),
+            getIt.get<CreatePlaylist>(),
+            getIt.get<DeletePlaylistWithUndo>(),
+            getIt.get<AddSongsToPlaylist>(),
+            getIt.get<RemoveSongsFromPlaylist>(),
+            getIt.get<GetPlaylistById>(),
+            getIt.get<CommandManager>(),
+            getIt.get<PinPlaylistById>(),
+            getIt.get<GetPinnedPlaylists>(),
+            getIt.get<InitializePlaylistCovers>(),
+            getIt.get<GetPlaylistCoverSongId>(),
+          )
+            ..add(const InitializePlaylistCoversEvent())
+            ..add(LoadPlayListsEvent()),
         ),
         BlocProvider(
           create: (_) => FavoriteSongsBloc(
@@ -159,13 +157,14 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
                 listener: (context, songsState) {
                   _hasRestoredPlaybackSession = true;
                   context.read<MusicPlayerBloc>().add(
-                    RestoreSavedPlaybackEvent(songsState.allSongs),
-                  );
+                        RestoreSavedPlaybackEvent(songsState.allSongs),
+                      );
                 },
               ),
             ],
             child: MaterialApp(
-              title: 'Music Player',
+              onGenerateTitle: (context) =>
+                  AppLocalizations.of(context)!.brandName,
               darkTheme: darkTheme,
               theme: lightTheme,
               themeMode: state.currentTheme,
@@ -179,12 +178,12 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
                 GlobalWidgetsLocalizations.delegate,
               ],
               home: isLoading
-                  ? const Material(child: Loading())
+                  ? const Material(child: AppStartupSplash())
                   : hasAudioPermission
-                  ? const HomePage()
-                  : GrantAudioPermission(
-                      onGrantPermission: requestPermission,
-                    ),
+                      ? const HomePage()
+                      : GrantAudioPermission(
+                          onGrantPermission: requestPermission,
+                        ),
             ),
           );
         },

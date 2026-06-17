@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/constants/constants.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/settings/presentation/widgets/widgets.dart';
 
@@ -14,6 +15,7 @@ class AboutUsPage extends StatelessWidget {
           context.localization.aboutUs,
           textAlign: TextAlign.center,
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -21,24 +23,30 @@ class AboutUsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 16,
           children: [
-            const Center(
-              child: CircleAvatar(
-                radius: 60,
-                backgroundImage: AssetImage(
-                  ImageAssets.logo,
+            BrandShowcase(
+              eyebrow: context.localization.brandTagline,
+              title: context.localization.brandName,
+              description: context.localization.brandAboutMessage,
+              footer: VersionInfo(
+                style: context.theme.textTheme.labelSmall?.copyWith(
+                  color: Colors.white.withValues(alpha: 0.82),
                 ),
               ),
             ),
-            Text(
-              context.localization.appPurpose,
-              style: Theme.of(context).textTheme.titleLarge,
-              textAlign: TextAlign.center,
+            GlassCard(
+              borderRadius: BorderRadius.circular(24),
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                context.localization.appPurpose,
+                style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.center,
+              ),
             ),
             Text(
               '${context.localization.aboutContributers} :',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-              ),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
             ),
             ContributerItem(
               imagePath: ImageAssets.talebAvatar,

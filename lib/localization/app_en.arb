@@ -36,6 +36,12 @@
     "seeMore": "See more",
     "seeLess": "See Less",
     "createdBy": "Made with ❤️ by Novan team",
+    "brandName": "Free Music Player",
+    "brandTagline": "Bold sound, effortless control.",
+    "brandSplashMessage": "Loading your library with a cleaner, sharper listening experience.",
+    "brandSettingsMessage": "Shape the player around your language, theme, and listening flow.",
+    "brandAboutMessage": "Designed by the Novan team to make everyday listening feel polished, playful, and completely free.",
+    "feedbackEmailSubject": "Free Music Player Feedback",
 
     "homePage": "",
     "@homePage": {

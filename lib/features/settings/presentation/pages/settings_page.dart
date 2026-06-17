@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/constants/constants.dart';
 import 'package:music_player/core/utils/utils.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/settings/presentation/bloc/bloc.dart';
@@ -56,6 +57,17 @@ class _SettingsPageState extends State<SettingsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 6,
                 children: [
+                  const SizedBox(height: 12),
+                  BrandShowcase(
+                    eyebrow: context.localization.brandTagline,
+                    title: context.localization.brandName,
+                    description: context.localization.brandSettingsMessage,
+                    footer: VersionInfo(
+                      style: context.theme.textTheme.labelSmall?.copyWith(
+                        color: Colors.white.withValues(alpha: 0.82),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 24),
                   SectionTitle(title: context.localization.appearance),
                   SettingsTile(
@@ -75,8 +87,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       ],
                       onChanged: (value) {
                         context.read<SettingsBloc>().add(
-                          ChangeLanguageEvent(value!),
-                        );
+                              ChangeLanguageEvent(value!),
+                            );
                       },
                     ),
                   ),
@@ -101,8 +113,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       ],
                       onChanged: (value) {
                         context.read<SettingsBloc>().add(
-                          ChangeThemeEvent(value!),
-                        );
+                              ChangeThemeEvent(value!),
+                            );
                       },
                     ),
                   ),
@@ -140,11 +152,11 @@ class _SettingsPageState extends State<SettingsPage> {
                               if (value == 'custom') {
                                 final duration =
                                     await showModalBottomSheet<Duration>(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      builder: (context) =>
-                                          const DurationPickerSheet(),
-                                    );
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) =>
+                                      const DurationPickerSheet(),
+                                );
                                 if (!mounted) return;
                                 if (duration != null &&
                                     duration > Duration.zero) {
@@ -162,8 +174,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                 );
                                 final sleepEndTime = now.add(duration);
                                 context.read<SettingsBloc>().add(
-                                  ChangeSleepTimerEvent(sleepEndTime),
-                                );
+                                      ChangeSleepTimerEvent(sleepEndTime),
+                                    );
                               }
                             },
                           )
@@ -171,9 +183,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             onTap: () async {
                               final remainedDuration =
                                   state.sleepEndTime?.difference(
-                                    DateTime.now(),
-                                  ) ??
-                                  Duration.zero;
+                                        DateTime.now(),
+                                      ) ??
+                                      Duration.zero;
                               if (remainedDuration <= Duration.zero) {
                                 return;
                               }
@@ -188,8 +200,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               );
                             },
                             child: CountDownTimer(
-                              duration:
-                                  state.sleepEndTime?.difference(
+                              duration: state.sleepEndTime?.difference(
                                     DateTime.now(),
                                   ) ??
                                   Duration.zero,
@@ -207,7 +218,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     onTap: () async {
                       final success = await LauncherUtils.openEmailApp(
                         toEmail: StringsConstants.supportEmail,
-                        subject: StringsConstants.supportEmailSubject,
+                        subject: context.localization.feedbackEmailSubject,
                       );
                       if (!success && context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(

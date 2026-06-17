@@ -272,6 +272,42 @@ abstract class AppLocalizations {
   /// **'Made with ❤️ by Novan team'**
   String get createdBy;
 
+  /// No description provided for @brandName.
+  ///
+  /// In en, this message translates to:
+  /// **'Free Music Player'**
+  String get brandName;
+
+  /// No description provided for @brandTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Bold sound, effortless control.'**
+  String get brandTagline;
+
+  /// No description provided for @brandSplashMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading your library with a cleaner, sharper listening experience.'**
+  String get brandSplashMessage;
+
+  /// No description provided for @brandSettingsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Shape the player around your language, theme, and listening flow.'**
+  String get brandSettingsMessage;
+
+  /// No description provided for @brandAboutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Designed by the Novan team to make everyday listening feel polished, playful, and completely free.'**
+  String get brandAboutMessage;
+
+  /// No description provided for @feedbackEmailSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Free Music Player Feedback'**
+  String get feedbackEmailSubject;
+
   /// Home page localizations.
   ///
   /// In en, this message translates to:

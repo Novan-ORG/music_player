@@ -96,6 +96,27 @@ class AppLocalizationsFa extends AppLocalizations {
   String get createdBy => 'ساخته شده با ❤️ توسط تیم نووان';
 
   @override
+  String get brandName => 'موزیک پلیر رایگان';
+
+  @override
+  String get brandTagline => 'پخش روان، کنترل بی‌دردسر.';
+
+  @override
+  String get brandSplashMessage =>
+      'کتابخانه موسیقی شما با ظاهری تازه و تجربه‌ای روان در حال آماده‌سازی است.';
+
+  @override
+  String get brandSettingsMessage =>
+      'زبان، تم و تجربه پخش را طوری تنظیم کنید که دقیقاً با سلیقه شما هماهنگ شود.';
+
+  @override
+  String get brandAboutMessage =>
+      'این تجربه توسط تیم نووان طراحی شده تا گوش‌دادن روزمره را شیک، روان و کاملاً رایگان کند.';
+
+  @override
+  String get feedbackEmailSubject => 'بازخورد موزیک پلیر رایگان';
+
+  @override
   String get homePage => '';
 
   @override
