@@ -158,6 +158,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get allSongs => 'همه موزیک ها';
 
   @override
+  String get yourLibrary => 'کتابخانه شما';
+
+  @override
+  String get libraryHeroSubtitle =>
+      'سریع جستجو کنید، همه موزیک ها را رندوم پخش کنید و دوباره وارد حال و هوای خودتان شوید.';
+
+  @override
+  String get startMix => 'شروع میکس';
+
+  @override
+  String get libraryReady => 'آماده پخش';
+
+  @override
   String get searchSongs => 'جستجوی موزیک ها';
 
   @override
@@ -181,6 +194,21 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get sortSongs => 'مرتب سازی موزیک ها';
+
+  @override
+  String get sortBy => 'مرتب سازی بر اساس';
+
+  @override
+  String get sortOrder => 'ترتیب نمایش';
+
+  @override
+  String get applySort => 'اعمال مرتب سازی';
+
+  @override
+  String get newestFirst => 'جدیدترین اول';
+
+  @override
+  String get oldestFirst => 'قدیمی ترین اول';
 
   @override
   String get recent => 'اخیر';

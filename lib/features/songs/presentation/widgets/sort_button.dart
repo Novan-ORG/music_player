@@ -9,20 +9,28 @@ class FilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.theme;
     return GlassCard(
       onTap: onTap,
+      borderRadius: const BorderRadius.all(Radius.circular(18)),
       padding: const EdgeInsets.symmetric(
-        horizontal: 6,
-        vertical: 2,
+        horizontal: 12,
+        vertical: 9,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        spacing: 3,
+        spacing: 7,
         children: [
-          const Icon(Icons.sort_rounded),
+          Icon(
+            Icons.tune_rounded,
+            size: 18,
+            color: theme.colorScheme.primary,
+          ),
           Text(
             context.localization.sortSongs,
-            style: context.theme.textTheme.labelMedium,
+            style: theme.textTheme.labelMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ],
       ),

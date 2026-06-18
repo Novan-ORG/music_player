@@ -1,16 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
+import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/search/presentation/pages/pages.dart';
+import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/views/views.dart';
-import 'package:music_player/features/songs/presentation/widgets/songs_appbar.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
 /// Main songs library page with tabs for songs, albums, and artists.
-///
-/// Features:
-/// - Tab navigation (songs, albums, artists)
-/// - Search functionality
-/// - Sort options
-/// - Shuffle all button
 class SongsPage extends StatefulWidget {
   const SongsPage({
     super.key,
@@ -24,18 +24,25 @@ class _SongsPageState extends State<SongsPage>
     with SingleTickerProviderStateMixin {
   late final TabController tabController;
   late final PageController pageController;
+
   @override
   void initState() {
+    super.initState();
     tabController = TabController(length: 3, vsync: this);
     pageController = PageController();
-    super.initState();
+
+    scheduleMicrotask(() {
+      if (!mounted) return;
+      context.read<AlbumsBloc>().add(const LoadAlbumsEvent());
+      context.read<ArtistsBloc>().add(const LoadArtistsEvent());
+    });
   }
 
   void animateToNewPage(int index) {
     pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+      curve: Curves.easeInOutCubic,
     );
   }
 
@@ -48,30 +55,95 @@ class _SongsPageState extends State<SongsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: SongsAppbar(
-        onSearchButtonPressed: _onSearchButtonPressed,
-      ),
-      body: Column(
-        children: [
-          CategoryTabbar(
-            tabController: tabController,
-            onTabChanged: animateToNewPage,
-          ),
-          Expanded(
-            child: PageView(
-              controller: pageController,
-              onPageChanged: (newPageIndex) {
-                tabController.animateTo(newPageIndex);
-              },
-              children: const [
-                AllSongsView(),
-                AlbumsView(),
-                ArtistsView(),
-              ],
+    final theme = context.theme;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final useWideLayout =
+            constraints.maxWidth >= 700 && constraints.maxHeight < 620;
+        final preferredSideWidth = constraints.maxWidth * 0.36;
+        final sideWidth = preferredSideWidth < 320
+            ? 320.0
+            : preferredSideWidth > 430
+            ? 430.0
+            : preferredSideWidth;
+        final pageView = PageView(
+          controller: pageController,
+          onPageChanged: tabController.animateTo,
+          children: const [
+            AllSongsView(),
+            AlbumsView(),
+            ArtistsView(),
+          ],
+        );
+
+        return Scaffold(
+          backgroundColor: theme.scaffoldBackgroundColor,
+          body: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  theme.colorScheme.primary.withValues(alpha: 0.24),
+                  const Color(0xFF00BFA6).withValues(alpha: 0.1),
+                  theme.scaffoldBackgroundColor,
+                  theme.scaffoldBackgroundColor,
+                ],
+                stops: const [0, 0.22, 0.5, 1],
+              ),
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: useWideLayout
+                  ? Row(
+                      children: [
+                        SizedBox(
+                          width: sideWidth,
+                          child: Column(
+                            children: [
+                              LibraryHeader(
+                                compact: true,
+                                onSearchPressed: _onSearchButtonPressed,
+                                onStartMixPressed: _onStartMixPressed,
+                              ),
+                              CategoryTabbar(
+                                tabController: tabController,
+                                onTabChanged: animateToNewPage,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(child: pageView),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        LibraryHeader(
+                          onSearchPressed: _onSearchButtonPressed,
+                          onStartMixPressed: _onStartMixPressed,
+                        ),
+                        CategoryTabbar(
+                          tabController: tabController,
+                          onTabChanged: animateToNewPage,
+                        ),
+                        Expanded(child: pageView),
+                      ],
+                    ),
             ),
           ),
-        ],
+        );
+      },
+    );
+  }
+
+  Future<void> _onStartMixPressed() async {
+    final songs = context.read<SongsBloc>().state.allSongs;
+    if (songs.isEmpty) return;
+
+    context.read<MusicPlayerBloc>().add(ShuffleMusicEvent(songs: songs));
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const MusicPlayerPage(),
       ),
     );
   }

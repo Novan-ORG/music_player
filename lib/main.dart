@@ -18,7 +18,7 @@ void main() {
   runZonedGuarded(
     () async {
       // Initialize Flutter binding and preserve splash screen
-      final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+      final widgetsBinding = SentryWidgetsFlutterBinding();
       FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
       // Setup dependency injection

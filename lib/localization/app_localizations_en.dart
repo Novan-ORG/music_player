@@ -158,6 +158,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get allSongs => 'All Songs';
 
   @override
+  String get yourLibrary => 'Your Library';
+
+  @override
+  String get libraryHeroSubtitle =>
+      'Shuffle the room, search fast, and jump back into your sound.';
+
+  @override
+  String get startMix => 'Start Mix';
+
+  @override
+  String get libraryReady => 'Ready to play';
+
+  @override
   String get searchSongs => 'Search Songs';
 
   @override
@@ -181,6 +194,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sortSongs => 'Sort Songs';
+
+  @override
+  String get sortBy => 'Sort by';
+
+  @override
+  String get sortOrder => 'Order';
+
+  @override
+  String get applySort => 'Apply Sort';
+
+  @override
+  String get newestFirst => 'Newest first';
+
+  @override
+  String get oldestFirst => 'Oldest first';
 
   @override
   String get recent => 'Recent';

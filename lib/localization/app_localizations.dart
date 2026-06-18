@@ -386,6 +386,30 @@ abstract class AppLocalizations {
   /// **'All Songs'**
   String get allSongs;
 
+  /// No description provided for @yourLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Library'**
+  String get yourLibrary;
+
+  /// No description provided for @libraryHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shuffle the room, search fast, and jump back into your sound.'**
+  String get libraryHeroSubtitle;
+
+  /// No description provided for @startMix.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Mix'**
+  String get startMix;
+
+  /// No description provided for @libraryReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to play'**
+  String get libraryReady;
+
   /// No description provided for @searchSongs.
   ///
   /// In en, this message translates to:
@@ -433,6 +457,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sort Songs'**
   String get sortSongs;
+
+  /// No description provided for @sortBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get sortBy;
+
+  /// No description provided for @sortOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get sortOrder;
+
+  /// No description provided for @applySort.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Sort'**
+  String get applySort;
+
+  /// No description provided for @newestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest first'**
+  String get newestFirst;
+
+  /// No description provided for @oldestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest first'**
+  String get oldestFirst;
 
   /// No description provided for @recent.
   ///

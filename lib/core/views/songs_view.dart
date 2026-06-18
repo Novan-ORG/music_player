@@ -17,11 +17,13 @@ class SongsView extends StatefulWidget {
     this.onRefresh,
     super.key,
     this.playlist,
+    this.bottomPadding = 12,
   });
 
   final List<Song> songs;
   final Future<void> Function()? onRefresh;
   final Playlist? playlist;
+  final double bottomPadding;
 
   @override
   State<SongsView> createState() => _SongsViewState();
@@ -77,10 +79,7 @@ class _SongsViewState extends State<SongsView>
             builder: (context, favoriteSongIds) {
               return ListView.builder(
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12,
-                  horizontal: 8,
-                ),
+                padding: EdgeInsets.fromLTRB(8, 4, 8, widget.bottomPadding),
                 itemCount: widget.songs.length,
                 itemBuilder: (context, index) {
                   final song = widget.songs[index];
