@@ -28,6 +28,7 @@ class AppPopupMenuButton<T> extends StatelessWidget {
     this.highlightColor,
     this.isHighlighted = false,
     this.offset = const Offset(0, 12),
+    this.compact = false,
   });
 
   final List<AppPopupMenuEntry<T>> items;
@@ -38,6 +39,7 @@ class AppPopupMenuButton<T> extends StatelessWidget {
   final Color? highlightColor;
   final bool isHighlighted;
   final Offset offset;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,7 @@ class AppPopupMenuButton<T> extends StatelessWidget {
         isEnabled: enabled && items.isNotEmpty,
         isHighlighted: isHighlighted,
         highlightColor: resolvedHighlightColor,
+        compact: compact,
       ),
       itemBuilder: (context) => [
         for (var index = 0; index < items.length; index++)
@@ -85,12 +88,14 @@ class _MenuTriggerIcon extends StatelessWidget {
     required this.isEnabled,
     required this.isHighlighted,
     required this.highlightColor,
+    required this.compact,
   });
 
   final IconData icon;
   final bool isEnabled;
   final bool isHighlighted;
   final Color highlightColor;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -98,8 +103,8 @@ class _MenuTriggerIcon extends StatelessWidget {
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 180),
-      width: 48,
-      height: 48,
+      width: compact ? 42 : 48,
+      height: compact ? 42 : 48,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: isHighlighted

@@ -174,6 +174,130 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchSongs => 'Search Songs';
 
   @override
+  String get searchHeroSubtitle =>
+      'Find by title, artist, or album and jump straight into the next track.';
+
+  @override
+  String get searchHint => 'Search by song, artist, or album';
+
+  @override
+  String get searchMatchesLabel => 'Matches';
+
+  @override
+  String get searchLibraryLabel => 'Library';
+
+  @override
+  String searchResultsCount(int count) {
+    return '$count results';
+  }
+
+  @override
+  String searchSongsReadyCount(int count) {
+    return '$count songs ready';
+  }
+
+  @override
+  String get searchInstantSearch => 'Instant search';
+
+  @override
+  String get searchQuickPicks => 'Quick picks';
+
+  @override
+  String get searchStartVoiceSearch => 'Start voice search';
+
+  @override
+  String get searchStopVoiceSearch => 'Stop voice search';
+
+  @override
+  String get searchInMotionTitle => 'Search in motion';
+
+  @override
+  String get searchLibraryGlanceTitle => 'Your library at a glance';
+
+  @override
+  String get searchLiveResultsMessage =>
+      'Matching tracks update live while you type or use voice search.';
+
+  @override
+  String get searchBrowseLibraryMessage =>
+      'Browse everything quickly, or jump straight to an artist, album, or favorite title.';
+
+  @override
+  String get searchVisibleNow => 'Visible now';
+
+  @override
+  String get searchTryAnotherAngle => 'Try another angle';
+
+  @override
+  String get searchTapToExplore => 'Tap to explore';
+
+  @override
+  String searchResultsFor(String query) {
+    return 'Results for \"$query\"';
+  }
+
+  @override
+  String searchMatchedSongsSummary(int count, int total) {
+    return '$count of $total tracks matched your search';
+  }
+
+  @override
+  String searchTracksReadySummary(int total) {
+    return '$total tracks ready to browse';
+  }
+
+  @override
+  String searchNoMatchesTitle(String query) {
+    return 'No matches for \"$query\"';
+  }
+
+  @override
+  String get searchNoMatchesMessage =>
+      'Try a song title, a different spelling, or switch to one of the quick picks below.';
+
+  @override
+  String get emptyLibraryTitle => 'No songs in your library';
+
+  @override
+  String get emptyLibraryMessage =>
+      'Refresh your library or add fresh tracks to start listening.';
+
+  @override
+  String get emptyAlbumsTitle => 'No albums yet';
+
+  @override
+  String get emptyAlbumsMessage =>
+      'Albums will appear here once your music library is ready.';
+
+  @override
+  String get emptyArtistsTitle => 'No artists yet';
+
+  @override
+  String get emptyArtistsMessage =>
+      'Artists will show up here as soon as your songs are available.';
+
+  @override
+  String get searchEmptyLibraryTitle => 'Search needs music first';
+
+  @override
+  String get searchEmptyLibraryMessage =>
+      'Refresh your library or add songs to start searching.';
+
+  @override
+  String get libraryLoadErrorTitle => 'Couldn\'t load your library';
+
+  @override
+  String get libraryLoadErrorMessage =>
+      'Check permissions, then try refreshing again.';
+
+  @override
+  String get searchLoadErrorTitle => 'Search is unavailable right now';
+
+  @override
+  String get searchLoadErrorMessage =>
+      'Refresh your library and try again in a moment.';
+
+  @override
   String get refresh => 'Refresh';
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/domain/enums/enums.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
@@ -19,12 +20,26 @@ class ArtistsView extends StatelessWidget {
         }
 
         if (artistsState.status == ArtistsStatus.error) {
-          return const SongsErrorLoading();
+          return SongsErrorLoading(
+            eyebrow: context.localization.artists,
+            title: context.localization.libraryLoadErrorTitle,
+            message: context.localization.libraryLoadErrorMessage,
+            onRetry: () => context.read<ArtistsBloc>().add(
+              LoadArtistsEvent(sortType: artistsState.sortType),
+            ),
+          );
         }
 
         final artists = artistsState.allArtists;
         if (artists.isEmpty) {
-          return const NoSongsWidget();
+          return NoSongsWidget(
+            eyebrow: context.localization.artists,
+            title: context.localization.emptyArtistsTitle,
+            message: context.localization.emptyArtistsMessage,
+            onRefresh: () => context.read<ArtistsBloc>().add(
+              LoadArtistsEvent(sortType: artistsState.sortType),
+            ),
+          );
         }
         final mediaQuery = MediaQuery.of(context);
         final isWideCompact =

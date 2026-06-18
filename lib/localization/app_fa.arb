@@ -66,6 +66,91 @@
     "startMix": "شروع میکس",
     "libraryReady": "آماده پخش",
     "searchSongs": "جستجوی موزیک ها",
+    "searchHeroSubtitle": "بر اساس عنوان، هنرمند یا آلبوم جستجو کنید و سریع به موزیک بعدی برسید.",
+    "searchHint": "جستجو بر اساس موزیک، هنرمند یا آلبوم",
+    "searchMatchesLabel": "نتیجه",
+    "searchLibraryLabel": "کتابخانه",
+    "searchResultsCount": "{count} نتیجه",
+    "@searchResultsCount": {
+        "description": "برچسب تعداد نتایج جستجو",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "searchSongsReadyCount": "{count} موزیک آماده",
+    "@searchSongsReadyCount": {
+        "description": "برچسب تعداد موزیک های آماده نمایش",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "searchInstantSearch": "جستجوی سریع",
+    "searchQuickPicks": "پیشنهادهای سریع",
+    "searchStartVoiceSearch": "شروع جستجوی صوتی",
+    "searchStopVoiceSearch": "توقف جستجوی صوتی",
+    "searchInMotionTitle": "جستجوی پویا",
+    "searchLibraryGlanceTitle": "مروری سریع بر کتابخانه شما",
+    "searchLiveResultsMessage": "همزمان با تایپ کردن یا استفاده از جستجوی صوتی، نتایج به صورت زنده به‌روزرسانی می‌شوند.",
+    "searchBrowseLibraryMessage": "همه چیز را سریع مرور کنید یا مستقیم به هنرمند، آلبوم یا موزیک دلخواهتان بروید.",
+    "searchVisibleNow": "نمایش فعلی",
+    "searchTryAnotherAngle": "جستجوی دیگری را امتحان کنید",
+    "searchTapToExplore": "برای جستجو لمس کنید",
+    "searchResultsFor": "نتایج برای «{query}»",
+    "@searchResultsFor": {
+        "description": "عنوان نتایج جستجو",
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "searchMatchedSongsSummary": "{count} مورد از {total} موزیک با جستجوی شما مطابقت داشت",
+    "@searchMatchedSongsSummary": {
+        "description": "خلاصه تعداد نتایج جستجو",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "searchTracksReadySummary": "{total} موزیک آماده مرور است",
+    "@searchTracksReadySummary": {
+        "description": "خلاصه وقتی همه موزیک ها در صفحه جستجو نمایش داده می شوند",
+        "placeholders": {
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "searchNoMatchesTitle": "نتیجه‌ای برای «{query}» پیدا نشد",
+    "@searchNoMatchesTitle": {
+        "description": "عنوان حالت بدون نتیجه در جستجو",
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "searchNoMatchesMessage": "عنوان موزیک، املای متفاوت یا یکی از پیشنهادهای سریع پایین را امتحان کنید.",
+    "emptyLibraryTitle": "هیچ موزیکی در کتابخانه شما نیست",
+    "emptyLibraryMessage": "کتابخانه را تازه سازی کنید یا موزیک های جدید اضافه کنید تا شنیدن را شروع کنید.",
+    "emptyAlbumsTitle": "هنوز آلبومی وجود ندارد",
+    "emptyAlbumsMessage": "به محض آماده شدن کتابخانه موسیقی، آلبوم ها اینجا نمایش داده می شوند.",
+    "emptyArtistsTitle": "هنوز هنرمندی وجود ندارد",
+    "emptyArtistsMessage": "وقتی موزیک های شما در دسترس باشند، هنرمندان اینجا نمایش داده می شوند.",
+    "searchEmptyLibraryTitle": "برای جستجو اول به موزیک نیاز دارید",
+    "searchEmptyLibraryMessage": "کتابخانه را تازه سازی کنید یا موزیک اضافه کنید تا جستجو را شروع کنید.",
+    "libraryLoadErrorTitle": "بارگذاری کتابخانه انجام نشد",
+    "libraryLoadErrorMessage": "دسترسی ها را بررسی کنید و دوباره تلاش کنید.",
+    "searchLoadErrorTitle": "جستجو فعلا در دسترس نیست",
+    "searchLoadErrorMessage": "کتابخانه را تازه سازی کنید و چند لحظه دیگر دوباره تلاش کنید.",
     "refresh": "تازه سازی",
     "errorLoadingSongs": "در هنگام باگزاری موزیک ها خطایی رخ داده است",
     "noSongTryAgain": "هیچ موزیکی پیدا نشد\n یا تازه سازی کنید و موزیک جدیدی اضاف کنید.",

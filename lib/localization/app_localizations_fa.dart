@@ -174,6 +174,130 @@ class AppLocalizationsFa extends AppLocalizations {
   String get searchSongs => 'جستجوی موزیک ها';
 
   @override
+  String get searchHeroSubtitle =>
+      'بر اساس عنوان، هنرمند یا آلبوم جستجو کنید و سریع به موزیک بعدی برسید.';
+
+  @override
+  String get searchHint => 'جستجو بر اساس موزیک، هنرمند یا آلبوم';
+
+  @override
+  String get searchMatchesLabel => 'نتیجه';
+
+  @override
+  String get searchLibraryLabel => 'کتابخانه';
+
+  @override
+  String searchResultsCount(int count) {
+    return '$count نتیجه';
+  }
+
+  @override
+  String searchSongsReadyCount(int count) {
+    return '$count موزیک آماده';
+  }
+
+  @override
+  String get searchInstantSearch => 'جستجوی سریع';
+
+  @override
+  String get searchQuickPicks => 'پیشنهادهای سریع';
+
+  @override
+  String get searchStartVoiceSearch => 'شروع جستجوی صوتی';
+
+  @override
+  String get searchStopVoiceSearch => 'توقف جستجوی صوتی';
+
+  @override
+  String get searchInMotionTitle => 'جستجوی پویا';
+
+  @override
+  String get searchLibraryGlanceTitle => 'مروری سریع بر کتابخانه شما';
+
+  @override
+  String get searchLiveResultsMessage =>
+      'همزمان با تایپ کردن یا استفاده از جستجوی صوتی، نتایج به صورت زنده به‌روزرسانی می‌شوند.';
+
+  @override
+  String get searchBrowseLibraryMessage =>
+      'همه چیز را سریع مرور کنید یا مستقیم به هنرمند، آلبوم یا موزیک دلخواهتان بروید.';
+
+  @override
+  String get searchVisibleNow => 'نمایش فعلی';
+
+  @override
+  String get searchTryAnotherAngle => 'جستجوی دیگری را امتحان کنید';
+
+  @override
+  String get searchTapToExplore => 'برای جستجو لمس کنید';
+
+  @override
+  String searchResultsFor(String query) {
+    return 'نتایج برای «$query»';
+  }
+
+  @override
+  String searchMatchedSongsSummary(int count, int total) {
+    return '$count مورد از $total موزیک با جستجوی شما مطابقت داشت';
+  }
+
+  @override
+  String searchTracksReadySummary(int total) {
+    return '$total موزیک آماده مرور است';
+  }
+
+  @override
+  String searchNoMatchesTitle(String query) {
+    return 'نتیجه‌ای برای «$query» پیدا نشد';
+  }
+
+  @override
+  String get searchNoMatchesMessage =>
+      'عنوان موزیک، املای متفاوت یا یکی از پیشنهادهای سریع پایین را امتحان کنید.';
+
+  @override
+  String get emptyLibraryTitle => 'هیچ موزیکی در کتابخانه شما نیست';
+
+  @override
+  String get emptyLibraryMessage =>
+      'کتابخانه را تازه سازی کنید یا موزیک های جدید اضافه کنید تا شنیدن را شروع کنید.';
+
+  @override
+  String get emptyAlbumsTitle => 'هنوز آلبومی وجود ندارد';
+
+  @override
+  String get emptyAlbumsMessage =>
+      'به محض آماده شدن کتابخانه موسیقی، آلبوم ها اینجا نمایش داده می شوند.';
+
+  @override
+  String get emptyArtistsTitle => 'هنوز هنرمندی وجود ندارد';
+
+  @override
+  String get emptyArtistsMessage =>
+      'وقتی موزیک های شما در دسترس باشند، هنرمندان اینجا نمایش داده می شوند.';
+
+  @override
+  String get searchEmptyLibraryTitle => 'برای جستجو اول به موزیک نیاز دارید';
+
+  @override
+  String get searchEmptyLibraryMessage =>
+      'کتابخانه را تازه سازی کنید یا موزیک اضافه کنید تا جستجو را شروع کنید.';
+
+  @override
+  String get libraryLoadErrorTitle => 'بارگذاری کتابخانه انجام نشد';
+
+  @override
+  String get libraryLoadErrorMessage =>
+      'دسترسی ها را بررسی کنید و دوباره تلاش کنید.';
+
+  @override
+  String get searchLoadErrorTitle => 'جستجو فعلا در دسترس نیست';
+
+  @override
+  String get searchLoadErrorMessage =>
+      'کتابخانه را تازه سازی کنید و چند لحظه دیگر دوباره تلاش کنید.';
+
+  @override
   String get refresh => 'تازه سازی';
 
   @override

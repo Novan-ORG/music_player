@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 
 class SelectionMoreButton extends StatelessWidget {
@@ -17,51 +18,49 @@ class SelectionMoreButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
+    return AppPopupMenuButton<_SelectionAction>(
+      compact: true,
       enabled: selectedCount > 0,
-      icon: const Icon(Icons.more_vert),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'add_to_playlist',
-          child: Row(
-            children: [
-              const Icon(Icons.playlist_add, color: Colors.green),
-              const SizedBox(width: 8),
-              Text(context.localization.addToPlaylist),
-            ],
-          ),
+      tooltip: context.localization.moreOptions,
+      items: [
+        AppPopupMenuEntry(
+          value: _SelectionAction.addToPlaylist,
+          label: context.localization.addToPlaylist,
+          icon: Icons.playlist_add_rounded,
+          iconColor: Colors.green,
         ),
-        PopupMenuItem(
-          value: 'share',
-          child: Row(
-            children: [
-              const Icon(Icons.share),
-              const SizedBox(width: 8),
-              Text(context.localization.share),
-            ],
-          ),
+        AppPopupMenuEntry(
+          value: _SelectionAction.share,
+          label: context.localization.share,
+          icon: Icons.share_rounded,
+          iconColor: Colors.blue,
         ),
-        PopupMenuItem(
-          value: 'delete',
-          child: Row(
-            children: [
-              const Icon(Icons.delete),
-              const SizedBox(width: 8),
-              Text(context.localization.delete),
-            ],
-          ),
+        AppPopupMenuEntry(
+          value: _SelectionAction.delete,
+          label: context.localization.delete,
+          icon: Icons.delete_outline_rounded,
+          isDestructive: true,
         ),
       ],
       onSelected: (value) {
         switch (value) {
-          case 'add_to_playlist':
+          case _SelectionAction.addToPlaylist:
             onAddToPlaylist();
-          case 'share':
+            return;
+          case _SelectionAction.share:
             onShare();
-          case 'delete':
+            return;
+          case _SelectionAction.delete:
             onDelete();
+            return;
         }
       },
     );
   }
+}
+
+enum _SelectionAction {
+  addToPlaylist,
+  share,
+  delete,
 }

@@ -69,6 +69,91 @@
     "startMix": "Start Mix",
     "libraryReady": "Ready to play",
     "searchSongs": "Search Songs",
+    "searchHeroSubtitle": "Find by title, artist, or album and jump straight into the next track.",
+    "searchHint": "Search by song, artist, or album",
+    "searchMatchesLabel": "Matches",
+    "searchLibraryLabel": "Library",
+    "searchResultsCount": "{count} results",
+    "@searchResultsCount": {
+        "description": "Summary label showing number of search results",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "searchSongsReadyCount": "{count} songs ready",
+    "@searchSongsReadyCount": {
+        "description": "Summary label showing number of songs ready to browse",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "searchInstantSearch": "Instant search",
+    "searchQuickPicks": "Quick picks",
+    "searchStartVoiceSearch": "Start voice search",
+    "searchStopVoiceSearch": "Stop voice search",
+    "searchInMotionTitle": "Search in motion",
+    "searchLibraryGlanceTitle": "Your library at a glance",
+    "searchLiveResultsMessage": "Matching tracks update live while you type or use voice search.",
+    "searchBrowseLibraryMessage": "Browse everything quickly, or jump straight to an artist, album, or favorite title.",
+    "searchVisibleNow": "Visible now",
+    "searchTryAnotherAngle": "Try another angle",
+    "searchTapToExplore": "Tap to explore",
+    "searchResultsFor": "Results for \"{query}\"",
+    "@searchResultsFor": {
+        "description": "Header for search results",
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "searchMatchedSongsSummary": "{count} of {total} tracks matched your search",
+    "@searchMatchedSongsSummary": {
+        "description": "Summary of matched search results",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "searchTracksReadySummary": "{total} tracks ready to browse",
+    "@searchTracksReadySummary": {
+        "description": "Summary when showing all songs on the search page",
+        "placeholders": {
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "searchNoMatchesTitle": "No matches for \"{query}\"",
+    "@searchNoMatchesTitle": {
+        "description": "Title for empty search results",
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "searchNoMatchesMessage": "Try a song title, a different spelling, or switch to one of the quick picks below.",
+    "emptyLibraryTitle": "No songs in your library",
+    "emptyLibraryMessage": "Refresh your library or add fresh tracks to start listening.",
+    "emptyAlbumsTitle": "No albums yet",
+    "emptyAlbumsMessage": "Albums will appear here once your music library is ready.",
+    "emptyArtistsTitle": "No artists yet",
+    "emptyArtistsMessage": "Artists will show up here as soon as your songs are available.",
+    "searchEmptyLibraryTitle": "Search needs music first",
+    "searchEmptyLibraryMessage": "Refresh your library or add songs to start searching.",
+    "libraryLoadErrorTitle": "Couldn't load your library",
+    "libraryLoadErrorMessage": "Check permissions, then try refreshing again.",
+    "searchLoadErrorTitle": "Search is unavailable right now",
+    "searchLoadErrorMessage": "Refresh your library and try again in a moment.",
     "refresh": "Refresh",
     "errorLoadingSongs": "Some error happend while loading songs",
     "noSongTryAgain": "No songs found.\nTry refreshing or adding music!",

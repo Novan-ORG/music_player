@@ -26,7 +26,12 @@ import 'package:volume_controller/volume_controller.dart';
 /// - Share and favorite options
 /// - Volume control
 class MusicPlayerPage extends StatefulWidget {
-  const MusicPlayerPage({super.key});
+  const MusicPlayerPage({
+    this.enableArtworkHero = true,
+    super.key,
+  });
+
+  final bool enableArtworkHero;
 
   @override
   State<MusicPlayerPage> createState() => _MusicPlayerPageState();
@@ -230,6 +235,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
                         child: SingleChildScrollView(
                           padding: layout.contentPadding,
                           child: _PlayerDetailsContent(
+                            enableArtworkHero: widget.enableArtworkHero,
                             layout: layout,
                             currentSongId: currentSongId,
                             songInfo: SongInfo(
@@ -423,12 +429,14 @@ class _PlayerPlaybackCard extends StatefulWidget {
 
 class _PlayerDetailsContent extends StatelessWidget {
   const _PlayerDetailsContent({
+    required this.enableArtworkHero,
     required this.layout,
     required this.currentSongId,
     required this.playbackCard,
     required this.songInfo,
   });
 
+  final bool enableArtworkHero;
   final _PlayerPageLayout layout;
   final int currentSongId;
   final Widget playbackCard;
@@ -436,13 +444,16 @@ class _PlayerDetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final artwork = Hero(
-      tag: 'song_cover_$currentSongId',
-      child: _ArtworkShowcase(
-        songId: currentSongId,
-        layout: layout,
-      ),
+    final artworkChild = _ArtworkShowcase(
+      songId: currentSongId,
+      layout: layout,
     );
+    final artwork = enableArtworkHero
+        ? Hero(
+            tag: 'song_cover_$currentSongId',
+            child: artworkChild,
+          )
+        : artworkChild;
 
     if (!layout.isWideLayout) {
       return Column(

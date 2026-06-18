@@ -25,6 +25,7 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
     with TickerProviderStateMixin {
   late final MusicPlayerBloc musicPlayerBloc = context.read<MusicPlayerBloc>();
   bool _isMinimized = false;
+  bool _enableArtworkHero = false;
   late AnimationController _animationController;
   late Animation<double> _sizeAnimation;
   late Animation<double> _fadeAnimation;
@@ -75,6 +76,26 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
     } else {
       _animationController.reverse();
     }
+  }
+
+  Future<void> _openMusicPlayerPage() async {
+    setState(() {
+      _enableArtworkHero = true;
+    });
+
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const MusicPlayerPage(),
+      ),
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _enableArtworkHero = false;
+    });
   }
 
   @override
@@ -159,15 +180,7 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
           padding: EdgeInsets.fromLTRB(12, 0, 12, compact ? 6 : 10),
           child: MiniPlayerSurface(
             onLongPress: _toggleMinimize,
-            onTap: () async {
-              await Navigator.of(
-                context,
-              ).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const MusicPlayerPage(),
-                ),
-              );
-            },
+            onTap: _openMusicPlayerPage,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -207,14 +220,21 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
                         ),
                         const SizedBox(width: 8),
                       ],
-                      Hero(
-                        tag: 'song_cover_${state.currentSong?.id ?? 0}',
-                        child: MiniArtwork(
+                      if (_enableArtworkHero)
+                        Hero(
+                          tag: 'song_cover_${state.currentSong?.id ?? 0}',
+                          child: MiniArtwork(
+                            songId: state.currentSong?.id ?? 0,
+                            isPlaying: isPlaying,
+                            compact: compact,
+                          ),
+                        )
+                      else
+                        MiniArtwork(
                           songId: state.currentSong?.id ?? 0,
                           isPlaying: isPlaying,
                           compact: compact,
                         ),
-                      ),
                       SizedBox(width: compact ? 10 : 12),
                       Expanded(
                         child: Column(

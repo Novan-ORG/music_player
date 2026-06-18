@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 
@@ -11,23 +12,17 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
     final songBloc = context.read<SongsBloc>();
     await showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.localization.deleteSong),
-        content: Text(context.localization.areSureYouWantToDeleteSong),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.localization.cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              songBloc.add(DeleteSongEvent(song));
-              _showUndoDeleteSnackbar(song);
-            },
-            child: Text(context.localization.deleteFromDevice),
-          ),
-        ],
+      builder: (dialogContext) => AppConfirmationDialog(
+        icon: Icons.delete_outline_rounded,
+        title: dialogContext.localization.deleteSong,
+        message: dialogContext.localization.areSureYouWantToDeleteSong,
+        confirmLabel: dialogContext.localization.deleteFromDevice,
+        isDestructive: true,
+        onConfirm: () {
+          Navigator.of(dialogContext).pop();
+          songBloc.add(DeleteSongEvent(song));
+          _showUndoDeleteSnackbar(song);
+        },
       ),
     );
   }
@@ -39,25 +34,19 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
     final songBloc = context.read<SongsBloc>();
     await showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.localization.deleteSongsAlertTitle(songs.length)),
-        content: Text(context.localization.deleteSongsAlertContent),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.localization.cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              songBloc.add(
-                DeleteSongsEvent(songs),
-              );
-              _showDeletedSnackbar(songs.length);
-              Navigator.of(context).pop();
-            },
-            child: Text(context.localization.deleteFromDevice),
-          ),
-        ],
+      builder: (dialogContext) => AppConfirmationDialog(
+        icon: Icons.delete_sweep_rounded,
+        title: dialogContext.localization.deleteSongsAlertTitle(songs.length),
+        message: dialogContext.localization.deleteSongsAlertContent,
+        confirmLabel: dialogContext.localization.deleteFromDevice,
+        isDestructive: true,
+        onConfirm: () {
+          songBloc.add(
+            DeleteSongsEvent(songs),
+          );
+          _showDeletedSnackbar(songs.length);
+          Navigator.of(dialogContext).pop();
+        },
       ),
     );
   }
@@ -65,13 +54,29 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
   void _showUndoDeleteSnackbar(Song song) {
     if (!mounted) return;
     final songBloc = context.read<SongsBloc>();
+    final theme = context.theme;
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${song.title} ${context.localization.deleted}'),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        backgroundColor: theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+          ),
+        ),
+        content: Text(
+          '${song.title} ${context.localization.deleted}',
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurface,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         action: SnackBarAction(
           label: context.localization.undo,
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          textColor: theme.colorScheme.primary,
           onPressed: () => songBloc.add(const UndoDeleteSongEvent()),
         ),
         duration: const Duration(seconds: 20),
@@ -85,10 +90,26 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
     final songText = count > 1
         ? context.localization.songs
         : context.localization.song;
+    final theme = context.theme;
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('$count $songText ${context.localization.deleted}'),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        backgroundColor: theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+          ),
+        ),
+        content: Text(
+          '$count $songText ${context.localization.deleted}',
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurface,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         duration: const Duration(seconds: 3),
       ),
     );

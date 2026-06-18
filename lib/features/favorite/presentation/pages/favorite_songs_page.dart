@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/views/views.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/favorite/presentation/widgets/widgets.dart';
+import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/pages/songs_selection_page.dart';
 
 /// Page displaying all favorite songs.
@@ -61,22 +63,20 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage> {
             builder: (context, state) {
               if (state.favoriteSongs.isEmpty) return const SizedBox.shrink();
 
-              return PopupMenuButton<String>(
-                onSelected: (value) {
-                  if (value == 'clear_all') {
+              return AppPopupMenuButton<_FavoriteAction>(
+                compact: true,
+                tooltip: context.localization.moreOptions,
+                onSelected: (_FavoriteAction value) {
+                  if (value == _FavoriteAction.clearAll) {
                     _showClearAllDialog();
                   }
                 },
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 'clear_all',
-                    child: Row(
-                      children: [
-                        const Icon(Icons.clear_all, color: Colors.red),
-                        const SizedBox(width: 8),
-                        Text(context.localization.clearAll),
-                      ],
-                    ),
+                items: [
+                  AppPopupMenuEntry(
+                    value: _FavoriteAction.clearAll,
+                    label: context.localization.clearAll,
+                    icon: Icons.clear_all_rounded,
+                    isDestructive: true,
                   ),
                 ],
               );
@@ -84,12 +84,19 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage> {
           ),
         ],
       ),
-      body: BlocBuilder<FavoriteSongsBloc, FavoriteSongsState>(
-        builder: (context, favoriteState) {
-          return _buildContent(
-            favoriteState,
-          );
-        },
+      body: BlocListener<SongsBloc, SongsState>(
+        listenWhen: (previous, current) =>
+            previous.allSongs != current.allSongs &&
+            current.status == SongsStatus.loaded,
+        listener: (_, state) =>
+            favSongsBloc.add(const LoadFavoriteSongsEvent()),
+        child: BlocBuilder<FavoriteSongsBloc, FavoriteSongsState>(
+          builder: (context, favoriteState) {
+            return _buildContent(
+              favoriteState,
+            );
+          },
+        ),
       ),
     );
   }
@@ -127,30 +134,22 @@ class _FavoriteSongsPageState extends State<FavoriteSongsPage> {
   void _showClearAllDialog() {
     showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.localization.clearAll),
-        content: Text(
-          context.localization.areYouSureYouWantToClearAllFavorites,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.localization.cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              favSongsBloc.add(
-                const ClearAllFavoritesEvent(),
-              );
-            },
-            child: Text(
-              context.localization.clearAll,
-              style: const TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
+      builder: (dialogContext) => AppConfirmationDialog(
+        icon: Icons.heart_broken_outlined,
+        title: dialogContext.localization.clearAll,
+        message:
+            dialogContext.localization.areYouSureYouWantToClearAllFavorites,
+        confirmLabel: dialogContext.localization.clearAll,
+        isDestructive: true,
+        onConfirm: () {
+          Navigator.of(dialogContext).pop();
+          favSongsBloc.add(
+            const ClearAllFavoritesEvent(),
+          );
+        },
       ),
     );
   }
 }
+
+enum _FavoriteAction { clearAll }

@@ -38,11 +38,11 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   ) : super(const MusicPlayerState()) {
     // Listen to player index changes
     _playerIndexSubscription = watchPlayerIndex().distinct().listen(
-          _watchPlayerIndex,
-        );
+      _watchPlayerIndex,
+    );
 
     // Register event handlers
-    on<UpdateStateEvent>((event, emit) => emit(event.state));
+    on<PlayerIndexChangedEvent>(_handlePlayerIndexChanged);
     on<PlayMusicEvent>(_handlePlayMusic);
     on<StopMusicEvent>(_handleStopMusic);
     on<TogglePlayPauseEvent>(_handleTogglePlayPause);
@@ -103,12 +103,10 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     final hasNext = hasNextSong();
     final hasPrevious = hasPreviousSong();
     add(
-      UpdateStateEvent(
-        state.copyWith(
-          currentSongIndex: index,
-          hasNext: hasNext.value ?? state.hasNext,
-          hasPrevious: hasPrevious.value ?? state.hasPrevious,
-        ),
+      PlayerIndexChangedEvent(
+        index: index,
+        hasNext: hasNext.value ?? state.hasNext,
+        hasPrevious: hasPrevious.value ?? state.hasPrevious,
       ),
     );
   }
@@ -141,6 +139,19 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   }
 
   // ==================== Event Handlers ====================
+
+  void _handlePlayerIndexChanged(
+    PlayerIndexChangedEvent event,
+    Emitter<MusicPlayerState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        currentSongIndex: event.index,
+        hasNext: event.hasNext,
+        hasPrevious: event.hasPrevious,
+      ),
+    );
+  }
 
   /// Handles setting the loop mode.
   Future<void> _handleSetPlayerLoopMode(
@@ -270,9 +281,6 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     ShuffleMusicEvent event,
     Emitter<MusicPlayerState> emit,
   ) async {
-    await setShuffleEnabled(isEnabled: true);
-    await playSong(event.songs, 0);
-
     emit(
       state.copyWith(
         shuffleEnabled: true,
@@ -281,6 +289,28 @@ class MusicPlayerBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         currentSongIndex: 0,
       ),
     );
+
+    final shuffleResult = await setShuffleEnabled(isEnabled: true);
+    if (shuffleResult.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: shuffleResult.error,
+        ),
+      );
+      return;
+    }
+
+    final result = await playSong(event.songs, 0);
+    if (result.isFailure) {
+      emit(
+        state.copyWith(
+          status: MusicPlayerStatus.error,
+          errorMessage: result.error,
+        ),
+      );
+      return;
+    }
 
     await _persistPlaybackSession(currentSongIndex: 0, wasPlaying: true);
   }

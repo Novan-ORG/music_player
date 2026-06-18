@@ -416,6 +416,210 @@ abstract class AppLocalizations {
   /// **'Search Songs'**
   String get searchSongs;
 
+  /// No description provided for @searchHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find by title, artist, or album and jump straight into the next track.'**
+  String get searchHeroSubtitle;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by song, artist, or album'**
+  String get searchHint;
+
+  /// No description provided for @searchMatchesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches'**
+  String get searchMatchesLabel;
+
+  /// No description provided for @searchLibraryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get searchLibraryLabel;
+
+  /// Summary label showing number of search results
+  ///
+  /// In en, this message translates to:
+  /// **'{count} results'**
+  String searchResultsCount(int count);
+
+  /// Summary label showing number of songs ready to browse
+  ///
+  /// In en, this message translates to:
+  /// **'{count} songs ready'**
+  String searchSongsReadyCount(int count);
+
+  /// No description provided for @searchInstantSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant search'**
+  String get searchInstantSearch;
+
+  /// No description provided for @searchQuickPicks.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick picks'**
+  String get searchQuickPicks;
+
+  /// No description provided for @searchStartVoiceSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Start voice search'**
+  String get searchStartVoiceSearch;
+
+  /// No description provided for @searchStopVoiceSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop voice search'**
+  String get searchStopVoiceSearch;
+
+  /// No description provided for @searchInMotionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search in motion'**
+  String get searchInMotionTitle;
+
+  /// No description provided for @searchLibraryGlanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your library at a glance'**
+  String get searchLibraryGlanceTitle;
+
+  /// No description provided for @searchLiveResultsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Matching tracks update live while you type or use voice search.'**
+  String get searchLiveResultsMessage;
+
+  /// No description provided for @searchBrowseLibraryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse everything quickly, or jump straight to an artist, album, or favorite title.'**
+  String get searchBrowseLibraryMessage;
+
+  /// No description provided for @searchVisibleNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible now'**
+  String get searchVisibleNow;
+
+  /// No description provided for @searchTryAnotherAngle.
+  ///
+  /// In en, this message translates to:
+  /// **'Try another angle'**
+  String get searchTryAnotherAngle;
+
+  /// No description provided for @searchTapToExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to explore'**
+  String get searchTapToExplore;
+
+  /// Header for search results
+  ///
+  /// In en, this message translates to:
+  /// **'Results for \"{query}\"'**
+  String searchResultsFor(String query);
+
+  /// Summary of matched search results
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {total} tracks matched your search'**
+  String searchMatchedSongsSummary(int count, int total);
+
+  /// Summary when showing all songs on the search page
+  ///
+  /// In en, this message translates to:
+  /// **'{total} tracks ready to browse'**
+  String searchTracksReadySummary(int total);
+
+  /// Title for empty search results
+  ///
+  /// In en, this message translates to:
+  /// **'No matches for \"{query}\"'**
+  String searchNoMatchesTitle(String query);
+
+  /// No description provided for @searchNoMatchesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a song title, a different spelling, or switch to one of the quick picks below.'**
+  String get searchNoMatchesMessage;
+
+  /// No description provided for @emptyLibraryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No songs in your library'**
+  String get emptyLibraryTitle;
+
+  /// No description provided for @emptyLibraryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh your library or add fresh tracks to start listening.'**
+  String get emptyLibraryMessage;
+
+  /// No description provided for @emptyAlbumsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No albums yet'**
+  String get emptyAlbumsTitle;
+
+  /// No description provided for @emptyAlbumsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Albums will appear here once your music library is ready.'**
+  String get emptyAlbumsMessage;
+
+  /// No description provided for @emptyArtistsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No artists yet'**
+  String get emptyArtistsTitle;
+
+  /// No description provided for @emptyArtistsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Artists will show up here as soon as your songs are available.'**
+  String get emptyArtistsMessage;
+
+  /// No description provided for @searchEmptyLibraryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search needs music first'**
+  String get searchEmptyLibraryTitle;
+
+  /// No description provided for @searchEmptyLibraryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh your library or add songs to start searching.'**
+  String get searchEmptyLibraryMessage;
+
+  /// No description provided for @libraryLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your library'**
+  String get libraryLoadErrorTitle;
+
+  /// No description provided for @libraryLoadErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Check permissions, then try refreshing again.'**
+  String get libraryLoadErrorMessage;
+
+  /// No description provided for @searchLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search is unavailable right now'**
+  String get searchLoadErrorTitle;
+
+  /// No description provided for @searchLoadErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh your library and try again in a moment.'**
+  String get searchLoadErrorMessage;
+
   /// No description provided for @refresh.
   ///
   /// In en, this message translates to:

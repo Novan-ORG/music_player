@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_player/core/services/logger/logger.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
@@ -16,9 +17,13 @@ import 'package:on_audio_query_pluse/on_audio_query.dart';
 /// - Playback state streaming
 class MAudioHandler extends BaseAudioHandler with SeekHandler {
   MAudioHandler(this._player) {
+    unawaited(_configureAudioSession());
     unawaited(
       _player.playbackEventStream.map(_transformEvent).pipe(playbackState),
     );
+    _player.errorStream.listen((error) {
+      Logger.error('Audio playback error: ${error.message}', error);
+    });
     _player.currentIndexStream.listen((currentIndex) {
       if (currentIndex != null && queue.value.length > currentIndex) {
         if (mediaItem.value?.id != queue.value[currentIndex].id) {
@@ -31,6 +36,23 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
   Timer? _timer;
 
   final AudioPlayer _player;
+
+  Future<void> _configureAudioSession() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.music());
+  }
+
+  AudioSource _createAudioSourceForSong(
+    SongModel song, {
+    required MediaItem mediaItem,
+  }) {
+    final uri = Uri.tryParse(song.data);
+    if (uri != null && uri.hasScheme) {
+      return AudioSource.uri(uri, tag: mediaItem);
+    }
+
+    return AudioSource.file(song.data, tag: mediaItem);
+  }
 
   bool get playing => _player.playing;
 
@@ -98,12 +120,13 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
             ),
           );
           mediaItems.add(mediaItem);
-          return AudioSource.uri(Uri.parse(song.data));
+          return _createAudioSourceForSong(song, mediaItem: mediaItem);
         }).toList(),
       );
       await addQueueItems(mediaItems);
-    } on Exception catch (e) {
-      Logger.error('Error setting audio sources: $e');
+    } on Exception catch (e, stackTrace) {
+      Logger.error('Error setting audio sources: $e', e, stackTrace);
+      rethrow;
     }
   }
 

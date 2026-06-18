@@ -46,6 +46,18 @@ class _SongsPageState extends State<SongsPage>
     );
   }
 
+  void _refreshDerivedLibraries() {
+    final albumsBloc = context.read<AlbumsBloc>();
+    final artistsBloc = context.read<ArtistsBloc>();
+
+    albumsBloc.add(
+      LoadAlbumsEvent(sortType: albumsBloc.state.sortType),
+    );
+    artistsBloc.add(
+      LoadArtistsEvent(sortType: artistsBloc.state.sortType),
+    );
+  }
+
   @override
   void dispose() {
     tabController.dispose();
@@ -76,59 +88,65 @@ class _SongsPageState extends State<SongsPage>
           ],
         );
 
-        return Scaffold(
-          backgroundColor: theme.scaffoldBackgroundColor,
-          body: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  theme.colorScheme.primary.withValues(alpha: 0.24),
-                  const Color(0xFF00BFA6).withValues(alpha: 0.1),
-                  theme.scaffoldBackgroundColor,
-                  theme.scaffoldBackgroundColor,
-                ],
-                stops: const [0, 0.22, 0.5, 1],
+        return BlocListener<SongsBloc, SongsState>(
+          listenWhen: (previous, current) =>
+              previous.allSongs != current.allSongs &&
+              current.status == SongsStatus.loaded,
+          listener: (_, state) => _refreshDerivedLibraries(),
+          child: Scaffold(
+            backgroundColor: theme.scaffoldBackgroundColor,
+            body: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    theme.colorScheme.primary.withValues(alpha: 0.24),
+                    const Color(0xFF00BFA6).withValues(alpha: 0.1),
+                    theme.scaffoldBackgroundColor,
+                    theme.scaffoldBackgroundColor,
+                  ],
+                  stops: const [0, 0.22, 0.5, 1],
+                ),
               ),
-            ),
-            child: SafeArea(
-              bottom: false,
-              child: useWideLayout
-                  ? Row(
-                      children: [
-                        SizedBox(
-                          width: sideWidth,
-                          child: Column(
-                            children: [
-                              LibraryHeader(
-                                compact: true,
-                                onSearchPressed: _onSearchButtonPressed,
-                                onStartMixPressed: _onStartMixPressed,
-                              ),
-                              CategoryTabbar(
-                                tabController: tabController,
-                                onTabChanged: animateToNewPage,
-                              ),
-                            ],
+              child: SafeArea(
+                bottom: false,
+                child: useWideLayout
+                    ? Row(
+                        children: [
+                          SizedBox(
+                            width: sideWidth,
+                            child: Column(
+                              children: [
+                                LibraryHeader(
+                                  compact: true,
+                                  onSearchPressed: _onSearchButtonPressed,
+                                  onStartMixPressed: _onStartMixPressed,
+                                ),
+                                CategoryTabbar(
+                                  tabController: tabController,
+                                  onTabChanged: animateToNewPage,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Expanded(child: pageView),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        LibraryHeader(
-                          onSearchPressed: _onSearchButtonPressed,
-                          onStartMixPressed: _onStartMixPressed,
-                        ),
-                        CategoryTabbar(
-                          tabController: tabController,
-                          onTabChanged: animateToNewPage,
-                        ),
-                        Expanded(child: pageView),
-                      ],
-                    ),
+                          Expanded(child: pageView),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          LibraryHeader(
+                            onSearchPressed: _onSearchButtonPressed,
+                            onStartMixPressed: _onStartMixPressed,
+                          ),
+                          CategoryTabbar(
+                            tabController: tabController,
+                            onTabChanged: animateToNewPage,
+                          ),
+                          Expanded(child: pageView),
+                        ],
+                      ),
+              ),
             ),
           ),
         );
@@ -143,7 +161,7 @@ class _SongsPageState extends State<SongsPage>
     context.read<MusicPlayerBloc>().add(ShuffleMusicEvent(songs: songs));
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => const MusicPlayerPage(),
+        builder: (_) => const MusicPlayerPage(enableArtworkHero: false),
       ),
     );
   }

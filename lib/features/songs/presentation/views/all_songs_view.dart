@@ -30,7 +30,9 @@ class AllSongsView extends StatelessWidget {
         // Handle error state
         if (songsState.status == SongsStatus.error) {
           return SongsErrorLoading(
-            message: context.localization.errorLoadingSongs,
+            eyebrow: context.localization.allSongs,
+            title: context.localization.libraryLoadErrorTitle,
+            message: context.localization.libraryLoadErrorMessage,
             onRetry: () => songsBloc.add(const LoadSongsEvent()),
           );
         }
@@ -38,7 +40,9 @@ class AllSongsView extends StatelessWidget {
         // Handle empty songs
         if (songsState.allSongs.isEmpty) {
           return NoSongsWidget(
-            message: context.localization.noSongTryAgain,
+            eyebrow: context.localization.allSongs,
+            title: context.localization.emptyLibraryTitle,
+            message: context.localization.emptyLibraryMessage,
             onRefresh: () => songsBloc.add(const LoadSongsEvent()),
           );
         }
