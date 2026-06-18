@@ -22,8 +22,11 @@ class SongsPage extends StatefulWidget {
 
 class _SongsPageState extends State<SongsPage>
     with SingleTickerProviderStateMixin {
+  static const double _headerCollapseDistance = 132;
+
   late final TabController tabController;
   late final PageController pageController;
+  double _headerCollapseProgress = 0;
 
   @override
   void initState() {
@@ -58,6 +61,23 @@ class _SongsPageState extends State<SongsPage>
     );
   }
 
+  bool _handleLibraryScroll(ScrollNotification notification) {
+    if (notification.metrics.axis != Axis.vertical) {
+      return false;
+    }
+
+    final nextProgress = (notification.metrics.pixels / _headerCollapseDistance)
+        .clamp(0.0, 1.0);
+    if ((nextProgress - _headerCollapseProgress).abs() < 0.01 || !mounted) {
+      return false;
+    }
+
+    setState(() {
+      _headerCollapseProgress = nextProgress;
+    });
+    return false;
+  }
+
   @override
   void dispose() {
     tabController.dispose();
@@ -78,14 +98,17 @@ class _SongsPageState extends State<SongsPage>
             : preferredSideWidth > 430
             ? 430.0
             : preferredSideWidth;
-        final pageView = PageView(
-          controller: pageController,
-          onPageChanged: tabController.animateTo,
-          children: const [
-            AllSongsView(),
-            AlbumsView(),
-            ArtistsView(),
-          ],
+        final pageView = NotificationListener<ScrollNotification>(
+          onNotification: _handleLibraryScroll,
+          child: PageView(
+            controller: pageController,
+            onPageChanged: tabController.animateTo,
+            children: const [
+              AllSongsView(),
+              AlbumsView(),
+              ArtistsView(),
+            ],
+          ),
         );
 
         return BlocListener<SongsBloc, SongsState>(
@@ -120,10 +143,13 @@ class _SongsPageState extends State<SongsPage>
                               children: [
                                 LibraryHeader(
                                   compact: true,
+                                  collapseProgress: _headerCollapseProgress,
                                   onSearchPressed: _onSearchButtonPressed,
                                   onStartMixPressed: _onStartMixPressed,
                                 ),
                                 CategoryTabbar(
+                                  compact: true,
+                                  collapseProgress: _headerCollapseProgress,
                                   tabController: tabController,
                                   onTabChanged: animateToNewPage,
                                 ),
@@ -136,10 +162,12 @@ class _SongsPageState extends State<SongsPage>
                     : Column(
                         children: [
                           LibraryHeader(
+                            collapseProgress: _headerCollapseProgress,
                             onSearchPressed: _onSearchButtonPressed,
                             onStartMixPressed: _onStartMixPressed,
                           ),
                           CategoryTabbar(
+                            collapseProgress: _headerCollapseProgress,
                             tabController: tabController,
                             onTabChanged: animateToNewPage,
                           ),
