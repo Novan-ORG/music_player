@@ -9,6 +9,7 @@ import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/playlist/playlist.dart';
+import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/pages/pages.dart';
 
 class SongsView extends StatefulWidget {
@@ -55,10 +56,17 @@ class _SongsViewState extends State<SongsView>
   Future<void> onLongPress(Song song, List<Song> songs) async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => SongsSelectionPage(
-          title: context.localization.songs,
-          availableSongs: songs,
-          selectedSongIds: {song.id},
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: context.read<SongsBloc>()),
+            BlocProvider.value(value: context.read<PlayListBloc>()),
+            BlocProvider.value(value: context.read<FavoriteSongsBloc>()),
+          ],
+          child: SongsSelectionPage(
+            title: context.localization.songs,
+            availableSongs: songs,
+            selectedSongIds: {song.id},
+          ),
         ),
       ),
     );

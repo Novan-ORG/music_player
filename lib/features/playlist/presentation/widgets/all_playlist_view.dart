@@ -230,7 +230,7 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: isSelectionMode ? 4 : 16),
+        SizedBox(height: isSelectionMode ? 2 : 16),
         if (isSelectionMode)
           _SelectionModeHeader(
             playlistCount: widget.playlists.length,
@@ -275,7 +275,7 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
               ),
             ],
           ),
-        const SizedBox(height: 16),
+        SizedBox(height: widget.isSelectionMode ? 12 : 16),
         if (widget.playlists.isEmpty)
           Expanded(
             child: EmptyPlaylist(
@@ -291,11 +291,11 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
                   parent: AlwaysScrollableScrollPhysics(),
                 ),
                 padding: EdgeInsets.only(
-                  bottom: widget.isSelectionMode ? 116 : 120,
+                  bottom: widget.isSelectionMode ? 96 : 120,
                 ),
                 itemCount: widget.playlists.length,
                 separatorBuilder: (_, _) =>
-                    SizedBox(height: widget.isSelectionMode ? 8 : 2),
+                    SizedBox(height: widget.isSelectionMode ? 6 : 2),
                 itemBuilder: (context, index) {
                   return _buildPlaylistTile(
                     widget.playlists[index],

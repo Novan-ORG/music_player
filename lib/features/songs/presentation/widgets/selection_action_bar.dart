@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 
 class SelectionActionBar extends StatelessWidget {
@@ -19,52 +20,89 @@ class SelectionActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 54,
-      margin: const EdgeInsets.symmetric(horizontal: 12),
-      padding: const EdgeInsets.only(left: 8),
-      decoration: BoxDecoration(
-        color: context.theme.scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(6),
-        boxShadow: [
-          BoxShadow(
-            color: context.theme.colorScheme.surface,
-            blurRadius: 4,
-            spreadRadius: 1,
-          ),
+    final theme = context.theme;
+    final selectionColor = theme.colorScheme.primary;
+    final selectedLabel =
+        selectedCount == 1 ||
+            Localizations.localeOf(context).languageCode == 'fa'
+        ? context.localization.song
+        : context.localization.songs;
+
+    return GlassCard(
+      borderRadius: const BorderRadius.all(Radius.circular(20)),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          selectionColor.withValues(alpha: 0.1),
+          theme.colorScheme.surface.withValues(alpha: 0.94),
         ],
       ),
+      borderColor: selectionColor.withValues(alpha: 0.12),
       child: Row(
         children: [
-          Expanded(
-            child: Text(
-              '$selectedCount ${context.localization.song}'
-              '${selectedCount > 1 ? context.localization.s : ''} '
-              '${context.localization.selected}',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: selectionColor.withValues(alpha: 0.12),
+            ),
+            child: Icon(
+              isAllSelected ? Icons.done_all_rounded : Icons.checklist_rounded,
+              color: selectionColor,
+              size: 20,
             ),
           ),
-          Row(
-            children: [
-              Text(
-                isAllSelected
-                    ? context.localization.deselectAll
-                    : context.localization.selectAll,
-                style: Theme.of(context).textTheme.bodyMedium,
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '$selectedCount '
+                  '$selectedLabel '
+                  '${context.localization.selected}',
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '$totalCount ${context.localization.songs}',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.64),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          FilledButton.tonalIcon(
+            onPressed: isAllSelected ? onDeselectAll : onSelectAll,
+            icon: Icon(
+              isAllSelected
+                  ? Icons.remove_done_rounded
+                  : Icons.select_all_rounded,
+              size: 18,
+            ),
+            label: Text(
+              isAllSelected
+                  ? context.localization.deselectAll
+                  : context.localization.selectAll,
+            ),
+            style: FilledButton.styleFrom(
+              visualDensity: VisualDensity.compact,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              textStyle: theme.textTheme.labelMedium?.copyWith(
+                fontWeight: FontWeight.w700,
               ),
-              Checkbox(
-                value: isAllSelected,
-                onChanged: (value) {
-                  if (isAllSelected) {
-                    onDeselectAll();
-                  } else {
-                    onSelectAll();
-                  }
-                },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-            ],
+            ),
           ),
         ],
       ),

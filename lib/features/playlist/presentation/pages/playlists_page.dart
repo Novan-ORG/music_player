@@ -34,12 +34,17 @@ class PlaylistsPage extends StatefulWidget {
     required BuildContext context,
     Set<int>? songIds,
   }) {
+    final playlistBloc = context.read<PlayListBloc>();
+
     return showAppModalBottomSheet<List<int>>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return _PlaylistSelectionSheet(songIds: songIds);
+        return BlocProvider.value(
+          value: playlistBloc,
+          child: _PlaylistSelectionSheet(songIds: songIds),
+        );
       },
     );
   }
@@ -76,7 +81,7 @@ class _PlaylistSelectionSheet extends StatelessWidget {
                 isSelectionMode: true,
                 songIds: songIds,
                 onCloseBottomSheet: () => Navigator.of(context).pop(),
-                padding: const EdgeInsets.fromLTRB(18, 10, 18, 12),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
               ),
             ),
           ),
