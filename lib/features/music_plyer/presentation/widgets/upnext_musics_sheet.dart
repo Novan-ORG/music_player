@@ -16,11 +16,16 @@ class UpnextMusicsSheet extends StatelessWidget {
   const UpnextMusicsSheet({super.key});
 
   static Future<void> show(BuildContext context) {
+    final sourceContext = context;
+
     return showAppModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => const UpnextMusicsSheet(),
+      builder: (_) => AppRouteBlocScope.fromContext(
+        context: sourceContext,
+        child: const UpnextMusicsSheet(),
+      ),
     );
   }
 
