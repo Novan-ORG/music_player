@@ -62,7 +62,10 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
   Future<void> _onSearchButtonPressed() async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => const SearchSongsPage(),
+        builder: (_) => AppRouteBlocScope.fromContext(
+          context: context,
+          child: const SearchSongsPage(),
+        ),
       ),
     );
   }

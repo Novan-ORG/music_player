@@ -64,10 +64,13 @@ class AlbumsView extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute<void>(
-                    builder: (_) => QuerySongsPage(
-                      fromType: SongsFromType.albumId,
-                      where: album.id,
-                      title: album.album,
+                    builder: (_) => AppRouteBlocScope.fromContext(
+                      context: context,
+                      child: QuerySongsPage(
+                        fromType: SongsFromType.albumId,
+                        where: album.id,
+                        title: album.album,
+                      ),
                     ),
                   ),
                 );

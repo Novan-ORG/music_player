@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
@@ -189,7 +190,10 @@ class _SongsPageState extends State<SongsPage>
     context.read<MusicPlayerBloc>().add(ShuffleMusicEvent(songs: songs));
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => const MusicPlayerPage(enableArtworkHero: false),
+        builder: (_) => AppRouteBlocScope.fromContext(
+          context: context,
+          child: const MusicPlayerPage(enableArtworkHero: false),
+        ),
       ),
     );
   }
@@ -197,7 +201,10 @@ class _SongsPageState extends State<SongsPage>
   Future<void> _onSearchButtonPressed() async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => const SearchSongsPage(),
+        builder: (_) => AppRouteBlocScope.fromContext(
+          context: context,
+          child: const SearchSongsPage(),
+        ),
       ),
     );
   }

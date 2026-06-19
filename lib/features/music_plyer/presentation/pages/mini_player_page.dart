@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
@@ -85,7 +86,10 @@ class _MiniPlayerPageState extends State<MiniPlayerPage>
 
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => const MusicPlayerPage(),
+        builder: (_) => AppRouteBlocScope.fromContext(
+          context: context,
+          child: const MusicPlayerPage(),
+        ),
       ),
     );
 

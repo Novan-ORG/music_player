@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/mixins/playlist_management_mixin.dart';
 import 'package:music_player/core/widgets/app_modal_bottom_sheet.dart';
+import 'package:music_player/core/widgets/app_route_bloc_scope.dart';
 import 'package:music_player/core/widgets/app_snackbar.dart';
 import 'package:music_player/core/widgets/app_state_view.dart';
 import 'package:music_player/core/widgets/loading.dart';
@@ -354,8 +355,11 @@ class _PlaylistContentViewState extends State<PlaylistContentView>
   void _navigateToPlaylistDetails(Playlist playlist) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => PlaylistDetailsPage(
-          playlistModel: playlist,
+        builder: (_) => AppRouteBlocScope.fromContext(
+          context: context,
+          child: PlaylistDetailsPage(
+            playlistModel: playlist,
+          ),
         ),
       ),
     );

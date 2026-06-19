@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/entities/playlist.dart';
 import 'package:music_player/features/playlist/presentation/pages/playlist_details_page.dart';
@@ -88,8 +89,11 @@ class PinnedPlaylistsView extends StatelessWidget {
                   isRecent: true,
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
-                      builder: (_) => PlaylistDetailsPage(
-                        playlistModel: recently,
+                      builder: (_) => AppRouteBlocScope.fromContext(
+                        context: context,
+                        child: PlaylistDetailsPage(
+                          playlistModel: recently,
+                        ),
                       ),
                     ),
                   ),
@@ -104,8 +108,11 @@ class PinnedPlaylistsView extends StatelessWidget {
                 width: cardWidth,
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
-                    builder: (_) => PlaylistDetailsPage(
-                      playlistModel: playlist,
+                    builder: (_) => AppRouteBlocScope.fromContext(
+                      context: context,
+                      child: PlaylistDetailsPage(
+                        playlistModel: playlist,
+                      ),
                     ),
                   ),
                 ),

@@ -1,6 +1,7 @@
 export 'app_confirmation_dialog.dart';
 export 'app_modal_bottom_sheet.dart';
 export 'app_popup_menu.dart';
+export 'app_route_bloc_scope.dart';
 export 'app_snackbar.dart';
 export 'app_state_view.dart';
 export 'artist_widget.dart';

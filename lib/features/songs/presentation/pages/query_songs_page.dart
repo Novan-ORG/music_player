@@ -77,7 +77,10 @@ class _QuerySongsPageState extends State<QuerySongsPage> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
-                      builder: (_) => const SearchSongsPage(),
+                      builder: (_) => AppRouteBlocScope.fromContext(
+                        context: context,
+                        child: const SearchSongsPage(),
+                      ),
                     ),
                   );
                 },

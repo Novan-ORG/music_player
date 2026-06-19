@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/mixins/mixins.dart';
+import 'package:music_player/core/widgets/app_route_bloc_scope.dart';
 import 'package:music_player/core/widgets/no_songs_widget.dart';
 import 'package:music_player/core/widgets/song_item.dart';
 import 'package:music_player/extensions/extensions.dart';
@@ -9,7 +10,6 @@ import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
 import 'package:music_player/features/playlist/playlist.dart';
-import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/pages/pages.dart';
 
 class SongsView extends StatefulWidget {
@@ -46,8 +46,11 @@ class _SongsViewState extends State<SongsView>
     context.read<MusicPlayerBloc>().add(PlayMusicEvent(songIndex, songs));
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => MusicPlayerPage(
-          enableArtworkHero: widget.enablePlayerArtworkHero,
+        builder: (_) => AppRouteBlocScope.fromContext(
+          context: context,
+          child: MusicPlayerPage(
+            enableArtworkHero: widget.enablePlayerArtworkHero,
+          ),
         ),
       ),
     );
@@ -56,12 +59,8 @@ class _SongsViewState extends State<SongsView>
   Future<void> onLongPress(Song song, List<Song> songs) async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: context.read<SongsBloc>()),
-            BlocProvider.value(value: context.read<PlayListBloc>()),
-            BlocProvider.value(value: context.read<FavoriteSongsBloc>()),
-          ],
+        builder: (_) => AppRouteBlocScope.fromContext(
+          context: context,
           child: SongsSelectionPage(
             title: context.localization.songs,
             availableSongs: songs,
