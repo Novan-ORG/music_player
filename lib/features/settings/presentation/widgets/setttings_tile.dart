@@ -52,61 +52,51 @@ class SettingsTile extends StatelessWidget {
               ),
             ],
           ),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final useColumn =
-                  currentTrailing != null && constraints.maxWidth < 360;
-              final leading = Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
+          child: ListTile(
+            dense: true,
+            visualDensity: VisualDensity.compact,
+            contentPadding: EdgeInsets.zero,
+            horizontalTitleGap: 10,
+            minLeadingWidth: 42,
+            titleAlignment: ListTileTitleAlignment.center,
+            leading: Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary.withValues(
+                  alpha: 0.12,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
                   color: theme.colorScheme.primary.withValues(
-                    alpha: 0.12,
+                    alpha: 0.08,
                   ),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: theme.colorScheme.primary.withValues(
-                      alpha: 0.08,
+                ),
+              ),
+              child: Icon(
+                icon,
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            title: Text(
+              title,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                height: 1.1,
+              ),
+            ),
+            subtitle: subtitle == null
+                ? null
+                : Text(
+                    subtitle!,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.62,
+                      ),
+                      height: 1.2,
                     ),
                   ),
-                ),
-                child: Icon(
-                  icon,
-                  color: theme.colorScheme.primary,
-                ),
-              );
-              final titleWidget = Text(
-                title,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  height: 1.1,
-                ),
-              );
-              final subtitleWidget = subtitle == null
-                  ? null
-                  : Text(
-                      subtitle!,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(
-                          alpha: 0.62,
-                        ),
-                        height: 1.2,
-                      ),
-                    );
-
-              return ListTile(
-                dense: true,
-                visualDensity: VisualDensity.compact,
-                contentPadding: EdgeInsets.zero,
-                horizontalTitleGap: 10,
-                minLeadingWidth: 42,
-                titleAlignment: ListTileTitleAlignment.center,
-                leading: leading,
-                title: titleWidget,
-                subtitle: subtitleWidget,
-                trailing: currentTrailing,
-              );
-            },
+            trailing: currentTrailing,
           ),
         ),
       ),

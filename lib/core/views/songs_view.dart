@@ -91,6 +91,7 @@ class _SongsViewState extends State<SongsView>
                     final isCurrent =
                         musicPlayerState.currentSong?.id == song.id;
                     return SongItem(
+                      key: ValueKey(song.id),
                       track: song,
                       isCurrentTrack: isCurrent,
                       isPlayingNow:
