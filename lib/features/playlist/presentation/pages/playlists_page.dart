@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/mixins/playlist_management_mixin.dart';
 import 'package:music_player/core/widgets/app_modal_bottom_sheet.dart';
+import 'package:music_player/core/widgets/app_snackbar.dart';
 import 'package:music_player/core/widgets/app_state_view.dart';
 import 'package:music_player/core/widgets/loading.dart';
 import 'package:music_player/extensions/extensions.dart';
@@ -33,10 +34,10 @@ class PlaylistsPage extends StatefulWidget {
   static Future<List<int>?> showSheet({
     required BuildContext context,
     Set<int>? songIds,
-  }) {
+  }) async {
     final playlistBloc = context.read<PlayListBloc>();
 
-    return showAppModalBottomSheet<List<int>>(
+    final selectedPlaylistIds = await showAppModalBottomSheet<List<int>>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -47,6 +48,69 @@ class PlaylistsPage extends StatefulWidget {
         );
       },
     );
+
+    if (selectedPlaylistIds == null ||
+        selectedPlaylistIds.isEmpty ||
+        songIds == null ||
+        songIds.isEmpty) {
+      return selectedPlaylistIds;
+    }
+
+    final completion = playlistBloc.stream.firstWhere(
+      (state) =>
+          state.status == PlayListStatus.loaded ||
+          state.status == PlayListStatus.error,
+    );
+
+    playlistBloc.add(
+      AddSongsToPlaylistsEvent(songIds, selectedPlaylistIds),
+    );
+
+    final result = await completion;
+    if (!context.mounted) {
+      return selectedPlaylistIds;
+    }
+
+    if (result.status == PlayListStatus.loaded) {
+      final selectedNames = result.playLists
+          .where((playlist) => selectedPlaylistIds.contains(playlist.id))
+          .map((playlist) => playlist.name)
+          .toList();
+
+      AppSnackBar.showSuccess(
+        context,
+        title: context.localization.addToPlaylist,
+        message: _buildSelectionMessage(
+          context,
+          songCount: songIds.length,
+          names: selectedNames,
+        ),
+        icon: Icons.playlist_add_check_circle_rounded,
+      );
+    } else {
+      AppSnackBar.showError(
+        context,
+        title: context.localization.error,
+        message: result.errorMessage ?? context.localization.playlistPage,
+      );
+    }
+
+    return selectedPlaylistIds;
+  }
+
+  static String _buildSelectionMessage(
+    BuildContext context, {
+    required int songCount,
+    required List<String> names,
+  }) {
+    final songLabel = songCount == 1
+        ? context.localization.song
+        : context.localization.songs;
+    final playlistLabel = names.isEmpty
+        ? context.localization.playlist
+        : names.join(', ');
+
+    return '$songCount $songLabel • $playlistLabel';
   }
 
   @override

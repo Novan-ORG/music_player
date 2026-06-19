@@ -85,34 +85,16 @@ class PlaylistItemMoreAction extends StatelessWidget {
 
   void _showUndoSnackbar(BuildContext context, Playlist playlist) {
     final playlistBloc = context.read<PlayListBloc>();
-    final theme = context.theme;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-        backgroundColor: theme.colorScheme.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-          ),
-        ),
-        content: Text(
-          '${playlist.name} ${context.localization.deleted}',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurface,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        action: SnackBarAction(
-          label: context.localization.undo,
-          textColor: theme.colorScheme.primary,
-          onPressed: () {
-            playlistBloc.add(UndoDeletePlayListEvent());
-          },
-        ),
-        duration: const Duration(seconds: 20),
-      ),
+    AppSnackBar.showInfo(
+      context,
+      title: context.localization.deleted,
+      message: playlist.name,
+      icon: Icons.playlist_remove_rounded,
+      actionLabel: context.localization.undo,
+      onAction: () {
+        playlistBloc.add(UndoDeletePlayListEvent());
+      },
+      duration: const Duration(seconds: 20),
     );
   }
 }

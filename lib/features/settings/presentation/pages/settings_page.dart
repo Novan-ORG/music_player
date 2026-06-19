@@ -145,14 +145,11 @@ class _SettingsPageState extends State<SettingsPage> {
                                               .feedbackEmailSubject,
                                         );
                                     if (!success && context.mounted) {
-                                      ScaffoldMessenger.of(
+                                      AppSnackBar.showError(
                                         context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
+                                        title: context.localization.error,
+                                        message:
                                             context.localization.errorOpenEmail,
-                                          ),
-                                        ),
                                       );
                                     }
                                   },

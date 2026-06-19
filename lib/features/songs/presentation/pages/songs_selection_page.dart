@@ -85,13 +85,11 @@ class _SongsSelectionPageState extends State<SongsSelectionPage>
     final songLabel = songsToDelete.length == 1
         ? context.localization.song
         : context.localization.songs;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text(
-          '${songsToDelete.length} $songLabel ${context.localization.deleted}',
-        ),
-      ),
+    AppSnackBar.showInfo(
+      context,
+      title: context.localization.deleted,
+      message: '${songsToDelete.length} $songLabel',
+      icon: Icons.delete_sweep_rounded,
     );
 
     if (_availableSongs.isEmpty && mounted) {

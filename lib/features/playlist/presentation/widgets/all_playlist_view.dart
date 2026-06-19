@@ -150,12 +150,6 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
                     return null;
                   }
                   return () {
-                    context.read<PlayListBloc>().add(
-                      AddSongsToPlaylistsEvent(
-                        widget.songIds!,
-                        selectedPlaylistIds.toList(),
-                      ),
-                    );
                     Navigator.of(context).pop(selectedPlaylistIds.toList());
                   };
                 }

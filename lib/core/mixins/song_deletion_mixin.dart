@@ -54,33 +54,14 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
   void _showUndoDeleteSnackbar(Song song) {
     if (!mounted) return;
     final songBloc = context.read<SongsBloc>();
-    final theme = context.theme;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-        backgroundColor: theme.colorScheme.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-          ),
-        ),
-        content: Text(
-          '${song.title} ${context.localization.deleted}',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurface,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        action: SnackBarAction(
-          label: context.localization.undo,
-          textColor: theme.colorScheme.primary,
-          onPressed: () => songBloc.add(const UndoDeleteSongEvent()),
-        ),
-        duration: const Duration(seconds: 20),
-      ),
+    AppSnackBar.showInfo(
+      context,
+      title: context.localization.deleted,
+      message: song.title,
+      icon: Icons.delete_outline_rounded,
+      actionLabel: context.localization.undo,
+      onAction: () => songBloc.add(const UndoDeleteSongEvent()),
+      duration: const Duration(seconds: 20),
     );
   }
 
@@ -90,28 +71,11 @@ mixin SongDeletionMixin<T extends StatefulWidget> on State<T> {
     final songText = count > 1
         ? context.localization.songs
         : context.localization.song;
-    final theme = context.theme;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-        backgroundColor: theme.colorScheme.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-          ),
-        ),
-        content: Text(
-          '$count $songText ${context.localization.deleted}',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurface,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        duration: const Duration(seconds: 3),
-      ),
+    AppSnackBar.showInfo(
+      context,
+      title: context.localization.deleted,
+      message: '$count $songText',
+      icon: Icons.delete_sweep_rounded,
     );
   }
 }

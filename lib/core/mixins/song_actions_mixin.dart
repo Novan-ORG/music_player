@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/services/services.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/favorite.dart';
 import 'package:share_plus/share_plus.dart';
@@ -74,18 +75,20 @@ mixin RingtoneMixin<T extends StatefulWidget> on State<T> {
   }
 
   void _showPermissionDeniedMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.localization.permissionDeniedForRingtone),
-      ),
+    AppSnackBar.showError(
+      context,
+      title: context.localization.error,
+      message: context.localization.permissionDeniedForRingtone,
+      icon: Icons.settings_rounded,
     );
   }
 
   void _showRingtoneFailedMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.localization.error),
-      ),
+    AppSnackBar.showError(
+      context,
+      title: context.localization.error,
+      message: context.localization.error,
+      icon: Icons.music_off_rounded,
     );
   }
 }

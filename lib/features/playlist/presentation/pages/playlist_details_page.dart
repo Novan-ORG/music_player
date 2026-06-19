@@ -89,13 +89,13 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
   Widget build(BuildContext context) {
     return BlocConsumer<PlaylistDetailsBloc, PlaylistDetailsState>(
       listener: (context, state) {
+        final errorMessage = state.errorMessage;
         if (state.status == PlaylistDetailsStatus.failure &&
-            state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.errorMessage!),
-              backgroundColor: Colors.red,
-            ),
+            errorMessage != null) {
+          AppSnackBar.showError(
+            context,
+            title: context.localization.error,
+            message: errorMessage,
           );
         }
       },
