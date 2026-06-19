@@ -63,45 +63,55 @@ class AllSongsView extends StatelessWidget {
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      context.localization.libraryReady,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  FilterButton(
-                    onTap: () async {
-                      final selectedSortConfig =
-                          await SongsSortBottomSheet.show(
-                            context: context,
-                            selectedSortConfig: songsState.sortConfig,
-                          );
-                      if (selectedSortConfig != null) {
-                        songsBloc.add(
-                          LoadSongsEvent(sortConfig: selectedSortConfig),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-              child: Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: SongsCount(songCount: songs.length),
-              ),
-            ),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final useCompactFilter = constraints.maxWidth < 430;
 
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          context.localization.libraryReady,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: context.theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      GlassCard(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(18),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: useCompactFilter ? 10 : 12,
+                          vertical: 9,
+                        ),
+                        child: SongsCount(songCount: songs.length),
+                      ),
+                      const SizedBox(width: 8),
+                      FilterButton(
+                        iconOnly: useCompactFilter,
+                        onTap: () async {
+                          final selectedSortConfig =
+                              await SongsSortBottomSheet.show(
+                                context: context,
+                                selectedSortConfig: songsState.sortConfig,
+                              );
+                          if (selectedSortConfig != null) {
+                            songsBloc.add(
+                              LoadSongsEvent(sortConfig: selectedSortConfig),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
             Expanded(
               child: SongsView(
                 songs: songs,
