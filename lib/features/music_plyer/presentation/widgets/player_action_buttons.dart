@@ -18,14 +18,31 @@ class PlayerActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isCompact = constraints.maxWidth < 360;
-        final primaryIconSize = isCompact
+        final isCompact = constraints.maxWidth < 380;
+        final isTight = constraints.maxWidth < 330;
+        final primaryIconSize = isTight
+            ? math.min(playIconSize, 40).toDouble()
+            : isCompact
             ? math.min(playIconSize, 44).toDouble()
             : playIconSize;
         final secondaryIconSize = primaryIconSize / 1.45;
-        final modeIconSize = primaryIconSize / 2.1;
-        final controlGap = isCompact ? 8.0 : 12.0;
-        final modeExtent = math.max(54, modeIconSize * 2.6).toDouble();
+        final modeIconSize = primaryIconSize / (isTight ? 2.25 : 2.1);
+        final secondaryExtent = secondaryIconSize + 18;
+        final primaryExtent = primaryIconSize + 28;
+        final modeExtent = math
+            .max(isTight ? 48 : 54, modeIconSize * (isTight ? 2.35 : 2.6))
+            .toDouble();
+        final controlsWidth =
+            (modeExtent * 2) + (secondaryExtent * 2) + primaryExtent;
+        final controlGap = math
+            .max(
+              isTight ? 6 : 10,
+              math.min(
+                isCompact ? 14 : 20,
+                (constraints.maxWidth - controlsWidth) / 4,
+              ),
+            )
+            .toDouble();
 
         return Directionality(
           textDirection: TextDirection.ltr,
@@ -34,10 +51,11 @@ class PlayerActionButtons extends StatelessWidget {
               final musicPlayer = context.read<MusicPlayerBloc>();
 
               return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
+                  SizedBox(
+                    width: modeExtent,
+                    child: Center(
                       child: _ShuffleButton(
                         state: state,
                         musicPlayer: musicPlayer,
@@ -46,26 +64,43 @@ class PlayerActionButtons extends StatelessWidget {
                       ),
                     ),
                   ),
-                  _PreviousButton(
-                    state: state,
-                    musicPlayer: musicPlayer,
-                    iconSize: secondaryIconSize,
+                  SizedBox(width: controlGap),
+                  SizedBox(
+                    width: secondaryExtent,
+                    child: Center(
+                      child: _PreviousButton(
+                        state: state,
+                        musicPlayer: musicPlayer,
+                        iconSize: secondaryIconSize,
+                      ),
+                    ),
                   ),
                   SizedBox(width: controlGap),
-                  _PlayPauseButton(
-                    state: state,
-                    musicPlayer: musicPlayer,
-                    iconSize: primaryIconSize,
+                  SizedBox(
+                    width: primaryExtent,
+                    child: Center(
+                      child: _PlayPauseButton(
+                        state: state,
+                        musicPlayer: musicPlayer,
+                        iconSize: primaryIconSize,
+                      ),
+                    ),
                   ),
                   SizedBox(width: controlGap),
-                  _NextButton(
-                    state: state,
-                    musicPlayer: musicPlayer,
-                    iconSize: secondaryIconSize,
+                  SizedBox(
+                    width: secondaryExtent,
+                    child: Center(
+                      child: _NextButton(
+                        state: state,
+                        musicPlayer: musicPlayer,
+                        iconSize: secondaryIconSize,
+                      ),
+                    ),
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerRight,
+                  SizedBox(width: controlGap),
+                  SizedBox(
+                    width: modeExtent,
+                    child: Center(
                       child: _LoopButton(
                         state: state,
                         musicPlayer: musicPlayer,

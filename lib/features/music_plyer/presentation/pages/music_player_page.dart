@@ -460,9 +460,9 @@ class _PlayerDetailsContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: layout.sectionSpacing,
         children: [
-          artwork,
           songInfo,
           playbackCard,
+          artwork,
         ],
       );
     }
@@ -470,16 +470,6 @@ class _PlayerDetailsContent extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Flexible(
-          flex: 5,
-          child: Padding(
-            padding: EdgeInsetsDirectional.only(end: layout.sectionSpacing),
-            child: Align(
-              alignment: AlignmentDirectional.topStart,
-              child: artwork,
-            ),
-          ),
-        ),
         Flexible(
           flex: 6,
           child: Column(
@@ -490,6 +480,16 @@ class _PlayerDetailsContent extends StatelessWidget {
               songInfo,
               playbackCard,
             ],
+          ),
+        ),
+        Flexible(
+          flex: 5,
+          child: Padding(
+            padding: EdgeInsetsDirectional.only(start: layout.sectionSpacing),
+            child: Align(
+              alignment: AlignmentDirectional.topEnd,
+              child: artwork,
+            ),
           ),
         ),
       ],
@@ -580,38 +580,52 @@ class _ArtworkShowcase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.theme.colorScheme;
+    final minFrameWidth = layout.artworkSize + (layout.artworkFramePadding * 2);
 
-    return Center(
-      child: Container(
-        padding: EdgeInsets.all(layout.artworkFramePadding),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(layout.artworkFrameBorderRadius),
-          gradient: LinearGradient(
-            colors: [
-              colorScheme.surface.withValues(alpha: 0.96),
-              colorScheme.surface.withValues(alpha: 0.72),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          border: Border.all(
-            color: colorScheme.onSurface.withValues(alpha: 0.08),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: colorScheme.primary.withValues(alpha: 0.18),
-              blurRadius: 36,
-              offset: const Offset(0, 18),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final frameWidth = constraints.maxWidth.isFinite
+            ? math.max(constraints.maxWidth, minFrameWidth)
+            : minFrameWidth;
+
+        return SizedBox(
+          width: frameWidth,
+          child: Container(
+            padding: EdgeInsets.all(layout.artworkFramePadding),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                layout.artworkFrameBorderRadius,
+              ),
+              gradient: LinearGradient(
+                colors: [
+                  colorScheme.surface.withValues(alpha: 0.96),
+                  colorScheme.surface.withValues(alpha: 0.72),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              border: Border.all(
+                color: colorScheme.onSurface.withValues(alpha: 0.08),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: colorScheme.primary.withValues(alpha: 0.18),
+                  blurRadius: 36,
+                  offset: const Offset(0, 18),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: ArtImageWidget(
-          qualitySize: 500,
-          id: songId,
-          size: layout.artworkSize,
-          borderRadius: layout.artworkBorderRadius,
-        ),
-      ),
+            child: Align(
+              child: ArtImageWidget(
+                qualitySize: 500,
+                id: songId,
+                size: layout.artworkSize,
+                borderRadius: layout.artworkBorderRadius,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
