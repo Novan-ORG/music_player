@@ -4,6 +4,7 @@ enum SongsFromType {
   albumId,
   artist,
   artistId,
+  folderPath,
   gener,
   generId,
   playlist,

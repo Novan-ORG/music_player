@@ -758,6 +758,30 @@ abstract class AppLocalizations {
   /// **'Artists'**
   String get artists;
 
+  /// No description provided for @folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder'**
+  String get folder;
+
+  /// No description provided for @folders.
+  ///
+  /// In en, this message translates to:
+  /// **'Folders'**
+  String get folders;
+
+  /// No description provided for @emptyFoldersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No folders with songs yet'**
+  String get emptyFoldersTitle;
+
+  /// No description provided for @emptyFoldersMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Song folders will show up here as soon as your music library is ready.'**
+  String get emptyFoldersMessage;
+
   /// No description provided for @ascending.
   ///
   /// In en, this message translates to:

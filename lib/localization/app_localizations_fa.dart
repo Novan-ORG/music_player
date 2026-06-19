@@ -368,6 +368,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get artists => 'هنرمندان';
 
   @override
+  String get folder => 'پوشه';
+
+  @override
+  String get folders => 'پوشه ها';
+
+  @override
+  String get emptyFoldersTitle => 'هنوز پوشه ای با موزیک وجود ندارد';
+
+  @override
+  String get emptyFoldersMessage =>
+      'به محض آماده شدن کتابخانه موسیقی، پوشه های دارای موزیک اینجا نمایش داده می شوند.';
+
+  @override
   String get ascending => 'افزایشی';
 
   @override

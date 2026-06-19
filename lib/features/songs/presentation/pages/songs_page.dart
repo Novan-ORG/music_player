@@ -32,13 +32,14 @@ class _SongsPageState extends State<SongsPage>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
     pageController = PageController();
 
     scheduleMicrotask(() {
       if (!mounted) return;
       context.read<AlbumsBloc>().add(const LoadAlbumsEvent());
       context.read<ArtistsBloc>().add(const LoadArtistsEvent());
+      context.read<FoldersBloc>().add(const LoadFoldersEvent());
     });
   }
 
@@ -53,6 +54,7 @@ class _SongsPageState extends State<SongsPage>
   void _refreshDerivedLibraries() {
     final albumsBloc = context.read<AlbumsBloc>();
     final artistsBloc = context.read<ArtistsBloc>();
+    final foldersBloc = context.read<FoldersBloc>();
 
     albumsBloc.add(
       LoadAlbumsEvent(sortType: albumsBloc.state.sortType),
@@ -60,6 +62,7 @@ class _SongsPageState extends State<SongsPage>
     artistsBloc.add(
       LoadArtistsEvent(sortType: artistsBloc.state.sortType),
     );
+    foldersBloc.add(const LoadFoldersEvent());
   }
 
   bool _handleLibraryScroll(ScrollNotification notification) {
@@ -108,6 +111,7 @@ class _SongsPageState extends State<SongsPage>
               AllSongsView(),
               AlbumsView(),
               ArtistsView(),
+              FoldersView(),
             ],
           ),
         );

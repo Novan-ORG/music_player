@@ -57,6 +57,11 @@ extension SongsFromTypeMapper on SongsFromType {
         return AudiosFromType.ARTIST;
       case SongsFromType.artistId:
         return AudiosFromType.ARTIST_ID;
+      case SongsFromType.folderPath:
+        throw UnsupportedError(
+          'Folder queries are derived from song paths '
+          'and do not map to AudiosFromType.',
+        );
       case SongsFromType.gener:
         return AudiosFromType.GENRE;
       case SongsFromType.generId:

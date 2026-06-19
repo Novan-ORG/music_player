@@ -120,6 +120,9 @@ class _AuthorizedHomeState extends State<_AuthorizedHome> {
           create: (_) => ArtistsBloc(getIt())..add(const LoadArtistsEvent()),
         ),
         BlocProvider(
+          create: (_) => FoldersBloc(getIt())..add(const LoadFoldersEvent()),
+        ),
+        BlocProvider(
           create: (_) => SongsBloc(
             getIt(),
             getIt(),

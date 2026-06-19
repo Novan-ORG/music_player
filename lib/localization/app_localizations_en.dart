@@ -368,6 +368,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get artists => 'Artists';
 
   @override
+  String get folder => 'Folder';
+
+  @override
+  String get folders => 'Folders';
+
+  @override
+  String get emptyFoldersTitle => 'No folders with songs yet';
+
+  @override
+  String get emptyFoldersMessage =>
+      'Song folders will show up here as soon as your music library is ready.';
+
+  @override
   String get ascending => 'Ascending';
 
   @override

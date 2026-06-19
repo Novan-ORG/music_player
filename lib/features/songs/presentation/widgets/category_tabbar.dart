@@ -28,6 +28,7 @@ class CategoryTabbar extends StatelessWidget {
       context.localization.allSongs,
       context.localization.albums,
       context.localization.artists,
+      context.localization.folders,
     ];
     final baseProgress = compact ? 0.22 : 0.0;
     final targetProgress =

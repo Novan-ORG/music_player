@@ -56,6 +56,11 @@ abstract interface class SongsRepository {
     ArtistsSortType sortType = ArtistsSortType.numOfTracks,
   });
 
+  /// Queries all folders that currently contain songs on the device.
+  ///
+  /// Returns a [Result] containing the list of folders or an error message.
+  Future<Result<List<Folder>>> queryFolders();
+
   /// Deletes a song from the device storage.
   ///
   /// Parameters:

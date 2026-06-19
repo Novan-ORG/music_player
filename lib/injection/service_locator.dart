@@ -80,6 +80,7 @@ void _setupSongsFeature() {
     ..registerLazySingleton(() => QuerySongsFrom(getIt.get()))
     ..registerLazySingleton(() => QueryAlbums(getIt.get()))
     ..registerLazySingleton(() => QueryArtists(getIt.get()))
+    ..registerLazySingleton(() => QueryFolders(getIt.get()))
     ..registerLazySingleton(() => GetSongsSortConfig(getIt.get()))
     ..registerLazySingleton(() => SaveSongsSortConfig(getIt.get()))
     ..registerLazySingleton(() => DeleteSongWithUndo(getIt.get(), getIt.get()))
