@@ -102,7 +102,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
       return;
     }
 
-    final selectedValue = await showModalBottomSheet<String>(
+    final selectedValue = await showAppModalBottomSheet<String>(
       context: context,
       showDragHandle: true,
       builder: (context) => const _SleepTimerOptionsSheet(
@@ -115,7 +115,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
     }
 
     if (selectedValue == 'custom') {
-      final duration = await showModalBottomSheet<Duration>(
+      final duration = await showAppModalBottomSheet<Duration>(
         context: context,
         isScrollControlled: true,
         builder: (context) => const DurationPickerSheet(),

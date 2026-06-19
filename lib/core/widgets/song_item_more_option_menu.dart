@@ -22,6 +22,7 @@ class SongItemMoreOptionMenu extends StatelessWidget {
     required this.isInPlaylist,
     required this.isCurrentTrack,
     super.key,
+    this.compact = false,
     this.showShare = true,
     this.onAddToPlaylist,
     this.onDelete,
@@ -34,6 +35,7 @@ class SongItemMoreOptionMenu extends StatelessWidget {
 
   final bool isInPlaylist;
   final bool isCurrentTrack;
+  final bool compact;
   final bool showShare;
   final VoidCallback? onPlayPause;
   final VoidCallback? onFavoriteToggle;
@@ -86,6 +88,7 @@ class SongItemMoreOptionMenu extends StatelessWidget {
       tooltip: context.localization.moreOptions,
       isHighlighted: isCurrentTrack,
       highlightColor: context.theme.colorScheme.primary,
+      compact: compact,
       onSelected: (action) {
         switch (action) {
           case SongItemMenuAction.addToPlaylist:

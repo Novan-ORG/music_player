@@ -7,6 +7,8 @@
 sealed class StringsConstants {
   // Support Info
   static const supportEmail = 'development.taleb@gmail.com';
+  static const supportTelegramId = '@dev_native_ir';
+  static const supportTelegramUrl = 'https://t.me/dev_native_ir';
 
   // Developer Info
   static const talebLinktreeUrl = 'https://linktr.ee/taleb.rafiepour';

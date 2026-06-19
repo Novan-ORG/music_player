@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/constants/constants.dart';
 import 'package:music_player/core/utils/utils.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/settings/presentation/bloc/bloc.dart';
@@ -158,6 +159,16 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ),
                                 const SizedBox(height: 10),
                                 SettingsTile(
+                                  icon: Icons.telegram_rounded,
+                                  title: context.localization.telegram,
+                                  subtitle: StringsConstants.supportTelegramId,
+                                  onTap: () =>
+                                      LauncherUtils.launchUrlExternally(
+                                        StringsConstants.supportTelegramUrl,
+                                      ),
+                                ),
+                                const SizedBox(height: 10),
+                                SettingsTile(
                                   icon: Icons.info_rounded,
                                   title: context.localization.aboutUs,
                                   onTap: () async {
@@ -307,7 +318,7 @@ class _PlaybackSection extends StatelessWidget {
                   onChanged: (value) async {
                     if (value == 'custom') {
                       final selectedDuration =
-                          await showModalBottomSheet<Duration>(
+                          await showAppModalBottomSheet<Duration>(
                             context: context,
                             isScrollControlled: true,
                             builder: (context) => const DurationPickerSheet(),
@@ -384,7 +395,7 @@ class _ActiveSleepTimerChip extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(18),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             color: theme.colorScheme.primary.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(18),
@@ -397,14 +408,20 @@ class _ActiveSleepTimerChip extends StatelessWidget {
             children: [
               Icon(
                 Icons.timer_outlined,
-                size: 18,
+                size: 16,
                 color: theme.colorScheme.primary,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 6),
               CountDownTimer(
                 duration: duration,
                 onEnd: onEnd,
-                fontSize: 14,
+                forceLtr: true,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w800,
+                  height: 1,
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
               ),
             ],
           ),

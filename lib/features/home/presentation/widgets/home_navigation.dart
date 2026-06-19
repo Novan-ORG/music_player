@@ -30,12 +30,12 @@ class HomeBottomNavDock extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
+        padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
         child: DecoratedBox(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(24),
             color: theme.colorScheme.surface.withValues(
-              alpha: isDark ? 0.86 : 0.94,
+              alpha: isDark ? 0.9 : 0.96,
             ),
             border: Border.all(
               color: isDark
@@ -44,14 +44,14 @@ class HomeBottomNavDock extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: isDark ? 0.28 : 0.1),
-                blurRadius: 22,
-                offset: const Offset(0, 10),
+                color: Colors.black.withValues(alpha: isDark ? 0.22 : 0.08),
+                blurRadius: 18,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.all(6),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             child: Row(
               children: [
                 for (var index = 0; index < items.length; index++)
@@ -157,47 +157,33 @@ class _BottomNavItem extends StatelessWidget {
         button: true,
         label: item.label,
         child: InkWell(
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(18),
           onTap: onTap,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 220),
             curve: Curves.easeOutCubic,
-            height: 54,
-            margin: const EdgeInsets.symmetric(horizontal: 2),
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            height: 46,
+            margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+            padding: const EdgeInsets.symmetric(horizontal: 6),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(22),
-              gradient: selected
-                  ? const LinearGradient(
-                      colors: [
-                        Color(0xFF9C27B0),
-                        Color(0xFF00BFA6),
-                      ],
-                    )
-                  : null,
+              borderRadius: BorderRadius.circular(18),
               color: selected
-                  ? null
-                  : theme.colorScheme.surfaceContainerHighest.withValues(
-                      alpha: 0,
-                    ),
-              boxShadow: selected
-                  ? [
-                      BoxShadow(
-                        color: selectedColor.withValues(alpha: 0.26),
-                        blurRadius: 14,
-                        offset: const Offset(0, 7),
-                      ),
-                    ]
+                  ? selectedColor.withValues(alpha: 0.12)
+                  : Colors.transparent,
+              border: selected
+                  ? Border.all(
+                      color: selectedColor.withValues(alpha: 0.16),
+                    )
                   : null,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 3,
+              spacing: 2,
               children: [
                 IconTheme(
                   data: IconThemeData(
-                    color: selected ? Colors.white : unselectedColor,
-                    size: selected ? 24 : 22,
+                    color: selected ? selectedColor : unselectedColor,
+                    size: selected ? 21 : 20,
                   ),
                   child: item.icon,
                 ),
@@ -205,8 +191,9 @@ class _BottomNavItem extends StatelessWidget {
                   duration: const Duration(milliseconds: 220),
                   curve: Curves.easeOutCubic,
                   style: theme.textTheme.labelSmall!.copyWith(
-                    color: selected ? Colors.white : unselectedColor,
+                    color: selected ? selectedColor : unselectedColor,
                     fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+                    fontSize: 10.5,
                     height: 1,
                   ),
                   child: Text(

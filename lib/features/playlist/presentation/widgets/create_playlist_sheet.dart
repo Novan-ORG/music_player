@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/domain.dart';
 import 'package:music_player/features/playlist/presentation/bloc/bloc.dart';
@@ -10,7 +11,7 @@ class CreatePlaylistSheet extends StatefulWidget {
 
   /// Show sheet for creating a new playlist
   static Future<void> show(BuildContext context) {
-    return showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -20,7 +21,7 @@ class CreatePlaylistSheet extends StatefulWidget {
 
   /// Show sheet for editing an existing playlist
   static Future<void> showEdit(BuildContext context, Playlist playlist) {
-    return showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,

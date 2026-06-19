@@ -218,6 +218,12 @@ abstract class AppLocalizations {
   /// **'Support'**
   String get support;
 
+  /// No description provided for @telegram.
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram'**
+  String get telegram;
+
   /// No description provided for @sendFeedbackOrSuggestion.
   ///
   /// In en, this message translates to:

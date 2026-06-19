@@ -69,6 +69,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get support => 'Support';
 
   @override
+  String get telegram => 'Telegram';
+
+  @override
   String get sendFeedbackOrSuggestion => 'Send Feedback or Suggestions';
 
   @override

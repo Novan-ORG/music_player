@@ -27,6 +27,7 @@
     "hour1": "1 hour",
     "custom": "Custom",
     "support": "Support",
+    "telegram": "Telegram",
     "sendFeedbackOrSuggestion":"Send Feedback or Suggestions",
     "errorOpenEmail": "Could not open email app.",
     "aboutUs": "About Us",

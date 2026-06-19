@@ -65,7 +65,7 @@ class AboutUsPage extends StatelessWidget {
                   constraints: BoxConstraints(maxWidth: maxWidth),
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(16, 10, 16, 120),
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 112),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -76,18 +76,21 @@ class AboutUsPage extends StatelessWidget {
                             subject:
                                 context.localization.sendFeedbackOrSuggestion,
                           ),
+                          onTelegram: () => LauncherUtils.launchUrlExternally(
+                            StringsConstants.supportTelegramUrl,
+                          ),
                         ),
-                        const SizedBox(height: 14),
+                        const SizedBox(height: 10),
                         BrandShowcase(
                           eyebrow: context.localization.brandTagline,
                           title: context.localization.brandName,
                           description: context.localization.brandAboutMessage,
-                          isProminent: true,
+                          centered: false,
                           footer: _AboutHeroFooter(
                             contributerCount: contributors.length,
                           ),
                         ),
-                        const SizedBox(height: 18),
+                        const SizedBox(height: 14),
                         LayoutBuilder(
                           builder: (context, contentConstraints) {
                             final isWide = contentConstraints.maxWidth >= 860;
@@ -110,7 +113,7 @@ class AboutUsPage extends StatelessWidget {
                                       },
                                     ),
                                   ),
-                                  const SizedBox(width: 16),
+                                  const SizedBox(width: 14),
                                   Expanded(
                                     flex: 2,
                                     child: _QuickContactCard(
@@ -121,6 +124,11 @@ class AboutUsPage extends StatelessWidget {
                                           subject: context
                                               .localization
                                               .sendFeedbackOrSuggestion,
+                                        );
+                                      },
+                                      onTelegram: () {
+                                        LauncherUtils.launchUrlExternally(
+                                          StringsConstants.supportTelegramUrl,
                                         );
                                       },
                                     ),
@@ -141,7 +149,7 @@ class AboutUsPage extends StatelessWidget {
                                     );
                                   },
                                 ),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: 14),
                                 _QuickContactCard(
                                   onSupport: () {
                                     LauncherUtils.openEmailApp(
@@ -151,17 +159,22 @@ class AboutUsPage extends StatelessWidget {
                                           .sendFeedbackOrSuggestion,
                                     );
                                   },
+                                  onTelegram: () {
+                                    LauncherUtils.launchUrlExternally(
+                                      StringsConstants.supportTelegramUrl,
+                                    );
+                                  },
                                 ),
                               ],
                             );
                           },
                         ),
-                        const SizedBox(height: 22),
+                        const SizedBox(height: 18),
                         _SectionHeading(
                           title: context.localization.aboutContributers,
                           count: contributors.length,
                         ),
-                        const SizedBox(height: 14),
+                        const SizedBox(height: 12),
                         LayoutBuilder(
                           builder: (context, contentConstraints) {
                             final isWide = contentConstraints.maxWidth >= 860;
@@ -171,7 +184,7 @@ class AboutUsPage extends StatelessWidget {
 
                             return Wrap(
                               spacing: 16,
-                              runSpacing: 16,
+                              runSpacing: 14,
                               children: [
                                 for (final contributor in contributors)
                                   SizedBox(
@@ -228,37 +241,59 @@ class _AboutTopBar extends StatelessWidget {
   const _AboutTopBar({
     required this.onBack,
     required this.onSupport,
+    required this.onTelegram,
   });
 
   final VoidCallback onBack;
   final VoidCallback onSupport;
+  final VoidCallback onTelegram;
 
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
 
-    return Row(
-      children: [
-        _TopBarButton(
-          icon: Icons.mail_outline_rounded,
-          tooltip: context.localization.sendFeedbackOrSuggestion,
-          onTap: onSupport,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.06),
         ),
-        Expanded(
-          child: Text(
-            context.localization.aboutUs,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w800,
+      ),
+      child: Row(
+        children: [
+          _TopBarButton(
+            icon: Icons.mail_outline_rounded,
+            tooltip: context.localization.sendFeedbackOrSuggestion,
+            onTap: onSupport,
+          ),
+          const SizedBox(width: 2),
+          _TopBarButton(
+            icon: Icons.telegram_rounded,
+            tooltip: StringsConstants.supportTelegramId,
+            onTap: onTelegram,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              context.localization.aboutUs,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
-        ),
-        _TopBarButton(
-          icon: Icons.arrow_forward_rounded,
-          tooltip: context.localization.close,
-          onTap: onBack,
-        ),
-      ],
+          const SizedBox(width: 8),
+          _TopBarButton(
+            icon: Icons.arrow_forward_rounded,
+            tooltip: context.localization.close,
+            onTap: onBack,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -283,9 +318,9 @@ class _TopBarButton extends StatelessWidget {
       onPressed: onTap,
       style: IconButton.styleFrom(
         backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.9),
-        minimumSize: const Size.square(52),
+        minimumSize: const Size.square(40),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(14),
           side: BorderSide(
             color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
           ),
@@ -314,9 +349,8 @@ class _AboutHeroFooter extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 10,
-          runSpacing: 10,
+          spacing: 8,
+          runSpacing: 8,
           children: [
             _HeroPill(
               icon: Icons.groups_rounded,
@@ -329,7 +363,7 @@ class _AboutHeroFooter extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 10),
         DecoratedBox(
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.12),
@@ -339,26 +373,26 @@ class _AboutHeroFooter extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 Icon(
                   Icons.favorite_rounded,
-                  size: 18,
+                  size: 16,
                   color: Colors.white.withValues(alpha: 0.9),
                 ),
-                const SizedBox(width: 8),
                 Text(
                   context.localization.createdBy,
-                  style: theme.textTheme.labelLarge?.copyWith(
+                  style: theme.textTheme.labelMedium?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(width: 10),
                 VersionInfo(
-                  style: theme.textTheme.labelLarge?.copyWith(
+                  style: theme.textTheme.labelMedium?.copyWith(
                     color: Colors.white.withValues(alpha: 0.92),
                     fontWeight: FontWeight.w700,
                   ),
@@ -394,19 +428,19 @@ class _HeroPill extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
-              size: 18,
+              size: 16,
               color: Colors.white,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 6),
             Text(
               label,
-              style: theme.textTheme.labelLarge?.copyWith(
+              style: theme.textTheme.labelMedium?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
               ),
@@ -430,18 +464,18 @@ class _AppPurposeCard extends StatelessWidget {
     final theme = context.theme;
 
     return Container(
-      padding: const EdgeInsets.all(22),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface.withValues(alpha: 0.94),
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: theme.colorScheme.onSurface.withValues(alpha: 0.07),
         ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 24,
-            offset: const Offset(0, 12),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -455,35 +489,35 @@ class _AppPurposeCard extends StatelessWidget {
               (index) => const Icon(
                 Icons.star_rounded,
                 color: Color(0xFFFFC857),
-                size: 22,
+                size: 18,
               ),
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 10),
           Text(
             context.localization.appPurpose,
-            style: theme.textTheme.headlineMedium?.copyWith(
+            style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w800,
               height: 1.28,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Text(
             context.localization.brandAboutMessage,
-            style: theme.textTheme.bodyLarge?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              height: 1.6,
+              height: 1.45,
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 14),
           FilledButton.icon(
             onPressed: onSupport,
             icon: const Icon(Icons.mail_outline_rounded),
             label: Text(context.localization.sendFeedbackOrSuggestion),
             style: FilledButton.styleFrom(
-              minimumSize: const Size(0, 50),
+              minimumSize: const Size(0, 46),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(16),
               ),
             ),
           ),
@@ -496,16 +530,18 @@ class _AppPurposeCard extends StatelessWidget {
 class _QuickContactCard extends StatelessWidget {
   const _QuickContactCard({
     required this.onSupport,
+    required this.onTelegram,
   });
 
   final VoidCallback onSupport;
+  final VoidCallback onTelegram;
 
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: AlignmentDirectional.topStart,
@@ -515,7 +551,7 @@ class _QuickContactCard extends StatelessWidget {
             theme.colorScheme.surface.withValues(alpha: 0.96),
           ],
         ),
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: theme.colorScheme.primary.withValues(alpha: 0.14),
         ),
@@ -524,43 +560,56 @@ class _QuickContactCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 52,
-            height: 52,
+            width: 44,
+            height: 44,
             decoration: BoxDecoration(
               color: theme.colorScheme.primary.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(
               Icons.forum_rounded,
               color: theme.colorScheme.primary,
-              size: 26,
+              size: 22,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Text(
             context.localization.support,
-            style: theme.textTheme.titleLarge?.copyWith(
+            style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w800,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
             context.localization.sendFeedbackOrSuggestion,
-            style: theme.textTheme.bodyLarge?.copyWith(
+            style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-              height: 1.5,
+              height: 1.4,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           OutlinedButton.icon(
             onPressed: onSupport,
             icon: const Icon(Icons.alternate_email_rounded),
             label: const Text(StringsConstants.supportEmail),
             style: OutlinedButton.styleFrom(
-              minimumSize: const Size(0, 50),
+              minimumSize: const Size(0, 46),
               alignment: AlignmentDirectional.centerStart,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: onTelegram,
+            icon: const Icon(Icons.telegram_rounded),
+            label: const Text(StringsConstants.supportTelegramId),
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(0, 46),
+              alignment: AlignmentDirectional.centerStart,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
             ),
           ),
@@ -586,35 +635,35 @@ class _SectionHeading extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 48,
-          height: 48,
+          width: 42,
+          height: 42,
           decoration: BoxDecoration(
             color: theme.colorScheme.primary.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(14),
           ),
           child: Icon(
             Icons.groups_rounded,
             color: theme.colorScheme.primary,
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
         Expanded(
           child: Text(
             title,
-            style: theme.textTheme.headlineMedium?.copyWith(
+            style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w800,
             ),
           ),
         ),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             color: theme.colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(999),
           ),
           child: Text(
             '$count',
-            style: theme.textTheme.titleMedium?.copyWith(
+            style: theme.textTheme.titleSmall?.copyWith(
               color: theme.colorScheme.primary,
               fontWeight: FontWeight.w800,
             ),

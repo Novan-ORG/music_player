@@ -56,73 +56,55 @@ class SettingsTile extends StatelessWidget {
             builder: (context, constraints) {
               final useColumn =
                   currentTrailing != null && constraints.maxWidth < 360;
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withValues(
-                            alpha: 0.12,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: theme.colorScheme.primary.withValues(
-                              alpha: 0.08,
-                            ),
-                          ),
-                        ),
-                        child: Icon(
-                          icon,
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              title,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                height: 1.1,
-                              ),
-                            ),
-                            if (subtitle != null) ...[
-                              const SizedBox(height: 2),
-                              Text(
-                                subtitle!,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.colorScheme.onSurface.withValues(
-                                    alpha: 0.62,
-                                  ),
-                                  height: 1.2,
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                      if (!useColumn && currentTrailing != null) ...[
-                        const SizedBox(width: 10),
-                        Flexible(child: currentTrailing),
-                      ],
-                    ],
+              final leading = Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary.withValues(
+                    alpha: 0.12,
                   ),
-                  if (useColumn) ...[
-                    const SizedBox(height: 10),
-                    Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: currentTrailing,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: theme.colorScheme.primary.withValues(
+                      alpha: 0.08,
                     ),
-                  ],
-                ],
+                  ),
+                ),
+                child: Icon(
+                  icon,
+                  color: theme.colorScheme.primary,
+                ),
+              );
+              final titleWidget = Text(
+                title,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  height: 1.1,
+                ),
+              );
+              final subtitleWidget = subtitle == null
+                  ? null
+                  : Text(
+                      subtitle!,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.62,
+                        ),
+                        height: 1.2,
+                      ),
+                    );
+
+              return ListTile(
+                dense: true,
+                visualDensity: VisualDensity.compact,
+                contentPadding: EdgeInsets.zero,
+                horizontalTitleGap: 10,
+                minLeadingWidth: 42,
+                titleAlignment: ListTileTitleAlignment.center,
+                leading: leading,
+                title: titleWidget,
+                subtitle: subtitleWidget,
+                trailing: currentTrailing,
               );
             },
           ),

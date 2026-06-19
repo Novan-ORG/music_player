@@ -16,7 +16,7 @@ class UpnextMusicsSheet extends StatelessWidget {
   const UpnextMusicsSheet({super.key});
 
   static Future<void> show(BuildContext context) {
-    return showModalBottomSheet<void>(
+    return showAppModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,

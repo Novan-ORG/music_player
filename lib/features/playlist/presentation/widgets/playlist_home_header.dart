@@ -31,17 +31,17 @@ class PlaylistHomeHeader extends StatelessWidget {
           duration: const Duration(milliseconds: 180),
           curve: Curves.easeOutCubic,
           margin: EdgeInsets.fromLTRB(
-            16,
-            10,
-            16,
-            progress > 0.5 ? 6 : 10,
+            14,
+            8,
+            14,
+            progress > 0.5 ? 4 : 8,
           ),
           padding: EdgeInsets.symmetric(
-            horizontal: 18,
-            vertical: progress > 0.55 ? 14 : 18,
+            horizontal: 15,
+            vertical: progress > 0.55 ? 11 : 13,
           ),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(progress > 0.5 ? 22 : 28),
+            borderRadius: BorderRadius.circular(progress > 0.5 ? 20 : 24),
             gradient: LinearGradient(
               begin: AlignmentDirectional.topStart,
               end: AlignmentDirectional.bottomEnd,
@@ -61,8 +61,8 @@ class PlaylistHomeHeader extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: isDark ? 0.24 : 0.06),
-                blurRadius: progress > 0.5 ? 18 : 26,
-                offset: Offset(0, progress > 0.5 ? 10 : 14),
+                blurRadius: progress > 0.5 ? 16 : 22,
+                offset: Offset(0, progress > 0.5 ? 8 : 12),
               ),
             ],
           ),
@@ -75,7 +75,7 @@ class PlaylistHomeHeader extends StatelessWidget {
                   textColor: textColor,
                   subtitleVisibility: subtitleVisibility,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 SizedBox(
                   width: double.infinity,
                   child: _CreatePlaylistButton(
@@ -94,35 +94,40 @@ class PlaylistHomeHeader extends StatelessWidget {
                         subtitleVisibility: subtitleVisibility,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
                     _CreatePlaylistButton(
                       iconOnly: iconOnlyButton,
                       onPressed: onCreatePressed,
                     ),
                   ],
                 ),
-              SizedBox(height: compactMetrics ? 10 : 16),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _MetricPill(
-                    compact: compactMetrics,
-                    icon: Icons.queue_music_rounded,
-                    label: context.localization.playlists,
-                  ),
-                  _MetricPill(
-                    compact: compactMetrics,
-                    icon: Icons.push_pin_rounded,
-                    label: context.localization.favoritePlaylists,
-                  ),
-                  if (!compactMetrics)
+              SizedBox(height: compactMetrics ? 7 : 10),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                child: Row(
+                  children: [
                     _MetricPill(
-                      compact: false,
-                      icon: Icons.play_circle_outline_rounded,
-                      label: context.localization.recentlyPlayed,
+                      compact: compactMetrics,
+                      icon: Icons.queue_music_rounded,
+                      label: context.localization.playlists,
                     ),
-                ],
+                    const SizedBox(width: 6),
+                    _MetricPill(
+                      compact: compactMetrics,
+                      icon: Icons.push_pin_rounded,
+                      label: context.localization.favoritePlaylists,
+                    ),
+                    if (!compactMetrics) ...[
+                      const SizedBox(width: 6),
+                      _MetricPill(
+                        compact: false,
+                        icon: Icons.play_circle_outline_rounded,
+                        label: context.localization.recentlyPlayed,
+                      ),
+                    ],
+                  ],
+                ),
               ),
             ],
           ),
@@ -152,10 +157,12 @@ class _PlaylistHeaderText extends StatelessWidget {
       children: [
         Text(
           context.localization.playlists,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style:
               (compactTitle
-                      ? theme.textTheme.headlineSmall
-                      : theme.textTheme.headlineMedium)
+                      ? theme.textTheme.titleMedium
+                      : theme.textTheme.titleLarge)
                   ?.copyWith(
                     color: textColor,
                     fontWeight: FontWeight.w800,
@@ -168,14 +175,14 @@ class _PlaylistHeaderText extends StatelessWidget {
             child: Opacity(
               opacity: subtitleVisibility.clamp(0.0, 1.0),
               child: Padding(
-                padding: const EdgeInsets.only(top: 6),
+                padding: const EdgeInsets.only(top: 3),
                 child: Text(
                   context.localization.playlistHeroSubtitle,
-                  maxLines: 3,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodyLarge?.copyWith(
+                  style: theme.textTheme.bodySmall?.copyWith(
                     color: textColor.withValues(alpha: 0.72),
-                    height: 1.4,
+                    height: 1.28,
                   ),
                 ),
               ),
@@ -202,10 +209,10 @@ class _CreatePlaylistButton extends StatelessWidget {
       backgroundColor: Colors.white,
       foregroundColor: const Color(0xFF202124),
       padding: EdgeInsets.symmetric(
-        horizontal: iconOnly ? 12 : 16,
-        vertical: 13,
+        horizontal: iconOnly ? 9 : 12,
+        vertical: 10,
       ),
-      minimumSize: Size(iconOnly ? 46 : 0, 46),
+      minimumSize: Size(iconOnly ? 40 : 0, 40),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
@@ -224,13 +231,13 @@ class _CreatePlaylistButton extends StatelessWidget {
               child: FilledButton(
                 onPressed: onPressed,
                 style: style,
-                child: const Icon(Icons.add_rounded, size: 20),
+                child: const Icon(Icons.add_rounded, size: 18),
               ),
             )
           : FilledButton.icon(
               key: const ValueKey('playlist-create-label'),
               onPressed: onPressed,
-              icon: const Icon(Icons.add_rounded, size: 20),
+              icon: const Icon(Icons.add_rounded, size: 18),
               label: Text(context.localization.createPlaylist),
               style: style,
             ),
@@ -255,8 +262,8 @@ class _MetricPill extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: compact ? 11 : 14,
-        vertical: compact ? 8 : 9,
+        horizontal: compact ? 8 : 10,
+        vertical: compact ? 6 : 7,
       ),
       decoration: BoxDecoration(
         color: Colors.black.withValues(
@@ -272,16 +279,16 @@ class _MetricPill extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: compact ? 15 : 16,
+            size: compact ? 13 : 14,
             color: theme.colorScheme.onSurface,
           ),
-          SizedBox(width: compact ? 6 : 8),
+          SizedBox(width: compact ? 5 : 6),
           Text(
             label,
             style:
                 (compact
-                        ? theme.textTheme.labelMedium
-                        : theme.textTheme.labelLarge)
+                        ? theme.textTheme.labelSmall
+                        : theme.textTheme.labelMedium)
                     ?.copyWith(
                       color: theme.colorScheme.onSurface,
                       fontWeight: FontWeight.w700,

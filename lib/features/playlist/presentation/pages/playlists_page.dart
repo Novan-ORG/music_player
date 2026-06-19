@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/mixins/playlist_management_mixin.dart';
+import 'package:music_player/core/widgets/app_modal_bottom_sheet.dart';
 import 'package:music_player/core/widgets/app_state_view.dart';
 import 'package:music_player/core/widgets/loading.dart';
 import 'package:music_player/extensions/extensions.dart';
@@ -33,7 +34,7 @@ class PlaylistsPage extends StatefulWidget {
     required BuildContext context,
     Set<int>? songIds,
   }) {
-    return showModalBottomSheet<List<int>>(
+    return showAppModalBottomSheet<List<int>>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,

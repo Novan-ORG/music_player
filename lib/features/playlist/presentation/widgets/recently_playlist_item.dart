@@ -11,10 +11,10 @@ class PinnedPlaylistItem extends StatelessWidget {
   const PinnedPlaylistItem({
     required this.playlist,
     super.key,
-    this.size = 92,
-    this.borderRadius = 24,
-    this.width = 154,
-    this.height = 182,
+    this.size = 84,
+    this.borderRadius = 22,
+    this.width = 144,
+    this.height = 170,
     this.isRecent = false,
     this.compact = false,
     this.onTap,
@@ -40,7 +40,7 @@ class PinnedPlaylistItem extends StatelessWidget {
       child: GlassCard(
         onTap: onTap,
         borderRadius: BorderRadius.circular(borderRadius),
-        padding: EdgeInsets.all(compact ? 10 : 12),
+        padding: EdgeInsets.all(compact ? 9 : 10),
         gradient: LinearGradient(
           begin: AlignmentDirectional.topStart,
           end: AlignmentDirectional.bottomEnd,
@@ -57,44 +57,18 @@ class PinnedPlaylistItem extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: compact ? 8 : 10,
-                    vertical: compact ? 4 : 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Text(
-                    isRecent
-                        ? context.localization.recentlyPlayed
-                        : context.localization.playlist,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style:
-                        (compact
-                                ? theme.textTheme.labelSmall
-                                : theme.textTheme.labelMedium)
-                            ?.copyWith(
-                              color: theme.colorScheme.primary,
-                              fontWeight: FontWeight.w700,
-                            ),
-                  ),
-                ),
-                SizedBox(height: compact ? 8 : 12),
                 Expanded(
                   child: Center(
                     child: ArtImageWidget(
                       id: artworkId,
                       size: compact ? size - 8 : size,
-                      borderRadius: compact ? 16 : 18,
+                      borderRadius: compact ? 14 : 16,
                       defaultCoverBg: Colors.white,
                       defaultCover: ImageAssets.playlistCover,
                     ),
                   ),
                 ),
-                SizedBox(height: compact ? 8 : 10),
+                SizedBox(height: compact ? 6 : 10),
                 Text(
                   playlist.name,
                   maxLines: compact ? 1 : 2,
@@ -112,7 +86,7 @@ class PinnedPlaylistItem extends StatelessWidget {
                   isRecent
                       ? context.localization.playlistRecentHint
                       : '${playlist.numOfSongs} ${context.localization.songs}',
-                  maxLines: compact ? 1 : 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.62),

@@ -69,6 +69,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get support => 'پشتیبانی';
 
   @override
+  String get telegram => 'تلگرام';
+
+  @override
   String get sendFeedbackOrSuggestion => 'ارسال بازخورد یا پیشنهادات';
 
   @override

@@ -61,19 +61,19 @@ class LibraryHeader extends StatelessWidget {
                     1 - Curves.easeIn.transform(progress.clamp(0.0, 1.0));
                 final containerMargin = EdgeInsetsGeometry.lerp(
                   compact
-                      ? const EdgeInsetsDirectional.fromSTEB(12, 8, 8, 8)
-                      : const EdgeInsets.fromLTRB(16, 12, 16, 10),
-                  compact
                       ? const EdgeInsetsDirectional.fromSTEB(10, 6, 8, 6)
-                      : const EdgeInsets.fromLTRB(12, 6, 12, 6),
+                      : const EdgeInsets.fromLTRB(14, 10, 14, 8),
+                  compact
+                      ? const EdgeInsetsDirectional.fromSTEB(8, 4, 8, 4)
+                      : const EdgeInsets.fromLTRB(10, 4, 10, 4),
                   progress,
                 )!;
                 final containerPadding = EdgeInsets.lerp(
-                  EdgeInsets.all(compact ? 14 : 18),
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+                  EdgeInsets.all(compact ? 12 : 16),
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   progress,
                 )!;
-                final contentSpacing = _lerp(compact ? 10 : 16, 8, progress);
+                final contentSpacing = _lerp(compact ? 8 : 12, 6, progress);
                 final titleStyle =
                     TextStyle.lerp(
                       compact || isNarrow
@@ -155,7 +155,7 @@ class LibraryHeader extends StatelessWidget {
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              spacing: subtitleVisibility > 0.12 ? 4 : 0,
+                              spacing: subtitleVisibility > 0.12 ? 3 : 0,
                               children: [
                                 Text(
                                   context.localization.yourLibrary,
@@ -195,7 +195,7 @@ class LibraryHeader extends StatelessWidget {
                               ],
                             ),
                           ),
-                          SizedBox(width: _lerp(12, 8, progress)),
+                          SizedBox(width: _lerp(10, 6, progress)),
                           _HeaderIconButton(
                             tooltip: context.localization.searchSongs,
                             icon: Icons.search_rounded,
@@ -227,7 +227,7 @@ class LibraryHeader extends StatelessWidget {
                                 collapseProgress: progress,
                               ),
                             ),
-                            SizedBox(width: _lerp(12, 8, progress)),
+                            SizedBox(width: _lerp(10, 6, progress)),
                             _StartMixButton(
                               enabled: hasSongs,
                               collapseProgress: progress,

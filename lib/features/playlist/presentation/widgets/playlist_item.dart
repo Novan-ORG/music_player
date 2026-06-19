@@ -9,7 +9,7 @@ class PlaylistItem extends StatelessWidget {
   const PlaylistItem({
     required this.playlist,
     this.margin = const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-    this.padding = const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+    this.padding = const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
     this.borderRadius = 22,
     this.onTap,
     this.blurBackground = true,
@@ -94,12 +94,12 @@ class PlaylistItem extends StatelessWidget {
       children: [
         PlaylistImageWidget(
           playlistId: playlist.id,
-          size: compact ? 58 : 66,
-          borderRadius: compact ? 16 : 18,
+          size: compact ? 54 : 60,
+          borderRadius: compact ? 14 : 16,
         ),
-        SizedBox(width: compact ? 10 : 12),
+        SizedBox(width: compact ? 8 : 10),
         Expanded(child: _buildTitle(context)),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
         if (isSelectionMode)
           _SelectionIndicator(isSelected: isSelected)
         else
@@ -150,11 +150,11 @@ class PlaylistItem extends StatelessWidget {
   Widget _buildTitle(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 4,
+      spacing: 3,
       children: [
         if (isPinned && !isSelectionMode)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
             decoration: BoxDecoration(
               color: context.theme.colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(999),
@@ -210,8 +210,9 @@ class PlaylistItem extends StatelessWidget {
             ),
             style: IconButton.styleFrom(
               backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.7),
-              minimumSize: Size.square(compact ? 38 : 42),
+              minimumSize: Size.square(compact ? 34 : 38),
               padding: EdgeInsets.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           ),
         ),

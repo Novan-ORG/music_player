@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/songs/domain/entities/entities.dart';
 import 'package:music_player/features/songs/domain/enums/enums.dart';
@@ -14,7 +15,7 @@ class SongsSortBottomSheet extends StatefulWidget {
     required BuildContext context,
     SortConfig selectedSortConfig = const SortConfig(),
   }) {
-    return showModalBottomSheet<SortConfig>(
+    return showAppModalBottomSheet<SortConfig>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,

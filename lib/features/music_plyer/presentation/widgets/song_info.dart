@@ -36,19 +36,19 @@ class SongInfo extends StatelessWidget {
 
     return GlassCard(
       borderRadius: BorderRadius.circular(28),
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final chipMaxWidth = math
               .max(
-                132,
-                math.min(220, (constraints.maxWidth - 12) / 2),
+                144,
+                math.min(280, constraints.maxWidth * 0.52),
               )
               .toDouble();
+          final isCompact = constraints.maxWidth < 400;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 16,
             children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,22 +56,23 @@ class SongInfo extends StatelessWidget {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 8,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           song?.displayNameWOExt ?? context.localization.song,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: textTheme.labelMedium?.copyWith(
-                            color: onSurface.withValues(alpha: 0.62),
-                            letterSpacing: 0.4,
+                          style: textTheme.labelSmall?.copyWith(
+                            color: onSurface.withValues(alpha: 0.56),
+                            letterSpacing: 0.32,
                           ),
                         ),
+                        const SizedBox(height: 4),
                         SongTitle(songTitle: song?.title),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   BlocSelector<FavoriteSongsBloc, FavoriteSongsState, Set<int>>(
                     selector: (state) => state.favoriteSongIds,
                     builder: (context, likedSongIds) {
@@ -85,7 +86,7 @@ class SongInfo extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 6),
                   SongItemMoreOptionMenu(
                     isInPlaylist: false,
                     isCurrentTrack: false,
@@ -96,23 +97,27 @@ class SongInfo extends StatelessWidget {
                   ),
                 ],
               ),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  _MetaChip(
-                    icon: Icons.person_outline_rounded,
-                    label: context.localization.artist,
-                    value: artist,
-                    maxWidth: chipMaxWidth,
-                  ),
-                  _MetaChip(
-                    icon: Icons.album_outlined,
-                    label: context.localization.album,
-                    value: album,
-                    maxWidth: chipMaxWidth,
-                  ),
-                ],
+              SizedBox(height: isCompact ? 10 : 12),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                child: Row(
+                  children: [
+                    _MetaChip(
+                      icon: Icons.person_outline_rounded,
+                      label: context.localization.artist,
+                      value: artist,
+                      maxWidth: chipMaxWidth,
+                    ),
+                    const SizedBox(width: 8),
+                    _MetaChip(
+                      icon: Icons.album_outlined,
+                      label: context.localization.album,
+                      value: album,
+                      maxWidth: chipMaxWidth,
+                    ),
+                  ],
+                ),
               ),
             ],
           );
@@ -140,8 +145,8 @@ class _MetaChip extends StatelessWidget {
     final colorScheme = context.theme.colorScheme;
 
     return Container(
-      constraints: const BoxConstraints(minHeight: 44),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      constraints: const BoxConstraints(minHeight: 36),
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
       decoration: BoxDecoration(
         color: colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(18),
@@ -154,28 +159,40 @@ class _MetaChip extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 16,
+            size: 15,
             color: colorScheme.primary,
           ),
-          const SizedBox(width: 8),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxWidth),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+          const SizedBox(width: 7),
+          SizedBox(
+            width: maxWidth,
+            child: Row(
               children: [
                 Text(
                   label,
                   style: context.theme.textTheme.labelSmall?.copyWith(
                     color: colorScheme.onSurface.withValues(alpha: 0.62),
+                    fontSize: 11,
                   ),
                 ),
-                Text(
-                  value,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                const SizedBox(width: 6),
+                Container(
+                  width: 3,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: colorScheme.onSurface.withValues(alpha: 0.32),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.theme.textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
                   ),
                 ),
               ],
@@ -212,6 +229,9 @@ class _ActionIconButton extends StatelessWidget {
       ),
       child: IconButton(
         onPressed: onPressed,
+        constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+        padding: EdgeInsets.zero,
+        splashRadius: 20,
         icon: Icon(icon, color: color ?? colorScheme.onSurface),
       ),
     );

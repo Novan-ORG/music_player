@@ -23,7 +23,9 @@ class _HeaderIconButton extends StatelessWidget {
         style: IconButton.styleFrom(
           backgroundColor: Colors.white.withValues(alpha: 0.18),
           foregroundColor: context.theme.colorScheme.onSurface,
-          minimumSize: Size.square(_lerp(46, 40, collapseProgress)),
+          minimumSize: Size.square(_lerp(42, 36, collapseProgress)),
+          padding: EdgeInsets.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
       ),
     );
@@ -103,8 +105,8 @@ class _StatPill extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: _lerp(10, 9, collapseProgress),
-        vertical: _lerp(7, 6, collapseProgress),
+        horizontal: _lerp(9, 8, collapseProgress),
+        vertical: _lerp(6, 5, collapseProgress),
       ),
       decoration: BoxDecoration(
         color: Colors.black.withValues(
@@ -127,7 +129,7 @@ class _StatPill extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: _lerp(15, 14, collapseProgress),
+            size: _lerp(14, 13, collapseProgress),
             color: theme.colorScheme.onSurface,
           ),
           AnimatedSwitcher(
@@ -178,12 +180,12 @@ class _StartMixButton extends StatelessWidget {
       disabledBackgroundColor: Colors.white.withValues(alpha: 0.34),
       disabledForegroundColor: const Color(0xFF202124).withValues(alpha: 0.42),
       padding: EdgeInsets.symmetric(
-        horizontal: _lerp(14, 10, collapseProgress),
-        vertical: _lerp(10, 8, collapseProgress),
+        horizontal: _lerp(12, 9, collapseProgress),
+        vertical: _lerp(9, 7, collapseProgress),
       ),
       minimumSize: Size(
         expand ? double.infinity : _lerp(0, 40, collapseProgress),
-        _lerp(40, 38, collapseProgress),
+        _lerp(38, 34, collapseProgress),
       ),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       shape: RoundedRectangleBorder(
@@ -199,7 +201,7 @@ class _StartMixButton extends StatelessWidget {
           ? FilledButton.icon(
               key: const ValueKey('mix-label'),
               onPressed: enabled ? onPressed : null,
-              icon: const Icon(Icons.shuffle_rounded, size: 19),
+              icon: const Icon(Icons.shuffle_rounded, size: 18),
               label: Text(context.localization.startMix),
               style: buttonStyle,
             )
@@ -209,7 +211,7 @@ class _StartMixButton extends StatelessWidget {
               child: FilledButton(
                 onPressed: enabled ? onPressed : null,
                 style: buttonStyle,
-                child: const Icon(Icons.shuffle_rounded, size: 18),
+                child: const Icon(Icons.shuffle_rounded, size: 17),
               ),
             ),
     );

@@ -16,10 +16,10 @@ import 'package:music_player/extensions/extensions.dart';
 class SongItem extends StatelessWidget {
   const SongItem({
     required this.track,
-    this.margin = const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-    this.padding = const EdgeInsets.symmetric(vertical: 9, horizontal: 10),
+    this.margin = const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+    this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 9),
     this.borderRadius = 24,
-    this.songImageSize = 58,
+    this.songImageSize = 54,
     this.onTap,
     this.onLongPress,
     this.blurBackground = true,
@@ -138,9 +138,9 @@ class SongItem extends StatelessWidget {
           isCurrentTrack: isCurrentTrack,
           isPlayingNow: isPlayingNow,
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
         Expanded(child: _buildTitleAndArtist(context)),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
         _buildActionButtons(context),
       ],
     );
@@ -193,7 +193,7 @@ class SongItem extends StatelessWidget {
   Widget _buildTitleAndArtist(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 6,
+      spacing: 4,
       children: [
         Text(
           track.title,
@@ -212,7 +212,7 @@ class SongItem extends StatelessWidget {
                 isCurrentTrack: isCurrentTrack,
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 6),
             Text(
               track.duration.format(),
               maxLines: 1,
@@ -246,6 +246,10 @@ class SongItem extends StatelessWidget {
                 color: context.theme.colorScheme.primary,
               ),
               onPressed: onPlayPause,
+              padding: EdgeInsets.zero,
+              splashRadius: 18,
+              constraints: const BoxConstraints.tightFor(width: 36, height: 36),
+              visualDensity: VisualDensity.compact,
             ),
           )
         else
@@ -261,6 +265,10 @@ class SongItem extends StatelessWidget {
                     : AppDarkColors.accent,
               ),
               onPressed: onFavoriteToggle,
+              padding: EdgeInsets.zero,
+              splashRadius: 18,
+              constraints: const BoxConstraints.tightFor(width: 36, height: 36),
+              visualDensity: VisualDensity.compact,
             ),
           ),
         SongItemMoreOptionMenu(
@@ -273,6 +281,7 @@ class SongItem extends StatelessWidget {
           onShare: onShare,
           isInPlaylist: isInPlaylist,
           isCurrentTrack: isCurrentTrack,
+          compact: true,
         ),
       ],
     );
@@ -299,8 +308,8 @@ class _SongArtwork extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Container(
-          width: size + 6,
-          height: size + 6,
+          width: size + 4,
+          height: size + 4,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: isCurrentTrack
@@ -317,8 +326,8 @@ class _SongArtwork extends StatelessWidget {
         ),
         if (isCurrentTrack)
           Container(
-            width: size + 6,
-            height: size + 6,
+            width: size + 4,
+            height: size + 4,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.black.withValues(alpha: isPlayingNow ? 0.3 : 0.18),
@@ -328,7 +337,7 @@ class _SongArtwork extends StatelessWidget {
                   ? Icons.graphic_eq_rounded
                   : Icons.play_arrow_rounded,
               color: Colors.white,
-              size: 24,
+              size: 20,
             ),
           ),
       ],

@@ -23,10 +23,10 @@ class SettingsPageHeader extends StatelessWidget {
         final isWide = constraints.maxWidth >= 720;
 
         return Container(
-          margin: const EdgeInsets.fromLTRB(16, 10, 16, 12),
-          padding: EdgeInsets.all(isWide ? 24 : 20),
+          margin: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+          padding: EdgeInsets.all(isWide ? 18 : 15),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(24),
             gradient: LinearGradient(
               begin: AlignmentDirectional.topStart,
               end: AlignmentDirectional.bottomEnd,
@@ -46,8 +46,8 @@ class SettingsPageHeader extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: isDark ? 0.24 : 0.06),
-                blurRadius: 26,
-                offset: const Offset(0, 14),
+                blurRadius: 22,
+                offset: const Offset(0, 10),
               ),
             ],
           ),
@@ -56,7 +56,7 @@ class SettingsPageHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _HeaderIcon(theme: theme, isDark: isDark),
-                    const SizedBox(width: 18),
+                    const SizedBox(width: 14),
                     Expanded(
                       child: _HeaderContent(
                         titleColor: titleColor,
@@ -94,35 +94,43 @@ class _HeaderContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
+    final title = Text(
+      context.localization.settings,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: theme.textTheme.headlineSmall?.copyWith(
+        color: titleColor,
+        fontWeight: FontWeight.w800,
+      ),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (leading != null) ...[
-          leading!,
-          const SizedBox(height: 16),
-        ],
-        Text(
-          context.localization.settings,
-          style: theme.textTheme.headlineMedium?.copyWith(
-            color: titleColor,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        const SizedBox(height: 6),
+        if (leading != null)
+          Row(
+            children: [
+              leading!,
+              const SizedBox(width: 10),
+              Expanded(child: title),
+            ],
+          )
+        else
+          title,
+        const SizedBox(height: 4),
         Text(
           context.localization.brandSettingsMessage,
-          maxLines: 3,
+          maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.bodyLarge?.copyWith(
+          style: theme.textTheme.bodyMedium?.copyWith(
             color: titleColor.withValues(alpha: 0.72),
-            height: 1.4,
+            height: 1.32,
           ),
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: 6,
+          runSpacing: 6,
           children: [
             _HeaderChip(
               icon: Icons.language_rounded,
@@ -134,34 +142,51 @@ class _HeaderContent extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: Colors.white.withValues(alpha: 0.14),
             ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                context.localization.createdBy,
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.82),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(width: 10),
-              VersionInfo(
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isTight = constraints.maxWidth < 280;
+              final createdByStyle = theme.textTheme.labelLarge?.copyWith(
+                color: Colors.white.withValues(alpha: 0.82),
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              );
+              final versionStyle = theme.textTheme.labelLarge?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+              );
+
+              return Wrap(
+                spacing: 6,
+                runSpacing: isTight ? 3 : 4,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: isTight ? constraints.maxWidth : 190,
+                    ),
+                    child: Text(
+                      context.localization.createdBy,
+                      maxLines: isTight ? 2 : 1,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: isTight,
+                      style: createdByStyle,
+                    ),
+                  ),
+                  VersionInfo(style: versionStyle),
+                ],
+              );
+            },
           ),
         ),
       ],
@@ -181,8 +206,8 @@ class _HeaderIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 56,
-      height: 56,
+      width: 50,
+      height: 50,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.white.withValues(alpha: isDark ? 0.12 : 0.78),
@@ -193,7 +218,7 @@ class _HeaderIcon extends StatelessWidget {
       child: Icon(
         Icons.settings_rounded,
         color: theme.colorScheme.primary,
-        size: 28,
+        size: 24,
       ),
     );
   }
@@ -213,7 +238,7 @@ class _HeaderChip extends StatelessWidget {
     final theme = context.theme;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(999),
@@ -226,13 +251,13 @@ class _HeaderChip extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 18,
+            size: 14,
             color: theme.colorScheme.primary,
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 5),
           Text(
             label,
-            style: theme.textTheme.labelLarge?.copyWith(
+            style: theme.textTheme.labelMedium?.copyWith(
               color: theme.colorScheme.onSurface,
               fontWeight: FontWeight.w700,
             ),

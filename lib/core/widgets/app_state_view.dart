@@ -44,7 +44,7 @@ class AppStateView extends StatelessWidget {
         children: [
           if (eyebrow != null) ...[
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
                 color: resolvedAccent.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(999),
@@ -58,7 +58,7 @@ class AppStateView extends StatelessWidget {
                 textAlign: centered ? TextAlign.center : TextAlign.start,
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 14),
           ],
           Text(
             title,
@@ -68,7 +68,7 @@ class AppStateView extends StatelessWidget {
               height: 1.15,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Text(
             message,
             textAlign: centered ? TextAlign.center : TextAlign.start,
@@ -78,7 +78,7 @@ class AppStateView extends StatelessWidget {
             ),
           ),
           if (onAction != null && actionLabel != null) ...[
-            const SizedBox(height: 24),
+            const SizedBox(height: 18),
             FilledButton.icon(
               onPressed: onAction,
               icon: Icon(actionIcon, size: 20),
@@ -87,10 +87,10 @@ class AppStateView extends StatelessWidget {
                 backgroundColor: resolvedAccent,
                 foregroundColor: colorScheme.onPrimary,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
+                  horizontal: 18,
+                  vertical: 14,
                 ),
-                minimumSize: Size(centered ? 0 : 220, 54),
+                minimumSize: Size(centered ? 0 : 200, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18),
                 ),
@@ -101,7 +101,7 @@ class AppStateView extends StatelessWidget {
             ),
           ],
           if (footer != null) ...[
-            const SizedBox(height: 18),
+            const SizedBox(height: 14),
             footer!,
           ],
         ],
@@ -143,8 +143,8 @@ class AppStateView extends StatelessWidget {
         if (useWideLayout) {
           return Row(
             children: [
-              buildIllustration(104),
-              const SizedBox(width: 24),
+              buildIllustration(92),
+              const SizedBox(width: 20),
               Expanded(
                 child: buildTextContent(centered: false),
               ),
@@ -155,8 +155,8 @@ class AppStateView extends StatelessWidget {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            buildIllustration(112),
-            const SizedBox(height: 24),
+            buildIllustration(96),
+            const SizedBox(height: 18),
             buildTextContent(centered: true),
           ],
         );
@@ -165,18 +165,18 @@ class AppStateView extends StatelessWidget {
 
     if (framed) {
       content = Container(
-        padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+        padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
         decoration: BoxDecoration(
           color: colorScheme.surface.withValues(alpha: 0.94),
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(26),
           border: Border.all(
             color: colorScheme.onSurface.withValues(alpha: 0.08),
           ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 28,
-              offset: const Offset(0, 14),
+              blurRadius: 22,
+              offset: const Offset(0, 10),
             ),
           ],
         ),
@@ -187,7 +187,7 @@ class AppStateView extends StatelessWidget {
     return Center(
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+        padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: maxWidth),
           child: content,
