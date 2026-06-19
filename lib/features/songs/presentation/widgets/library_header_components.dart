@@ -132,13 +132,13 @@ class _StatPill extends StatelessWidget {
             size: _lerp(14, 13, collapseProgress),
             color: theme.colorScheme.onSurface,
           ),
-          AnimatedSwitcher(
+          AnimatedSize(
             duration: const Duration(milliseconds: 160),
-            switchInCurve: Curves.easeOutCubic,
-            switchOutCurve: Curves.easeInCubic,
-            child: Text(
-              isTight ? '$value' : '$value $label',
-              key: ValueKey('$isTight-$value-$label'),
+            curve: Curves.easeOutCubic,
+            alignment: Alignment.centerLeft,
+            child: AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 160),
+              curve: Curves.easeOutCubic,
               style:
                   TextStyle.lerp(
                     theme.textTheme.labelMedium,
@@ -147,7 +147,14 @@ class _StatPill extends StatelessWidget {
                   )?.copyWith(
                     color: theme.colorScheme.onSurface,
                     fontWeight: FontWeight.w700,
-                  ),
+                  ) ??
+                  const TextStyle(fontWeight: FontWeight.w700),
+              child: Text(
+                isTight ? '$value' : '$value $label',
+                maxLines: 1,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+              ),
             ),
           ),
         ],

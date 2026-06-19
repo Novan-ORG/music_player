@@ -81,8 +81,8 @@ class AudioHandlerDatasourceImpl implements AudioHandlerDatasource {
   AudioHandlerDatasourceImpl({
     required MAudioHandler audioHandler,
     required SharedPreferences preferences,
-  })  : _audioHandler = audioHandler,
-        _preferences = preferences;
+  }) : _audioHandler = audioHandler,
+       _preferences = preferences;
 
   final MAudioHandler _audioHandler;
   final SharedPreferences _preferences;
@@ -99,9 +99,10 @@ class AudioHandlerDatasourceImpl implements AudioHandlerDatasource {
     bool autoPlay = true,
   }) async {
     // Add songs to the audio handler's queue
-    await _audioHandler.addAudioSources(songs);
-    // Seek to the specified song index
-    await _audioHandler.seek(Duration.zero, index: index);
+    await _audioHandler.addAudioSources(
+      songs,
+      initialIndex: index,
+    );
     if (autoPlay) {
       await _audioHandler.play();
     }
@@ -198,8 +199,9 @@ class AudioHandlerDatasourceImpl implements AudioHandlerDatasource {
     int currentIndex, {
     required bool wasPlaying,
   }) {
-    final songIds =
-        songs.map((song) => song.id.toString()).toList(growable: false);
+    final songIds = songs
+        .map((song) => song.id.toString())
+        .toList(growable: false);
     return Future.wait<bool>([
       _preferences.setStringList(PreferencesKeys.playbackQueueSongIds, songIds),
       _preferences.setInt(PreferencesKeys.playbackCurrentIndex, currentIndex),

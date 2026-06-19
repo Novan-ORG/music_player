@@ -42,53 +42,53 @@ void main() {
 
     group('play', () {
       test(
-        'should call addAudioSources, seek and play on audioHandler',
+        'should replace the queue and play on audioHandler',
         () async {
+          const initialIndex = 1;
+
           // Arrange
           when(
-            () => mockAudioHandler.addAudioSources(any()),
-          ).thenAnswer((_) async {});
-          when(
-            () => mockAudioHandler.seek(
-              Duration.zero,
-              index: any(named: 'index'),
+            () => mockAudioHandler.addAudioSources(
+              any(),
+              initialIndex: any(named: 'initialIndex'),
             ),
           ).thenAnswer((_) async {});
           when(() => mockAudioHandler.play()).thenAnswer((_) async {});
 
           // Act
-          await datasource.play([tSongModel], tIndex);
+          await datasource.play([tSongModel], initialIndex);
 
           // Assert
           verify(
-            () => mockAudioHandler.addAudioSources([tSongModel]),
-          ).called(1);
-          verify(
-            () => mockAudioHandler.seek(Duration.zero, index: tIndex),
+            () => mockAudioHandler.addAudioSources(
+              [tSongModel],
+              initialIndex: initialIndex,
+            ),
           ).called(1);
           verify(() => mockAudioHandler.play()).called(1);
         },
       );
 
       test('should prepare queue without auto playing when disabled', () async {
+        const initialIndex = 1;
+
         // Arrange
         when(
-          () => mockAudioHandler.addAudioSources(any()),
-        ).thenAnswer((_) async {});
-        when(
-          () => mockAudioHandler.seek(
-            Duration.zero,
-            index: any(named: 'index'),
+          () => mockAudioHandler.addAudioSources(
+            any(),
+            initialIndex: any(named: 'initialIndex'),
           ),
         ).thenAnswer((_) async {});
 
         // Act
-        await datasource.play([tSongModel], tIndex, autoPlay: false);
+        await datasource.play([tSongModel], initialIndex, autoPlay: false);
 
         // Assert
-        verify(() => mockAudioHandler.addAudioSources([tSongModel])).called(1);
         verify(
-          () => mockAudioHandler.seek(Duration.zero, index: tIndex),
+          () => mockAudioHandler.addAudioSources(
+            [tSongModel],
+            initialIndex: initialIndex,
+          ),
         ).called(1);
         verifyNever(() => mockAudioHandler.play());
       });
@@ -304,12 +304,14 @@ void main() {
             PreferencesKeys.recentlyPlayedSongIds,
           ),
         ).called(1);
-        final captured = verify(
-          () => mockPreferences.setStringList(
-            PreferencesKeys.recentlyPlayedSongIds,
-            captureAny(),
-          ),
-        ).captured.first as List<String>;
+        final captured =
+            verify(
+                  () => mockPreferences.setStringList(
+                    PreferencesKeys.recentlyPlayedSongIds,
+                    captureAny(),
+                  ),
+                ).captured.first
+                as List<String>;
         expect(captured.length, 50);
         expect(captured.first, '100');
       });
