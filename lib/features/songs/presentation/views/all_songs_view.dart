@@ -7,6 +7,7 @@ import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
+import 'package:music_player/features/songs/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
 
 class AllSongsView extends StatelessWidget {
@@ -60,6 +61,20 @@ class AllSongsView extends StatelessWidget {
             ? (isWideCompact ? 104.0 : 132.0)
             : 16.0;
 
+        Future<void> openSelectionMode() async {
+          await Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => AppRouteBlocScope.fromContext(
+                context: context,
+                child: SongsSelectionPage(
+                  title: context.localization.songs,
+                  availableSongs: songs,
+                ),
+              ),
+            ),
+          );
+        }
+
         return Column(
           children: [
             Padding(
@@ -90,6 +105,25 @@ class AllSongsView extends StatelessWidget {
                           vertical: 9,
                         ),
                         child: SongsCount(songCount: songs.length),
+                      ),
+                      const SizedBox(width: 8),
+                      Tooltip(
+                        message: context.localization.selectAll,
+                        child: GlassCard(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(18),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 11,
+                            vertical: 9,
+                          ),
+                          onTap: openSelectionMode,
+                          child: Icon(
+                            Icons.checklist_rounded,
+                            size: 18,
+                            color: context.theme.colorScheme.primary,
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 8),
                       FilterButton(
