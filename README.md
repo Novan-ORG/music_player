@@ -1,31 +1,42 @@
-# 🎵 Music Player
+# Music Player
 
-A beautifully crafted, offline music player built with **Flutter** that delivers a seamless listening experience. Enjoy your music with playlists, favorites, voice search, and more—all without internet.
+An offline Flutter music player focused on fast local playback, polished UI, and a smooth day-to-day listening flow. The app supports playlists, favorites, search, sleep timer, restored playback sessions, and now folder-based browsing for songs stored on the device.
 
 ![PR Checks](https://github.com/Novan-ORG/music_player/actions/workflows/pr-checks.yml/badge.svg)
 ![Build Artifacts](https://github.com/Novan-ORG/music_player/actions/workflows/publish-new-version.yml/badge.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
----
+## Version
 
-## ✨ Features
+Current app version: `1.0.0+13`
 
-- 🎵 **Local Playback** - Play music files directly from your device
-- 📱 **Intuitive UI** - Beautiful, user-friendly interface
-- 🔍 **Voice Search** - Find songs using voice commands
-- ❤️ **Favorites** - Save and organize your favorite tracks
-- 📝 **Playlists** - Create and manage custom playlists
-- 🌐 **Multi-Language** - English & Persian support
-- 🎨 **Dark Mode** - Easy on the eyes with custom theming
-- 🔊 **Background Playback** - Keep listening while using other apps
-- 📊 **Audio Visualization** - Watch dynamic waveform animations
-- ⏱️ **Sleep Timer** - Auto-stop after a set time
-- 🔄 **Repeat & Shuffle** - Control playback modes
-- 📤 **Share** - Share your favorite songs instantly
+## Highlights In 1.0.0
 
----
+- Browse your library by `Songs`, `Albums`, `Artists`, and `Folders`
+- Open any folder and see every song inside it
+- Enjoy a refreshed home, library, search, playlist, settings, and player experience
+- Resume your last playback session when you reopen the app
+- Use multi-select song actions, better snackbars, and cleaner bottom sheets
+- Switch between English and Persian with localized app copy
 
-## 📸 Screenshots
+## Features
+
+- Local offline playback from device storage
+- Library browsing by songs, albums, artists, and folders
+- Folder view with song counts per folder
+- Full search flow with quick insights and cleaner empty/error states
+- Favorites management
+- Playlist creation, rename, pinning, and song management
+- Recently played support
+- Restored playback session after reopening the app
+- Mini player, full player, queue, shuffle, repeat, and volume controls
+- Sleep timer
+- Voice search
+- Share songs and manage song actions from contextual menus
+- Multi-language support for English and Persian
+- Modern responsive UI across compact and larger layouts
+
+## Screenshots
 
 | | | |
 |---|---|---|
@@ -33,211 +44,195 @@ A beautifully crafted, offline music player built with **Flutter** that delivers
 | ![Music Player](screenshots/MusicPlayer.jpg) | ![Playlist](screenshots/PlayList.jpg) | ![Queue](screenshots/Queue.jpg) |
 | ![Sleep Timer](screenshots/SleepTimer.jpg) | ![Themes](screenshots/Themes.jpg) | |
 
+## Tech Stack
 
----
+### Core
 
-## 🛠️ Technologies Used
+- Flutter `3.32.8` via `fvm`
+- Dart `3.8.1`
+- `flutter_bloc` for state management
+- `get_it` for dependency injection
+- `equatable` for value equality
 
-### Framework & Language
-- **Flutter** (3.8.1+) - Cross-platform mobile development
-- **Dart** - Programming language
+### Audio And Device Access
 
-### State Management & DI
-- **flutter_bloc** - BLoC pattern for state management
-- **get_it** - Service locator and dependency injection
-- **equatable** - Value equality for objects
+- `just_audio`
+- `audio_service`
+- `audio_session`
+- `on_audio_query_pluse`
+- `permission_handler`
+- `volume_controller`
 
-### Audio Engine
-- **just_audio** - Audio playback engine
-- **audio_service** - Background audio handling
-- **audio_session** - Session management
-- **on_audio_query_pluse** - Device audio file queries
-- **wave_player** - Waveform visualization
-- **volume_controller** - Volume control
+### UI And Utilities
 
-### UI & UX
-- **font_awesome_flutter** - Icon library
-- **auto_size_text** - Responsive text scaling
-- **marquee** - Text animations
-- **scrollable_positioned_list** - Advanced scrolling
-- **duration_picker** - Time selection widget
+- `shared_preferences`
+- `speech_to_text`
+- `share_plus`
+- `package_info_plus`
+- `scrollable_positioned_list`
+- `duration_picker`
 
-### Utilities
-- **speech_to_text** - Voice search
-- **permission_handler** - Runtime permissions
-- **shared_preferences** - Local storage
+## Project Structure
 
----
-
-## 📁 Project Structure
-
-```
+```text
 lib/
-├── core/                          # Shared logic and resources
-│   ├── commands/                  # Command pattern
-│   ├── constants/                 # Global constants
-│   ├── data/                      # Core data layer
-│   ├── domain/                    # Business logic
-│   ├── errors/                    # Error handling
-│   ├── services/                  # Core services
-│   ├── theme/                     # Theming
-│   ├── utils/                     # Helpers
-│   └── widgets/                   # Reusable widgets
-├── features/                      # Feature modules
-│   ├── favorite/                  # Favorites management
-│   ├── home/                      # Home screen
-│   ├── music_player/              # Player screen
-│   ├── playlist/                  # Playlist management
-│   ├── search/                    # Search functionality
-│   ├── settings/                  # App settings
-│   └── songs/                     # Music library
-├── injection/                     # Dependency setup
-├── localization/                  # Translations
-└── main.dart                      # Entry point
+├── core/
+│   ├── commands/
+│   ├── constants/
+│   ├── data/
+│   ├── domain/
+│   ├── mixins/
+│   ├── services/
+│   ├── theme/
+│   ├── utils/
+│   ├── views/
+│   └── widgets/
+├── features/
+│   ├── favorite/
+│   ├── home/
+│   ├── music_plyer/
+│   ├── playlist/
+│   ├── search/
+│   ├── settings/
+│   └── songs/
+├── injection/
+├── localization/
+└── main.dart
 ```
 
----
+## Architecture
 
-## 🏗️ Architecture
+The app follows a clean feature-first structure with:
 
-This project implements **Clean Architecture** with **BLoC** pattern:
+- Presentation layer for pages, widgets, and BLoCs
+- Domain layer for entities, repositories, and use cases
+- Data layer for datasource and repository implementations
 
-| Layer | Purpose |
-|-------|---------|
-| **Presentation** | UI & BLoC state management |
-| **Domain** | Business logic & use cases |
-| **Data** | Repositories & data sources |
+Patterns used across the project:
 
-**Key Patterns:** BLoC, Repository, Dependency Injection, Command Pattern
+- BLoC
+- Repository
+- Dependency Injection
+- Command pattern for undoable actions
 
----
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Requirements
-- Flutter 3.32.8+
-- Dart 3.8.1+
-- Android Studio / Xcode
-- Physical device or emulator
+
+- `fvm`
+- Flutter `3.32.8`
+- Dart `3.8.1`
+- Android Studio or VS Code
+- Android device or emulator
 
 ### Setup
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Novan-ORG/music_player.git
-   cd music_player
-   ```
-
-2. **Install dependencies**
-   ```bash
-   flutter pub get
-   ```
-
-3. **Configure environment**
-   ```bash
-   # Create an empty .env file
-   touch .env
-   ```
-
-4. **Run the app**
-   ```bash
-   flutter run
-   ```
-
-### Build for Production
+1. Clone the repository
 
 ```bash
-# Android APK
-flutter build apk --release
-
-# Android App Bundle
-flutter build appbundle --release
-
-# iOS (Coming Soon)
-# flutter build ios --release
+git clone https://github.com/Novan-ORG/music_player.git
+cd music_player
 ```
 
-> **Note:** Currently optimized for **Android**. iOS support coming soon.
+2. Install the pinned Flutter SDK
 
+```bash
+fvm install
+```
 
-### Permissions
-- **Storage** - Read audio files
-- **Microphone** - Voice search (optional)
+3. Get packages
 
----
+```bash
+fvm flutter pub get
+```
 
-## 📥 Downloads
+4. Create the environment file
+
+```bash
+touch .env
+```
+
+5. Run the app
+
+```bash
+fvm flutter run
+```
+
+## Localization
+
+The app currently supports:
+
+- English
+- Persian
+
+When adding new strings:
+
+```bash
+fvm flutter gen-l10n
+```
+
+## Quality Checks
+
+Run the main checks with `fvm`:
+
+```bash
+fvm flutter analyze
+fvm flutter test
+```
+
+## Build
+
+```bash
+fvm flutter build apk --release
+fvm flutter build appbundle --release
+```
+
+The project is primarily optimized for Android.
+
+## Permissions
+
+- Storage and media access for reading device audio files
+- Microphone for optional voice search
+- Extra storage management permission when deleting songs from device storage
+
+## Downloads
+
 | Platform | Download |
-|----------|----------|
-| **GitHub Releases** | [![GitHub](https://img.shields.io/badge/Download-APK-blue?logo=github)](https://github.com/Novan-ORG/music_player/releases/latest) |
-| **CafeBazar** | [![CafeBazar](https://img.shields.io/badge/Download-CafeBazar-green)](https://cafebazaar.ir/app/com.taleb.music_player) |
-| **Myket** | [![Myket](https://img.shields.io/badge/Download-Myket-orange)](https://myket.ir/app/com.taleb.music_player) |
+|---|---|
+| GitHub Releases | [Latest release](https://github.com/Novan-ORG/music_player/releases/latest) |
+| CafeBazar | [com.taleb.music_player](https://cafebazaar.ir/app/com.taleb.music_player) |
+| Myket | [com.taleb.music_player](https://myket.ir/app/com.taleb.music_player) |
 
-**APK Architectures** (from GitHub Releases):
-| Architecture | Download |
-|--------------|----------|
-| **ARM64 (arm64-v8a)** | [![ARM64](https://img.shields.io/badge/ARM64-APK-blue?logo=android)](https://github.com/Novan-ORG/music_player/releases/latest) |
-| **ARMv7 (armeabi-v7a)** | [![ARMv7](https://img.shields.io/badge/ARMv7-APK-blue?logo=android)](https://github.com/Novan-ORG/music_player/releases/latest) |
-| **x86** | [![x86](https://img.shields.io/badge/x86-APK-blue?logo=android)](https://github.com/Novan-ORG/music_player/releases/latest) |
-| **x86_64** | [![x86_64](https://img.shields.io/badge/x86_64-APK-blue?logo=android)](https://github.com/Novan-ORG/music_player/releases/latest) |
-| **Universal** | [![Universal](https://img.shields.io/badge/Universal-APK-green?logo=android)](https://github.com/Novan-ORG/music_player/releases/latest) |
+## Contributing
 
-> All APKs are available in the [Releases](https://github.com/Novan-ORG/music_player/releases) page.
-
----
-
-## 📊 Code Quality
-
-```bash
-# Run analysis
-flutter analyze
-
-# Run tests
-flutter test
-```
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Follow these steps:
+Contributions are welcome.
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/YourFeature`
-3. Commit changes: `git commit -m 'Add YourFeature'`
-4. Push to branch: `git push origin feature/YourFeature`
-5. Open a Pull Request
+2. Create a branch
+3. Make your changes
+4. Run `fvm flutter analyze` and `fvm flutter test`
+5. Open a pull request
 
-For detailed contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
+More details are available in [CONTRIBUTING.md](CONTRIBUTING.md).
 
----
+## License
 
-## 📄 License
+This project is licensed under the [MIT License](LICENSE).
 
-Licensed under the **MIT License** - see [LICENSE](LICENSE) for details.
+## Author And Contributors
 
----
+Author:
 
-## 👨‍💻 Author & Contributors
+- [Taleb Rafiepour](https://github.com/TalebRafiepour)
 
-**Taleb Rafiepour** - [GitHub](https://github.com/TalebRafiepour)
+Contributors:
 
-**Contributors:**
 - [@elhamebrahimpour](https://github.com/elhamebrahimpour)
-- [@carozamani](https://github.com/carozamani) - UI/UX Design
+- [@carozamani](https://github.com/carozamani)
 
----
+## Support
 
-## 🙏 Acknowledgments
+- Report issues: [GitHub Issues](https://github.com/Novan-ORG/music_player/issues)
+- Follow releases: [GitHub Releases](https://github.com/Novan-ORG/music_player/releases)
 
-- Flutter team for the excellent framework
-- All open-source package maintainers
-
----
-
-## 📞 Support
-
-Found an issue? [Open a GitHub issue](https://github.com/Novan-ORG/music_player/issues)
-
----
-Made with ❤️ by **NOVAN** team using Flutter
+Made by the NOVAN team with Flutter.
