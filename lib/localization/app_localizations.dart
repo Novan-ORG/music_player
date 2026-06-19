@@ -956,6 +956,54 @@ abstract class AppLocalizations {
   /// **'Create First Playlist'**
   String get createFirstPlaylist;
 
+  /// No description provided for @playlistHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Build mood sets, pin your go-to collections, and jump back into recent listens.'**
+  String get playlistHeroSubtitle;
+
+  /// No description provided for @emptyPlaylistsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No playlists yet'**
+  String get emptyPlaylistsTitle;
+
+  /// No description provided for @emptyPlaylistsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first playlist to group songs for workouts, quiet nights, and everything in between.'**
+  String get emptyPlaylistsMessage;
+
+  /// No description provided for @playlistPinnedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your favorite collections close and open recent sessions in one tap.'**
+  String get playlistPinnedHint;
+
+  /// No description provided for @playlistRecentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Jump back into your latest listening session.'**
+  String get playlistRecentHint;
+
+  /// No description provided for @pinPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin playlist'**
+  String get pinPlaylist;
+
+  /// No description provided for @unpinPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpin playlist'**
+  String get unpinPlaylist;
+
+  /// No description provided for @pinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned'**
+  String get pinned;
+
   /// No description provided for @song.
   ///
   /// In en, this message translates to:
@@ -1157,7 +1205,7 @@ abstract class AppLocalizations {
   /// Favorite songs page localization
   ///
   /// In en, this message translates to:
-  /// **''**
+  /// **'Keep the songs you love close and jump back into them faster.'**
   String get favoriteSongsPage;
 
   /// No description provided for @clearAll.

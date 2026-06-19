@@ -4,7 +4,6 @@ import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/services/services.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/favorite.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
 /// Mixin that provides song sharing functionality
@@ -54,15 +53,23 @@ mixin SongSharingMixin {
 /// Mixin that provides ringtone setting functionality
 mixin RingtoneMixin<T extends StatefulWidget> on State<T> {
   Future<void> setAsRingtone(String songPath) async {
-    final hasPermission = await Permission.systemAlertWindow
-        .request()
-        .isGranted;
+    final hasPermission = await RingtoneSet.canWriteSettings();
 
     if (hasPermission) {
-      await RingtoneSet.setRingtone(songPath);
-    } else {
-      if (!mounted) return;
+      await _applyRingtone(songPath);
+      return;
+    }
+
+    final didOpenSettings = await RingtoneSet.openWriteSettings();
+    if (!didOpenSettings && mounted) {
       _showPermissionDeniedMessage();
+    }
+  }
+
+  Future<void> _applyRingtone(String songPath) async {
+    final didSetRingtone = await RingtoneSet.setRingtone(songPath);
+    if (!didSetRingtone && mounted) {
+      _showRingtoneFailedMessage();
     }
   }
 
@@ -70,6 +77,14 @@ mixin RingtoneMixin<T extends StatefulWidget> on State<T> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(context.localization.permissionDeniedForRingtone),
+      ),
+    );
+  }
+
+  void _showRingtoneFailedMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(context.localization.error),
       ),
     );
   }

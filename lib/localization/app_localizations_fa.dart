@@ -472,6 +472,33 @@ class AppLocalizationsFa extends AppLocalizations {
   String get createFirstPlaylist => 'ایجاد اولین لیست پخش';
 
   @override
+  String get playlistHeroSubtitle =>
+      'لیست های حال و هوایی بسازید، مجموعه های محبوبتان را سنجاق کنید و سریع به پخش های اخیر برگردید.';
+
+  @override
+  String get emptyPlaylistsTitle => 'هنوز لیست پخشی ندارید';
+
+  @override
+  String get emptyPlaylistsMessage =>
+      'اولین لیست پخش خود را بسازید تا موزیک هایتان را برای ورزش، شب های آرام و هر حس دیگری کنار هم نگه دارید.';
+
+  @override
+  String get playlistPinnedHint =>
+      'لیست های محبوبتان را همیشه دم دست نگه دارید و با یک لمس به پخش های اخیر برگردید.';
+
+  @override
+  String get playlistRecentHint => 'سریع به آخرین جلسه پخش خود برگردید.';
+
+  @override
+  String get pinPlaylist => 'سنجاق کردن لیست پخش';
+
+  @override
+  String get unpinPlaylist => 'برداشتن سنجاق لیست پخش';
+
+  @override
+  String get pinned => 'سنجاق شده';
+
+  @override
   String get song => 'موزیک';
 
   @override
@@ -576,7 +603,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get cancelTimer => 'لغو تایمر';
 
   @override
-  String get favoriteSongsPage => '';
+  String get favoriteSongsPage =>
+      'موزیک های محبوب خود را نزدیک نگه دارید و سریع تر به آن ها برگردید.';
 
   @override
   String get clearAll => 'حذف همه';

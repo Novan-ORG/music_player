@@ -472,6 +472,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createFirstPlaylist => 'Create First Playlist';
 
   @override
+  String get playlistHeroSubtitle =>
+      'Build mood sets, pin your go-to collections, and jump back into recent listens.';
+
+  @override
+  String get emptyPlaylistsTitle => 'No playlists yet';
+
+  @override
+  String get emptyPlaylistsMessage =>
+      'Create your first playlist to group songs for workouts, quiet nights, and everything in between.';
+
+  @override
+  String get playlistPinnedHint =>
+      'Keep your favorite collections close and open recent sessions in one tap.';
+
+  @override
+  String get playlistRecentHint =>
+      'Jump back into your latest listening session.';
+
+  @override
+  String get pinPlaylist => 'Pin playlist';
+
+  @override
+  String get unpinPlaylist => 'Unpin playlist';
+
+  @override
+  String get pinned => 'Pinned';
+
+  @override
   String get song => 'Song';
 
   @override
@@ -576,7 +604,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelTimer => 'Cancel Timer';
 
   @override
-  String get favoriteSongsPage => '';
+  String get favoriteSongsPage =>
+      'Keep the songs you love close and jump back into them faster.';
 
   @override
   String get clearAll => 'Clear All';

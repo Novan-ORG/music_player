@@ -232,6 +232,14 @@
     },
     "noPlaylistFound": "هیچ لیست پخشی پیدا نشد",
     "createFirstPlaylist": "ایجاد اولین لیست پخش",
+    "playlistHeroSubtitle": "لیست های حال و هوایی بسازید، مجموعه های محبوبتان را سنجاق کنید و سریع به پخش های اخیر برگردید.",
+    "emptyPlaylistsTitle": "هنوز لیست پخشی ندارید",
+    "emptyPlaylistsMessage": "اولین لیست پخش خود را بسازید تا موزیک هایتان را برای ورزش، شب های آرام و هر حس دیگری کنار هم نگه دارید.",
+    "playlistPinnedHint": "لیست های محبوبتان را همیشه دم دست نگه دارید و با یک لمس به پخش های اخیر برگردید.",
+    "playlistRecentHint": "سریع به آخرین جلسه پخش خود برگردید.",
+    "pinPlaylist": "سنجاق کردن لیست پخش",
+    "unpinPlaylist": "برداشتن سنجاق لیست پخش",
+    "pinned": "سنجاق شده",
     "song": "موزیک",
     "s": "",
     "createNewPlaylist": "ایجاد لیست پخش جدید",
@@ -274,7 +282,7 @@
     "sleepTimerActive": "تایمر خواب فعال است",
     "cancelTimer": "لغو تایمر",
 
-    "favoriteSongsPage": "",
+    "favoriteSongsPage": "موزیک های محبوب خود را نزدیک نگه دارید و سریع تر به آن ها برگردید.",
     "@favoriteSongsPage": {
         "description": "محلی سازی صفحه موزیک های محبوب"
     },

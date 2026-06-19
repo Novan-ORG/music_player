@@ -34,9 +34,14 @@ class CreatePlaylistSheet extends StatefulWidget {
 
 class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
   late final TextEditingController _controller;
+  late final FocusNode _focusNode;
   bool _isValid = false;
 
   bool get _isEditing => widget.initialPlaylist != null;
+  String get _trimmedName => _controller.text.trim();
+  bool get _isChanged =>
+      !_isEditing || _trimmedName != widget.initialPlaylist!.name.trim();
+  bool get _canSubmit => _isValid && _isChanged;
 
   @override
   void initState() {
@@ -44,12 +49,14 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
     _controller = TextEditingController(
       text: widget.initialPlaylist?.name ?? '',
     );
+    _focusNode = FocusNode();
     _isValid = _controller.text.trim().isNotEmpty;
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -60,17 +67,15 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
   }
 
   void _createOrUpdatePlaylist() {
-    final name = _controller.text.trim();
-    if (name.isEmpty) return;
+    final name = _trimmedName;
+    if (!_canSubmit || name.isEmpty) return;
     final bloc = context.read<PlayListBloc>();
     if (_isEditing) {
-      // Update existing playlist (keep the same id)
       final id = widget.initialPlaylist!.id;
       bloc.add(
         RenamePlayListEvent(id, name),
       );
     } else {
-      // Add new playlist
       bloc.add(
         CreatePlayListEvent(name),
       );
@@ -80,130 +85,261 @@ class _CreatePlaylistSheetState extends State<CreatePlaylistSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = context.theme;
     final isDark = theme.brightness == Brightness.dark;
 
     final title = _isEditing
         ? context.localization.renamePlaylist
         : context.localization.createNewPlaylist;
-    final actionIcon = _isEditing ? Icons.edit : Icons.add;
+    final submitLabel = _isEditing
+        ? context.localization.rename
+        : context.localization.createPlaylist;
+    final actionIcon = _isEditing
+        ? Icons.edit_rounded
+        : Icons.playlist_add_rounded;
+    final previewName = _trimmedName.isEmpty
+        ? context.localization.playlistName
+        : _trimmedName;
+    final mediaQuery = MediaQuery.of(context);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: DraggableScrollableSheet(
-          initialChildSize: 0.45,
-          minChildSize: 0.35,
-          maxChildSize: 0.7,
-          expand: false,
-          builder: (context, scrollController) => Container(
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(24),
+      child: AnimatedPadding(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOutCubic,
+        padding: EdgeInsets.only(bottom: mediaQuery.viewInsets.bottom),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 680),
+            child: Container(
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surface,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(30),
+                ),
+                border: Border.all(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.28 : 0.14),
+                    blurRadius: 34,
+                    offset: const Offset(0, -12),
+                  ),
+                ],
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: isDark ? Colors.white30 : Colors.white60,
-                ),
-                BoxShadow(
-                  color: theme.colorScheme.surface,
-                  spreadRadius: -3,
-                  blurRadius: 8,
-                ),
-              ],
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 20,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        color: isDark ? Colors.white : Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+              child: SafeArea(
+                top: false,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 48,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.14,
+                            ),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                        ),
                       ),
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: Icon(
-                        Icons.keyboard_arrow_down,
-                        color: isDark ? Colors.white : Colors.black,
+                      const SizedBox(height: 14),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 52,
+                            height: 52,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18),
+                              gradient: LinearGradient(
+                                begin: AlignmentDirectional.topStart,
+                                end: AlignmentDirectional.bottomEnd,
+                                colors: [
+                                  theme.colorScheme.primary.withValues(
+                                    alpha: 0.22,
+                                  ),
+                                  const Color(
+                                    0xFF00BFA6,
+                                  ).withValues(alpha: 0.18),
+                                ],
+                              ),
+                            ),
+                            child: Icon(
+                              actionIcon,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  title,
+                                  style: theme.textTheme.headlineSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  previewName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: theme.colorScheme.onSurface
+                                        .withValues(
+                                          alpha: 0.6,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          IconButton(
+                            onPressed: () => Navigator.pop(context),
+                            tooltip: MaterialLocalizations.of(
+                              context,
+                            ).closeButtonTooltip,
+                            icon: const Icon(Icons.close_rounded),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
+                      const SizedBox(height: 22),
+                      Container(
+                        padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? Colors.white.withValues(alpha: 0.1)
-                              : Colors.black.withValues(alpha: 0.1),
-                          borderRadius: const BorderRadiusDirectional.only(
-                            topStart: Radius.circular(12),
-                            bottomStart: Radius.circular(12),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.04,
                           ),
-                        ),
-                        child: TextField(
-                          controller: _controller,
-                          style: TextStyle(
-                            color: isDark ? Colors.white : Colors.black,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: context.localization.playlistName,
-                            hintStyle: TextStyle(
-                              color: isDark ? Colors.white54 : Colors.black54,
-                            ),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 16,
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.06,
                             ),
                           ),
-                          onChanged: _onChanged,
-                          autofocus: true,
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 68,
+                              height: 68,
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.onSurface,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Icon(
+                                Icons.add_rounded,
+                                color: Colors.white,
+                                size: 32,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: TextField(
+                                controller: _controller,
+                                focusNode: _focusNode,
+                                autofocus: true,
+                                maxLength: 40,
+                                textInputAction: TextInputAction.done,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                decoration: InputDecoration(
+                                  labelText: context.localization.playlistName,
+                                  hintText: context.localization.playlistName,
+                                  counterText: '',
+                                  filled: true,
+                                  fillColor: theme.colorScheme.surface,
+                                  prefixIcon: const Icon(
+                                    Icons.queue_music_rounded,
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 18,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(
+                                      color: theme.colorScheme.onSurface
+                                          .withValues(
+                                            alpha: 0.08,
+                                          ),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(
+                                      color: theme.colorScheme.primary,
+                                      width: 1.4,
+                                    ),
+                                  ),
+                                ),
+                                onChanged: _onChanged,
+                                onSubmitted: (_) => _createOrUpdatePlaylist(),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    InkWell(
-                      onTap: () {
-                        if (_isValid) {
-                          _createOrUpdatePlaylist();
-                        }
-                      },
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        height: 56,
-                        width: 56,
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadiusDirectional.only(
-                            topEnd: Radius.circular(12),
-                            bottomEnd: Radius.circular(12),
+                      const SizedBox(height: 18),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () => Navigator.pop(context),
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: const Size(0, 54),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                              ),
+                              child: Text(context.localization.cancel),
+                            ),
                           ),
-                        ),
-                        child: Icon(actionIcon, color: Colors.white),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            flex: 2,
+                            child: FilledButton.icon(
+                              onPressed: _canSubmit
+                                  ? _createOrUpdatePlaylist
+                                  : null,
+                              icon: Icon(
+                                _isEditing
+                                    ? Icons.check_rounded
+                                    : Icons.playlist_add_rounded,
+                                size: 20,
+                              ),
+                              label: Text(submitLabel),
+                              style: FilledButton.styleFrom(
+                                minimumSize: const Size(0, 54),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                textStyle: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 20),
-              ],
+              ),
             ),
           ),
         ),

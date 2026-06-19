@@ -233,6 +233,14 @@
     },
     "noPlaylistFound": "No Playlists Found",
     "createFirstPlaylist": "Create First Playlist",
+    "playlistHeroSubtitle": "Build mood sets, pin your go-to collections, and jump back into recent listens.",
+    "emptyPlaylistsTitle": "No playlists yet",
+    "emptyPlaylistsMessage": "Create your first playlist to group songs for workouts, quiet nights, and everything in between.",
+    "playlistPinnedHint": "Keep your favorite collections close and open recent sessions in one tap.",
+    "playlistRecentHint": "Jump back into your latest listening session.",
+    "pinPlaylist": "Pin playlist",
+    "unpinPlaylist": "Unpin playlist",
+    "pinned": "Pinned",
     "song": "Song",
     "s": "s",
     "createNewPlaylist": "Create New Playlist",
@@ -275,7 +283,7 @@
     "sleepTimerActive": "Sleep Timer is Active",
     "cancelTimer": "Cancel Timer",
 
-    "favoriteSongsPage": "",
+    "favoriteSongsPage": "Keep the songs you love close and jump back into them faster.",
     "@favoriteSongsPage": {
         "description": "Favorite songs page localization"
     },

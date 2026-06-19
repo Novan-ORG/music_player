@@ -8,17 +8,38 @@ import 'package:flutter/services.dart';
 class RingtoneSet {
   RingtoneSet._();
 
+  static const MethodChannel _channel = MethodChannel(
+    'com.taleb.music_player/ringtone_set',
+  );
+
   static Future<bool> setRingtone(String path) async {
     try {
-      const channel = MethodChannel(
-        'com.taleb.music_player/ringtone_set',
-      );
-      final result = await channel.invokeMethod('set_ringtone', {
+      final result = await _channel.invokeMethod<bool>('set_ringtone', {
         'filePath': path,
       });
-      return result == true;
+      return result ?? false;
     } on Exception catch (e) {
       debugPrint('Error setting ringtone: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> canWriteSettings() async {
+    try {
+      final result = await _channel.invokeMethod<bool>('can_write_settings');
+      return result ?? false;
+    } on Exception catch (e) {
+      debugPrint('Error checking write settings permission: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> openWriteSettings() async {
+    try {
+      final result = await _channel.invokeMethod<bool>('open_write_settings');
+      return result ?? false;
+    } on Exception catch (e) {
+      debugPrint('Error opening write settings permission screen: $e');
       return false;
     }
   }
