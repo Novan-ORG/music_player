@@ -20,6 +20,10 @@ class GlassCard extends StatelessWidget {
     this.sigmaY = 10,
     this.onTap,
     this.onLongPress,
+    this.gradient,
+    this.borderColor,
+    this.borderWidth,
+    this.boxShadow,
     super.key,
   });
 
@@ -31,10 +35,40 @@ class GlassCard extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final EdgeInsets padding;
+  final Gradient? gradient;
+  final Color? borderColor;
+  final double? borderWidth;
+  final List<BoxShadow>? boxShadow;
 
   @override
   Widget build(BuildContext context) {
     final isDark = context.theme.brightness == Brightness.dark;
+    final defaultBorderColor = isDark
+        ? Colors.white.withValues(alpha: 0.2)
+        : Colors.black.withValues(alpha: 0.12);
+    final defaultGradient = LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: isDark
+          ? [
+              Colors.white.withValues(alpha: 0.08),
+              Colors.white.withValues(alpha: 0.04),
+            ]
+          : [
+              Colors.white.withValues(alpha: 0.82),
+              Colors.white.withValues(alpha: 0.58),
+            ],
+    );
+    final defaultBoxShadow = [
+      BoxShadow(
+        color: isDark
+            ? Colors.black.withValues(alpha: 0.3)
+            : Colors.black.withValues(alpha: 0.08),
+        blurRadius: isDark ? 20 : 18,
+        offset: Offset(0, isDark ? 8 : 7),
+      ),
+    ];
+
     return Padding(
       padding: margin,
       child: ClipRRect(
@@ -46,33 +80,11 @@ class GlassCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: borderRadius,
               border: Border.all(
-                color: isDark
-                    ? Colors.white.withValues(alpha: 0.2)
-                    : Colors.black.withValues(alpha: 0.1),
-                width: 0.25,
+                color: borderColor ?? defaultBorderColor,
+                width: borderWidth ?? (isDark ? 0.25 : 0.7),
               ),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: isDark
-                    ? [
-                        Colors.white.withValues(alpha: 0.08),
-                        Colors.white.withValues(alpha: 0.04),
-                      ]
-                    : [
-                        Colors.white.withValues(alpha: 0.28),
-                        Colors.white.withValues(alpha: 0.08),
-                      ],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: isDark
-                      ? Colors.black.withValues(alpha: 0.3)
-                      : Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ],
+              gradient: gradient ?? defaultGradient,
+              boxShadow: boxShadow ?? defaultBoxShadow,
             ),
             child: Material(
               color: Colors.transparent,

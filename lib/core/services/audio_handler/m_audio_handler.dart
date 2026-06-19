@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_player/core/services/logger/logger.dart';
 import 'package:on_audio_query_pluse/on_audio_query.dart';
@@ -16,10 +17,16 @@ import 'package:on_audio_query_pluse/on_audio_query.dart';
 /// - Playback state streaming
 class MAudioHandler extends BaseAudioHandler with SeekHandler {
   MAudioHandler(this._player) {
+    unawaited(_configureAudioSession());
     unawaited(
       _player.playbackEventStream.map(_transformEvent).pipe(playbackState),
     );
-    _player.currentIndexStream.listen((currentIndex) {
+    _errorSubscription = _player.errorStream.listen((error) {
+      Logger.error('Audio playback error: ${error.message}', error);
+    });
+    _currentIndexSubscription = _player.currentIndexStream.listen((
+      currentIndex,
+    ) {
       if (currentIndex != null && queue.value.length > currentIndex) {
         if (mediaItem.value?.id != queue.value[currentIndex].id) {
           mediaItem.add(queue.value[currentIndex]);
@@ -29,8 +36,27 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
   }
 
   Timer? _timer;
-
   final AudioPlayer _player;
+  late final StreamSubscription<PlayerException> _errorSubscription;
+  late final StreamSubscription<int?> _currentIndexSubscription;
+  bool _isDisposed = false;
+
+  Future<void> _configureAudioSession() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.music());
+  }
+
+  AudioSource _createAudioSourceForSong(
+    SongModel song, {
+    required MediaItem mediaItem,
+  }) {
+    final uri = Uri.tryParse(song.data);
+    if (uri != null && uri.hasScheme) {
+      return AudioSource.uri(uri, tag: mediaItem);
+    }
+
+    return AudioSource.file(song.data, tag: mediaItem);
+  }
 
   bool get playing => _player.playing;
 
@@ -55,7 +81,13 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
   void setLoopMode(LoopMode loopMode) => _player.setLoopMode(loopMode);
 
   Future<void> dispose() async {
+    if (_isDisposed) {
+      return;
+    }
+    _isDisposed = true;
     _timer?.cancel();
+    await _errorSubscription.cancel();
+    await _currentIndexSubscription.cancel();
     await _player.dispose();
   }
 
@@ -81,10 +113,28 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
     await _player.setShuffleModeEnabled(enabled);
   }
 
-  Future<void> addAudioSources(List<SongModel> songs) async {
+  Future<void> addAudioSources(
+    List<SongModel> songs, {
+    int initialIndex = 0,
+    Duration initialPosition = Duration.zero,
+  }) async {
+    if (_isDisposed) {
+      return;
+    }
+
+    if (songs.isEmpty) {
+      await stop();
+      return;
+    }
+
     final mediaItems = <MediaItem>[];
 
     try {
+      await _player.stop();
+      await _player.clearAudioSources();
+      queue.add(const []);
+      mediaItem.add(null);
+
       await _player.setAudioSources(
         songs.map((song) {
           final mediaItem = MediaItem(
@@ -98,12 +148,18 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
             ),
           );
           mediaItems.add(mediaItem);
-          return AudioSource.uri(Uri.parse(song.data));
+          return _createAudioSourceForSong(song, mediaItem: mediaItem);
         }).toList(),
+        initialIndex: initialIndex,
+        initialPosition: initialPosition,
       );
       await addQueueItems(mediaItems);
-    } on Exception catch (e) {
-      Logger.error('Error setting audio sources: $e');
+      if (initialIndex >= 0 && initialIndex < mediaItems.length) {
+        mediaItem.add(mediaItems[initialIndex]);
+      }
+    } on Exception catch (e, stackTrace) {
+      Logger.error('Error setting audio sources: $e', e, stackTrace);
+      rethrow;
     }
   }
 
@@ -159,5 +215,11 @@ class MAudioHandler extends BaseAudioHandler with SeekHandler {
   Future<void> skipToPrevious() => _player.seekToPrevious();
 
   @override
-  Future<void> stop() => _player.stop();
+  Future<void> stop() async {
+    _timer?.cancel();
+    await _player.stop();
+    await _player.clearAudioSources();
+    queue.add(const []);
+    mediaItem.add(null);
+  }
 }

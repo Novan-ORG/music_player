@@ -6,14 +6,11 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:music_player/app.dart';
 import 'package:music_player/core/services/logger/logger.dart';
 import 'package:music_player/injection/service_locator.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 /// Application entry point.
 ///
 /// Initializes the app with error handling, dependency injection,
-/// environment configuration, and crash reporting via Sentry.
-///
-/// All uncaught errors are logged and reported to Sentry for monitoring.
+/// environment configuration, and top-level error logging.
 void main() {
   runZonedGuarded(
     () async {
@@ -27,27 +24,9 @@ void main() {
 
       // Load environment variables
       await dotenv.load();
-      final sentryDSN = dotenv.get('SENTRY_DSN');
-
-      // Initialize Sentry for crash reporting
-      await SentryFlutter.init(
-        (options) {
-          options
-            ..dsn = sentryDSN
-            ..tracesSampleRate = 1.0
-            ..sendDefaultPii = true
-            ..debug = true
-            ..profilesSampleRate = 1.0;
-        },
-        appRunner: () => runApp(SentryWidget(child: const MusicPlayerApp())),
-      );
+      runApp(const MusicPlayerApp());
     },
     (Object error, StackTrace stack) {
-      // Catch and report all uncaught errors
-      Sentry.captureException(
-        error,
-        stackTrace: stack,
-      );
       Logger.error('Uncaught error: $error', error, stack);
     },
   );

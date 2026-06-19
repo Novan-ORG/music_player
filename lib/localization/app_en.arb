@@ -20,12 +20,14 @@
     "sleepTimer": "Sleep Timer",
     "minutes": "Minutes",
     "hours": "Hours",
+    "seconds": "Seconds",
     "off": "Off",
     "min15":"15 Min",
     "min30": "30 Min",
     "hour1": "1 hour",
     "custom": "Custom",
     "support": "Support",
+    "telegram": "Telegram",
     "sendFeedbackOrSuggestion":"Send Feedback or Suggestions",
     "errorOpenEmail": "Could not open email app.",
     "aboutUs": "About Us",
@@ -36,6 +38,12 @@
     "seeMore": "See more",
     "seeLess": "See Less",
     "createdBy": "Made with ❤️ by Novan team",
+    "brandName": "Free Music Player",
+    "brandTagline": "Bold sound, effortless control.",
+    "brandSplashMessage": "Loading your library with a cleaner, sharper listening experience.",
+    "brandSettingsMessage": "Shape the player around your language, theme, and listening flow.",
+    "brandAboutMessage": "Designed by the Novan team to make everyday listening feel polished, playful, and completely free.",
+    "feedbackEmailSubject": "Free Music Player Feedback",
 
     "homePage": "",
     "@homePage": {
@@ -58,7 +66,96 @@
     "deleteFromDevice": "Delete from device",
     "favoriteSongs": "Favorite Songs",
     "allSongs": "All Songs",
+    "yourLibrary": "Your Library",
+    "libraryHeroSubtitle": "Shuffle the room, search fast, and jump back into your sound.",
+    "startMix": "Start Mix",
+    "libraryReady": "Ready to play",
     "searchSongs": "Search Songs",
+    "searchHeroSubtitle": "Find by title, artist, or album and jump straight into the next track.",
+    "searchHint": "Search by song, artist, or album",
+    "searchMatchesLabel": "Matches",
+    "searchLibraryLabel": "Library",
+    "searchResultsCount": "{count} results",
+    "@searchResultsCount": {
+        "description": "Summary label showing number of search results",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "searchSongsReadyCount": "{count} songs ready",
+    "@searchSongsReadyCount": {
+        "description": "Summary label showing number of songs ready to browse",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "searchInstantSearch": "Instant search",
+    "searchQuickPicks": "Quick picks",
+    "searchStartVoiceSearch": "Start voice search",
+    "searchStopVoiceSearch": "Stop voice search",
+    "searchInMotionTitle": "Search in motion",
+    "searchLibraryGlanceTitle": "Your library at a glance",
+    "searchLiveResultsMessage": "Matching tracks update live while you type or use voice search.",
+    "searchBrowseLibraryMessage": "Browse everything quickly, or jump straight to an artist, album, or favorite title.",
+    "searchVisibleNow": "Visible now",
+    "searchTryAnotherAngle": "Try another angle",
+    "searchTapToExplore": "Tap to explore",
+    "searchResultsFor": "Results for \"{query}\"",
+    "@searchResultsFor": {
+        "description": "Header for search results",
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "searchMatchedSongsSummary": "{count} of {total} tracks matched your search",
+    "@searchMatchedSongsSummary": {
+        "description": "Summary of matched search results",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "searchTracksReadySummary": "{total} tracks ready to browse",
+    "@searchTracksReadySummary": {
+        "description": "Summary when showing all songs on the search page",
+        "placeholders": {
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "searchNoMatchesTitle": "No matches for \"{query}\"",
+    "@searchNoMatchesTitle": {
+        "description": "Title for empty search results",
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "searchNoMatchesMessage": "Try a song title, a different spelling, or switch to one of the quick picks below.",
+    "emptyLibraryTitle": "No songs in your library",
+    "emptyLibraryMessage": "Refresh your library or add fresh tracks to start listening.",
+    "emptyAlbumsTitle": "No albums yet",
+    "emptyAlbumsMessage": "Albums will appear here once your music library is ready.",
+    "emptyArtistsTitle": "No artists yet",
+    "emptyArtistsMessage": "Artists will show up here as soon as your songs are available.",
+    "searchEmptyLibraryTitle": "Search needs music first",
+    "searchEmptyLibraryMessage": "Refresh your library or add songs to start searching.",
+    "libraryLoadErrorTitle": "Couldn't load your library",
+    "libraryLoadErrorMessage": "Check permissions, then try refreshing again.",
+    "searchLoadErrorTitle": "Search is unavailable right now",
+    "searchLoadErrorMessage": "Refresh your library and try again in a moment.",
     "refresh": "Refresh",
     "errorLoadingSongs": "Some error happend while loading songs",
     "noSongTryAgain": "No songs found.\nTry refreshing or adding music!",
@@ -66,6 +163,11 @@
     "noSongInPlaylist": "No song exist in this playlist",
     "shuffleAllSongs": "Shuffle All Songs",
     "sortSongs": "Sort Songs",
+    "sortBy": "Sort by",
+    "sortOrder": "Order",
+    "applySort": "Apply Sort",
+    "newestFirst": "Newest first",
+    "oldestFirst": "Oldest first",
     "recent": "Recent",
     "dateAdded": "Date Added",
     "duration": "Duration",
@@ -75,6 +177,10 @@
     "albums": "Albums",
     "artist": "Artist",
     "artists": "Artists",
+    "folder": "Folder",
+    "folders": "Folders",
+    "emptyFoldersTitle": "No folders with songs yet",
+    "emptyFoldersMessage": "Song folders will show up here as soon as your music library is ready.",
     "ascending": "Ascending",
     "descending": "Descending",
     "dismiss": "DISMISS",
@@ -83,6 +189,23 @@
     "addToPlaylist": "Add to Playlist",
     "removeFromPlaylist": "Remove from Playlist",
     "share": "Share",
+    "moreOptions": "More options",
+    "play": "Play",
+    "pause": "Pause",
+    "previous": "Previous",
+    "next": "Next",
+    "like": "Like",
+    "unlike": "Unlike",
+    "enableShuffle": "Enable Shuffle",
+    "disableShuffle": "Disable Shuffle",
+    "repeatOne": "Repeat One",
+    "repeatAll": "Repeat All",
+    "noRepeat": "No Repeat",
+    "volume": "Volume",
+    "muted": "Muted",
+    "unknownSong": "Unknown Song",
+    "unknownArtist": "Unknown Artist",
+    "unknownAlbum": "Unknown Album",
     "selected": "selected",
     "deleteSongsAlertTitle": "Delete {count} songs?",
     "@deleteSongsAlertTitle": {
@@ -116,6 +239,14 @@
     },
     "noPlaylistFound": "No Playlists Found",
     "createFirstPlaylist": "Create First Playlist",
+    "playlistHeroSubtitle": "Build mood sets, pin your go-to collections, and jump back into recent listens.",
+    "emptyPlaylistsTitle": "No playlists yet",
+    "emptyPlaylistsMessage": "Create your first playlist to group songs for workouts, quiet nights, and everything in between.",
+    "playlistPinnedHint": "Keep your favorite collections close and open recent sessions in one tap.",
+    "playlistRecentHint": "Jump back into your latest listening session.",
+    "pinPlaylist": "Pin playlist",
+    "unpinPlaylist": "Unpin playlist",
+    "pinned": "Pinned",
     "song": "Song",
     "s": "s",
     "createNewPlaylist": "Create New Playlist",
@@ -158,7 +289,7 @@
     "sleepTimerActive": "Sleep Timer is Active",
     "cancelTimer": "Cancel Timer",
 
-    "favoriteSongsPage": "",
+    "favoriteSongsPage": "Keep the songs you love close and jump back into them faster.",
     "@favoriteSongsPage": {
         "description": "Favorite songs page localization"
     },

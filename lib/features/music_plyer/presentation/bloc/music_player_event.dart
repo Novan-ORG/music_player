@@ -93,15 +93,21 @@ final class SetPlayerLoopModeEvent extends MusicPlayerEvent {
   List<Object> get props => [...super.props, loopMode];
 }
 
-/// Internal event to update the state.
-final class UpdateStateEvent extends MusicPlayerEvent {
-  /// Creates an [UpdateStateEvent].
-  const UpdateStateEvent(this.state);
+/// Internal event emitted when the underlying player changes song index.
+final class PlayerIndexChangedEvent extends MusicPlayerEvent {
+  /// Creates a [PlayerIndexChangedEvent].
+  const PlayerIndexChangedEvent({
+    required this.index,
+    required this.hasNext,
+    required this.hasPrevious,
+  });
 
-  final MusicPlayerState state;
+  final int index;
+  final bool hasNext;
+  final bool hasPrevious;
 
   @override
-  List<Object> get props => [...super.props, state];
+  List<Object> get props => [...super.props, index, hasNext, hasPrevious];
 }
 
 /// Event to skip to the next song in the playlist.
@@ -120,4 +126,14 @@ final class SkipToPreviousEvent extends MusicPlayerEvent {
 
   @override
   List<Object> get props => [];
+}
+
+/// Restores the previously saved playback session.
+final class RestoreSavedPlaybackEvent extends MusicPlayerEvent {
+  const RestoreSavedPlaybackEvent(this.availableSongs);
+
+  final List<Song> availableSongs;
+
+  @override
+  List<Object> get props => [...super.props, availableSongs];
 }

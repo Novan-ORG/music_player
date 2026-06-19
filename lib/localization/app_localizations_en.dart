@@ -48,6 +48,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hours => 'Hours';
 
   @override
+  String get seconds => 'Seconds';
+
+  @override
   String get off => 'Off';
 
   @override
@@ -64,6 +67,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get support => 'Support';
+
+  @override
+  String get telegram => 'Telegram';
 
   @override
   String get sendFeedbackOrSuggestion => 'Send Feedback or Suggestions';
@@ -94,6 +100,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createdBy => 'Made with ❤️ by Novan team';
+
+  @override
+  String get brandName => 'Free Music Player';
+
+  @override
+  String get brandTagline => 'Bold sound, effortless control.';
+
+  @override
+  String get brandSplashMessage =>
+      'Loading your library with a cleaner, sharper listening experience.';
+
+  @override
+  String get brandSettingsMessage =>
+      'Shape the player around your language, theme, and listening flow.';
+
+  @override
+  String get brandAboutMessage =>
+      'Designed by the Novan team to make everyday listening feel polished, playful, and completely free.';
+
+  @override
+  String get feedbackEmailSubject => 'Free Music Player Feedback';
 
   @override
   String get homePage => '';
@@ -137,7 +164,144 @@ class AppLocalizationsEn extends AppLocalizations {
   String get allSongs => 'All Songs';
 
   @override
+  String get yourLibrary => 'Your Library';
+
+  @override
+  String get libraryHeroSubtitle =>
+      'Shuffle the room, search fast, and jump back into your sound.';
+
+  @override
+  String get startMix => 'Start Mix';
+
+  @override
+  String get libraryReady => 'Ready to play';
+
+  @override
   String get searchSongs => 'Search Songs';
+
+  @override
+  String get searchHeroSubtitle =>
+      'Find by title, artist, or album and jump straight into the next track.';
+
+  @override
+  String get searchHint => 'Search by song, artist, or album';
+
+  @override
+  String get searchMatchesLabel => 'Matches';
+
+  @override
+  String get searchLibraryLabel => 'Library';
+
+  @override
+  String searchResultsCount(int count) {
+    return '$count results';
+  }
+
+  @override
+  String searchSongsReadyCount(int count) {
+    return '$count songs ready';
+  }
+
+  @override
+  String get searchInstantSearch => 'Instant search';
+
+  @override
+  String get searchQuickPicks => 'Quick picks';
+
+  @override
+  String get searchStartVoiceSearch => 'Start voice search';
+
+  @override
+  String get searchStopVoiceSearch => 'Stop voice search';
+
+  @override
+  String get searchInMotionTitle => 'Search in motion';
+
+  @override
+  String get searchLibraryGlanceTitle => 'Your library at a glance';
+
+  @override
+  String get searchLiveResultsMessage =>
+      'Matching tracks update live while you type or use voice search.';
+
+  @override
+  String get searchBrowseLibraryMessage =>
+      'Browse everything quickly, or jump straight to an artist, album, or favorite title.';
+
+  @override
+  String get searchVisibleNow => 'Visible now';
+
+  @override
+  String get searchTryAnotherAngle => 'Try another angle';
+
+  @override
+  String get searchTapToExplore => 'Tap to explore';
+
+  @override
+  String searchResultsFor(String query) {
+    return 'Results for \"$query\"';
+  }
+
+  @override
+  String searchMatchedSongsSummary(int count, int total) {
+    return '$count of $total tracks matched your search';
+  }
+
+  @override
+  String searchTracksReadySummary(int total) {
+    return '$total tracks ready to browse';
+  }
+
+  @override
+  String searchNoMatchesTitle(String query) {
+    return 'No matches for \"$query\"';
+  }
+
+  @override
+  String get searchNoMatchesMessage =>
+      'Try a song title, a different spelling, or switch to one of the quick picks below.';
+
+  @override
+  String get emptyLibraryTitle => 'No songs in your library';
+
+  @override
+  String get emptyLibraryMessage =>
+      'Refresh your library or add fresh tracks to start listening.';
+
+  @override
+  String get emptyAlbumsTitle => 'No albums yet';
+
+  @override
+  String get emptyAlbumsMessage =>
+      'Albums will appear here once your music library is ready.';
+
+  @override
+  String get emptyArtistsTitle => 'No artists yet';
+
+  @override
+  String get emptyArtistsMessage =>
+      'Artists will show up here as soon as your songs are available.';
+
+  @override
+  String get searchEmptyLibraryTitle => 'Search needs music first';
+
+  @override
+  String get searchEmptyLibraryMessage =>
+      'Refresh your library or add songs to start searching.';
+
+  @override
+  String get libraryLoadErrorTitle => 'Couldn\'t load your library';
+
+  @override
+  String get libraryLoadErrorMessage =>
+      'Check permissions, then try refreshing again.';
+
+  @override
+  String get searchLoadErrorTitle => 'Search is unavailable right now';
+
+  @override
+  String get searchLoadErrorMessage =>
+      'Refresh your library and try again in a moment.';
 
   @override
   String get refresh => 'Refresh';
@@ -160,6 +324,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sortSongs => 'Sort Songs';
+
+  @override
+  String get sortBy => 'Sort by';
+
+  @override
+  String get sortOrder => 'Order';
+
+  @override
+  String get applySort => 'Apply Sort';
+
+  @override
+  String get newestFirst => 'Newest first';
+
+  @override
+  String get oldestFirst => 'Oldest first';
 
   @override
   String get recent => 'Recent';
@@ -189,6 +368,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get artists => 'Artists';
 
   @override
+  String get folder => 'Folder';
+
+  @override
+  String get folders => 'Folders';
+
+  @override
+  String get emptyFoldersTitle => 'No folders with songs yet';
+
+  @override
+  String get emptyFoldersMessage =>
+      'Song folders will show up here as soon as your music library is ready.';
+
+  @override
   String get ascending => 'Ascending';
 
   @override
@@ -211,6 +403,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get share => 'Share';
+
+  @override
+  String get moreOptions => 'More options';
+
+  @override
+  String get play => 'Play';
+
+  @override
+  String get pause => 'Pause';
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get like => 'Like';
+
+  @override
+  String get unlike => 'Unlike';
+
+  @override
+  String get enableShuffle => 'Enable Shuffle';
+
+  @override
+  String get disableShuffle => 'Disable Shuffle';
+
+  @override
+  String get repeatOne => 'Repeat One';
+
+  @override
+  String get repeatAll => 'Repeat All';
+
+  @override
+  String get noRepeat => 'No Repeat';
+
+  @override
+  String get volume => 'Volume';
+
+  @override
+  String get muted => 'Muted';
+
+  @override
+  String get unknownSong => 'Unknown Song';
+
+  @override
+  String get unknownArtist => 'Unknown Artist';
+
+  @override
+  String get unknownAlbum => 'Unknown Album';
 
   @override
   String get selected => 'selected';
@@ -246,6 +489,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createFirstPlaylist => 'Create First Playlist';
+
+  @override
+  String get playlistHeroSubtitle =>
+      'Build mood sets, pin your go-to collections, and jump back into recent listens.';
+
+  @override
+  String get emptyPlaylistsTitle => 'No playlists yet';
+
+  @override
+  String get emptyPlaylistsMessage =>
+      'Create your first playlist to group songs for workouts, quiet nights, and everything in between.';
+
+  @override
+  String get playlistPinnedHint =>
+      'Keep your favorite collections close and open recent sessions in one tap.';
+
+  @override
+  String get playlistRecentHint =>
+      'Jump back into your latest listening session.';
+
+  @override
+  String get pinPlaylist => 'Pin playlist';
+
+  @override
+  String get unpinPlaylist => 'Unpin playlist';
+
+  @override
+  String get pinned => 'Pinned';
 
   @override
   String get song => 'Song';
@@ -352,7 +623,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelTimer => 'Cancel Timer';
 
   @override
-  String get favoriteSongsPage => '';
+  String get favoriteSongsPage =>
+      'Keep the songs you love close and jump back into them faster.';
 
   @override
   String get clearAll => 'Clear All';

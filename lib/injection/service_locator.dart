@@ -80,6 +80,7 @@ void _setupSongsFeature() {
     ..registerLazySingleton(() => QuerySongsFrom(getIt.get()))
     ..registerLazySingleton(() => QueryAlbums(getIt.get()))
     ..registerLazySingleton(() => QueryArtists(getIt.get()))
+    ..registerLazySingleton(() => QueryFolders(getIt.get()))
     ..registerLazySingleton(() => GetSongsSortConfig(getIt.get()))
     ..registerLazySingleton(() => SaveSongsSortConfig(getIt.get()))
     ..registerLazySingleton(() => DeleteSongWithUndo(getIt.get(), getIt.get()))
@@ -98,11 +99,13 @@ void _setupSongsFeature() {
 
 void _setupCore() {
   getIt
-    ..registerLazySingleton(
-      () {
-        return OnAudioQuery()..setLogConfig(
-          LogConfig(logType: LogType.ERROR, showDetailedLog: true),
+    ..registerSingletonAsync<OnAudioQuery>(
+      () async {
+        final audioQuery = OnAudioQuery();
+        await audioQuery.setLogConfig(
+          LogConfig(logType: LogType.ERROR),
         );
+        return audioQuery;
       },
     )
     ..registerLazySingleton(() => EnsureMediaPermission(getIt.get()))
@@ -132,6 +135,9 @@ void _setupMusicPlayerFeature() {
     ..registerLazySingleton(() => HasPreviousSong(getIt.get()))
     ..registerLazySingleton(() => PauseSong(getIt.get()))
     ..registerLazySingleton(() => PlaySong(getIt.get()))
+    ..registerLazySingleton(() => SavePlaybackSession(getIt.get()))
+    ..registerLazySingleton(() => GetSavedPlaybackSession(getIt.get()))
+    ..registerLazySingleton(() => ClearSavedPlaybackSession(getIt.get()))
     ..registerLazySingleton(() => ResumeSong(getIt.get()))
     ..registerLazySingleton(() => SeekSong(getIt.get()))
     ..registerLazySingleton(() => SkipToNext(getIt.get()))

@@ -1,9 +1,12 @@
 export 'add_to_recently_played.dart';
+export 'clear_saved_playback_session.dart';
+export 'get_saved_playback_session.dart';
 export 'has_next_song.dart';
 export 'has_previous_song.dart';
 export 'pause_song.dart';
 export 'play_song.dart';
 export 'resume_song.dart';
+export 'save_playback_session.dart';
 export 'seek_song.dart';
 export 'set_loop_mode.dart';
 export 'set_shuffle_enabled.dart';

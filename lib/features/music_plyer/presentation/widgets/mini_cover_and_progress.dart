@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/core/constants/constants.dart';
-import 'package:on_audio_query_pluse/on_audio_query.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 
 class MiniCoverAndProgress extends StatelessWidget {
   const MiniCoverAndProgress({
@@ -19,21 +18,10 @@ class MiniCoverAndProgress extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        QueryArtworkWidget(
+        ArtImageWidget(
           id: songId,
-          type: ArtworkType.AUDIO,
-          artworkBorder: BorderRadius.circular(46),
-          artworkWidth: 46,
-          artworkHeight: 46,
-          nullArtworkWidget: ClipRRect(
-            borderRadius: BorderRadius.circular(46),
-            child: Image.asset(
-              ImageAssets.songCover,
-              fit: BoxFit.cover,
-              width: 46,
-              height: 46,
-            ),
-          ),
+          size: 46,
+          borderRadius: 46,
         ),
         SizedBox(
           width: 48,

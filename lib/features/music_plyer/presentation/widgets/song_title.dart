@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import 'package:music_player/extensions/extensions.dart';
 
 class SongTitle extends StatelessWidget {
   const SongTitle({super.key, this.songTitle});
@@ -8,17 +9,28 @@ class SongTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = songTitle ?? 'Unknown Song';
+    final title = songTitle ?? context.localization.unknownSong;
+    final baseStyle = Theme.of(context).textTheme.titleLarge?.copyWith(
+      height: 1.2,
+    );
+    final baseFontSize = baseStyle?.fontSize ?? 22;
+    final titleHeight = baseFontSize * 1.3;
+
     return AutoSizeText(
       title,
-      minFontSize: Theme.of(context).textTheme.titleLarge?.fontSize ?? 14,
-      style: Theme.of(context).textTheme.titleLarge,
+      minFontSize: baseFontSize > 16 ? baseFontSize - 4 : baseFontSize,
+      style: baseStyle,
+      strutStyle: StrutStyle(
+        fontSize: baseFontSize,
+        height: 1.2,
+        forceStrutHeight: true,
+      ),
       maxLines: 1,
       overflowReplacement: SizedBox(
-        height: 22,
+        height: titleHeight,
         child: Marquee(
           text: title,
-          style: Theme.of(context).textTheme.titleLarge,
+          style: baseStyle,
           crossAxisAlignment: CrossAxisAlignment.start,
           blankSpace: 30,
           velocity: 40,

@@ -1,77 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/widgets/app_state_view.dart';
 import 'package:music_player/extensions/extensions.dart';
 
 class FavoriteEmptyWidget extends StatelessWidget {
   const FavoriteEmptyWidget({
     super.key,
     this.onRefresh,
+    this.maxWidth = 820,
   });
 
   final VoidCallback? onRefresh;
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Card(
-        elevation: 4,
-        margin: const EdgeInsets.symmetric(horizontal: 32),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.favorite_border,
-                size: 64,
-                color: theme.colorScheme.primary.withAlpha(
-                  (0.6 * 255).round(),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                context.localization.noFavoriteSong,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withAlpha(
-                    (0.8 * 255).round(),
-                  ),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Start liking songs to see them here!',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withAlpha(
-                    (0.6 * 255).round(),
-                  ),
-                ),
-              ),
-              if (onRefresh != null) ...[
-                const SizedBox(height: 24),
-                ElevatedButton.icon(
-                  onPressed: onRefresh,
-                  icon: const Icon(Icons.refresh),
-                  label: Text(context.localization.refresh),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
+    return AppStateView(
+      eyebrow: context.localization.favoriteSongs,
+      title: context.localization.noFavoriteSong,
+      message: context.localization.favoriteSongsPage,
+      actionLabel: context.localization.refresh,
+      onAction: onRefresh,
+      accentColor: context.theme.colorScheme.primary,
+      illustration: Icon(
+        Icons.favorite_border_rounded,
+        size: 54,
+        color: context.theme.colorScheme.primary,
       ),
+      maxWidth: maxWidth,
     );
   }
 }

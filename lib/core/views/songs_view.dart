@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/mixins/mixins.dart';
+import 'package:music_player/core/widgets/app_route_bloc_scope.dart';
 import 'package:music_player/core/widgets/no_songs_widget.dart';
 import 'package:music_player/core/widgets/song_item.dart';
 import 'package:music_player/extensions/extensions.dart';
@@ -17,11 +18,17 @@ class SongsView extends StatefulWidget {
     this.onRefresh,
     super.key,
     this.playlist,
+    this.bottomPadding = 12,
+    this.enablePlayerArtworkHero = false,
+    this.enableRefreshIndicator = true,
   });
 
   final List<Song> songs;
   final Future<void> Function()? onRefresh;
   final Playlist? playlist;
+  final double bottomPadding;
+  final bool enablePlayerArtworkHero;
+  final bool enableRefreshIndicator;
 
   @override
   State<SongsView> createState() => _SongsViewState();
@@ -39,7 +46,12 @@ class _SongsViewState extends State<SongsView>
     context.read<MusicPlayerBloc>().add(PlayMusicEvent(songIndex, songs));
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => const MusicPlayerPage(),
+        builder: (_) => AppRouteBlocScope.fromContext(
+          context: context,
+          child: MusicPlayerPage(
+            enableArtworkHero: widget.enablePlayerArtworkHero,
+          ),
+        ),
       ),
     );
   }
@@ -47,10 +59,13 @@ class _SongsViewState extends State<SongsView>
   Future<void> onLongPress(Song song, List<Song> songs) async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => SongsSelectionPage(
-          title: context.localization.songs,
-          availableSongs: songs,
-          selectedSongIds: {song.id},
+        builder: (_) => AppRouteBlocScope.fromContext(
+          context: context,
+          child: SongsSelectionPage(
+            title: context.localization.songs,
+            availableSongs: songs,
+            selectedSongIds: {song.id},
+          ),
         ),
       ),
     );
@@ -68,60 +83,67 @@ class _SongsViewState extends State<SongsView>
           previous.playList != next.playList ||
           previous.status != next.status,
       builder: (context, musicPlayerState) {
+        final songsList =
+            BlocSelector<FavoriteSongsBloc, FavoriteSongsState, Set<int>>(
+              selector: (state) {
+                return state.favoriteSongIds;
+              },
+              builder: (context, favoriteSongIds) {
+                return ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  padding: EdgeInsets.fromLTRB(8, 4, 8, widget.bottomPadding),
+                  itemCount: widget.songs.length,
+                  itemBuilder: (context, index) {
+                    final song = widget.songs[index];
+                    final isCurrent =
+                        musicPlayerState.currentSong?.id == song.id;
+                    return SongItem(
+                      key: ValueKey(song.id),
+                      track: song,
+                      isCurrentTrack: isCurrent,
+                      isPlayingNow:
+                          musicPlayerState.status ==
+                              MusicPlayerStatus.playing &&
+                          isCurrent,
+                      isFavorite: favoriteSongIds.contains(song.id),
+                      isInPlaylist: widget.playlist != null,
+                      onSetAsRingtone: () => setAsRingtone(song.data),
+                      onDelete: () => showDeleteSongDialog(song),
+                      onFavoriteToggle: () => onToggleLike(song.id),
+                      onAddToPlaylist: () async {
+                        await PlaylistsPage.showSheet(
+                          context: context,
+                          songIds: {song.id},
+                        );
+                      },
+                      onShare: () => shareSong(song),
+                      onLongPress: () => onLongPress(song, widget.songs),
+                      onTap: () => _handleSongTap(index, widget.songs),
+                      onPlayPause: () {
+                        context.read<MusicPlayerBloc>().add(
+                          const TogglePlayPauseEvent(),
+                        );
+                      },
+                      onRemoveFromPlaylist: () {
+                        if (widget.playlist != null) {
+                          removeSongsFromPlaylist({
+                            song.id,
+                          }, widget.playlist!);
+                        }
+                      },
+                    );
+                  },
+                );
+              },
+            );
+
+        if (!widget.enableRefreshIndicator) {
+          return songsList;
+        }
+
         return RefreshIndicator(
           onRefresh: widget.onRefresh ?? () async {},
-          child: BlocSelector<FavoriteSongsBloc, FavoriteSongsState, Set<int>>(
-            selector: (state) {
-              return state.favoriteSongIds;
-            },
-            builder: (context, favoriteSongIds) {
-              return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12,
-                  horizontal: 8,
-                ),
-                itemCount: widget.songs.length,
-                itemBuilder: (context, index) {
-                  final song = widget.songs[index];
-                  final isCurrent = musicPlayerState.currentSong?.id == song.id;
-                  return SongItem(
-                    track: song,
-                    isCurrentTrack: isCurrent,
-                    isPlayingNow:
-                        musicPlayerState.status == MusicPlayerStatus.playing &&
-                        isCurrent,
-                    isFavorite: favoriteSongIds.contains(song.id),
-                    isInPlaylist: widget.playlist != null,
-                    onSetAsRingtone: () => setAsRingtone(song.data),
-                    onDelete: () => showDeleteSongDialog(song),
-                    onFavoriteToggle: () => onToggleLike(song.id),
-                    onAddToPlaylist: () async {
-                      await PlaylistsPage.showSheet(
-                        context: context,
-                        songIds: {song.id},
-                      );
-                    },
-                    onShare: () => shareSong(song),
-                    onLongPress: () => onLongPress(song, widget.songs),
-                    onTap: () => _handleSongTap(index, widget.songs),
-                    onPlayPause: () {
-                      context.read<MusicPlayerBloc>().add(
-                        const TogglePlayPauseEvent(),
-                      );
-                    },
-                    onRemoveFromPlaylist: () {
-                      if (widget.playlist != null) {
-                        removeSongsFromPlaylist({
-                          song.id,
-                        }, widget.playlist!);
-                      }
-                    },
-                  );
-                },
-              );
-            },
-          ),
+          child: songsList,
         );
       },
     );

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/services/services.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/favorite.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
 /// Mixin that provides song sharing functionality
@@ -54,23 +54,41 @@ mixin SongSharingMixin {
 /// Mixin that provides ringtone setting functionality
 mixin RingtoneMixin<T extends StatefulWidget> on State<T> {
   Future<void> setAsRingtone(String songPath) async {
-    final hasPermission = await Permission.systemAlertWindow
-        .request()
-        .isGranted;
+    final hasPermission = await RingtoneSet.canWriteSettings();
 
     if (hasPermission) {
-      await RingtoneSet.setRingtone(songPath);
-    } else {
-      if (!mounted) return;
+      await _applyRingtone(songPath);
+      return;
+    }
+
+    final didOpenSettings = await RingtoneSet.openWriteSettings();
+    if (!didOpenSettings && mounted) {
       _showPermissionDeniedMessage();
     }
   }
 
+  Future<void> _applyRingtone(String songPath) async {
+    final didSetRingtone = await RingtoneSet.setRingtone(songPath);
+    if (!didSetRingtone && mounted) {
+      _showRingtoneFailedMessage();
+    }
+  }
+
   void _showPermissionDeniedMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.localization.permissionDeniedForRingtone),
-      ),
+    AppSnackBar.showError(
+      context,
+      title: context.localization.error,
+      message: context.localization.permissionDeniedForRingtone,
+      icon: Icons.settings_rounded,
+    );
+  }
+
+  void _showRingtoneFailedMessage() {
+    AppSnackBar.showError(
+      context,
+      title: context.localization.error,
+      message: context.localization.error,
+      icon: Icons.music_off_rounded,
     );
   }
 }

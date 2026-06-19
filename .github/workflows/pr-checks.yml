@@ -31,7 +31,7 @@ jobs:
           channel: ${{ matrix.flutter-version }}
       - name: Create .env file
         run: |
-          echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
+          touch .env
 
       - name: Flutter -- Version
         run: flutter --version

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/mixins/playlist_management_mixin.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/domain/entities/pin_playlist.dart';
 import 'package:music_player/features/playlist/domain/entities/playlist.dart';
@@ -16,6 +17,7 @@ class AllPlaylistView extends StatefulWidget {
     required this.isSelectionMode,
     super.key,
     this.songIds,
+    this.onCreatePressed,
   });
 
   final List<Playlist> playlists;
@@ -23,6 +25,7 @@ class AllPlaylistView extends StatefulWidget {
   final bool isSelectionMode;
 
   final Set<int>? songIds;
+  final VoidCallback? onCreatePressed;
 
   @override
   State<AllPlaylistView> createState() => _AllPlaylistViewState();
@@ -33,6 +36,16 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
   final Set<int> selectedPlaylistIds = {};
 
   Future<void> _showCreatePlaylistSheet() => CreatePlaylistSheet.show(context);
+
+  Future<void> _refreshPlaylists() async {
+    final bloc = context.read<PlayListBloc>();
+    final completed = bloc.stream.firstWhere(
+      (state) => state.status != PlayListStatus.loading,
+    );
+
+    bloc.add(LoadPlayListsEvent());
+    await completed;
+  }
 
   void _handlePinPlaylist(Playlist playlist) {
     context.read<PlayListBloc>().add(
@@ -80,8 +93,11 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
   void _navigateToPlaylistDetails(Playlist playlist) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => PlaylistDetailsPage(
-          playlistModel: playlist,
+        builder: (_) => AppRouteBlocScope.fromContext(
+          context: context,
+          child: PlaylistDetailsPage(
+            playlistModel: playlist,
+          ),
         ),
       ),
     );
@@ -89,40 +105,90 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
 
   Widget? _buildBottomBar() {
     if (widget.isSelectionMode && widget.songIds != null) {
+      final theme = context.theme;
+
       return SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(0, -2),
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface.withValues(alpha: 0.96),
+              borderRadius: BorderRadius.circular(26),
+              border: Border.all(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
               ),
-            ],
-          ),
-          child: ElevatedButton.icon(
-            icon: const Icon(Icons.playlist_add_check),
-            label: Text(context.localization.addToSelectedPlaylist),
-            onPressed: selectedPlaylistIds.isEmpty
-                ? null
-                : () {
-                    context.read<PlayListBloc>().add(
-                      AddSongsToPlaylistsEvent(
-                        widget.songIds!,
-                        selectedPlaylistIds.toList(),
-                      ),
-                    );
-                    Navigator.of(
-                      context,
-                    ).pop(selectedPlaylistIds.toList());
-                  },
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size.fromHeight(48),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: 20,
+                  offset: const Offset(0, -6),
+                ),
+              ],
+            ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final useColumn = constraints.maxWidth < 440;
+                final selectionChip = Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    '${selectedPlaylistIds.length} '
+                    '${context.localization.selected}',
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                );
+
+                VoidCallback? onPressed() {
+                  if (selectedPlaylistIds.isEmpty) {
+                    return null;
+                  }
+                  return () {
+                    Navigator.of(context).pop(selectedPlaylistIds.toList());
+                  };
+                }
+
+                final actionButton = FilledButton.icon(
+                  onPressed: onPressed(),
+                  icon: const Icon(Icons.playlist_add_check_rounded),
+                  label: Text(context.localization.addToSelectedPlaylist),
+                  style: FilledButton.styleFrom(
+                    minimumSize: const Size.fromHeight(54),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                );
+
+                if (useColumn) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      selectionChip,
+                      const SizedBox(height: 12),
+                      actionButton,
+                    ],
+                  );
+                }
+
+                return Row(
+                  children: [
+                    selectionChip,
+                    const SizedBox(width: 12),
+                    Expanded(child: actionButton),
+                  ],
+                );
+              },
             ),
           ),
         ),
@@ -156,57 +222,176 @@ class _AllPlaylistViewState extends State<AllPlaylistView>
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.theme;
+    final isSelectionMode = widget.isSelectionMode;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          height: 16,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              context.localization.allPlaylists,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                fontWeight: FontWeight.w600,
+        SizedBox(height: isSelectionMode ? 2 : 16),
+        if (isSelectionMode)
+          _SelectionModeHeader(
+            playlistCount: widget.playlists.length,
+            selectedCount: selectedPlaylistIds.length,
+            onCreatePressed: widget.onCreatePressed ?? _showCreatePlaylistSheet,
+          )
+        else
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: 12,
+            spacing: 12,
+            children: [
+              Text(
+                context.localization.allPlaylists,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 7,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      '${widget.playlists.length} '
+                      '${context.localization.playlists}',
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        SizedBox(height: widget.isSelectionMode ? 12 : 16),
+        if (widget.playlists.isEmpty)
+          Expanded(
+            child: EmptyPlaylist(
+              onAddPressed: widget.onCreatePressed ?? _showCreatePlaylistSheet,
+            ),
+          )
+        else
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: _refreshPlaylists,
+              child: ListView.separated(
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                padding: EdgeInsets.only(
+                  bottom: widget.isSelectionMode ? 96 : 120,
+                ),
+                itemCount: widget.playlists.length,
+                separatorBuilder: (_, _) =>
+                    SizedBox(height: widget.isSelectionMode ? 6 : 2),
+                itemBuilder: (context, index) {
+                  return _buildPlaylistTile(
+                    widget.playlists[index],
+                    widget.pinnedMeta,
+                  );
+                },
               ),
             ),
-            if (widget.isSelectionMode)
-              GestureDetector(
-                onTap: _showCreatePlaylistSheet,
-                child: Text(
-                  context.localization.createPlaylist,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.primary,
-                  ),
-                ),
+          ),
+        if (widget.isSelectionMode) _buildBottomBar()!,
+      ],
+    );
+  }
+}
+
+class _SelectionModeHeader extends StatelessWidget {
+  const _SelectionModeHeader({
+    required this.playlistCount,
+    required this.selectedCount,
+    required this.onCreatePressed,
+  });
+
+  final int playlistCount;
+  final int selectedCount;
+  final VoidCallback onCreatePressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.theme;
+
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      runSpacing: 10,
+      spacing: 10,
+      children: [
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _HeaderChip(
+              label: '$playlistCount ${context.localization.playlists}',
+            ),
+            if (selectedCount > 0)
+              _HeaderChip(
+                label: '$selectedCount ${context.localization.selected}',
+                emphasized: true,
               ),
           ],
         ),
-
-        const SizedBox(
-          height: 16,
-        ),
-        if (widget.playlists.isEmpty)
-          const Expanded(child: EmptyPlaylist())
-        else
-          Expanded(
-            child: ListView.builder(
-              itemCount: widget.playlists.length,
-              itemBuilder: (context, index) {
-                return _buildPlaylistTile(
-                  widget.playlists[index],
-                  widget.pinnedMeta,
-                );
-              },
+        FilledButton.tonalIcon(
+          onPressed: onCreatePressed,
+          icon: const Icon(Icons.add_rounded),
+          label: Text(context.localization.createPlaylist),
+          style: FilledButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            textStyle: theme.textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.w700,
             ),
           ),
-
-        if (widget.isSelectionMode) _buildBottomBar()!,
+        ),
       ],
+    );
+  }
+}
+
+class _HeaderChip extends StatelessWidget {
+  const _HeaderChip({
+    required this.label,
+    this.emphasized = false,
+  });
+
+  final String label;
+  final bool emphasized;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.theme;
+    final primary = theme.colorScheme.primary;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      decoration: BoxDecoration(
+        color: emphasized
+            ? primary.withValues(alpha: 0.12)
+            : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: theme.textTheme.labelLarge?.copyWith(
+          color: emphasized ? primary : theme.colorScheme.onSurface,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/domain/entities/song.dart';
 import 'package:music_player/core/mixins/mixins.dart';
 import 'package:music_player/core/views/views.dart';
 import 'package:music_player/core/widgets/widgets.dart';
@@ -39,6 +40,7 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
     with PlaylistManagementMixin {
   late final PlaylistDetailsBloc _detailsBloc = context
       .read<PlaylistDetailsBloc>();
+  bool get _isRecentlyPlayed => widget.playlist.id == -1;
 
   @override
   void initState() {
@@ -53,71 +55,144 @@ class _PlaylistDetailsViewState extends State<_PlaylistDetailsView>
   }
 
   Future<void> onRefresh() async {
-    await Future<void>.delayed(const Duration(milliseconds: 200));
     _loadPlaylistSongs();
+    await Future<void>.delayed(const Duration(milliseconds: 200));
   }
 
   Future<void> _onSearchButtonPressed() async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => const SearchSongsPage(),
+        builder: (_) => AppRouteBlocScope.fromContext(
+          context: context,
+          child: const SearchSongsPage(),
+        ),
       ),
     );
+  }
+
+  Future<void> _onAddSongsPressed(
+    Playlist playlist,
+    List<Song> songs,
+  ) async {
+    if (_isRecentlyPlayed) {
+      return;
+    }
+
+    final result = await addSongsToPlaylist(
+      playlist,
+      songs.map((e) => e.id).toSet(),
+    );
+    if (result != null && mounted) {
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      _loadPlaylistSongs();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PlaylistDetailsBloc, PlaylistDetailsState>(
       listener: (context, state) {
+        final errorMessage = state.errorMessage;
         if (state.status == PlaylistDetailsStatus.failure &&
-            state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.errorMessage!),
-              backgroundColor: Colors.red,
-            ),
+            errorMessage != null) {
+          AppSnackBar.showError(
+            context,
+            title: context.localization.error,
+            message: errorMessage,
           );
         }
       },
       builder: (context, state) {
+        final theme = context.theme;
         final songCount = state.songs.length;
         final songs = state.songs;
+        final isLoading = state.status == PlaylistDetailsStatus.loading;
+        final hasSongs = songs.isNotEmpty;
 
         return Scaffold(
-          appBar: PlaylistDetailsAppbar(
-            playlist: state.playlist,
-            songCount: songCount,
-            onSearchButtonPressed: _onSearchButtonPressed,
+          backgroundColor: theme.scaffoldBackgroundColor,
+          body: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  theme.colorScheme.primary.withValues(alpha: 0.18),
+                  const Color(0xFF00BFA6).withValues(alpha: 0.08),
+                  theme.scaffoldBackgroundColor,
+                  theme.scaffoldBackgroundColor,
+                ],
+                stops: const [0, 0.18, 0.42, 1],
+              ),
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  PlaylistDetailsAppbar(
+                    playlist: state.playlist,
+                    songCount: songCount,
+                    onBackPressed: () => Navigator.of(context).maybePop(),
+                    onSearchButtonPressed: _onSearchButtonPressed,
+                    onAddSongsPressed: _isRecentlyPlayed
+                        ? null
+                        : () => _onAddSongsPressed(state.playlist, songs),
+                  ),
+                  Expanded(
+                    child: isLoading
+                        ? const Loading()
+                        : hasSongs
+                        ? Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  16,
+                                  8,
+                                  16,
+                                  8,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      context.localization.songs,
+                                      style: theme.textTheme.titleMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                    ),
+                                    const Spacer(),
+                                    SongsCount(songCount: songCount),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: SongsView(
+                                  songs: songs,
+                                  playlist: state.playlist,
+                                  onRefresh: onRefresh,
+                                ),
+                              ),
+                            ],
+                          )
+                        : NoSongsWidget(
+                            eyebrow: context.localization.playlist,
+                            title: context.localization.noSongInPlaylist,
+                            message: _isRecentlyPlayed
+                                ? context.localization.playlistRecentHint
+                                : context.localization.noSongInThePlaylist,
+                            actionLabel: _isRecentlyPlayed
+                                ? context.localization.refresh
+                                : context.localization.addSongs,
+                            onRefresh: _isRecentlyPlayed
+                                ? onRefresh
+                                : () =>
+                                      _onAddSongsPressed(state.playlist, songs),
+                          ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          body: state.status == PlaylistDetailsStatus.loading
-              ? const Loading()
-              : songs.isEmpty
-              ? NoSongsWidget(
-                  message: context.localization.noSongInPlaylist,
-                )
-              : SongsView(
-                  songs: songs,
-                  playlist: state.playlist,
-                  onRefresh: onRefresh,
-                ),
-
-          // playlist id of -1 is for 'Recently Played' pseudo-playlist
-          floatingActionButton: widget.playlist.id == -1
-              ? null
-              : FloatingAddButton(
-                  onPressed: () async {
-                    final result = await addSongsToPlaylist(
-                      state.playlist,
-                      songs.map((e) => e.id).toSet(),
-                    );
-                    if (result != null) {
-                      await Future<void>.delayed(
-                        const Duration(milliseconds: 200),
-                      );
-                      _loadPlaylistSongs();
-                    }
-                  },
-                ),
         );
       },
     );

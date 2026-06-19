@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/widgets/widgets.dart';
+import 'package:music_player/extensions/extensions.dart';
+import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/domain/enums/enums.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/pages/pages.dart';
@@ -18,15 +20,42 @@ class ArtistsView extends StatelessWidget {
         }
 
         if (artistsState.status == ArtistsStatus.error) {
-          return const SongsErrorLoading();
+          return SongsErrorLoading(
+            eyebrow: context.localization.artists,
+            title: context.localization.libraryLoadErrorTitle,
+            message: context.localization.libraryLoadErrorMessage,
+            onRetry: () => context.read<ArtistsBloc>().add(
+              LoadArtistsEvent(sortType: artistsState.sortType),
+            ),
+          );
         }
 
         final artists = artistsState.allArtists;
         if (artists.isEmpty) {
-          return const NoSongsWidget();
+          return NoSongsWidget(
+            eyebrow: context.localization.artists,
+            title: context.localization.emptyArtistsTitle,
+            message: context.localization.emptyArtistsMessage,
+            onRefresh: () => context.read<ArtistsBloc>().add(
+              LoadArtistsEvent(sortType: artistsState.sortType),
+            ),
+          );
         }
+        final mediaQuery = MediaQuery.of(context);
+        final isWideCompact =
+            mediaQuery.size.width >= 700 && mediaQuery.size.height < 620;
+        final hasMiniPlayer = context
+            .read<MusicPlayerBloc>()
+            .state
+            .playList
+            .isNotEmpty;
+        final bottomPadding = hasMiniPlayer
+            ? (isWideCompact ? 104.0 : 132.0)
+            : 16.0;
 
         return ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          padding: EdgeInsets.only(top: 6, bottom: bottomPadding),
           itemCount: artistsState.allArtists.length,
           itemBuilder: (context, index) {
             final artist = artists[index];
@@ -35,10 +64,13 @@ class ArtistsView extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute<void>(
-                    builder: (_) => QuerySongsPage(
-                      fromType: SongsFromType.artistId,
-                      where: artist.id,
-                      title: artist.artist,
+                    builder: (_) => AppRouteBlocScope.fromContext(
+                      context: context,
+                      child: QuerySongsPage(
+                        fromType: SongsFromType.artistId,
+                        where: artist.id,
+                        title: artist.artist,
+                      ),
                     ),
                   ),
                 );

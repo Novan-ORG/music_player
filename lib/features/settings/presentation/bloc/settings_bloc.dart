@@ -16,25 +16,54 @@ part 'settings_state.dart';
 /// - Sleep timer management
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc(this.preferences, this.audioHandler, this.systemLangCode)
-    : super(
-        SettingsState(
-          themeMode:
-              preferences.getString(PreferencesKeys.themeMode) ?? 'system',
-          currentLocale: Locale(
-            preferences.getString(PreferencesKeys.currentLangCode) ??
-                systemLangCode,
+      : super(
+          _buildInitialState(
+            preferences: preferences,
+            systemLangCode: systemLangCode,
           ),
-        ),
-      ) {
+        ) {
     on<ChangeThemeEvent>(_onChangeTheme);
     on<ChangeSleepTimerEvent>(_onSleepTimer);
     on<ClearSleepTimerEvent>(_onTimerClear);
     on<ChangeLanguageEvent>(_onChangeLanguage);
+
+    final sleepTimerValue = preferences.getString(PreferencesKeys.sleepTimer);
+    final initialSleepEndTime = state.sleepEndTime;
+
+    if (initialSleepEndTime != null) {
+      audioHandler.setSleepTimer(
+        initialSleepEndTime.difference(DateTime.now()),
+      );
+    } else if (sleepTimerValue != null) {
+      add(ClearSleepTimerEvent());
+    }
   }
 
   final SharedPreferences preferences;
   final MAudioHandler audioHandler;
   final String systemLangCode;
+
+  static SettingsState _buildInitialState({
+    required SharedPreferences preferences,
+    required String systemLangCode,
+  }) {
+    final storedSleepTimer = preferences.getString(PreferencesKeys.sleepTimer);
+    final parsedSleepEndTime =
+        storedSleepTimer == null ? null : DateTime.tryParse(storedSleepTimer);
+    final activeSleepEndTime =
+        parsedSleepEndTime != null && parsedSleepEndTime.isAfter(DateTime.now())
+            ? parsedSleepEndTime
+            : null;
+
+    return SettingsState(
+      themeMode: preferences.getString(PreferencesKeys.themeMode) ?? 'system',
+      currentLocale: Locale(
+        preferences.getString(PreferencesKeys.currentLangCode) ??
+            systemLangCode,
+      ),
+      sleepEndTime: activeSleepEndTime,
+    );
+  }
 
   Future<void> _onChangeLanguage(
     ChangeLanguageEvent event,
@@ -42,7 +71,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     final currentLangCode =
         preferences.getString(PreferencesKeys.currentLangCode) ??
-        systemLangCode;
+            systemLangCode;
     if (currentLangCode == event.langCode) {
       return;
     } else {

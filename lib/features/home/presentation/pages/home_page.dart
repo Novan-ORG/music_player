@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/presentation/pages/pages.dart';
-import 'package:music_player/features/music_plyer/presentation/bloc/bloc.dart';
-import 'package:music_player/features/music_plyer/presentation/pages/pages.dart';
+import 'package:music_player/features/home/presentation/widgets/widgets.dart';
 import 'package:music_player/features/playlist/presentation/pages/pages.dart';
 import 'package:music_player/features/settings/presentation/pages/pages.dart';
 import 'package:music_player/features/songs/presentation/pages/pages.dart';
@@ -25,7 +23,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
-  late final MusicPlayerBloc _musicPlayerBloc = context.read<MusicPlayerBloc>();
 
   final List<Widget> _pages = const [
     SongsPage(),
@@ -37,57 +34,62 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
-    final navBarItems = [
-      BottomNavigationBarItem(
+    final navItems = _navItems(context);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final useSideNavigation =
+            constraints.maxWidth >= 700 && constraints.maxHeight < 620;
+
+        return Scaffold(
+          backgroundColor: theme.colorScheme.surface,
+          body: useSideNavigation
+              ? Row(
+                  children: [
+                    HomeSideNavRail(
+                      items: navItems,
+                      currentIndex: _currentIndex,
+                      onChanged: _onNavChanged,
+                    ),
+                    Expanded(child: HomeBody(_pages[_currentIndex])),
+                  ],
+                )
+              : HomeBody(_pages[_currentIndex]),
+          bottomNavigationBar: useSideNavigation
+              ? null
+              : HomeBottomNavDock(
+                  items: navItems,
+                  currentIndex: _currentIndex,
+                  onChanged: _onNavChanged,
+                ),
+        );
+      },
+    );
+  }
+
+  void _onNavChanged(int index) {
+    if (index == _currentIndex) return;
+    setState(() => _currentIndex = index);
+  }
+
+  List<HomeNavItem> _navItems(BuildContext context) {
+    return [
+      HomeNavItem(
         icon: const Icon(Icons.music_note_rounded),
         label: context.localization.songs,
       ),
-      BottomNavigationBarItem(
+      HomeNavItem(
         icon: const Icon(Icons.library_music),
         label: context.localization.playlists,
       ),
-      BottomNavigationBarItem(
+      HomeNavItem(
         icon: const Icon(Icons.favorite_rounded),
         label: context.localization.favorites,
       ),
-      BottomNavigationBarItem(
+      HomeNavItem(
         icon: const Icon(Icons.settings_rounded),
         label: context.localization.settings,
       ),
     ];
-
-    return Scaffold(
-      backgroundColor: theme.colorScheme.surface,
-      body: Stack(
-        children: [
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: _pages[_currentIndex],
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
-              bloc: _musicPlayerBloc,
-              builder: (_, state) {
-                if (state.playList.isEmpty) {
-                  return const SizedBox.shrink();
-                } else {
-                  return const MiniPlayerPage();
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
-        items: navBarItems,
-        showUnselectedLabels: true,
-      ),
-    );
   }
 }

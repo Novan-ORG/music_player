@@ -62,21 +62,65 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
+    return BlocProvider(
+      create: (_) => SettingsBloc(
+        getIt.get<SharedPreferences>(),
+        getIt.get<MAudioHandler>(),
+        PlatformDispatcher.instance.locale.languageCode,
+      ),
+      child: BlocBuilder<SettingsBloc, SettingsState>(
+        builder: (context, state) {
+          return MaterialApp(
+            onGenerateTitle: (context) =>
+                AppLocalizations.of(context)!.brandName,
+            darkTheme: darkTheme,
+            theme: lightTheme,
+            themeMode: state.currentTheme,
+            debugShowCheckedModeBanner: false,
+            locale: state.currentLocale,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            home: isLoading
+                ? const Material(child: AppStartupSplash())
+                : hasAudioPermission
+                ? const _AuthorizedHome()
+                : GrantAudioPermission(
+                    onGrantPermission: requestPermission,
+                  ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _AuthorizedHome extends StatefulWidget {
+  const _AuthorizedHome();
+
+  @override
+  State<_AuthorizedHome> createState() => _AuthorizedHomeState();
+}
+
+class _AuthorizedHomeState extends State<_AuthorizedHome> {
+  bool _hasRestoredPlaybackSession = false;
+
+  @override
+  Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => AlbumsBloc(getIt())
-            ..add(
-              const LoadAlbumsEvent(),
-            ),
+          create: (_) => AlbumsBloc(getIt())..add(const LoadAlbumsEvent()),
         ),
         BlocProvider(
-          create: (_) =>
-              ArtistsBloc(
-                getIt(),
-              )..add(
-                const LoadArtistsEvent(),
-              ),
+          create: (_) => ArtistsBloc(getIt())..add(const LoadArtistsEvent()),
+        ),
+        BlocProvider(
+          create: (_) => FoldersBloc(getIt())..add(const LoadFoldersEvent()),
         ),
         BlocProvider(
           create: (_) => SongsBloc(
@@ -90,6 +134,9 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
         ),
         BlocProvider(
           create: (_) => MusicPlayerBloc(
+            getIt(),
+            getIt(),
+            getIt(),
             getIt(),
             getIt(),
             getIt(),
@@ -135,39 +182,23 @@ class _MusicPlayerAppState extends State<MusicPlayerApp> {
             clearAllFavorites: getIt(),
           )..add(const LoadFavoriteSongsEvent()),
         ),
-        BlocProvider(
-          create: (_) => SettingsBloc(
-            getIt.get<SharedPreferences>(),
-            getIt.get<MAudioHandler>(),
-            PlatformDispatcher.instance.locale.languageCode,
-          ),
-        ),
       ],
-      child: BlocBuilder<SettingsBloc, SettingsState>(
-        builder: (context, state) {
-          return MaterialApp(
-            title: 'Music Player',
-            darkTheme: darkTheme,
-            theme: lightTheme,
-            themeMode: state.currentTheme,
-            debugShowCheckedModeBanner: false,
-            locale: state.currentLocale,
-            supportedLocales: AppLocalizations.supportedLocales,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            home: isLoading
-                ? const Material(child: Loading())
-                : hasAudioPermission
-                ? const HomePage()
-                : GrantAudioPermission(
-                    onGrantPermission: requestPermission,
-                  ),
-          );
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<SongsBloc, SongsState>(
+            listenWhen: (previous, current) =>
+                !_hasRestoredPlaybackSession &&
+                previous.status != current.status &&
+                current.status == SongsStatus.loaded,
+            listener: (context, songsState) {
+              _hasRestoredPlaybackSession = true;
+              context.read<MusicPlayerBloc>().add(
+                RestoreSavedPlaybackEvent(songsState.allSongs),
+              );
+            },
+          ),
+        ],
+        child: const HomePage(),
       ),
     );
   }

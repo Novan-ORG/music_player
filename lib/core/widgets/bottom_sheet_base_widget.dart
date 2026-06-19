@@ -5,11 +5,13 @@ class BottomSheetBaseWidget extends StatelessWidget {
   const BottomSheetBaseWidget({
     required this.body,
     this.title = '',
+    this.bodyFlexible = false,
     super.key,
   });
 
   final String title;
   final Widget body;
+  final bool bodyFlexible;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class BottomSheetBaseWidget extends StatelessWidget {
       ),
       child: SafeArea(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: bodyFlexible ? MainAxisSize.max : MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -69,7 +71,7 @@ class BottomSheetBaseWidget extends StatelessWidget {
                 ),
               ],
             ),
-            body,
+            if (bodyFlexible) Flexible(child: body) else body,
           ],
         ),
       ),

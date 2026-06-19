@@ -16,9 +16,9 @@ import 'package:music_player/extensions/extensions.dart';
 class SongItem extends StatelessWidget {
   const SongItem({
     required this.track,
-    this.margin = const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-    this.padding = const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-    this.borderRadius = 32,
+    this.margin = const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+    this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 9),
+    this.borderRadius = 24,
     this.songImageSize = 54,
     this.onTap,
     this.onLongPress,
@@ -66,13 +66,81 @@ class SongItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.theme;
+    final isDark = theme.brightness == Brightness.dark;
+    final primary = theme.colorScheme.primary;
+    final highlightGradient = isCurrentTrack
+        ? LinearGradient(
+            begin: AlignmentDirectional.centerStart,
+            end: AlignmentDirectional.centerEnd,
+            colors: [
+              primary.withValues(
+                alpha: isDark ? 0.2 : 0.18,
+              ),
+              const Color(0xFF00BFA6).withValues(alpha: 0.16),
+              if (isDark)
+                theme.colorScheme.surface.withValues(alpha: 0.58)
+              else
+                const Color(0xFFFFFBF2),
+            ],
+          )
+        : null;
+    final idleLightGradient = !isCurrentTrack && !isDark
+        ? const LinearGradient(
+            begin: AlignmentDirectional.topStart,
+            end: AlignmentDirectional.bottomEnd,
+            colors: [
+              Color(0xFFFFFFFF),
+              Color(0xFFF9FBF3),
+            ],
+          )
+        : null;
+    final cardGradient = highlightGradient ?? idleLightGradient;
+    final borderColor = isCurrentTrack
+        ? primary.withValues(alpha: isDark ? 0.56 : 0.62)
+        : !isDark
+        ? const Color(0xFFE0E2D9)
+        : null;
+    final borderWidth = isCurrentTrack ? 1.15 : (!isDark ? 0.9 : null);
+    final cardShadow = isCurrentTrack
+        ? [
+            BoxShadow(
+              color: primary.withValues(alpha: isDark ? 0.22 : 0.18),
+              blurRadius: 24,
+              offset: const Offset(0, 12),
+            ),
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.28 : 0.08),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
+            ),
+          ]
+        : !isDark
+        ? [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 20,
+              offset: const Offset(0, 9),
+            ),
+            BoxShadow(
+              color: Colors.white.withValues(alpha: 0.8),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ]
+        : null;
     // Common row content used by both blurred and plain variants
     final content = Row(
       children: [
-        ArtImageWidget(id: track.id, size: songImageSize),
-        const SizedBox(width: 12),
+        _SongArtwork(
+          id: track.id,
+          size: songImageSize,
+          isCurrentTrack: isCurrentTrack,
+          isPlayingNow: isPlayingNow,
+        ),
+        const SizedBox(width: 10),
         Expanded(child: _buildTitleAndArtist(context)),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
         _buildActionButtons(context),
       ],
     );
@@ -85,14 +153,11 @@ class SongItem extends StatelessWidget {
         padding: padding,
         onTap: onTap,
         onLongPress: onLongPress,
-        child: Card(
-          color: Colors.transparent,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-          child: Padding(padding: EdgeInsets.zero, child: content),
-        ),
+        gradient: cardGradient,
+        borderColor: borderColor,
+        borderWidth: borderWidth,
+        boxShadow: cardShadow,
+        child: content,
       );
     }
 
@@ -108,9 +173,18 @@ class SongItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         onTap: onTap,
         onLongPress: onLongPress,
-        child: Padding(
-          padding: padding,
-          child: content,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(borderRadius),
+            border: borderColor != null && borderWidth != null
+                ? Border.all(color: borderColor, width: borderWidth)
+                : null,
+            gradient: cardGradient,
+          ),
+          child: Padding(
+            padding: padding,
+            child: content,
+          ),
         ),
       ),
     );
@@ -130,9 +204,27 @@ class SongItem extends StatelessWidget {
             color: isCurrentTrack ? context.theme.colorScheme.primary : null,
           ),
         ),
-        ArtistWidget(
-          artist: track.artist,
-          isCurrentTrack: isCurrentTrack,
+        Row(
+          children: [
+            Expanded(
+              child: ArtistWidget(
+                artist: track.artist,
+                isCurrentTrack: isCurrentTrack,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              track.duration.format(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: context.theme.textTheme.labelSmall?.copyWith(
+                color: context.theme.textTheme.bodyMedium?.color?.withValues(
+                  alpha: 0.72,
+                ),
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -145,18 +237,26 @@ class SongItem extends StatelessWidget {
         if (isCurrentTrack)
           Tooltip(
             // When current track is playing, action is to pause; otherwise play
-            message: isPlayingNow ? 'Pause' : 'Play',
+            message: isPlayingNow
+                ? context.localization.pause
+                : context.localization.play,
             child: IconButton(
               icon: Icon(
                 isPlayingNow ? Icons.pause : Icons.play_arrow,
                 color: context.theme.colorScheme.primary,
               ),
               onPressed: onPlayPause,
+              padding: EdgeInsets.zero,
+              splashRadius: 18,
+              constraints: const BoxConstraints.tightFor(width: 36, height: 36),
+              visualDensity: VisualDensity.compact,
             ),
           )
         else
           Tooltip(
-            message: isFavorite ? 'Unlike' : 'Like',
+            message: isFavorite
+                ? context.localization.unlike
+                : context.localization.like,
             child: IconButton(
               icon: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -165,6 +265,10 @@ class SongItem extends StatelessWidget {
                     : AppDarkColors.accent,
               ),
               onPressed: onFavoriteToggle,
+              padding: EdgeInsets.zero,
+              splashRadius: 18,
+              constraints: const BoxConstraints.tightFor(width: 36, height: 36),
+              visualDensity: VisualDensity.compact,
             ),
           ),
         SongItemMoreOptionMenu(
@@ -177,7 +281,65 @@ class SongItem extends StatelessWidget {
           onShare: onShare,
           isInPlaylist: isInPlaylist,
           isCurrentTrack: isCurrentTrack,
+          compact: true,
         ),
+      ],
+    );
+  }
+}
+
+class _SongArtwork extends StatelessWidget {
+  const _SongArtwork({
+    required this.id,
+    required this.size,
+    required this.isCurrentTrack,
+    required this.isPlayingNow,
+  });
+
+  final int id;
+  final double size;
+  final bool isCurrentTrack;
+  final bool isPlayingNow;
+
+  @override
+  Widget build(BuildContext context) {
+    final primary = context.theme.colorScheme.primary;
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: size + 4,
+          height: size + 4,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: isCurrentTrack
+                ? LinearGradient(
+                    colors: [
+                      primary,
+                      const Color(0xFF00BFA6),
+                    ],
+                  )
+                : null,
+          ),
+          alignment: Alignment.center,
+          child: ArtImageWidget(id: id, size: size),
+        ),
+        if (isCurrentTrack)
+          Container(
+            width: size + 4,
+            height: size + 4,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.black.withValues(alpha: isPlayingNow ? 0.3 : 0.18),
+            ),
+            child: Icon(
+              isPlayingNow
+                  ? Icons.graphic_eq_rounded
+                  : Icons.play_arrow_rounded,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
       ],
     );
   }

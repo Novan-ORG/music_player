@@ -48,6 +48,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get hours => 'ساعت';
 
   @override
+  String get seconds => 'ثانیه';
+
+  @override
   String get off => 'خاموش';
 
   @override
@@ -64,6 +67,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get support => 'پشتیبانی';
+
+  @override
+  String get telegram => 'تلگرام';
 
   @override
   String get sendFeedbackOrSuggestion => 'ارسال بازخورد یا پیشنهادات';
@@ -94,6 +100,27 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get createdBy => 'ساخته شده با ❤️ توسط تیم نووان';
+
+  @override
+  String get brandName => 'موزیک پلیر رایگان';
+
+  @override
+  String get brandTagline => 'پخش روان، کنترل بی‌دردسر.';
+
+  @override
+  String get brandSplashMessage =>
+      'کتابخانه موسیقی شما با ظاهری تازه و تجربه‌ای روان در حال آماده‌سازی است.';
+
+  @override
+  String get brandSettingsMessage =>
+      'زبان، تم و تجربه پخش را طوری تنظیم کنید که دقیقاً با سلیقه شما هماهنگ شود.';
+
+  @override
+  String get brandAboutMessage =>
+      'این تجربه توسط تیم نووان طراحی شده تا گوش‌دادن روزمره را شیک، روان و کاملاً رایگان کند.';
+
+  @override
+  String get feedbackEmailSubject => 'بازخورد موزیک پلیر رایگان';
 
   @override
   String get homePage => '';
@@ -137,7 +164,144 @@ class AppLocalizationsFa extends AppLocalizations {
   String get allSongs => 'همه موزیک ها';
 
   @override
+  String get yourLibrary => 'کتابخانه شما';
+
+  @override
+  String get libraryHeroSubtitle =>
+      'سریع جستجو کنید، همه موزیک ها را رندوم پخش کنید و دوباره وارد حال و هوای خودتان شوید.';
+
+  @override
+  String get startMix => 'شروع میکس';
+
+  @override
+  String get libraryReady => 'آماده پخش';
+
+  @override
   String get searchSongs => 'جستجوی موزیک ها';
+
+  @override
+  String get searchHeroSubtitle =>
+      'بر اساس عنوان، هنرمند یا آلبوم جستجو کنید و سریع به موزیک بعدی برسید.';
+
+  @override
+  String get searchHint => 'جستجو بر اساس موزیک، هنرمند یا آلبوم';
+
+  @override
+  String get searchMatchesLabel => 'نتیجه';
+
+  @override
+  String get searchLibraryLabel => 'کتابخانه';
+
+  @override
+  String searchResultsCount(int count) {
+    return '$count نتیجه';
+  }
+
+  @override
+  String searchSongsReadyCount(int count) {
+    return '$count موزیک آماده';
+  }
+
+  @override
+  String get searchInstantSearch => 'جستجوی سریع';
+
+  @override
+  String get searchQuickPicks => 'پیشنهادهای سریع';
+
+  @override
+  String get searchStartVoiceSearch => 'شروع جستجوی صوتی';
+
+  @override
+  String get searchStopVoiceSearch => 'توقف جستجوی صوتی';
+
+  @override
+  String get searchInMotionTitle => 'جستجوی پویا';
+
+  @override
+  String get searchLibraryGlanceTitle => 'مروری سریع بر کتابخانه شما';
+
+  @override
+  String get searchLiveResultsMessage =>
+      'همزمان با تایپ کردن یا استفاده از جستجوی صوتی، نتایج به صورت زنده به‌روزرسانی می‌شوند.';
+
+  @override
+  String get searchBrowseLibraryMessage =>
+      'همه چیز را سریع مرور کنید یا مستقیم به هنرمند، آلبوم یا موزیک دلخواهتان بروید.';
+
+  @override
+  String get searchVisibleNow => 'نمایش فعلی';
+
+  @override
+  String get searchTryAnotherAngle => 'جستجوی دیگری را امتحان کنید';
+
+  @override
+  String get searchTapToExplore => 'برای جستجو لمس کنید';
+
+  @override
+  String searchResultsFor(String query) {
+    return 'نتایج برای «$query»';
+  }
+
+  @override
+  String searchMatchedSongsSummary(int count, int total) {
+    return '$count مورد از $total موزیک با جستجوی شما مطابقت داشت';
+  }
+
+  @override
+  String searchTracksReadySummary(int total) {
+    return '$total موزیک آماده مرور است';
+  }
+
+  @override
+  String searchNoMatchesTitle(String query) {
+    return 'نتیجه‌ای برای «$query» پیدا نشد';
+  }
+
+  @override
+  String get searchNoMatchesMessage =>
+      'عنوان موزیک، املای متفاوت یا یکی از پیشنهادهای سریع پایین را امتحان کنید.';
+
+  @override
+  String get emptyLibraryTitle => 'هیچ موزیکی در کتابخانه شما نیست';
+
+  @override
+  String get emptyLibraryMessage =>
+      'کتابخانه را تازه سازی کنید یا موزیک های جدید اضافه کنید تا شنیدن را شروع کنید.';
+
+  @override
+  String get emptyAlbumsTitle => 'هنوز آلبومی وجود ندارد';
+
+  @override
+  String get emptyAlbumsMessage =>
+      'به محض آماده شدن کتابخانه موسیقی، آلبوم ها اینجا نمایش داده می شوند.';
+
+  @override
+  String get emptyArtistsTitle => 'هنوز هنرمندی وجود ندارد';
+
+  @override
+  String get emptyArtistsMessage =>
+      'وقتی موزیک های شما در دسترس باشند، هنرمندان اینجا نمایش داده می شوند.';
+
+  @override
+  String get searchEmptyLibraryTitle => 'برای جستجو اول به موزیک نیاز دارید';
+
+  @override
+  String get searchEmptyLibraryMessage =>
+      'کتابخانه را تازه سازی کنید یا موزیک اضافه کنید تا جستجو را شروع کنید.';
+
+  @override
+  String get libraryLoadErrorTitle => 'بارگذاری کتابخانه انجام نشد';
+
+  @override
+  String get libraryLoadErrorMessage =>
+      'دسترسی ها را بررسی کنید و دوباره تلاش کنید.';
+
+  @override
+  String get searchLoadErrorTitle => 'جستجو فعلا در دسترس نیست';
+
+  @override
+  String get searchLoadErrorMessage =>
+      'کتابخانه را تازه سازی کنید و چند لحظه دیگر دوباره تلاش کنید.';
 
   @override
   String get refresh => 'تازه سازی';
@@ -160,6 +324,21 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get sortSongs => 'مرتب سازی موزیک ها';
+
+  @override
+  String get sortBy => 'مرتب سازی بر اساس';
+
+  @override
+  String get sortOrder => 'ترتیب نمایش';
+
+  @override
+  String get applySort => 'اعمال مرتب سازی';
+
+  @override
+  String get newestFirst => 'جدیدترین اول';
+
+  @override
+  String get oldestFirst => 'قدیمی ترین اول';
 
   @override
   String get recent => 'اخیر';
@@ -189,6 +368,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get artists => 'هنرمندان';
 
   @override
+  String get folder => 'پوشه';
+
+  @override
+  String get folders => 'پوشه ها';
+
+  @override
+  String get emptyFoldersTitle => 'هنوز پوشه ای با موزیک وجود ندارد';
+
+  @override
+  String get emptyFoldersMessage =>
+      'به محض آماده شدن کتابخانه موسیقی، پوشه های دارای موزیک اینجا نمایش داده می شوند.';
+
+  @override
   String get ascending => 'افزایشی';
 
   @override
@@ -211,6 +403,57 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get share => 'اشتراک گذاری';
+
+  @override
+  String get moreOptions => 'گزینه‌های بیشتر';
+
+  @override
+  String get play => 'پخش';
+
+  @override
+  String get pause => 'مکث';
+
+  @override
+  String get previous => 'قبلی';
+
+  @override
+  String get next => 'بعدی';
+
+  @override
+  String get like => 'پسندیدن';
+
+  @override
+  String get unlike => 'لغو پسند';
+
+  @override
+  String get enableShuffle => 'فعال کردن پخش تصادفی';
+
+  @override
+  String get disableShuffle => 'غیرفعال کردن پخش تصادفی';
+
+  @override
+  String get repeatOne => 'تکرار یک آهنگ';
+
+  @override
+  String get repeatAll => 'تکرار همه آهنگ‌ها';
+
+  @override
+  String get noRepeat => 'بدون تکرار';
+
+  @override
+  String get volume => 'صدا';
+
+  @override
+  String get muted => 'بی‌صدا';
+
+  @override
+  String get unknownSong => 'آهنگ نامشخص';
+
+  @override
+  String get unknownArtist => 'هنرمند نامشخص';
+
+  @override
+  String get unknownAlbum => 'آلبوم نامشخص';
 
   @override
   String get selected => 'انتخاب شده';
@@ -246,6 +489,33 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get createFirstPlaylist => 'ایجاد اولین لیست پخش';
+
+  @override
+  String get playlistHeroSubtitle =>
+      'لیست های حال و هوایی بسازید، مجموعه های محبوبتان را سنجاق کنید و سریع به پخش های اخیر برگردید.';
+
+  @override
+  String get emptyPlaylistsTitle => 'هنوز لیست پخشی ندارید';
+
+  @override
+  String get emptyPlaylistsMessage =>
+      'اولین لیست پخش خود را بسازید تا موزیک هایتان را برای ورزش، شب های آرام و هر حس دیگری کنار هم نگه دارید.';
+
+  @override
+  String get playlistPinnedHint =>
+      'لیست های محبوبتان را همیشه دم دست نگه دارید و با یک لمس به پخش های اخیر برگردید.';
+
+  @override
+  String get playlistRecentHint => 'سریع به آخرین جلسه پخش خود برگردید.';
+
+  @override
+  String get pinPlaylist => 'سنجاق کردن لیست پخش';
+
+  @override
+  String get unpinPlaylist => 'برداشتن سنجاق لیست پخش';
+
+  @override
+  String get pinned => 'سنجاق شده';
 
   @override
   String get song => 'موزیک';
@@ -352,7 +622,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get cancelTimer => 'لغو تایمر';
 
   @override
-  String get favoriteSongsPage => '';
+  String get favoriteSongsPage =>
+      'موزیک های محبوب خود را نزدیک نگه دارید و سریع تر به آن ها برگردید.';
 
   @override
   String get clearAll => 'حذف همه';

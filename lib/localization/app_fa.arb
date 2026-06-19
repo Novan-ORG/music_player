@@ -20,11 +20,13 @@
     "off": "خاموش",
     "minutes": "دقیقه",
     "hours": "ساعت",
+    "seconds": "ثانیه",
     "min15": "۱۵ دقیقه",
     "min30": "۳۰ دقیقه",
     "hour1": "۱ ساعت",
     "custom": "تایم دلخواه",
     "support": "پشتیبانی",
+    "telegram": "تلگرام",
     "sendFeedbackOrSuggestion": "ارسال بازخورد یا پیشنهادات",
     "errorOpenEmail": "برنامه ایمیل باز نشد به دلیل خطای نامعلوم.",
     "aboutUs": "درباره ما",
@@ -33,6 +35,12 @@
     "setTimer": "تنظیم تایمر",
     "aboutContributers": "درباره مشارکت کنندگان",
     "createdBy": "ساخته شده با ❤️ توسط تیم نووان",
+    "brandName": "موزیک پلیر رایگان",
+    "brandTagline": "پخش روان، کنترل بی‌دردسر.",
+    "brandSplashMessage": "کتابخانه موسیقی شما با ظاهری تازه و تجربه‌ای روان در حال آماده‌سازی است.",
+    "brandSettingsMessage": "زبان، تم و تجربه پخش را طوری تنظیم کنید که دقیقاً با سلیقه شما هماهنگ شود.",
+    "brandAboutMessage": "این تجربه توسط تیم نووان طراحی شده تا گوش‌دادن روزمره را شیک، روان و کاملاً رایگان کند.",
+    "feedbackEmailSubject": "بازخورد موزیک پلیر رایگان",
     "homePage": "",
     
     "@homePage": {
@@ -55,7 +63,96 @@
     "deleteFromDevice": "حذف از دستگاه",
     "favoriteSongs": "موزیک های محبوب",
     "allSongs": "همه موزیک ها",
+    "yourLibrary": "کتابخانه شما",
+    "libraryHeroSubtitle": "سریع جستجو کنید، همه موزیک ها را رندوم پخش کنید و دوباره وارد حال و هوای خودتان شوید.",
+    "startMix": "شروع میکس",
+    "libraryReady": "آماده پخش",
     "searchSongs": "جستجوی موزیک ها",
+    "searchHeroSubtitle": "بر اساس عنوان، هنرمند یا آلبوم جستجو کنید و سریع به موزیک بعدی برسید.",
+    "searchHint": "جستجو بر اساس موزیک، هنرمند یا آلبوم",
+    "searchMatchesLabel": "نتیجه",
+    "searchLibraryLabel": "کتابخانه",
+    "searchResultsCount": "{count} نتیجه",
+    "@searchResultsCount": {
+        "description": "برچسب تعداد نتایج جستجو",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "searchSongsReadyCount": "{count} موزیک آماده",
+    "@searchSongsReadyCount": {
+        "description": "برچسب تعداد موزیک های آماده نمایش",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "searchInstantSearch": "جستجوی سریع",
+    "searchQuickPicks": "پیشنهادهای سریع",
+    "searchStartVoiceSearch": "شروع جستجوی صوتی",
+    "searchStopVoiceSearch": "توقف جستجوی صوتی",
+    "searchInMotionTitle": "جستجوی پویا",
+    "searchLibraryGlanceTitle": "مروری سریع بر کتابخانه شما",
+    "searchLiveResultsMessage": "همزمان با تایپ کردن یا استفاده از جستجوی صوتی، نتایج به صورت زنده به‌روزرسانی می‌شوند.",
+    "searchBrowseLibraryMessage": "همه چیز را سریع مرور کنید یا مستقیم به هنرمند، آلبوم یا موزیک دلخواهتان بروید.",
+    "searchVisibleNow": "نمایش فعلی",
+    "searchTryAnotherAngle": "جستجوی دیگری را امتحان کنید",
+    "searchTapToExplore": "برای جستجو لمس کنید",
+    "searchResultsFor": "نتایج برای «{query}»",
+    "@searchResultsFor": {
+        "description": "عنوان نتایج جستجو",
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "searchMatchedSongsSummary": "{count} مورد از {total} موزیک با جستجوی شما مطابقت داشت",
+    "@searchMatchedSongsSummary": {
+        "description": "خلاصه تعداد نتایج جستجو",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "searchTracksReadySummary": "{total} موزیک آماده مرور است",
+    "@searchTracksReadySummary": {
+        "description": "خلاصه وقتی همه موزیک ها در صفحه جستجو نمایش داده می شوند",
+        "placeholders": {
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "searchNoMatchesTitle": "نتیجه‌ای برای «{query}» پیدا نشد",
+    "@searchNoMatchesTitle": {
+        "description": "عنوان حالت بدون نتیجه در جستجو",
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "searchNoMatchesMessage": "عنوان موزیک، املای متفاوت یا یکی از پیشنهادهای سریع پایین را امتحان کنید.",
+    "emptyLibraryTitle": "هیچ موزیکی در کتابخانه شما نیست",
+    "emptyLibraryMessage": "کتابخانه را تازه سازی کنید یا موزیک های جدید اضافه کنید تا شنیدن را شروع کنید.",
+    "emptyAlbumsTitle": "هنوز آلبومی وجود ندارد",
+    "emptyAlbumsMessage": "به محض آماده شدن کتابخانه موسیقی، آلبوم ها اینجا نمایش داده می شوند.",
+    "emptyArtistsTitle": "هنوز هنرمندی وجود ندارد",
+    "emptyArtistsMessage": "وقتی موزیک های شما در دسترس باشند، هنرمندان اینجا نمایش داده می شوند.",
+    "searchEmptyLibraryTitle": "برای جستجو اول به موزیک نیاز دارید",
+    "searchEmptyLibraryMessage": "کتابخانه را تازه سازی کنید یا موزیک اضافه کنید تا جستجو را شروع کنید.",
+    "libraryLoadErrorTitle": "بارگذاری کتابخانه انجام نشد",
+    "libraryLoadErrorMessage": "دسترسی ها را بررسی کنید و دوباره تلاش کنید.",
+    "searchLoadErrorTitle": "جستجو فعلا در دسترس نیست",
+    "searchLoadErrorMessage": "کتابخانه را تازه سازی کنید و چند لحظه دیگر دوباره تلاش کنید.",
     "refresh": "تازه سازی",
     "errorLoadingSongs": "در هنگام باگزاری موزیک ها خطایی رخ داده است",
     "noSongTryAgain": "هیچ موزیکی پیدا نشد\n یا تازه سازی کنید و موزیک جدیدی اضاف کنید.",
@@ -63,6 +160,11 @@
     "noSongInPlaylist": "هیچ موزیکی در این لیست پخش وجود ندارد",
     "shuffleAllSongs": "همه موزیک های بصورت رندوم",
     "sortSongs": "مرتب سازی موزیک ها",
+    "sortBy": "مرتب سازی بر اساس",
+    "sortOrder": "ترتیب نمایش",
+    "applySort": "اعمال مرتب سازی",
+    "newestFirst": "جدیدترین اول",
+    "oldestFirst": "قدیمی ترین اول",
     "recent": "اخیر",
     "dateAdded": "تاریخ افزدون",
     "duration": "مدت زمان",
@@ -72,6 +174,10 @@
     "albums": "آلبوم ها",
     "artist": "هنرمند",
     "artists": "هنرمندان",
+    "folder": "پوشه",
+    "folders": "پوشه ها",
+    "emptyFoldersTitle": "هنوز پوشه ای با موزیک وجود ندارد",
+    "emptyFoldersMessage": "به محض آماده شدن کتابخانه موسیقی، پوشه های دارای موزیک اینجا نمایش داده می شوند.",
     "ascending": "افزایشی",
     "descending": "کاهشی",
     "dismiss": "رد کردن",
@@ -82,6 +188,23 @@
     "addToPlaylist": "اضافه کردن به لیست پخش",
     "removeFromPlaylist": "حذف از لیست پخش",
     "share": "اشتراک گذاری",
+    "moreOptions": "گزینه‌های بیشتر",
+    "play": "پخش",
+    "pause": "مکث",
+    "previous": "قبلی",
+    "next": "بعدی",
+    "like": "پسندیدن",
+    "unlike": "لغو پسند",
+    "enableShuffle": "فعال کردن پخش تصادفی",
+    "disableShuffle": "غیرفعال کردن پخش تصادفی",
+    "repeatOne": "تکرار یک آهنگ",
+    "repeatAll": "تکرار همه آهنگ‌ها",
+    "noRepeat": "بدون تکرار",
+    "volume": "صدا",
+    "muted": "بی‌صدا",
+    "unknownSong": "آهنگ نامشخص",
+    "unknownArtist": "هنرمند نامشخص",
+    "unknownAlbum": "آلبوم نامشخص",
     "selected": "انتخاب شده",
     "deleteSongsAlertTitle": "حذف {count} موزیک؟",
     "@deleteSongsAlertTitle": {
@@ -115,6 +238,14 @@
     },
     "noPlaylistFound": "هیچ لیست پخشی پیدا نشد",
     "createFirstPlaylist": "ایجاد اولین لیست پخش",
+    "playlistHeroSubtitle": "لیست های حال و هوایی بسازید، مجموعه های محبوبتان را سنجاق کنید و سریع به پخش های اخیر برگردید.",
+    "emptyPlaylistsTitle": "هنوز لیست پخشی ندارید",
+    "emptyPlaylistsMessage": "اولین لیست پخش خود را بسازید تا موزیک هایتان را برای ورزش، شب های آرام و هر حس دیگری کنار هم نگه دارید.",
+    "playlistPinnedHint": "لیست های محبوبتان را همیشه دم دست نگه دارید و با یک لمس به پخش های اخیر برگردید.",
+    "playlistRecentHint": "سریع به آخرین جلسه پخش خود برگردید.",
+    "pinPlaylist": "سنجاق کردن لیست پخش",
+    "unpinPlaylist": "برداشتن سنجاق لیست پخش",
+    "pinned": "سنجاق شده",
     "song": "موزیک",
     "s": "",
     "createNewPlaylist": "ایجاد لیست پخش جدید",
@@ -157,7 +288,7 @@
     "sleepTimerActive": "تایمر خواب فعال است",
     "cancelTimer": "لغو تایمر",
 
-    "favoriteSongsPage": "",
+    "favoriteSongsPage": "موزیک های محبوب خود را نزدیک نگه دارید و سریع تر به آن ها برگردید.",
     "@favoriteSongsPage": {
         "description": "محلی سازی صفحه موزیک های محبوب"
     },

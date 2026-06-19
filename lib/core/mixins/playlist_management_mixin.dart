@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/domain/entities/song.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/favorite/presentation/bloc/bloc.dart';
 import 'package:music_player/features/playlist/playlist.dart';
@@ -26,14 +27,29 @@ mixin PlaylistManagementMixin<T extends StatefulWidget> on State<T> {
     );
 
     if (selectedSongIds != null && selectedSongIds.isNotEmpty && mounted) {
-      context.read<PlayListBloc>().add(
+      final playlistBloc = context.read<PlayListBloc>();
+      final completion = playlistBloc.stream.firstWhere(
+        (state) =>
+            state.status == PlayListStatus.loaded ||
+            state.status == PlayListStatus.error,
+      );
+      playlistBloc.add(
         AddSongsToPlaylistsEvent(
           selectedSongIds,
           [playlist.id],
         ),
       );
+      final result = await completion;
 
-      _showSongsAddedMessage(selectedSongIds.length, playlist.name);
+      if (mounted && result.status == PlayListStatus.loaded) {
+        _showSongsAddedMessage(selectedSongIds.length, playlist.name);
+      } else if (mounted) {
+        AppSnackBar.showError(
+          context,
+          title: context.localization.error,
+          message: result.errorMessage ?? context.localization.playlistPage,
+        );
+      }
     }
 
     return selectedSongIds;
@@ -99,11 +115,11 @@ mixin PlaylistManagementMixin<T extends StatefulWidget> on State<T> {
         ? context.localization.song
         : context.localization.songs;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$count $songText added to $playlistName'),
-        duration: const Duration(seconds: 3),
-      ),
+    AppSnackBar.showSuccess(
+      context,
+      title: context.localization.addToPlaylist,
+      message: '$count $songText • $playlistName',
+      icon: Icons.playlist_add_check_circle_rounded,
     );
   }
 
@@ -114,11 +130,11 @@ mixin PlaylistManagementMixin<T extends StatefulWidget> on State<T> {
         ? context.localization.song
         : context.localization.songs;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$count $songText removed from $playlistName'),
-        duration: const Duration(seconds: 3),
-      ),
+    AppSnackBar.showInfo(
+      context,
+      title: context.localization.removeFromPlaylist,
+      message: '$count $songText • $playlistName',
+      icon: Icons.playlist_remove_rounded,
     );
   }
 }

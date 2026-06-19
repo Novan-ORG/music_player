@@ -3,28 +3,52 @@ import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 
 class FilterButton extends StatelessWidget {
-  const FilterButton({super.key, this.onTap});
+  const FilterButton({
+    super.key,
+    this.onTap,
+    this.iconOnly = false,
+  });
 
   final VoidCallback? onTap;
+  final bool iconOnly;
 
   @override
   Widget build(BuildContext context) {
-    return GlassCard(
-      onTap: onTap,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 6,
-        vertical: 2,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        spacing: 3,
-        children: [
-          const Icon(Icons.sort_rounded),
-          Text(
-            context.localization.sortSongs,
-            style: context.theme.textTheme.labelMedium,
-          ),
-        ],
+    final theme = context.theme;
+    final content = iconOnly
+        ? Icon(
+            Icons.tune_rounded,
+            size: 18,
+            color: theme.colorScheme.primary,
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 7,
+            children: [
+              Icon(
+                Icons.tune_rounded,
+                size: 18,
+                color: theme.colorScheme.primary,
+              ),
+              Text(
+                context.localization.sortSongs,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          );
+
+    return Tooltip(
+      message: context.localization.sortSongs,
+      child: GlassCard(
+        onTap: onTap,
+        borderRadius: const BorderRadius.all(Radius.circular(18)),
+        padding: EdgeInsets.symmetric(
+          horizontal: iconOnly ? 11 : 12,
+          vertical: 9,
+        ),
+        child: content,
       ),
     );
   }

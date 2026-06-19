@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/playlist/playlist.dart';
 
@@ -18,14 +19,19 @@ class PlaylistItemMoreAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      icon: const Icon(Icons.more_vert),
+    return AppPopupMenuButton<_MenuAction>(
+      compact: true,
+      tooltip: context.localization.moreOptions,
       onSelected: (action) async {
         switch (action) {
           case _MenuAction.addMusicToPlaylist:
             onAddMusicToPlaylist?.call();
             return;
           case _MenuAction.delete:
+            final confirmed = await _showDeleteConfirmation(context);
+            if (!context.mounted || !confirmed) {
+              return;
+            }
             context.read<PlayListBloc>().add(
               DeletePlayListEvent(playlist.id),
             );
@@ -38,55 +44,57 @@ class PlaylistItemMoreAction extends StatelessWidget {
             return;
         }
       },
-      itemBuilder: (context) => [
-        const PopupMenuItem(
+      items: [
+        AppPopupMenuEntry(
           value: _MenuAction.addMusicToPlaylist,
-          child: Row(
-            spacing: 8,
-            children: [
-              Icon(Icons.add, color: Colors.green),
-              Text('Add music'),
-            ],
-          ),
+          label: context.localization.addSongs,
+          icon: Icons.playlist_add_rounded,
+          iconColor: Colors.green,
         ),
-        const PopupMenuItem(
+        AppPopupMenuEntry(
           value: _MenuAction.edit,
-          child: Row(
-            spacing: 8,
-            children: [
-              Icon(Icons.edit, color: Colors.orange),
-              Text('Rename'),
-            ],
-          ),
+          label: context.localization.rename,
+          icon: Icons.edit_rounded,
+          iconColor: Colors.orange,
         ),
-        const PopupMenuItem(
+        AppPopupMenuEntry(
           value: _MenuAction.delete,
-          child: Row(
-            spacing: 8,
-            children: [
-              Icon(Icons.delete, color: Colors.red),
-              Text('Delete'),
-            ],
-          ),
+          label: context.localization.delete,
+          icon: Icons.delete_outline_rounded,
+          isDestructive: true,
         ),
       ],
     );
   }
 
+  Future<bool> _showDeleteConfirmation(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AppConfirmationDialog(
+        icon: Icons.playlist_remove_rounded,
+        title: dialogContext.localization.delete,
+        message: '${dialogContext.localization.playlist}: ${playlist.name}',
+        confirmLabel: dialogContext.localization.delete,
+        isDestructive: true,
+        onConfirm: () => Navigator.of(dialogContext).pop(true),
+      ),
+    );
+
+    return confirmed ?? false;
+  }
+
   void _showUndoSnackbar(BuildContext context, Playlist playlist) {
     final playlistBloc = context.read<PlayListBloc>();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${playlist.name} ${context.localization.deleted}'),
-        action: SnackBarAction(
-          label: context.localization.undo,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          onPressed: () {
-            playlistBloc.add(UndoDeletePlayListEvent());
-          },
-        ),
-        duration: const Duration(seconds: 20),
-      ),
+    AppSnackBar.showInfo(
+      context,
+      title: context.localization.deleted,
+      message: playlist.name,
+      icon: Icons.playlist_remove_rounded,
+      actionLabel: context.localization.undo,
+      onAction: () {
+        playlistBloc.add(UndoDeletePlayListEvent());
+      },
+      duration: const Duration(seconds: 20),
     );
   }
 }

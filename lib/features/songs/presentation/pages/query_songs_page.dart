@@ -4,6 +4,7 @@ import 'package:music_player/core/views/songs_view.dart';
 import 'package:music_player/core/widgets/widgets.dart';
 import 'package:music_player/extensions/extensions.dart';
 import 'package:music_player/features/search/presentation/pages/search_songs_page.dart';
+import 'package:music_player/features/songs/domain/entities/entities.dart';
 import 'package:music_player/features/songs/domain/enums/enums.dart';
 import 'package:music_player/features/songs/presentation/bloc/bloc.dart';
 import 'package:music_player/features/songs/presentation/widgets/widgets.dart';
@@ -43,117 +44,119 @@ class _QuerySongsPageState extends State<QuerySongsPage> {
     super.dispose();
   }
 
+  void _reloadQuerySongs({SortConfig? sortConfig}) {
+    querySongsBloc.add(
+      LoadQuerySongsEvent(
+        songsFromType: widget.fromType,
+        where: widget.where,
+        sortConfig: sortConfig,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<QuerySongsBloc>(
       create: (context) => querySongsBloc,
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: Text(
-            widget.title,
+      child: BlocListener<SongsBloc, SongsState>(
+        listenWhen: (previous, current) =>
+            previous.allSongs != current.allSongs &&
+            current.status == SongsStatus.loaded,
+        listener: (_, state) {
+          _reloadQuerySongs(sortConfig: querySongsBloc.state.sortConfig);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: Text(
+              widget.title,
+            ),
+            centerTitle: true,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => AppRouteBlocScope.fromContext(
+                        context: context,
+                        child: const SearchSongsPage(),
+                      ),
+                    ),
+                  );
+                },
+                tooltip: context.localization.searchSongs,
+                icon: const Icon(
+                  Icons.search,
+                ),
+              ).paddingSymmetric(horizontal: 6),
+            ],
           ),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const SearchSongsPage(),
+          body: BlocBuilder<QuerySongsBloc, QuerySongsState>(
+            builder: (_, querySongsState) {
+              // Handle loading state
+              if (querySongsState.status == QuerySongsStatus.loading) {
+                return const Loading();
+              }
+
+              // Handle error state
+              if (querySongsState.status == QuerySongsStatus.error) {
+                return SongsErrorLoading(
+                  message: context.localization.errorLoadingSongs,
+                  onRetry: () => _reloadQuerySongs(
+                    sortConfig: querySongsState.sortConfig,
                   ),
                 );
-              },
-              tooltip: context.localization.searchSongs,
-              icon: const Icon(
-                Icons.search,
-              ),
-            ).paddingSymmetric(horizontal: 6),
-          ],
-        ),
-        body: BlocBuilder<QuerySongsBloc, QuerySongsState>(
-          builder: (_, querySongsState) {
-            // Handle loading state
-            if (querySongsState.status == QuerySongsStatus.loading) {
-              return const Loading();
-            }
+              }
 
-            // Handle error state
-            if (querySongsState.status == QuerySongsStatus.error) {
-              return SongsErrorLoading(
-                message: context.localization.errorLoadingSongs,
-                onRetry: () => querySongsBloc.add(
-                  LoadQuerySongsEvent(
-                    where: widget.where,
-                    songsFromType: widget.fromType,
+              // Handle empty songs
+              if (querySongsState.songs.isEmpty) {
+                return NoSongsWidget(
+                  message: context.localization.noSongTryAgain,
+                  onRefresh: () => _reloadQuerySongs(
                     sortConfig: querySongsState.sortConfig,
                   ),
-                ),
-              );
-            }
+                );
+              }
 
-            // Handle empty songs
-            if (querySongsState.songs.isEmpty) {
-              return NoSongsWidget(
-                message: context.localization.noSongTryAgain,
-                onRefresh: () => querySongsBloc.add(
-                  LoadQuerySongsEvent(
-                    where: widget.where,
-                    songsFromType: widget.fromType,
-                    sortConfig: querySongsState.sortConfig,
-                  ),
-                ),
-              );
-            }
+              final songs = querySongsState.songs;
 
-            final songs = querySongsState.songs;
-
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FilterButton(
-                      onTap: () async {
-                        final selectedSortConfig =
-                            await SongsSortBottomSheet.show(
-                              context: context,
-                              selectedSortConfig: querySongsState.sortConfig,
-                            );
-                        if (selectedSortConfig != null) {
-                          querySongsBloc.add(
-                            LoadQuerySongsEvent(
-                              where: widget.where,
-                              songsFromType: widget.fromType,
-                              sortConfig: selectedSortConfig,
-                            ),
-                          );
-                        }
+              return Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FilterButton(
+                        onTap: () async {
+                          final selectedSortConfig =
+                              await SongsSortBottomSheet.show(
+                                context: context,
+                                selectedSortConfig: querySongsState.sortConfig,
+                              );
+                          if (selectedSortConfig != null) {
+                            _reloadQuerySongs(sortConfig: selectedSortConfig);
+                          }
+                        },
+                      ),
+                      SongsCount(songCount: songs.length),
+                    ],
+                  ).padding(value: 12),
+                  Expanded(
+                    child: SongsView(
+                      songs: songs,
+                      onRefresh: () async {
+                        _reloadQuerySongs(
+                          sortConfig: querySongsState.sortConfig,
+                        );
+                        await Future<void>.delayed(
+                          const Duration(milliseconds: 300),
+                        );
                       },
                     ),
-                    SongsCount(songCount: songs.length),
-                  ],
-                ).padding(value: 12),
-
-                Expanded(
-                  child: SongsView(
-                    songs: songs,
-                    onRefresh: () async {
-                      querySongsBloc.add(
-                        LoadQuerySongsEvent(
-                          where: widget.where,
-                          songsFromType: widget.fromType,
-                          sortConfig: querySongsState.sortConfig,
-                        ),
-                      );
-                      await Future<void>.delayed(
-                        const Duration(milliseconds: 300),
-                      );
-                    },
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

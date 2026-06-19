@@ -176,6 +176,12 @@ abstract class AppLocalizations {
   /// **'Hours'**
   String get hours;
 
+  /// No description provided for @seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Seconds'**
+  String get seconds;
+
   /// No description provided for @off.
   ///
   /// In en, this message translates to:
@@ -211,6 +217,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Support'**
   String get support;
+
+  /// No description provided for @telegram.
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram'**
+  String get telegram;
 
   /// No description provided for @sendFeedbackOrSuggestion.
   ///
@@ -271,6 +283,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Made with ❤️ by Novan team'**
   String get createdBy;
+
+  /// No description provided for @brandName.
+  ///
+  /// In en, this message translates to:
+  /// **'Free Music Player'**
+  String get brandName;
+
+  /// No description provided for @brandTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Bold sound, effortless control.'**
+  String get brandTagline;
+
+  /// No description provided for @brandSplashMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading your library with a cleaner, sharper listening experience.'**
+  String get brandSplashMessage;
+
+  /// No description provided for @brandSettingsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Shape the player around your language, theme, and listening flow.'**
+  String get brandSettingsMessage;
+
+  /// No description provided for @brandAboutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Designed by the Novan team to make everyday listening feel polished, playful, and completely free.'**
+  String get brandAboutMessage;
+
+  /// No description provided for @feedbackEmailSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Free Music Player Feedback'**
+  String get feedbackEmailSubject;
 
   /// Home page localizations.
   ///
@@ -350,11 +398,239 @@ abstract class AppLocalizations {
   /// **'All Songs'**
   String get allSongs;
 
+  /// No description provided for @yourLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Library'**
+  String get yourLibrary;
+
+  /// No description provided for @libraryHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shuffle the room, search fast, and jump back into your sound.'**
+  String get libraryHeroSubtitle;
+
+  /// No description provided for @startMix.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Mix'**
+  String get startMix;
+
+  /// No description provided for @libraryReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to play'**
+  String get libraryReady;
+
   /// No description provided for @searchSongs.
   ///
   /// In en, this message translates to:
   /// **'Search Songs'**
   String get searchSongs;
+
+  /// No description provided for @searchHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find by title, artist, or album and jump straight into the next track.'**
+  String get searchHeroSubtitle;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by song, artist, or album'**
+  String get searchHint;
+
+  /// No description provided for @searchMatchesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches'**
+  String get searchMatchesLabel;
+
+  /// No description provided for @searchLibraryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get searchLibraryLabel;
+
+  /// Summary label showing number of search results
+  ///
+  /// In en, this message translates to:
+  /// **'{count} results'**
+  String searchResultsCount(int count);
+
+  /// Summary label showing number of songs ready to browse
+  ///
+  /// In en, this message translates to:
+  /// **'{count} songs ready'**
+  String searchSongsReadyCount(int count);
+
+  /// No description provided for @searchInstantSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant search'**
+  String get searchInstantSearch;
+
+  /// No description provided for @searchQuickPicks.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick picks'**
+  String get searchQuickPicks;
+
+  /// No description provided for @searchStartVoiceSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Start voice search'**
+  String get searchStartVoiceSearch;
+
+  /// No description provided for @searchStopVoiceSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop voice search'**
+  String get searchStopVoiceSearch;
+
+  /// No description provided for @searchInMotionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search in motion'**
+  String get searchInMotionTitle;
+
+  /// No description provided for @searchLibraryGlanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your library at a glance'**
+  String get searchLibraryGlanceTitle;
+
+  /// No description provided for @searchLiveResultsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Matching tracks update live while you type or use voice search.'**
+  String get searchLiveResultsMessage;
+
+  /// No description provided for @searchBrowseLibraryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse everything quickly, or jump straight to an artist, album, or favorite title.'**
+  String get searchBrowseLibraryMessage;
+
+  /// No description provided for @searchVisibleNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible now'**
+  String get searchVisibleNow;
+
+  /// No description provided for @searchTryAnotherAngle.
+  ///
+  /// In en, this message translates to:
+  /// **'Try another angle'**
+  String get searchTryAnotherAngle;
+
+  /// No description provided for @searchTapToExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to explore'**
+  String get searchTapToExplore;
+
+  /// Header for search results
+  ///
+  /// In en, this message translates to:
+  /// **'Results for \"{query}\"'**
+  String searchResultsFor(String query);
+
+  /// Summary of matched search results
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {total} tracks matched your search'**
+  String searchMatchedSongsSummary(int count, int total);
+
+  /// Summary when showing all songs on the search page
+  ///
+  /// In en, this message translates to:
+  /// **'{total} tracks ready to browse'**
+  String searchTracksReadySummary(int total);
+
+  /// Title for empty search results
+  ///
+  /// In en, this message translates to:
+  /// **'No matches for \"{query}\"'**
+  String searchNoMatchesTitle(String query);
+
+  /// No description provided for @searchNoMatchesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a song title, a different spelling, or switch to one of the quick picks below.'**
+  String get searchNoMatchesMessage;
+
+  /// No description provided for @emptyLibraryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No songs in your library'**
+  String get emptyLibraryTitle;
+
+  /// No description provided for @emptyLibraryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh your library or add fresh tracks to start listening.'**
+  String get emptyLibraryMessage;
+
+  /// No description provided for @emptyAlbumsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No albums yet'**
+  String get emptyAlbumsTitle;
+
+  /// No description provided for @emptyAlbumsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Albums will appear here once your music library is ready.'**
+  String get emptyAlbumsMessage;
+
+  /// No description provided for @emptyArtistsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No artists yet'**
+  String get emptyArtistsTitle;
+
+  /// No description provided for @emptyArtistsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Artists will show up here as soon as your songs are available.'**
+  String get emptyArtistsMessage;
+
+  /// No description provided for @searchEmptyLibraryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search needs music first'**
+  String get searchEmptyLibraryTitle;
+
+  /// No description provided for @searchEmptyLibraryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh your library or add songs to start searching.'**
+  String get searchEmptyLibraryMessage;
+
+  /// No description provided for @libraryLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your library'**
+  String get libraryLoadErrorTitle;
+
+  /// No description provided for @libraryLoadErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Check permissions, then try refreshing again.'**
+  String get libraryLoadErrorMessage;
+
+  /// No description provided for @searchLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search is unavailable right now'**
+  String get searchLoadErrorTitle;
+
+  /// No description provided for @searchLoadErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh your library and try again in a moment.'**
+  String get searchLoadErrorMessage;
 
   /// No description provided for @refresh.
   ///
@@ -397,6 +673,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sort Songs'**
   String get sortSongs;
+
+  /// No description provided for @sortBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get sortBy;
+
+  /// No description provided for @sortOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get sortOrder;
+
+  /// No description provided for @applySort.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Sort'**
+  String get applySort;
+
+  /// No description provided for @newestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest first'**
+  String get newestFirst;
+
+  /// No description provided for @oldestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest first'**
+  String get oldestFirst;
 
   /// No description provided for @recent.
   ///
@@ -452,6 +758,30 @@ abstract class AppLocalizations {
   /// **'Artists'**
   String get artists;
 
+  /// No description provided for @folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder'**
+  String get folder;
+
+  /// No description provided for @folders.
+  ///
+  /// In en, this message translates to:
+  /// **'Folders'**
+  String get folders;
+
+  /// No description provided for @emptyFoldersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No folders with songs yet'**
+  String get emptyFoldersTitle;
+
+  /// No description provided for @emptyFoldersMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Song folders will show up here as soon as your music library is ready.'**
+  String get emptyFoldersMessage;
+
   /// No description provided for @ascending.
   ///
   /// In en, this message translates to:
@@ -499,6 +829,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Share'**
   String get share;
+
+  /// No description provided for @moreOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get moreOptions;
+
+  /// No description provided for @play.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get play;
+
+  /// No description provided for @pause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pause;
+
+  /// No description provided for @previous.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previous;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @like.
+  ///
+  /// In en, this message translates to:
+  /// **'Like'**
+  String get like;
+
+  /// No description provided for @unlike.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlike'**
+  String get unlike;
+
+  /// No description provided for @enableShuffle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Shuffle'**
+  String get enableShuffle;
+
+  /// No description provided for @disableShuffle.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Shuffle'**
+  String get disableShuffle;
+
+  /// No description provided for @repeatOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat One'**
+  String get repeatOne;
+
+  /// No description provided for @repeatAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat All'**
+  String get repeatAll;
+
+  /// No description provided for @noRepeat.
+  ///
+  /// In en, this message translates to:
+  /// **'No Repeat'**
+  String get noRepeat;
+
+  /// No description provided for @volume.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume'**
+  String get volume;
+
+  /// No description provided for @muted.
+  ///
+  /// In en, this message translates to:
+  /// **'Muted'**
+  String get muted;
+
+  /// No description provided for @unknownSong.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Song'**
+  String get unknownSong;
+
+  /// No description provided for @unknownArtist.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Artist'**
+  String get unknownArtist;
+
+  /// No description provided for @unknownAlbum.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Album'**
+  String get unknownAlbum;
 
   /// No description provided for @selected.
   ///
@@ -559,6 +991,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create First Playlist'**
   String get createFirstPlaylist;
+
+  /// No description provided for @playlistHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Build mood sets, pin your go-to collections, and jump back into recent listens.'**
+  String get playlistHeroSubtitle;
+
+  /// No description provided for @emptyPlaylistsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No playlists yet'**
+  String get emptyPlaylistsTitle;
+
+  /// No description provided for @emptyPlaylistsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first playlist to group songs for workouts, quiet nights, and everything in between.'**
+  String get emptyPlaylistsMessage;
+
+  /// No description provided for @playlistPinnedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your favorite collections close and open recent sessions in one tap.'**
+  String get playlistPinnedHint;
+
+  /// No description provided for @playlistRecentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Jump back into your latest listening session.'**
+  String get playlistRecentHint;
+
+  /// No description provided for @pinPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin playlist'**
+  String get pinPlaylist;
+
+  /// No description provided for @unpinPlaylist.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpin playlist'**
+  String get unpinPlaylist;
+
+  /// No description provided for @pinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned'**
+  String get pinned;
 
   /// No description provided for @song.
   ///
@@ -761,7 +1241,7 @@ abstract class AppLocalizations {
   /// Favorite songs page localization
   ///
   /// In en, this message translates to:
-  /// **''**
+  /// **'Keep the songs you love close and jump back into them faster.'**
   String get favoriteSongsPage;
 
   /// No description provided for @clearAll.

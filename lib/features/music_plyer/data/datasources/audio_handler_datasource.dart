@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// to control music playback.
 abstract interface class AudioHandlerDatasource {
   /// Plays a playlist starting at the specified index.
-  Future<void> play(List<SongModel> songs, int index);
+  Future<void> play(List<SongModel> songs, int index, {bool autoPlay = true});
 
   /// Pauses the currently playing song.
   Future<void> pause();
@@ -57,6 +57,19 @@ abstract interface class AudioHandlerDatasource {
   /// - [songId]: ID of the song to add
   /// Returns a [bool] indicating success or failure.
   Future<bool> addToRecentlyPlayed(int songId);
+
+  /// Persists the current playback queue.
+  Future<bool> savePlaybackSession(
+    List<SongModel> songs,
+    int currentIndex, {
+    required bool wasPlaying,
+  });
+
+  /// Retrieves the saved playback queue, if any.
+  PlaybackSession? getSavedPlaybackSession();
+
+  /// Clears the saved playback queue.
+  Future<bool> clearSavedPlaybackSession();
 }
 
 /// Implementation of [AudioHandlerDatasource] using MAudioHandler.
@@ -80,13 +93,19 @@ class AudioHandlerDatasourceImpl implements AudioHandlerDatasource {
   }
 
   @override
-  Future<void> play(List<SongModel> songs, int index) async {
+  Future<void> play(
+    List<SongModel> songs,
+    int index, {
+    bool autoPlay = true,
+  }) async {
     // Add songs to the audio handler's queue
-    await _audioHandler.addAudioSources(songs);
-    // Seek to the specified song index
-    await _audioHandler.seek(Duration.zero, index: index);
-    // Start playback
-    await _audioHandler.play();
+    await _audioHandler.addAudioSources(
+      songs,
+      initialIndex: index,
+    );
+    if (autoPlay) {
+      await _audioHandler.play();
+    }
   }
 
   @override
@@ -172,5 +191,55 @@ class AudioHandlerDatasourceImpl implements AudioHandlerDatasource {
   @override
   Future<void> skipToPrevious() {
     return _audioHandler.skipToPrevious();
+  }
+
+  @override
+  Future<bool> savePlaybackSession(
+    List<SongModel> songs,
+    int currentIndex, {
+    required bool wasPlaying,
+  }) {
+    final songIds = songs
+        .map((song) => song.id.toString())
+        .toList(growable: false);
+    return Future.wait<bool>([
+      _preferences.setStringList(PreferencesKeys.playbackQueueSongIds, songIds),
+      _preferences.setInt(PreferencesKeys.playbackCurrentIndex, currentIndex),
+      _preferences.setBool(PreferencesKeys.playbackWasPlaying, wasPlaying),
+    ]).then((results) => results.every((saved) => saved));
+  }
+
+  @override
+  PlaybackSession? getSavedPlaybackSession() {
+    final queueSongIds = _preferences.getStringList(
+      PreferencesKeys.playbackQueueSongIds,
+    );
+    final currentIndex = _preferences.getInt(
+      PreferencesKeys.playbackCurrentIndex,
+    );
+
+    if (queueSongIds == null ||
+        queueSongIds.isEmpty ||
+        currentIndex == null ||
+        currentIndex < 0 ||
+        currentIndex >= queueSongIds.length) {
+      return null;
+    }
+
+    return PlaybackSession(
+      playlistSongIds: queueSongIds.map(int.parse).toList(growable: false),
+      currentSongIndex: currentIndex,
+      wasPlaying:
+          _preferences.getBool(PreferencesKeys.playbackWasPlaying) ?? true,
+    );
+  }
+
+  @override
+  Future<bool> clearSavedPlaybackSession() {
+    return Future.wait<bool>([
+      _preferences.remove(PreferencesKeys.playbackQueueSongIds),
+      _preferences.remove(PreferencesKeys.playbackCurrentIndex),
+      _preferences.remove(PreferencesKeys.playbackWasPlaying),
+    ]).then((results) => results.every((removed) => removed));
   }
 }

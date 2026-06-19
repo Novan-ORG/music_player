@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/core/constants/constants.dart';
+import 'package:music_player/core/widgets/app_state_view.dart';
 import 'package:music_player/extensions/extensions.dart';
 
 /// Error state widget displayed when songs fail to load.
@@ -11,42 +12,28 @@ import 'package:music_player/extensions/extensions.dart';
 class SongsErrorLoading extends StatelessWidget {
   const SongsErrorLoading({
     super.key,
-    this.message = 'Failed to load songs',
+    this.title,
+    this.message,
+    this.eyebrow,
     this.onRetry,
   });
-  final String message;
+  final String? title;
+  final String? message;
+  final String? eyebrow;
   final VoidCallback? onRetry;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            ImageAssets.errorLoadSongs,
-            width: 97,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            message,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(
-                alpha: 0.8,
-              ),
-            ),
-          ),
-          if (onRetry != null) ...[
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: onRetry,
-              child: Text(context.localization.retry),
-            ),
-          ],
-        ],
+    return AppStateView(
+      eyebrow: eyebrow ?? context.localization.error,
+      accentColor: context.theme.colorScheme.error,
+      title: title ?? context.localization.libraryLoadErrorTitle,
+      message: message ?? context.localization.libraryLoadErrorMessage,
+      actionLabel: onRetry != null ? context.localization.retry : null,
+      onAction: onRetry,
+      illustration: Image.asset(
+        ImageAssets.errorLoadSongs,
+        width: 74,
       ),
     );
   }

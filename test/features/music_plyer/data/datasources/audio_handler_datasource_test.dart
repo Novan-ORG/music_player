@@ -42,33 +42,56 @@ void main() {
 
     group('play', () {
       test(
-        'should call addAudioSources, seek and play on audioHandler',
+        'should replace the queue and play on audioHandler',
         () async {
+          const initialIndex = 1;
+
           // Arrange
           when(
-            () => mockAudioHandler.addAudioSources(any()),
-          ).thenAnswer((_) async {});
-          when(
-            () => mockAudioHandler.seek(
-              Duration.zero,
-              index: any(named: 'index'),
+            () => mockAudioHandler.addAudioSources(
+              any(),
+              initialIndex: any(named: 'initialIndex'),
             ),
           ).thenAnswer((_) async {});
           when(() => mockAudioHandler.play()).thenAnswer((_) async {});
 
           // Act
-          await datasource.play([tSongModel], tIndex);
+          await datasource.play([tSongModel], initialIndex);
 
           // Assert
           verify(
-            () => mockAudioHandler.addAudioSources([tSongModel]),
-          ).called(1);
-          verify(
-            () => mockAudioHandler.seek(Duration.zero, index: tIndex),
+            () => mockAudioHandler.addAudioSources(
+              [tSongModel],
+              initialIndex: initialIndex,
+            ),
           ).called(1);
           verify(() => mockAudioHandler.play()).called(1);
         },
       );
+
+      test('should prepare queue without auto playing when disabled', () async {
+        const initialIndex = 1;
+
+        // Arrange
+        when(
+          () => mockAudioHandler.addAudioSources(
+            any(),
+            initialIndex: any(named: 'initialIndex'),
+          ),
+        ).thenAnswer((_) async {});
+
+        // Act
+        await datasource.play([tSongModel], initialIndex, autoPlay: false);
+
+        // Assert
+        verify(
+          () => mockAudioHandler.addAudioSources(
+            [tSongModel],
+            initialIndex: initialIndex,
+          ),
+        ).called(1);
+        verifyNever(() => mockAudioHandler.play());
+      });
     });
 
     group('pause', () {
@@ -291,6 +314,115 @@ void main() {
                 as List<String>;
         expect(captured.length, 50);
         expect(captured.first, '100');
+      });
+    });
+
+    group('playback session', () {
+      test('should save playback queue metadata', () async {
+        // Arrange
+        when(
+          () => mockPreferences.setStringList(any(), any()),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockPreferences.setInt(any(), any()),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockPreferences.setBool(any(), any()),
+        ).thenAnswer((_) async => true);
+
+        // Act
+        final result = await datasource.savePlaybackSession(
+          [tSongModel],
+          tIndex,
+          wasPlaying: false,
+        );
+
+        // Assert
+        expect(result, isTrue);
+        verify(
+          () => mockPreferences.setStringList(
+            PreferencesKeys.playbackQueueSongIds,
+            ['1'],
+          ),
+        ).called(1);
+        verify(
+          () => mockPreferences.setInt(
+            PreferencesKeys.playbackCurrentIndex,
+            tIndex,
+          ),
+        ).called(1);
+        verify(
+          () => mockPreferences.setBool(
+            PreferencesKeys.playbackWasPlaying,
+            false,
+          ),
+        ).called(1);
+      });
+
+      test('should return saved playback session when data is valid', () {
+        // Arrange
+        when(
+          () => mockPreferences.getStringList(
+            PreferencesKeys.playbackQueueSongIds,
+          ),
+        ).thenReturn(['1', '2']);
+        when(
+          () => mockPreferences.getInt(PreferencesKeys.playbackCurrentIndex),
+        ).thenReturn(1);
+        when(
+          () => mockPreferences.getBool(PreferencesKeys.playbackWasPlaying),
+        ).thenReturn(true);
+
+        // Act
+        final result = datasource.getSavedPlaybackSession();
+
+        // Assert
+        expect(
+          result,
+          const PlaybackSession(
+            playlistSongIds: [1, 2],
+            currentSongIndex: 1,
+            wasPlaying: true,
+          ),
+        );
+      });
+
+      test('should return null when saved playback session is invalid', () {
+        // Arrange
+        when(
+          () => mockPreferences.getStringList(
+            PreferencesKeys.playbackQueueSongIds,
+          ),
+        ).thenReturn(['1']);
+        when(
+          () => mockPreferences.getInt(PreferencesKeys.playbackCurrentIndex),
+        ).thenReturn(5);
+
+        // Act
+        final result = datasource.getSavedPlaybackSession();
+
+        // Assert
+        expect(result, isNull);
+      });
+
+      test('should clear saved playback session keys', () async {
+        // Arrange
+        when(() => mockPreferences.remove(any())).thenAnswer((_) async => true);
+
+        // Act
+        final result = await datasource.clearSavedPlaybackSession();
+
+        // Assert
+        expect(result, isTrue);
+        verify(
+          () => mockPreferences.remove(PreferencesKeys.playbackQueueSongIds),
+        ).called(1);
+        verify(
+          () => mockPreferences.remove(PreferencesKeys.playbackCurrentIndex),
+        ).called(1);
+        verify(
+          () => mockPreferences.remove(PreferencesKeys.playbackWasPlaying),
+        ).called(1);
       });
     });
   });

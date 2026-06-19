@@ -16,6 +16,10 @@ class ArtistWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.theme;
+    final inactiveColor = theme.textTheme.bodyMedium?.color?.withValues(
+      alpha: 0.76,
+    );
     return Row(
       mainAxisSize: MainAxisSize.min,
       spacing: 4,
@@ -23,9 +27,7 @@ class ArtistWidget extends StatelessWidget {
         Icon(
           Icons.person,
           size: 14,
-          color: isCurrentTrack
-              ? context.theme.colorScheme.primary
-              : Colors.grey,
+          color: isCurrentTrack ? theme.colorScheme.primary : inactiveColor,
         ),
         Flexible(
           child: Text(
@@ -33,9 +35,7 @@ class ArtistWidget extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: isCurrentTrack
-                  ? context.theme.colorScheme.primary
-                  : Colors.grey[700],
+              color: isCurrentTrack ? theme.colorScheme.primary : inactiveColor,
             ),
           ),
         ),
