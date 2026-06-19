@@ -176,6 +176,12 @@ abstract class AppLocalizations {
   /// **'Hours'**
   String get hours;
 
+  /// No description provided for @seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Seconds'**
+  String get seconds;
+
   /// No description provided for @off.
   ///
   /// In en, this message translates to:

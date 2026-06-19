@@ -849,41 +849,63 @@ class _SleepTimerOptionsSheet extends StatelessWidget {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 12,
-          children: [
-            Text(
-              context.localization.selectSleepTimerDuration,
-              style: context.theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            ...options.map(
-              (option) => ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    color: context.theme.colorScheme.primary.withValues(
-                      alpha: 0.1,
-                    ),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    option.icon,
-                    color: context.theme.colorScheme.primary,
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isLandscape = constraints.maxWidth > constraints.maxHeight;
+            final itemWidth = isLandscape
+                ? (constraints.maxWidth - 12) / 2
+                : constraints.maxWidth;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.localization.selectSleepTimerDuration,
+                  style: context.theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                title: Text(localizedLabels[option.value] ?? option.value),
-                trailing: const Icon(Icons.chevron_right_rounded),
-                onTap: () => Navigator.of(context).pop(option.value),
-              ),
-            ),
-          ],
+                const SizedBox(height: 14),
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: options
+                      .map((option) {
+                        return SizedBox(
+                          width: itemWidth,
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
+                              width: 42,
+                              height: 42,
+                              decoration: BoxDecoration(
+                                color: context.theme.colorScheme.primary
+                                    .withValues(
+                                      alpha: 0.1,
+                                    ),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                option.icon,
+                                color: context.theme.colorScheme.primary,
+                              ),
+                            ),
+                            title: Text(
+                              localizedLabels[option.value] ?? option.value,
+                            ),
+                            trailing: const Icon(Icons.chevron_right_rounded),
+                            onTap: () =>
+                                Navigator.of(context).pop(option.value),
+                          ),
+                        );
+                      })
+                      .toList(growable: false),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

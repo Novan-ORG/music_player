@@ -48,6 +48,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hours => 'Hours';
 
   @override
+  String get seconds => 'Seconds';
+
+  @override
   String get off => 'Off';
 
   @override

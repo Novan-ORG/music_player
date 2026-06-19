@@ -48,6 +48,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get hours => 'ساعت';
 
   @override
+  String get seconds => 'ثانیه';
+
+  @override
   String get off => 'خاموش';
 
   @override

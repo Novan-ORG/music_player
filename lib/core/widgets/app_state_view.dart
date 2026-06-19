@@ -35,95 +35,132 @@ class AppStateView extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final resolvedAccent = accentColor ?? colorScheme.primary;
 
-    Widget content = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (eyebrow != null) ...[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-            decoration: BoxDecoration(
-              color: resolvedAccent.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(999),
-            ),
-            child: Text(
-              eyebrow!,
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: resolvedAccent,
-                fontWeight: FontWeight.w700,
+    Widget buildTextContent({required bool centered}) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: centered
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.start,
+        children: [
+          if (eyebrow != null) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              decoration: BoxDecoration(
+                color: resolvedAccent.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(999),
               ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(height: 18),
-        ],
-        Container(
-          width: 112,
-          height: 112,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: RadialGradient(
-              colors: [
-                resolvedAccent.withValues(alpha: 0.16),
-                resolvedAccent.withValues(alpha: 0.03),
-              ],
-            ),
-            border: Border.all(
-              color: resolvedAccent.withValues(alpha: 0.14),
-            ),
-          ),
-          child: Center(
-            child:
-                illustration ??
-                Icon(
-                  Icons.music_off_rounded,
-                  size: 48,
+              child: Text(
+                eyebrow!,
+                style: theme.textTheme.labelLarge?.copyWith(
                   color: resolvedAccent,
+                  fontWeight: FontWeight.w700,
                 ),
-          ),
-        ),
-        const SizedBox(height: 24),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w800,
-            height: 1.15,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          message,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.bodyLarge?.copyWith(
-            color: colorScheme.onSurface.withValues(alpha: 0.62),
-            height: 1.45,
-          ),
-        ),
-        if (onAction != null && actionLabel != null) ...[
-          const SizedBox(height: 24),
-          FilledButton.icon(
-            onPressed: onAction,
-            icon: Icon(actionIcon, size: 20),
-            label: Text(actionLabel!),
-            style: FilledButton.styleFrom(
-              backgroundColor: resolvedAccent,
-              foregroundColor: colorScheme.onPrimary,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              minimumSize: const Size(0, 54),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
-              textStyle: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w700,
+                textAlign: centered ? TextAlign.center : TextAlign.start,
               ),
             ),
+            const SizedBox(height: 18),
+          ],
+          Text(
+            title,
+            textAlign: centered ? TextAlign.center : TextAlign.start,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w800,
+              height: 1.15,
+            ),
           ),
+          const SizedBox(height: 12),
+          Text(
+            message,
+            textAlign: centered ? TextAlign.center : TextAlign.start,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: colorScheme.onSurface.withValues(alpha: 0.62),
+              height: 1.45,
+            ),
+          ),
+          if (onAction != null && actionLabel != null) ...[
+            const SizedBox(height: 24),
+            FilledButton.icon(
+              onPressed: onAction,
+              icon: Icon(actionIcon, size: 20),
+              label: Text(actionLabel!),
+              style: FilledButton.styleFrom(
+                backgroundColor: resolvedAccent,
+                foregroundColor: colorScheme.onPrimary,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
+                minimumSize: Size(centered ? 0 : 220, 54),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                textStyle: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+          if (footer != null) ...[
+            const SizedBox(height: 18),
+            footer!,
+          ],
         ],
-        if (footer != null) ...[
-          const SizedBox(height: 18),
-          footer!,
-        ],
-      ],
+      );
+    }
+
+    Widget buildIllustration(double size) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: RadialGradient(
+            colors: [
+              resolvedAccent.withValues(alpha: 0.16),
+              resolvedAccent.withValues(alpha: 0.03),
+            ],
+          ),
+          border: Border.all(
+            color: resolvedAccent.withValues(alpha: 0.14),
+          ),
+        ),
+        child: Center(
+          child:
+              illustration ??
+              Icon(
+                Icons.music_off_rounded,
+                size: size * 0.42,
+                color: resolvedAccent,
+              ),
+        ),
+      );
+    }
+
+    Widget content = LayoutBuilder(
+      builder: (context, constraints) {
+        final useWideLayout = constraints.maxWidth >= 720;
+
+        if (useWideLayout) {
+          return Row(
+            children: [
+              buildIllustration(104),
+              const SizedBox(width: 24),
+              Expanded(
+                child: buildTextContent(centered: false),
+              ),
+            ],
+          );
+        }
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            buildIllustration(112),
+            const SizedBox(height: 24),
+            buildTextContent(centered: true),
+          ],
+        );
+      },
     );
 
     if (framed) {

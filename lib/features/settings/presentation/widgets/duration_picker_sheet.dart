@@ -36,21 +36,22 @@ class _DurationPickerSheetState extends State<DurationPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.theme;
+
     return BottomSheetBaseWidget(
       title: context.localization.sleepTimer,
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 200,
-            margin: const EdgeInsets.symmetric(vertical: 16),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isLandscape = constraints.maxWidth > constraints.maxHeight;
+          final picker = SizedBox(
+            height: isLandscape ? 180 : 200,
             child: CupertinoTheme(
               data: CupertinoThemeData(
-                brightness: context.theme.brightness,
-                primaryColor: context.theme.primaryColor,
-                scaffoldBackgroundColor: context.theme.scaffoldBackgroundColor,
+                brightness: theme.brightness,
+                primaryColor: theme.primaryColor,
+                scaffoldBackgroundColor: theme.scaffoldBackgroundColor,
                 textTheme: CupertinoTextThemeData(
-                  dateTimePickerTextStyle: context.theme.textTheme.titleLarge,
+                  dateTimePickerTextStyle: theme.textTheme.titleLarge,
                 ),
               ),
               child: CupertinoDatePicker(
@@ -68,51 +69,110 @@ class _DurationPickerSheetState extends State<DurationPickerSheet> {
                 initialDateTime: DateTime.now().add(widget.initialDuration),
               ),
             ),
-          ),
-          Text(
-            _formattedDuration(_selectedDuration),
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(),
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size.fromWidth(150),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  backgroundColor: context.theme.colorScheme.surfaceDim,
-                ),
-                child: Text(
-                  context.localization.cancel,
-                  style: context.theme.textTheme.bodyMedium?.copyWith(
-                    color: context.theme.colorScheme.onSurface,
-                  ),
-                ),
+          );
+
+          final summary = Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: theme.colorScheme.primary.withValues(alpha: 0.12),
               ),
-              const SizedBox(width: 16),
-              ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(_selectedDuration),
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size.fromWidth(150),
-                  backgroundColor: context.theme.colorScheme.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: isLandscape
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.center,
+              children: [
+                Text(
+                  context.localization.selectSleepTimerDuration,
+                  textAlign: isLandscape ? TextAlign.start : TextAlign.center,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
-                child: Text(
-                  context.localization.setTimer,
-                  style: context.theme.textTheme.bodyMedium?.copyWith(
-                    color: context.theme.colorScheme.onSurface,
+                const SizedBox(height: 10),
+                Text(
+                  _formattedDuration(_selectedDuration),
+                  textAlign: isLandscape ? TextAlign.start : TextAlign.center,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
+                const SizedBox(height: 16),
+                Flex(
+                  direction: isLandscape ? Axis.vertical : Axis.horizontal,
+                  children: [
+                    Expanded(
+                      flex: isLandscape ? 0 : 1,
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size(0, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: Text(context.localization.cancel),
+                      ),
+                    ),
+                    SizedBox(
+                      width: isLandscape ? 0 : 12,
+                      height: isLandscape ? 12 : 0,
+                    ),
+                    Expanded(
+                      flex: isLandscape ? 0 : 1,
+                      child: FilledButton(
+                        onPressed: () =>
+                            Navigator.of(context).pop(_selectedDuration),
+                        style: FilledButton.styleFrom(
+                          minimumSize: const Size(0, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: Text(context.localization.setTimer),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+
+          if (isLandscape) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(8, 8, 8, 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: picker,
+                  ),
+                  const SizedBox(width: 18),
+                  Expanded(
+                    flex: 2,
+                    child: summary,
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
+            );
+          }
+
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                picker,
+                const SizedBox(height: 16),
+                summary,
+              ],
+            ),
+          );
+        },
       ),
     );
   }

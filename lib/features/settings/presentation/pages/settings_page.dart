@@ -205,17 +205,17 @@ class _AppearanceSection extends StatelessWidget {
         SettingsTile(
           icon: Icons.language_rounded,
           title: context.localization.language,
-          subtitle: languageLabel,
           trailing: CustomDropdown(
+            title: context.localization.language,
             value: state.currentLocale.languageCode,
             items: const [
-              DropdownMenuItem(
+              CustomDropdownItem(
                 value: 'en',
-                child: Text('English (en)'),
+                label: 'English (en)',
               ),
-              DropdownMenuItem(
+              CustomDropdownItem(
                 value: 'fa',
-                child: Text('فارسی (fa)'),
+                label: 'فارسی (fa)',
               ),
             ],
             onChanged: (value) {
@@ -229,21 +229,21 @@ class _AppearanceSection extends StatelessWidget {
         SettingsTile(
           icon: Icons.palette_rounded,
           title: context.localization.theme,
-          subtitle: themeLabel,
           trailing: CustomDropdown(
+            title: context.localization.theme,
             value: state.themeMode,
             items: [
-              DropdownMenuItem(
+              CustomDropdownItem(
                 value: 'system',
-                child: Text(context.localization.system),
+                label: context.localization.system,
               ),
-              DropdownMenuItem(
+              CustomDropdownItem(
                 value: 'dark',
-                child: Text(context.localization.dark),
+                label: context.localization.dark,
               ),
-              DropdownMenuItem(
+              CustomDropdownItem(
                 value: 'light',
-                child: Text(context.localization.light),
+                label: context.localization.light,
               ),
             ],
             onChanged: (value) {
@@ -278,32 +278,30 @@ class _PlaybackSection extends StatelessWidget {
         SettingsTile(
           icon: Icons.timer_rounded,
           title: context.localization.sleepTimer,
-          subtitle: duration <= Duration.zero
-              ? context.localization.off
-              : context.localization.sleepTimerActive,
           trailing: duration <= Duration.zero
               ? CustomDropdown(
+                  title: context.localization.sleepTimer,
                   value: '0',
                   items: [
-                    DropdownMenuItem(
+                    CustomDropdownItem(
                       value: '0',
-                      child: Text(context.localization.off),
+                      label: context.localization.off,
                     ),
-                    DropdownMenuItem(
+                    CustomDropdownItem(
                       value: '15',
-                      child: Text(context.localization.min15),
+                      label: context.localization.min15,
                     ),
-                    DropdownMenuItem(
+                    CustomDropdownItem(
                       value: '30',
-                      child: Text(context.localization.min30),
+                      label: context.localization.min30,
                     ),
-                    DropdownMenuItem(
+                    CustomDropdownItem(
                       value: '60',
-                      child: Text(context.localization.hour1),
+                      label: context.localization.hour1,
                     ),
-                    DropdownMenuItem(
+                    CustomDropdownItem(
                       value: 'custom',
-                      child: Text(context.localization.custom),
+                      label: context.localization.custom,
                     ),
                   ],
                   onChanged: (value) async {

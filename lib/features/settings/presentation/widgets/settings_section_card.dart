@@ -18,9 +18,16 @@ class SettingsSectionCard extends StatelessWidget {
     final theme = context.theme;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withValues(alpha: 0.94),
+        gradient: LinearGradient(
+          begin: AlignmentDirectional.topStart,
+          end: AlignmentDirectional.bottomEnd,
+          colors: [
+            theme.colorScheme.surface.withValues(alpha: 0.96),
+            theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.2),
+          ],
+        ),
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: theme.colorScheme.onSurface.withValues(alpha: 0.08),

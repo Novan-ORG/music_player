@@ -7,7 +7,7 @@ class FavoriteErrorWidget extends StatelessWidget {
     required this.message,
     super.key,
     this.onRetry,
-    this.maxWidth = 560,
+    this.maxWidth = 820,
   });
 
   final String message;

@@ -27,45 +27,59 @@ class UpnextMusicsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final musicPlayerBloc = context.read<MusicPlayerBloc>();
+    final screenSize = MediaQuery.sizeOf(context);
+    final isLandscape = screenSize.width > screenSize.height;
+    final maxWidth = isLandscape
+        ? math.min<double>(screenSize.width - 24, 980)
+        : screenSize.width;
+    final minChildSize = isLandscape ? 0.54 : 0.30;
+    final initialChildSize = isLandscape ? 0.72 : 0.44;
+    final maxChildSize = isLandscape ? 0.96 : 0.94;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: context.theme.scaffoldBackgroundColor,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.24),
-            blurRadius: 28,
-            offset: const Offset(0, -10),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: Container(
+          decoration: BoxDecoration(
+            color: context.theme.scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.24),
+                blurRadius: 28,
+                offset: const Offset(0, -10),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: DraggableScrollableSheet(
-        minChildSize: 0.30,
-        initialChildSize: 0.44,
-        maxChildSize: 0.94,
-        snap: true,
-        snapSizes: const [0.44, 0.94],
-        expand: false,
-        builder: (context, innerScrollController) {
-          return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
-            bloc: musicPlayerBloc,
-            buildWhen: (previous, next) =>
-                previous.currentSongIndex != next.currentSongIndex ||
-                previous.playList != next.playList ||
-                previous.status != next.status,
-            builder: (context, state) {
-              return _UpNextMusicsView(
-                innerScrollController: innerScrollController,
-                currentSongIndex: state.currentSongIndex,
-                playerStatus: state.status,
-                playList: state.playList,
-                onTapSong: (index) =>
-                    musicPlayerBloc.add(SeekMusicEvent(index: index)),
+          child: DraggableScrollableSheet(
+            minChildSize: minChildSize,
+            initialChildSize: initialChildSize,
+            maxChildSize: maxChildSize,
+            snap: true,
+            snapSizes: [initialChildSize, maxChildSize],
+            expand: false,
+            builder: (context, innerScrollController) {
+              return BlocBuilder<MusicPlayerBloc, MusicPlayerState>(
+                bloc: musicPlayerBloc,
+                buildWhen: (previous, next) =>
+                    previous.currentSongIndex != next.currentSongIndex ||
+                    previous.playList != next.playList ||
+                    previous.status != next.status,
+                builder: (context, state) {
+                  return _UpNextMusicsView(
+                    innerScrollController: innerScrollController,
+                    currentSongIndex: state.currentSongIndex,
+                    playerStatus: state.status,
+                    playList: state.playList,
+                    onTapSong: (index) =>
+                        musicPlayerBloc.add(SeekMusicEvent(index: index)),
+                  );
+                },
               );
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }
@@ -98,7 +112,6 @@ class _UpNextMusicsViewState extends State<_UpNextMusicsView>
         SongDeletionMixin,
         ToggleLikeMixin {
   static const _tileExtent = 88.0;
-  static const _listStartOffset = 214.0;
   double _sheetExtent = 0.44;
 
   bool get _isExpanded => _sheetExtent >= 0.72;
@@ -131,8 +144,12 @@ class _UpNextMusicsViewState extends State<_UpNextMusicsView>
       return;
     }
 
+    final size = MediaQuery.sizeOf(context);
+    final isLandscape = size.width > size.height;
+    final headerOffset = isLandscape ? 164.0 : 214.0;
+
     widget.innerScrollController?.animateTo(
-      _listStartOffset + (currentIndex * _tileExtent),
+      headerOffset + (currentIndex * _tileExtent),
       duration: const Duration(milliseconds: 240),
       curve: Curves.easeOutCubic,
     );
@@ -142,6 +159,8 @@ class _UpNextMusicsViewState extends State<_UpNextMusicsView>
   Widget build(BuildContext context) {
     final colorScheme = context.theme.colorScheme;
     final currentSong = _currentSong;
+    final size = MediaQuery.sizeOf(context);
+    final isLandscape = size.width > size.height;
 
     return NotificationListener<DraggableScrollableNotification>(
       onNotification: (notification) {
@@ -181,9 +200,15 @@ class _UpNextMusicsViewState extends State<_UpNextMusicsView>
                         children: [
                           _SheetHandle(isExpanded: _isExpanded),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
+                            padding: EdgeInsets.fromLTRB(
+                              18,
+                              isLandscape ? 6 : 10,
+                              18,
+                              0,
+                            ),
                             child: _SheetHeader(
                               isExpanded: _isExpanded,
+                              isLandscape: isLandscape,
                               currentSong: currentSong,
                               currentSongIndex: widget.currentSongIndex ?? 0,
                               totalSongs: widget.playList.length,
@@ -203,7 +228,12 @@ class _UpNextMusicsViewState extends State<_UpNextMusicsView>
                     )
                   else
                     SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(18, 0, 18, 24),
+                      padding: EdgeInsets.fromLTRB(
+                        18,
+                        0,
+                        18,
+                        isLandscape ? 18 : 24,
+                      ),
                       sliver: SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, itemIndex) {
@@ -285,6 +315,7 @@ class _SheetHandle extends StatelessWidget {
 class _SheetHeader extends StatelessWidget {
   const _SheetHeader({
     required this.isExpanded,
+    required this.isLandscape,
     required this.currentSong,
     required this.currentSongIndex,
     required this.totalSongs,
@@ -292,6 +323,7 @@ class _SheetHeader extends StatelessWidget {
   });
 
   final bool isExpanded;
+  final bool isLandscape;
   final Song? currentSong;
   final int currentSongIndex;
   final int totalSongs;
@@ -306,7 +338,7 @@ class _SheetHeader extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      spacing: 14,
+      spacing: isLandscape ? 10 : 14,
       children: [
         Row(
           children: [
@@ -328,7 +360,7 @@ class _SheetHeader extends StatelessWidget {
         ),
         AnimatedCrossFade(
           duration: const Duration(milliseconds: 240),
-          crossFadeState: isExpanded
+          crossFadeState: (isExpanded && !isLandscape)
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
           firstChild: _CompactQueuePreview(
@@ -336,11 +368,13 @@ class _SheetHeader extends StatelessWidget {
             currentSongIndex: currentSongIndex,
             totalSongs: totalSongs,
             playerStatus: playerStatus,
+            isLandscape: isLandscape,
           ),
           secondChild: _ExpandedQueuePreview(
             currentSong: currentSong,
             currentSongIndex: currentSongIndex,
             totalSongs: totalSongs,
+            isLandscape: isLandscape,
           ),
         ),
       ],
@@ -383,12 +417,14 @@ class _CompactQueuePreview extends StatelessWidget {
     required this.currentSongIndex,
     required this.totalSongs,
     required this.playerStatus,
+    required this.isLandscape,
   });
 
   final Song? currentSong;
   final int currentSongIndex;
   final int totalSongs;
   final MusicPlayerStatus playerStatus;
+  final bool isLandscape;
 
   @override
   Widget build(BuildContext context) {
@@ -396,7 +432,7 @@ class _CompactQueuePreview extends StatelessWidget {
 
     return GlassCard(
       borderRadius: BorderRadius.circular(28),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(isLandscape ? 12 : 16),
       child: Row(
         children: [
           Hero(
@@ -450,11 +486,13 @@ class _ExpandedQueuePreview extends StatelessWidget {
     required this.currentSong,
     required this.currentSongIndex,
     required this.totalSongs,
+    required this.isLandscape,
   });
 
   final Song? currentSong;
   final int currentSongIndex;
   final int totalSongs;
+  final bool isLandscape;
 
   @override
   Widget build(BuildContext context) {
@@ -462,22 +500,22 @@ class _ExpandedQueuePreview extends StatelessWidget {
 
     return GlassCard(
       borderRadius: BorderRadius.circular(30),
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(isLandscape ? 14 : 18),
       child: Row(
         children: [
           Hero(
             tag: 'song_cover_${currentSong?.id ?? 0}',
             child: ArtImageWidget(
               id: currentSong?.id ?? 0,
-              size: 94,
+              size: isLandscape ? 74 : 94,
               borderRadius: 26,
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: isLandscape ? 12 : 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 10,
+              spacing: isLandscape ? 8 : 10,
               children: [
                 Text(
                   '${math.min(currentSongIndex + 1, totalSongs)}/$totalSongs',
@@ -489,13 +527,15 @@ class _ExpandedQueuePreview extends StatelessWidget {
                 SongTitle(songTitle: currentSong?.title),
                 Text(
                   currentSong?.artist ?? context.localization.unknownArtist,
-                  maxLines: 2,
+                  maxLines: isLandscape ? 1 : 2,
                   overflow: TextOverflow.ellipsis,
                   style: context.theme.textTheme.bodyMedium?.copyWith(
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
-                const UpnextSheetActionButtons(playIconSize: 28),
+                UpnextSheetActionButtons(
+                  playIconSize: isLandscape ? 22 : 28,
+                ),
               ],
             ),
           ),

@@ -6,7 +6,7 @@ class FavoriteEmptyWidget extends StatelessWidget {
   const FavoriteEmptyWidget({
     super.key,
     this.onRefresh,
-    this.maxWidth = 560,
+    this.maxWidth = 820,
   });
 
   final VoidCallback? onRefresh;

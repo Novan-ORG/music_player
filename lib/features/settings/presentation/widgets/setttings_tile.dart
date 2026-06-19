@@ -28,59 +28,81 @@ class SettingsTile extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(22),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22),
-            color: theme.colorScheme.surface.withValues(alpha: 0.6),
+            gradient: LinearGradient(
+              begin: AlignmentDirectional.topStart,
+              end: AlignmentDirectional.bottomEnd,
+              colors: [
+                theme.colorScheme.surface.withValues(alpha: 0.98),
+                theme.colorScheme.surfaceContainerHighest.withValues(
+                  alpha: 0.28,
+                ),
+              ],
+            ),
             border: Border.all(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.06),
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.03),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: LayoutBuilder(
             builder: (context, constraints) {
               final useColumn =
-                  currentTrailing != null && constraints.maxWidth < 520;
+                  currentTrailing != null && constraints.maxWidth < 360;
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: 46,
-                        height: 46,
+                        width: 42,
+                        height: 42,
                         decoration: BoxDecoration(
                           color: theme.colorScheme.primary.withValues(
                             alpha: 0.12,
                           ),
                           borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.08,
+                            ),
+                          ),
                         ),
                         child: Icon(
                           icon,
                           color: theme.colorScheme.primary,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
                               title,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.w700,
+                                height: 1.1,
                               ),
                             ),
                             if (subtitle != null) ...[
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 2),
                               Text(
                                 subtitle!,
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: theme.colorScheme.onSurface.withValues(
                                     alpha: 0.62,
                                   ),
-                                  height: 1.35,
+                                  height: 1.2,
                                 ),
                               ),
                             ],
@@ -88,13 +110,13 @@ class SettingsTile extends StatelessWidget {
                         ),
                       ),
                       if (!useColumn && currentTrailing != null) ...[
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 10),
                         Flexible(child: currentTrailing),
                       ],
                     ],
                   ),
                   if (useColumn) ...[
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     Align(
                       alignment: AlignmentDirectional.centerStart,
                       child: currentTrailing,
