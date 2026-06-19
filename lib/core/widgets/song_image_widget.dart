@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
@@ -96,26 +97,32 @@ class _ArtImageWidgetState extends State<ArtImageWidget> {
       return pendingArtwork;
     }
 
-    final artworkFuture = _audioQuery
-        .queryArtwork(
-          cacheKey.id,
-          cacheKey.type,
-          format: cacheKey.format,
-          size: cacheKey.qualitySize,
-          quality: cacheKey.quality,
-        )
-        .then((artworkBytes) {
-          if (artworkBytes != null && artworkBytes.isNotEmpty) {
-            _cacheArtwork(cacheKey, artworkBytes);
-          }
-          return artworkBytes;
-        })
-        .whenComplete(() {
-          _pendingArtwork.remove(cacheKey);
-        });
-
+    final artworkFuture = _queryArtwork(cacheKey);
     _pendingArtwork[cacheKey] = artworkFuture;
+    unawaited(
+      artworkFuture.whenComplete(() {
+        _pendingArtwork.remove(cacheKey);
+      }),
+    );
     return artworkFuture;
+  }
+
+  Future<Uint8List?> _queryArtwork(_ArtworkCacheKey cacheKey) async {
+    try {
+      final artworkBytes = await _audioQuery.queryArtwork(
+        cacheKey.id,
+        cacheKey.type,
+        format: cacheKey.format,
+        size: cacheKey.qualitySize,
+        quality: cacheKey.quality,
+      );
+      if (artworkBytes != null && artworkBytes.isNotEmpty) {
+        _cacheArtwork(cacheKey, artworkBytes);
+      }
+      return artworkBytes;
+    } on Exception {
+      return null;
+    }
   }
 
   void _cacheArtwork(_ArtworkCacheKey cacheKey, Uint8List artworkBytes) {

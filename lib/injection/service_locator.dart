@@ -53,7 +53,6 @@ void _setupPlaylistFeature() {
     ..registerLazySingleton<PlaylistRepository>(
       () => PlaylistRepositoryImpl(getIt.get()),
     )
-
     ///
     // Usecases
     ..registerLazySingleton(() => RenamePlaylist(getIt.get()))
@@ -99,12 +98,13 @@ void _setupSongsFeature() {
 
 void _setupCore() {
   getIt
-    ..registerLazySingleton(
-      () {
-        return OnAudioQuery()
-          ..setLogConfig(
-            LogConfig(logType: LogType.ERROR, showDetailedLog: true),
-          );
+    ..registerSingletonAsync<OnAudioQuery>(
+      () async {
+        final audioQuery = OnAudioQuery();
+        await audioQuery.setLogConfig(
+          LogConfig(logType: LogType.ERROR),
+        );
+        return audioQuery;
       },
     )
     ..registerLazySingleton(() => EnsureMediaPermission(getIt.get()))
@@ -163,19 +163,16 @@ void _setupMusicPlayerFeature() {
 
 void _setupFavoriteSongsFeature() {
   getIt
-
     /// Use cases
     ..registerLazySingleton(() => GetFavoriteSongs(getIt.get()))
     ..registerLazySingleton(() => AddFavoriteSong(getIt.get()))
     ..registerLazySingleton(() => RemoveFavoriteSong(getIt.get()))
     ..registerLazySingleton(() => ToggleFavoriteSong(getIt.get()))
     ..registerLazySingleton(() => ClearAllFavorites(getIt.get()))
-
     /// Repository
     ..registerLazySingleton<FavoriteSongsRepository>(
       () => FavoriteSongsRepoImpl(datasource: getIt.get()),
     )
-
     /// Data source
     ..registerLazySingleton<FavoriteSongsDatasource>(
       () => FavoriteSongsDatasourceImpl(

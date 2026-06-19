@@ -66,7 +66,6 @@ A beautifully crafted, offline music player built with **Flutter** that delivers
 - **speech_to_text** - Voice search
 - **permission_handler** - Runtime permissions
 - **shared_preferences** - Local storage
-- **sentry_flutter** - Error tracking
 
 ---
 
@@ -136,8 +135,8 @@ This project implements **Clean Architecture** with **BLoC** pattern:
 
 3. **Configure environment**
    ```bash
-   # Create .env file
-   echo "SENTRY_DSN=your_dsn_here" > .env
+   # Create an empty .env file
+   touch .env
    ```
 
 4. **Run the app**

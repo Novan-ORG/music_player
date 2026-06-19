@@ -46,7 +46,6 @@ We're committed to a welcoming community. Please be respectful and constructive.
 
 3. Create `.env` file:
   ```bash
-  SENTRY_DSN=your_sentry_dsn_here
   ```
 
 4. Verify setup:
@@ -175,4 +174,3 @@ This project is licensed under the [MIT License](LICENSE). Contributions must co
 - **PRs**: For code review
 
 Thank you for contributing! 🎵✨
-

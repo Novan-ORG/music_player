@@ -52,20 +52,34 @@ class PinnedPlaylistItem extends StatelessWidget {
         child: BlocBuilder<PlayListBloc, PlayListState>(
           builder: (context, state) {
             final coverSongId = state.playlistCoverSongIds[playlist.id];
-            final artworkId = coverSongId ?? playlist.id;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Center(
-                    child: ArtImageWidget(
-                      id: artworkId,
-                      size: compact ? size - 8 : size,
-                      borderRadius: compact ? 14 : 16,
-                      defaultCoverBg: Colors.white,
-                      defaultCover: ImageAssets.playlistCover,
-                    ),
+                    child: coverSongId == null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              compact ? 14 : 16,
+                            ),
+                            child: ColoredBox(
+                              color: Colors.white,
+                              child: Image.asset(
+                                ImageAssets.playlistCover,
+                                width: compact ? size - 8 : size,
+                                height: compact ? size - 8 : size,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        : ArtImageWidget(
+                            id: coverSongId,
+                            size: compact ? size - 8 : size,
+                            borderRadius: compact ? 14 : 16,
+                            defaultCoverBg: Colors.white,
+                            defaultCover: ImageAssets.playlistCover,
+                          ),
                   ),
                 ),
                 SizedBox(height: compact ? 6 : 10),

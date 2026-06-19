@@ -22,10 +22,24 @@ class PlaylistImageWidget extends StatelessWidget {
       builder: (context, state) {
         // Get cover song ID from bloc state
         final coverSongId = state.playlistCoverSongIds[playlistId];
-        final artworkId = coverSongId ?? playlistId;
+
+        if (coverSongId == null) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius),
+            child: ColoredBox(
+              color: Colors.white,
+              child: Image.asset(
+                ImageAssets.playlistCover,
+                fit: BoxFit.cover,
+                width: size,
+                height: size,
+              ),
+            ),
+          );
+        }
 
         return ArtImageWidget(
-          id: artworkId,
+          id: coverSongId,
           defaultCover: ImageAssets.playlistCover,
           defaultCoverBg: Colors.white,
           borderRadius: borderRadius,

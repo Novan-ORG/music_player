@@ -16,7 +16,6 @@ jobs:
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
       ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -44,7 +43,7 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "SENTRY_DSN=$SENTRY_DSN" >> .env
+          touch .env
 
       - name: Setup NDK Version
         run: |
